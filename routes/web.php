@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +31,12 @@ Route::get('/cart', function () {
 Route::get('/show', function () {
     return Inertia::render('Store/Products/Show');
 });
+Route::get('/products/{product}/edit', [ProductController::class ,'edit'])->name('product.edit');
+
+Route::get('/product/create', function () {
+    return Inertia::render('Store/Products/Create');
+});
+Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 
 Route::middleware([
     'auth:sanctum',
