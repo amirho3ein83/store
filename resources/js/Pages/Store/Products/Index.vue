@@ -1,14 +1,18 @@
 <script setup>
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Product from "@/Components/Product.vue";
+import Pagination from "@/Components/Pagination.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+
+defineProps({
+    products: Object,
+});
 </script>
 
 <template>
     <Head title="Store Page" />
 
-
-<AppLayout>
+    <AppLayout>
         <div
             class="carousel relative container mx-auto"
             style="max-width: 1600px"
@@ -38,7 +42,9 @@ Alternatively if you want to just have a single hero
                 class="container mx-auto flex items-center flex-wrap pt-4 pb-12"
             >
                 <div class="flex">
-                    <form class="border-t border-gray-200 lg:border-t-0 w-1/4 bg-gray-200">
+                    <form
+                        class="border-t border-gray-200 lg:border-t-0 w-1/4 bg-gray-200"
+                    >
                         <fieldset>
                             <legend
                                 class="block w-full bg-gray-50 px-5 py-3 text-xs font-medium"
@@ -211,15 +217,19 @@ Alternatively if you want to just have a single hero
                             </button>
                         </div>
                     </form>
-                    <div class="flex flex-wrap">
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
+                    <div class="flex flex-col">
+                        <div class="flex flex-wrap">
+                            <Product
+                                v-for="product of products.data"
+                                :product="product"
+                                :key="product.id"
+                            />
+                        </div>
+                        <Pagination
+                            :nextPage="products.next_page_url"
+                            :previousPage="products.prev_page_url"
+                            :currentPage="products.current_page"
+                        />
                     </div>
                 </div>
             </div>

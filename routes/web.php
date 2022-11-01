@@ -16,21 +16,12 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Store/Products/Index', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [ProductController::class ,'index']);
 Route::get('/cart', function () {
     return Inertia::render('Store/Cart');
 });
 
-Route::get('/show', function () {
-    return Inertia::render('Store/Products/Show');
-});
+Route::get('/products/{product}', [ProductController::class ,'show'])->name('product.show');
 Route::get('/products/{product}/edit', [ProductController::class ,'edit'])->name('product.edit');
 
 Route::get('/product/create', function () {

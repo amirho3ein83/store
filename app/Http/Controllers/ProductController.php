@@ -9,28 +9,28 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function create(Request $request)
+
+    protected $_validation = [
+        'name' => 'bail|required|unique:products|max:255',
+        'description' => 'required|max:255',
+        'price' => 'required | integer',
+        'image' => 'required ',
+    ];
+    public function index(Request $request)
     {
-        info($request->name);
-        // dd();
-        DB::transaction(function ($request) {
+        return Inertia::render('Store/Products/Index', ['products' => Product::simplePaginate(10)]);
+        // return Inertia::render('Store/CheckoutView');
+    }
+    public function store(Request $request)
+    {
+        $product = Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'balance' => $request->balance
+        ]);
 
-            $request->validate([
-                'name' => 'bail|required|unique:products|max:255',
-                'description' => 'required|max:255',
-                'price' => 'required | integer',
-                'image' => 'required ',
-            ]);
-
-
-            $product = Product::create([
-                'name' => $request->name,
-                'description' => $request->description,
-                'price' => $request->price,
-            ]);
-
-            $product->addMediaFromRequest('image')->toMediaCollection();
-        });
+        $product->addMediaFromRequest('image')->toMediaCollection();
     }
 
     public function update(Product $product, Request $request)
@@ -56,5 +56,10 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia::render('Store/Product/Edit', ['product' => $product]);
+    }
+
+    public function show(Product $product)
+    {
+        return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }

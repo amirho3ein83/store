@@ -1,89 +1,125 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { Link, useForm } from "@inertiajs/inertia-vue3";
+import JetButton from "@/Components/Button.vue";
+import JetInput from "@/Components/Input.vue";
+import JetInputError from "@/Components/InputError.vue";
+import JetCheckbox from "@/Components/Checkbox.vue";
+import JetLabel from "@/Components/Label.vue";
+import { onMounted, ref } from "vue";
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String,
-});
+let showForm = ref(false);
 
 const form = useForm({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     remember: false,
 });
 
 const submit = () => {
-    form.transform(data => ({
+    form.transform((data) => ({
         ...data,
-        remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
-        onFinish: () => form.reset('password'),
+        remember: form.remember ? "on" : "",
+    })).post(route("login"), {
+        onFinish: () => form.reset("password"),
     });
 };
+
+onMounted(() => {
+    setTimeout(() => {
+        showForm.value = true;
+    }, 50);
+});
 </script>
 
 <template>
-    <Head title="Log in" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+    <div class="flex">
+        <div class="w-full h-screen">
+            <img
+                class="object-cover w-full h-full"
+                src="./pics/astronat.jpg"
+                alt=""
+            />
         </div>
+        <Transition name="slide-fade">
+            <div
+                v-if="showForm"
+                class="w-[400px]  p-4 absolute  top-20 left-24 m-5 backdrop-blur-sm bg-white/20"
+            >
+                <form @submit.prevent="submit">
+                    <h1 class="text-xl font-bold mb-4">
+                        Sign in to your account
+                    </h1>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
+                    <div>
+                        <JetLabel for="email" value="email" />
+                        <JetInput
+                            id="email"
+                            v-model="form.email"
+                            type="text"
+                            class="mt-1 block w-full"
+                            required
+                            autofocus
+                        />
+                        <JetInputError
+                            class="mt-2"
+                            :message="form.errors.email"
+                        />
+                    </div>
+
+                    <div class="mt-4">
+                        <JetLabel for="password" value="Password" />
+                        <JetInput
+                            id="password"
+                            v-model="form.password"
+                            type="password"
+                            class="mt-1 block w-full"
+                            required
+                            autocomplete="current-password"
+                        />
+                        <JetInputError
+                            class="mt-2"
+                            :message="form.errors.password"
+                        />
+                    </div>
+                    <div class="mt-4 flex justify-between">
+                        <label class="flex items-center">
+                            <JetCheckbox
+                                v-model:checked="form.remember"
+                                class="w-6 h-6"
+                                name="remember"
+                            />
+                            <span class="ml-2 text-sm text-gray-200"
+                                >Remember me</span
+                            >
+                        </label>
+
+                        <div class="flex flex-col mt-2">
+                            <Link
+                                :href="route('password.request')"
+                                class="my-1 text-sm text-gray-300 hover:text-gray-100"
+                            >
+                                Forgot your password?
+                            </Link>
+                            <Link
+                                :href="route('register')"
+                                class="my-1 text-sm text-gray-300 hover:text-gray-100"
+                            >
+                                haven't registered yet?
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div class="flex w-full mt-8">
+                        <JetButton
+                            class="m-4"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            Log in
+                        </JetButton>
+                    </div>
+                </form>
             </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+        </Transition>
+    </div>
 </template>

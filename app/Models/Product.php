@@ -15,13 +15,25 @@ class Product extends Model implements HasMedia
 
     protected $fillable = [
         'name',
+        'slug',
         'price',
+        'sale_price',
         'description',
+        'balance',
     ];
+
+    protected $appends = ['available'];
+
 
     public $timestamps = false;
 
-    public static function last(){
+    public static function last()
+    {
         return static::all()->last();
+    }
+
+    public function getAvailableAttribute()
+    {
+        return $this->balance != 0 ? true : false;
     }
 }
