@@ -37,7 +37,8 @@ Alternatively if you want to just have a single hero
 </section>
 -->
 
-        <section class="bg-white py-8">
+        <section class="bg-white ">
+            <img src="./bgw.jpg" alt="" class="w-full">
             <div
                 class="container mx-auto flex items-center flex-wrap pt-4 pb-12"
             >

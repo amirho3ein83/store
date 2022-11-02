@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -33,6 +35,8 @@ class ProductController extends Controller
         $product->addMediaFromRequest('image')->toMediaCollection();
     }
 
+
+
     public function update(Product $product, Request $request)
     {
         $request->validate([
@@ -52,6 +56,7 @@ class ProductController extends Controller
         // $product->removeMedia();
         $product->addMediaFromRequest('image')->toMediaCollection();
     }
+
 
     public function edit(Product $product)
     {
