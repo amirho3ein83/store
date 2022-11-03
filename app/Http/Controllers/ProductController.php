@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +21,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Store/Products/Index', ['products' => Product::simplePaginate(10)]);
-        // return Inertia::render('Store/CheckoutView');
+        // return Inertia::render('backoffice/Dashboard');
     }
     public function store(Request $request)
     {

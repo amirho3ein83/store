@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,37 +13,54 @@ class CartController extends Controller
 
     public function index(Product $product)
     {
-        $cart = Cart::with('products')->where('user_id', Auth::id())->get();
+        $cart = CartItem::with('product')->where('user_id', Auth::id())->get();
 
-        return Inertia::render('Store/Cart', ['cart'=> $cart]);
+        // info($cart);
+        // foreach ($variable as $key => $value) {
+        //     # code...
+        // }
+        $total = 0;
+
+        foreach ($cart as $key => $item) {
+            $total += $item->price *  $item->quantity;
+        }
+
+        $cart->total = $total;
+        info($cart);
+
+        return Inertia::render('Store/Cart', ['cart' => $cart, 'total' => $total]);
     }
 
     public function addToCart(Request $request)
     {
         $product = Product::find($request->product_id);
-        $productFoundInCart = Cart::where('product_id', $request->product_id)->pluck('id');
+        $productFoundInCart = CartItem::where('product_id', $request->product_id)->pluck('id');
 
         if ($productFoundInCart->isEmpty()) {
-            $cart = Cart::create([
+            $cart = CartItem::create([
                 'product_id' => $product->id,
                 'price' => $product->sale_price,
                 'quantity' => 1,
                 'user_id' => Auth::id()
             ]);
         } else {
-            $cart =  Cart::where('product_id', $product->id)->increment('quantity');
+            $cart =  CartItem::where('product_id', $product->id)->increment('quantity');
         }
 
 
         if ($cart) {
             return [
-                'message' => 'Cart updated',
+                'message' => 'CartItem updated',
             ];
         }
     }
 
     public function countCartItems(Product $product)
     {
-        return  Cart::where('user_id', Auth::id())->sum('quantity');
+        return  CartItem::where('user_id', Auth::id())->sum('quantity');
+    }
+    public function payment(Product $product)
+    {
+        return  CartItem::where('user_id', Auth::id())->sum('quantity');
     }
 }

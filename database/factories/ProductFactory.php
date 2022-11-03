@@ -21,12 +21,13 @@ class ProductFactory extends Factory
         $price = $this->faker->numberBetween(100, 900);
 
         return [
-            'name' => $name,
+            'title' => $name,
             'slug' => Str::slug($name),
             'description' => $this->faker->text(100),
             'price' => $price,
-            'sale_price' => $price - 50,
+            'discount' => rand(10, 54),
             'balance' => rand(10, 30),
+            'category_id' => 1,
         ];
     }
 }

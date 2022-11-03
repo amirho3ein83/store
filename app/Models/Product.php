@@ -14,10 +14,11 @@ class Product extends Model implements HasMedia
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
         'slug',
         'price',
-        'sale_price',
+        'sold_quantity',
+        'discount',
         'description',
         'balance',
     ];
@@ -35,5 +36,10 @@ class Product extends Model implements HasMedia
     public function getAvailableAttribute()
     {
         return $this->balance != 0 ? true : false;
+    }
+
+    public function rate()
+    {
+        return Rating::where('product_id', $this->id)->avg('stars_rated');
     }
 }

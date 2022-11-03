@@ -23,6 +23,7 @@
     "dependencies": {
         "bootstrap-icons": "^1.9.1",
         "pinia": "^2.0.23",
+        "vue-horizontal-scroll": "^0.2.4",
         "vue-toastr": "^2.1.2"
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BackofficeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
@@ -22,6 +23,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
+    Route::group(['middleware' => ['role:backoffice'], 'prefix' => 'backoffice', 'name' => 'backoffice.'], function () {
+        Route::get('/products-list', [BackofficeController::class, 'productsList'])->name('products.list');
+    });
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
@@ -29,10 +35,12 @@ Route::middleware([
 
     Route::get('/', [ProductController::class, 'index']);
 
+    Route::post('/payment', [CartController::class, 'payment'])->name('payment');
+
     Route::post('/cart', [CartController::class, 'addToCart']);
     Route::get('/cart', [CartController::class, 'index']);
     Route::get('/cart/count', [CartController::class, 'countCartItems'])->name('cart.count');
-    
+
 
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
