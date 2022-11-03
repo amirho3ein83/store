@@ -33,12 +33,12 @@ Route::middleware([
     })->name('dashboard');
 
 
-    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/', [ProductController::class, 'index'])->name('Home');
 
     Route::post('/payment', [CartController::class, 'payment'])->name('payment');
 
     Route::post('/cart', [CartController::class, 'addToCart']);
-    Route::get('/cart', [CartController::class, 'index']);
+    Route::get('/cart', [CartController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [CartController::class, 'countCartItems'])->name('cart.count');
 
 

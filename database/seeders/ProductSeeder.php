@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\AmazingOffer;
 use App\Models\Product;
+use Carbon\Carbon;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -26,6 +28,13 @@ class ProductSeeder extends Seeder
 
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
                 ->toMediaCollection('photo');
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            AmazingOffer::create([
+                'product_id' => $i,
+                'expiration_date' => Carbon::now()->addHour(rand(1, 14))
+            ]);
         }
     }
 }

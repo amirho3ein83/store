@@ -1,12 +1,11 @@
 <script setup>
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Hero2 from "@/Components/Hero2.vue";
-import Pagination from "@/Components/Pagination.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import HorizontalScroll from "vue-horizontal-scroll";
 import "vue-horizontal-scroll/dist/vue-horizontal-scroll.css";
+
 defineProps({
-    products: Object,
+    amazing_offers: Object,
 });
 </script>
 
@@ -39,9 +38,7 @@ Alternatively if you want to just have a single hero
 -->
         <section class="bg-white">
             <img src="./banner1.webp" alt="" class="w-full" />
-            <div
-                class="container mx-auto flex items-center flex-wrap pt-4 pb-12"
-            >
+            <div class="mx-auto flex items-center flex-wrap">
                 <!-- <div class="flex">
                     <div class="flex flex-col">
                         <div class="flex flex-wrap">
@@ -59,117 +56,41 @@ Alternatively if you want to just have a single hero
                     </div>
                 </div> -->
                 <!-- <HorizontalScroll> -->
-                <div
-                    class="flex-col flex bg-indigo-100 w-full "
-                >
-                    <p class="text-2xl text-indigo-500 p-3">
+
+                <div class="flex-col flex bg-gray-100 w-full">
+                    <p class="text-2xl self-center text-indigo-500 p-3">
                         Amazing offers
                     </p>
-                    <div class="flex   flex-wrap items-center justify-center">
-                        <Hero2 />
-                        <Hero2 />
-                        <Hero2 />
-                        <Hero2 />
+                    <div
+                        class="flex touch-pan-x overflow-x-auto items-center justify-center"
+                    >
+                        <Hero2
+                            v-for="amazing_offer of amazing_offers"
+                            :key="amazing_offer.product_id"
+                            :product="amazing_offer.product"
+                            :remaining_time="amazing_offer.remaining_time"
+                        />
                     </div>
                 </div>
-                <!-- component -->
-                <!-- commerce slide cards -->
-                <div style="background-color: #fff8f4" class="h-full">
-                    <div class="container mx-auto lg:px-20">
-                        <div class="flex h-full pb-40">
-                            <div class="mx-3">
-                                <div
-                                    class="py-10 pb-3 mt-5 h-4/6 relative bg-purple-100 group hover:bg-purple-200 cursor-pointer transition ease-out duration-300"
-                                >
-                                    <div>
-                                        <img
-                                            src="https://i.ibb.co/FzkhpcD/pngegg.png"
-                                            alt="https://www.pngegg.com/en/png-nllal/download"
-                                        />
-                                    </div>
-                                    <div class="px-7 mt-20">
-                                        <h1
-                                            class="text-3xl font-bold group-hover:text-purple-300 transition ease-out duration-300"
-                                        >
-                                            01.
-                                        </h1>
-                                        <h2 class="text-1xl mt-4 font-bold">
-                                            Roof light lamp
-                                        </h2>
-                                        <p
-                                            class="mt-2 opacity-60 group-hover:opacity-70"
-                                        >
-                                            Diverse collection of roof lights of
-                                            quality
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mx-3">
-                                <div
-                                    class="py-10 pb-3 mt-5 h-4/6 relative bg-indigo-100 group hover:bg-indigo-200 cursor-pointer transition ease-out duration-300"
-                                >
-                                    <div>
-                                        <img
-                                            src="https://i.ibb.co/MgnH44p/pngegg-2.png"
-                                            alt="https://www.pngegg.com/en/png-epwii/download"
-                                        />
-                                    </div>
-                                    <div class="px-7 mt-20">
-                                        <h1
-                                            class="text-3xl font-bold group-hover:text-indigo-300 transition ease-out duration-300"
-                                        >
-                                            02.
-                                        </h1>
-                                        <h2 class="text-1xl mt-4 font-bold">
-                                            Lounge Chair
-                                        </h2>
-                                        <p
-                                            class="mt-2 opacity-60 group-hover:opacity-70"
-                                        >
-                                            Comfortable collection of perfect
-                                            lounge chairs
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mx-3">
-                                <div
-                                    class="py-10 pb-3 mt-5 h-4/6 relative bg-indigo-100 group hover:bg-indigo-200 cursor-pointer transition ease-out duration-300"
-                                >
-                                    <div>
-                                        <img
-                                            src="https://i.ibb.co/JB4GWMJ/pngegg-1.png"
-                                            alt="https://www.pngegg.com/en/png-zquqj/download"
-                                        />
-                                    </div>
-                                    <div class="px-7 mt-20">
-                                        <h1
-                                            class="text-3xl font-bold group-hover:text-indigo-300 transition ease-out duration-300"
-                                        >
-                                            02.
-                                        </h1>
-                                        <h2 class="text-1xl mt-4 font-bold">
-                                            Lounge Chair
-                                        </h2>
-                                        <p
-                                            class="mt-2 opacity-60 group-hover:opacity-70"
-                                        >
-                                            Comfortable collection of perfect
-                                            lounge chairs
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--  -->
-                <!-- https://dribbble.com/shots/15103214/attachments/6835973?mode=media -->
-                <!-- </HorizontalScroll> -->
 
-                <!-- /////////// -->
-                <!-- component -->
+                <section class="flex h-full p-2 my-8">
+                    <img
+                        class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
+                        src="https://i.pinimg.com/736x/a2/8a/2e/a28a2ec311907cea02fee60b3e26fc1c.jpg"
+                        alt="https://www.pngegg.com/en/png-nllal/download"
+                    />
+                    <img
+                        class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
+                        src="https://i.pinimg.com/originals/5c/cb/8c/5ccb8cf7968659ba21f827a945cf4b22.jpg"
+                        alt="https://www.pngegg.com/en/png-epwii/download"
+                    />
+                    <img
+                        class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
+                        src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/mens-clothing-sale-portrait-flyer-template-1627835dd392414eb308cf84fde379a1_screen.jpg?ts=1636966283"
+                        alt="https://www.pngegg.com/en/png-zquqj/download"
+                    />
+                </section>
+
                 <div class="py-6">
                     <div
                         class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden"

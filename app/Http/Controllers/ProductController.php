@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AmazingOffer;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -18,11 +19,15 @@ class ProductController extends Controller
         'price' => 'required | integer',
         'image' => 'required ',
     ];
+
+
+
     public function index(Request $request)
     {
-        return Inertia::render('Store/Products/Index', ['products' => Product::simplePaginate(10)]);
-        // return Inertia::render('backoffice/Dashboard');
+        $amazing_offers = AmazingOffer::with('product')->get();
+        return Inertia::render('Store/Products/Index', ['amazing_offers' => $amazing_offers]);
     }
+
     public function store(Request $request)
     {
         $product = Product::create([
@@ -34,8 +39,6 @@ class ProductController extends Controller
 
         $product->addMediaFromRequest('image')->toMediaCollection();
     }
-
-
 
     public function update(Product $product, Request $request)
     {
