@@ -3,14 +3,17 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Components/Button.vue";
 import JetInput from "@/Components/Input.vue";
 import JetInputError from "@/Components/InputError.vue";
-import JetCheckbox from "@/Components/Checkbox.vue";
+import CartItem from "@/Components/CartItem.vue";
 import JetLabel from "@/Components/Label.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import { onMounted, ref } from "vue";
 
 defineProps({
     cart: Object,
     total: Number,
 });
+
+let loaded = ref(false);
 
 const form = useForm({
     recipient_name: "",
@@ -20,6 +23,7 @@ const form = useForm({
     expirationYear: null,
     expirationMonth: null,
     cvc: null,
+    saveInfo: null,
 });
 
 const pay = () => {
@@ -27,187 +31,217 @@ const pay = () => {
         onFinish: () => console.log("done"),
     });
 };
+
+onMounted(() => {
+    loaded.value = true;
+});
 </script>
 
 <template>
+            <Transition >
+
     <AppLayout>
         <!-- <div class="absolute bg-black opacity-80 inset-0 z-0"></div> -->
-        <div class="inline-flex items-center mt-2">
-            <button
-                class="bg-white rounded-l border text-gray-600 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 inline-flex items-center px-2 py-1 border-r border-gray-200"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M20 12H4"
-                    />
-                </svg>
-            </button>
+
+        <div class="flex justify-evenly"  >
             <div
-                class="bg-gray-100 border-t border-b border-gray-100 text-gray-600 hover:bg-gray-100 inline-flex items-center px-4 py-1 select-none"
+                class="flex m-5 h-full flex-col overflow-y-scroll bg-gray-300 shadow-xl w-1/3"
             >
-                2
-            </div>
-            <button
-                class="bg-white rounded-r border text-gray-600 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 inline-flex items-center px-2 py-1 border-r border-gray-200"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 4v16m8-8H4"
-                    />
-                </svg>
-            </button>
-        </div>
-        <div class="bg-gray-200 h-screen">
-            <h1 class="sr-only">Checkout</h1>
+                <div class="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+                    <div class="mt-8">
+                        <div class="flow-root">
+                            <ul
+                                role="list"
+                                class="-my-6 divide-y divide-gray-200"
+                            >
+                                <CartItem v-for="item of cart" :item="item" />
 
-            <div class="relative mx-auto max-w-screen-2xl">
-                <div class="flex justify-evenly bg-gray-200">
-                    <div class="pt-2 md:pt-4 flex-1">
-                        <div class="mx-auto max-w-lg px-4 lg:px-8">
-                            <div class="mt-12">
-                                <div class="flow-root">
-                                    <ul class="-my-4 divide-y divide-gray-200">
-                                        <!-- {{cart}} -->
-                                        <li
-                                            v-for="item of cart"
-                                            class="flex bg-slate-700 rounded-lg px-3 items-center justify-between py-4"
-                                        >
-                                            <div
-                                                class="flex items-start align-baseline"
-                                            >
-                                                <img
-                                                    alt="Trainer"
-                                                    src="https://images.unsplash.com/photo-1565299999261-28ba859019bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
-                                                    class="h-20 w-20 flex-shrink-0 rounded-lg object-cover"
-                                                />
-                                                <h1
-                                                    class="text-gray-200 text-lg mx-2"
-                                                ></h1>
-                                                <div class="ml-4">
-                                                    <p
-                                                        class="text-sm text-gray-200"
-                                                    >
-                                                        quantity:
-                                                        {{ item.quantity }}
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <p
-                                                    class="text-sm text-gray-200"
-                                                >
-                                                    total:
-                                                    <span
-                                                        class="text-lg text-red-200"
-                                                        >{{
-                                                            item.price *
-                                                            item.quantity
-                                                        }}</span
-                                                    >
-                                                    $
-                                                </p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="py-14 md:py-14 overflow-y-auto flex-1">
-                        <div class="mx-auto max-w-lg px-4 lg:px-8">
-                            <form class="flex flex-col" @submit.prevent="pay()">
-                                <div class="mt-1 col-span-6">
-                                    <JetLabel
-                                        for="recipient_name"
-                                        value="Recipient Name"
-                                    />
-                                    <JetInput
-                                        id="recipient_name"
-                                        v-model="form.recipient_name"
-                                        type="text"
-                                        class="mt-1 block w-full"
-                                        required
-                                    />
-                                    <JetInputError
-                                        class="mt-1"
-                                        :message="form.errors.recipient_name"
-                                    />
-                                </div>
-                                <div class="mt-1 col-span-6">
-                                    <JetLabel for="phone" value="phone" />
-                                    <JetInput
-                                        id="phone"
-                                        v-model="form.phone"
-                                        type="text"
-                                        class="mt-1 block w-full"
-                                        required
-                                    />
-                                    <JetInputError
-                                        class="mt-1"
-                                        :message="form.errors.phone"
-                                    />
-                                </div>
-                                <div class="mt-1">
-                                    <JetLabel for="address" value="address" />
-
-                                    <textarea
-                                        class="bg-gray-100"
-                                        name=""
-                                        v-model="form.address"
-                                        id=""
-                                        cols="39"
-                                        rows="3"
-                                    ></textarea>
-                                </div>
-                                <div class="m-3">
-                                    <JetLabel
-                                        for="saveInfo"
-                                        value="save info for next payments"
-                                    />
-
-                                    <JetInput
-                                        v-model="form.saveInfo"
-                                        type="checkbox"
-                                        class="mt-1 block"
-                                        required
-                                    />
-                                </div>
-                                <div class="w-full">
-                                    <JetButton
-                                        class="m-4 w-full bg-gray-500"
-                                        :class="{
-                                            'opacity-25': form.processing,
-                                        }"
-                                        :disabled="form.processing"
+                                <div class="py-6 px-4 sm:px-6">
+                                    <div
+                                        class="flex justify-between text-base font-medium text-gray-900"
                                     >
-                                        pay
-                                    </JetButton>
+                                        <p>Subtotal</p>
+                                        <p>${{ total }}</p>
+                                    </div>
+                                    <p class="mt-0.5 text-sm text-gray-500">
+                                        Shipping and taxes calculated at
+                                        checkout.
+                                    </p>
+
+                                    <div
+                                        class="mt-6 flex justify-center text-center text-sm text-gray-500"
+                                    >
+                                        <a
+                                            href="/category"
+                                            type="button"
+                                            class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2"
+                                        >
+                                            <i class="bi bi-cart mx-1"></i>
+                                            Continue Shopping
+                                        </a>
+                                    </div>
                                 </div>
-                            </form>
+                                <!-- More products... -->
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- form deatails -->
+            <Transition name="fade">
+                <div
+                v-if="loaded"
+                    class="flex m-5 h-full flex-col py-3 bg-gray-300 shadow-xl"
+                >
+                    <div class="mx-auto max-w-lg px-4 lg:px-8">
+                        <form class="flex flex-col">
+                            <div>
+                                <JetLabel
+                                    for="recipient_name"
+                                    value="recipient_name"
+                                />
+                                <JetInput
+                                    id="recipient_name"
+                                    v-model="form.recipient_name"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    required
+                                    autofocus
+                                />
+                                <JetInputError
+                                    class="mt-2"
+                                    :message="form.errors.recipient_name"
+                                />
+                            </div>
+
+                            <div>
+                                <JetLabel for="phone" value="phone" />
+                                <JetInput
+                                    id="phone"
+                                    v-model="form.phone"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    required
+                                    autofocus
+                                />
+                                <JetInputError
+                                    class="mt-2"
+                                    :message="form.errors.phone"
+                                />
+                            </div>
+                            <div>
+                                <JetLabel for="address" value="address" />
+                                <textarea
+                                    class="bg-gray-100 my-2 p-3"
+                                    name=""
+                                    v-model="form.address"
+                                    id=""
+                                    cols="39"
+                                    rows="3"
+                                ></textarea>
+                                <JetInputError
+                                    class="mt-2"
+                                    :message="form.errors.address"
+                                />
+                            </div>
+                            <div class="my-2 flex gap-3">
+                                <JetLabel
+                                    for="saveInfo"
+                                    value="save address for later "
+                                />
+                                <JetInput
+                                    id="phone"
+                                    v-model="form.saveInfo"
+                                    type="checkbox"
+                                    class="mt-1 w-5 h-5 block"
+                                    required
+                                    autofocus
+                                />
+                                <JetInputError
+                                    class="mt-2"
+                                    :message="form.errors.saveInfo"
+                                />
+                            </div>
+
+                            <fieldset
+                                class="col-span-6 border-t border-gray-200 my-1"
+                            >
+                                <legend
+                                    class="mb-1 block text-sm text-gray-600"
+                                >
+                                    Card Details
+                                </legend>
+
+                                <div
+                                    class="-space-y-px rounded-lg bg-white shadow-sm"
+                                >
+                                    <div>
+                                        <label class="sr-only" for="card-number"
+                                            >Card Number</label
+                                        >
+
+                                        <input
+                                            class="relative w-full rounded-t-lg border-gray-200 p-2.5 text-sm placeholder-gray-500 focus:z-10"
+                                            type="text"
+                                            name="card-number"
+                                            id="card-number"
+                                            placeholder="Card number"
+                                        />
+                                    </div>
+
+                                    <div class="flex -space-x-px">
+                                        <div class="flex-1">
+                                            <label
+                                                class="sr-only"
+                                                for="card-expiration-date"
+                                            >
+                                                Expiration Date
+                                            </label>
+
+                                            <input
+                                                class="relative w-full rounded-bl-lg border-gray-200 p-2.5 text-sm placeholder-gray-500 focus:z-10"
+                                                type="text"
+                                                name="card-expiration-date"
+                                                id="card-expiration-date"
+                                                placeholder="MM / YY"
+                                            />
+                                        </div>
+
+                                        <div class="flex-1">
+                                            <label
+                                                class="sr-only"
+                                                for="card-cvc"
+                                                >CVC</label
+                                            >
+
+                                            <input
+                                                class="relative w-full rounded-br-lg border-gray-200 p-2.5 text-sm placeholder-gray-500 focus:z-10"
+                                                type="text"
+                                                name="card-cvc"
+                                                id="card-cvc"
+                                                placeholder="CVC"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="mx-auto">
+                                <button
+                                    id="button"
+                                    type="submit"
+                                    class="bg-green-600 shadow-xl hover:bg-green-700 text-lg text-white font-bold rounded-full p-3 my-2 w-48"
+                                >
+                                    Pay
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </Transition>
         </div>
     </AppLayout>
+</Transition >
+
 </template>

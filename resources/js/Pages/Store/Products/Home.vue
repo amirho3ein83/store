@@ -1,6 +1,8 @@
 <script setup>
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Hero2 from "@/Components/Hero2.vue";
+import AmazingOffer from "@/Components/AmazingOffer.vue";
+import Slider from "@/Components/Slider.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import "vue-horizontal-scroll/dist/vue-horizontal-scroll.css";
 
@@ -37,7 +39,10 @@ Alternatively if you want to just have a single hero
 </section>
 -->
         <section class="bg-white">
-            <img src="./banner1.webp" alt="" class="w-full" />
+            <!-- <img src="./pics/banner1.webp" alt="" class="w-full" /> -->
+            <div class="flex px-16 py-4 bg-slate-50">
+                    <img src="./pics/hero4.jpg" alt="" class="object-cover w-full"/>
+            </div>
             <div class="mx-auto flex items-center flex-wrap">
                 <!-- <div class="flex">
                     <div class="flex flex-col">
@@ -62,7 +67,7 @@ Alternatively if you want to just have a single hero
                         Amazing offers
                     </p>
                     <div
-                        class="flex touch-pan-x overflow-x-auto items-center justify-center"
+                        class="flex touch-pan-x overflow-x-scroll items-center justify-center"
                     >
                         <Hero2
                             v-for="amazing_offer of amazing_offers"
@@ -73,7 +78,7 @@ Alternatively if you want to just have a single hero
                     </div>
                 </div>
 
-                <section class="flex h-full p-2 my-8">
+                <section class="flex h-full p-2 my-4">
                     <img
                         class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
                         src="https://i.pinimg.com/736x/a2/8a/2e/a28a2ec311907cea02fee60b3e26fc1c.jpg"
@@ -89,6 +94,63 @@ Alternatively if you want to just have a single hero
                         src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/mens-clothing-sale-portrait-flyer-template-1627835dd392414eb308cf84fde379a1_screen.jpg?ts=1636966283"
                         alt="https://www.pngegg.com/en/png-zquqj/download"
                     />
+                </section>
+
+                <section class="flex h-full p-1 mx-auto">
+                    <section class="overflow-hidden text-gray-700">
+                        <div
+                            class="container px-5 py-2 mx-auto lg:pt-24 lg:px-32"
+                        >
+                            <div class="flex flex-wrap -m-1 md:-m-2">
+                                <div class="flex flex-wrap w-1/2">
+                                    <div class="w-1/2 p-1 md:p-2">
+                                        <img
+                                            alt="gallery"
+                                            class="block object-cover object-center w-full h-full rounded-lg"
+                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(70).webp"
+                                        />
+                                    </div>
+                                    <div class="w-1/2 p-1 md:p-2">
+                                        <img
+                                            alt="gallery"
+                                            class="block object-cover object-center w-full h-full rounded-lg"
+                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(72).webp"
+                                        />
+                                    </div>
+                                    <div class="w-full p-1 md:p-2">
+                                        <img
+                                            alt="gallery"
+                                            class="block object-cover object-center w-full h-full rounded-lg"
+                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap w-1/2">
+                                    <div class="w-full p-1 md:p-2">
+                                        <img
+                                            alt="gallery"
+                                            class="block object-cover object-center w-full h-full rounded-lg"
+                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(74).webp"
+                                        />
+                                    </div>
+                                    <div class="w-1/2 p-1 md:p-2">
+                                        <img
+                                            alt="gallery"
+                                            class="block object-cover object-center w-full h-full rounded-lg"
+                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(75).webp"
+                                        />
+                                    </div>
+                                    <div class="w-1/2 p-1 md:p-2">
+                                        <img
+                                            alt="gallery"
+                                            class="block object-cover object-center w-full h-full rounded-lg"
+                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(77).webp"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </section>
 
                 <div class="py-6">

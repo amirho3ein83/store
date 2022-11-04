@@ -111,7 +111,7 @@ onMounted(() => {
 
                     <div class="flex w-full mt-8">
                         <JetButton
-                            class="m-4"
+                            class="m-4 bg-yellow-600"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >

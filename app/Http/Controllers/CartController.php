@@ -26,7 +26,6 @@ class CartController extends Controller
         }
 
         $cart->total = $total;
-        info($cart);
 
         return Inertia::render('Store/Cart', ['cart' => $cart, 'total' => $total]);
     }
@@ -39,7 +38,7 @@ class CartController extends Controller
         if ($productFoundInCart->isEmpty()) {
             $cart = CartItem::create([
                 'product_id' => $product->id,
-                'price' => $product->sale_price,
+                'price' => $product->price,
                 'quantity' => 1,
                 'user_id' => Auth::id()
             ]);
@@ -55,12 +54,25 @@ class CartController extends Controller
         }
     }
 
+    public function increaseCartItem($id)
+    {
+        CartItem::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->increment('quantity');
+    }
+    public function decreaseCartItem($id)
+    {
+        CartItem::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->decrement('quantity');
+    }
+    public function deleteCartItem($id)
+    {
+        CartItem::where([['user_id', Auth::id()], ['product_id', $id]])->delete();
+    }
+
     public function countCartItems(Product $product)
     {
-        return  CartItem::where('user_id', Auth::id())->sum('quantity');
+        return  CartItem::where('user_id', Auth::id())->count();
     }
     public function payment(Product $product)
     {
-        return  CartItem::where('user_id', Auth::id())->sum('quantity');
+        // return  CartItem::where('user_id', Auth::id())->sum('quantity');
     }
 }

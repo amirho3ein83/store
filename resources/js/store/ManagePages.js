@@ -16,5 +16,14 @@ export const managePageStore = defineStore("manage-pages", {
                 }
             );
         },
+        chooseCategory(id) {
+            Inertia.get(
+                route('product-list',{id:id}),
+                {},
+                {
+                    onSuccess: () => {},
+                }
+            );
+        },
     },
 });

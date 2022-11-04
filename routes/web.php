@@ -18,6 +18,10 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/home', [ProductController::class, 'index'])->name('home');
+Route::get('/category', [ProductController::class, 'category'])->name('category');
+Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -32,14 +36,22 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    Route::get('/user/profile', function () {
+        return Inertia::render('UserProfile');
+    })->name('profile');
 
-    Route::get('/', [ProductController::class, 'index'])->name('Home');
+
+
 
     Route::post('/payment', [CartController::class, 'payment'])->name('payment');
 
-    Route::post('/cart', [CartController::class, 'addToCart']);
+    Route::post('/cart', [CartController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [CartController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [CartController::class, 'countCartItems'])->name('cart.count');
+
+    Route::patch('/cart/products/{id}/increase-item', [CartController::class, 'increaseCartItem'])->name('cart.increase-item');
+    Route::patch('/cart/products/{id}/decrease-item', [CartController::class, 'decreaseCartItem'])->name('cart.decrease-item');
+    Route::delete('/cart/products/{id}', [CartController::class, 'deleteCartItem'])->name('cart.delete-item');
 
 
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
@@ -49,4 +61,10 @@ Route::middleware([
         return Inertia::render('Store/Products/Create');
     });
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+});
+
+
+
+Route::fallback(function () {
+    return Inertia::render('404');
 });

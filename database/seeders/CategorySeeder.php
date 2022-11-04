@@ -15,8 +15,23 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        Category::create([
-            'name' => 'watches'
-        ]);
+        $categories = [
+            1 => 'Digital',
+            2 => 'Mobile',
+            3 => 'Tools',
+            4 => 'Health',
+            5 => 'Furniture',
+            6 => 'Sport',
+            7 => 'Clothes',
+            8 => 'Stationary',
+            9 => 'Accessory',
+            10 => 'Game Console',
+        ];
+
+        foreach ($categories as $key => $category) {
+            Category::factory()->create([
+                'name' => $category
+            ]);
+        }
     }
 }

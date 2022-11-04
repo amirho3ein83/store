@@ -4,7 +4,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { useCartStore } from "@/store/Cart.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Footer from "../Pages/Footer.vue";
-import NavItem from "@/Components/NavItem.vue";
+import Navbar from "@/Components/Navbar.vue";
 import { managePageStore } from "@/store/ManagePages";
 
 const storePages = managePageStore();
@@ -24,13 +24,12 @@ onMounted(() => {
         class="bg-gray-800 text-gray-600 work-sans leading-normal text-base tracking-normal"
     >
         <!--Nav-->
-        <nav id="header" class="w-full z-30 top-0">
+        <Navbar/>
+        <!-- <nav id="header" class="w-full z-30 top-0">
             <div
                 class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3"
             >
-                <!-- <a href="/" class="text-2xl text-gray-200 cursor-pointer"
-                    >Space Store</a
-                > -->
+
                 <div class="p-1">
                     <button
                         type="button"
@@ -76,7 +75,7 @@ onMounted(() => {
 
                 </div>
             </div>
-        </nav>
+        </nav> -->
 
         <slot />
 
@@ -87,5 +86,24 @@ onMounted(() => {
 <style>
 i {
     font-size: 24px;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 </style>

@@ -49,9 +49,10 @@ defineProps({
             <div
                 class="flex flex-col justify-between w-56 sm:w-72 h-72 bg-white bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
                 style="
-                    background-image: url('https://placeimg.com/480/480/any');
+                    background-image: url('https://st2.depositphotos.com/1000375/9917/v/950/depositphotos_99171422-stock-illustration-gift-coupon-discount-card-template.jpg');
                 "
             >
+            <!-- <img src="../Pages/Store/Products/pics/amazing-offer.jpg" class="" alt=""> -->
                 <div class="flex justify-between items-center ml-4 pr-8">
                     <div
                         class="bg-red-600 w-12 h-12 shadow flex flex-col-reverse p-2 text-center font-bold text-white rounded-b-full"

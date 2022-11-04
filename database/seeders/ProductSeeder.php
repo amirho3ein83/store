@@ -30,7 +30,7 @@ class ProductSeeder extends Seeder
                 ->toMediaCollection('photo');
         }
 
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 7; $i++) {
             AmazingOffer::create([
                 'product_id' => $i,
                 'expiration_date' => Carbon::now()->addHour(rand(1, 14))

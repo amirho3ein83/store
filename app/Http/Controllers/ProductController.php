@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AmazingOffer;
 use App\Models\CartItem;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,34 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $amazing_offers = AmazingOffer::with('product')->get();
-        return Inertia::render('Store/Products/Index', ['amazing_offers' => $amazing_offers]);
+        return Inertia::render('Store/Products/Home', ['amazing_offers' => $amazing_offers]);
+    }
+
+    public function category(Request $request)
+    {
+        $categories = Category::all();
+
+        return Inertia::render(
+            'Store/Products/Category',
+            ['categories' => $categories]
+        );
+    }
+    public function productList($id)
+    {
+        $in_cart_products = CartItem::where('user_id', Auth::id())->pluck('id')->toArray();
+
+        $products = Product::where('category_id', $id)->simplePaginate(20);
+
+        $products->map(function ($product) use ($in_cart_products) {
+            if (in_array($product->id, $in_cart_products)) {
+                $product->is_in_cart = true;
+            }
+        });
+
+        return Inertia::render(
+            'Store/Products/ProductList',
+            ['products' => $products]
+        );
     }
 
     public function store(Request $request)

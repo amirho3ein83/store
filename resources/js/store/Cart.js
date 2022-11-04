@@ -7,7 +7,7 @@ export const useCartStore = defineStore("cart", {
     actions: {
         addToCart(id) {
             axios
-                .post("cart", {
+                .post(route("addToCart"), {
                     product_id: id,
                 })
                 .then((res) => {
