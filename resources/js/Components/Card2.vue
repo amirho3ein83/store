@@ -1,16 +1,25 @@
 <script setup>
 import AddToCartButton from "@/Components/AddToCartButton.vue";
 import InCartButton from "@/Components/InCartButton.vue";
+import { onMounted, ref } from "vue";
 
 defineProps({
     product: Object,
 });
+
+let showItem = ref(false);
+
+onMounted(() => {
+    setTimeout(() => {
+        showItem.value = true;
+    }, 1);
+});
 </script>
 
 <template>
-    <!-- component -->
-    <!-- This is an example component -->
-    <div class="max-w-2xl mx-auto">
+    <Transition> 
+
+    <div class="max-w-2xl mx-auto" v-if="showItem">
         <div
             class="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700"
         >
@@ -43,12 +52,13 @@ defineProps({
                     >
                 </div>
                 <div class="w-full">
-                    <InCartButton v-if="product.is_in_cart"  />
+                    <InCartButton v-if="product.is_in_cart" />
                     <AddToCartButton v-else :id="product.id" />
                 </div>
             </div>
         </div>
     </div>
+</Transition>
 </template>
 
 <style>

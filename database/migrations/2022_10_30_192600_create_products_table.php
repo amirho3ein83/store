@@ -19,11 +19,12 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->integer('price');
-            $table->integer('sold_quantity')->default(0);
+            $table->integer('sold_qty')->default(0);
             $table->foreignIdFor(Category::class);
             $table->integer('discount');
             $table->integer('balance');
             $table->mediumText('description');
+            $table->timestamps();
         });
     }
 

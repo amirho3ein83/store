@@ -38,11 +38,37 @@ class ProductController extends Controller
             ['categories' => $categories]
         );
     }
-    public function productList($id)
+    public function productList($id, Request $request)
     {
+
+
+
+        $products = Product::query()
+            ->where('category_id', $id)
+            ->when($request->search, function ($query, $search) {
+                $query->where('slug', 'like', "%{$search}%");
+            })
+            ->when($request->order_by, function ($query, $order_by) {
+                switch ($order_by) {
+                    case 'newest':
+                        $query->latest();
+                        break;
+                    case 'cheapest':
+                        $query->orderBy('price');
+                        break;
+                    case 'most_expensive':
+                        $query->orderBy('price', 'DESC');
+                        break;
+                    case 'bsetselling':
+                        $query->orderBy('sold_qty', 'DESC');
+                        break;
+                }
+            })
+            ->simplePaginate(5)
+            ->withQueryString();
+
         $in_cart_products = CartItem::where('user_id', Auth::id())->pluck('id')->toArray();
 
-        $products = Product::where('category_id', $id)->simplePaginate(20);
 
         $products->map(function ($product) use ($in_cart_products) {
             if (in_array($product->id, $in_cart_products)) {
@@ -52,7 +78,10 @@ class ProductController extends Controller
 
         return Inertia::render(
             'Store/Products/ProductList',
-            ['products' => $products]
+            [
+                'products' => $products,
+                'filters' => $request->get('search', 'order_by')
+            ]
         );
     }
 

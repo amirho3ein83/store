@@ -26,6 +26,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->text(100),
             'price' => $price,
             'discount' => rand(10, 54),
+            'sold_qty' => rand(144, 254),
             'balance' => rand(10, 30),
             'category_id' => 1,
         ];

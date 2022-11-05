@@ -17,16 +17,13 @@ class Product extends Model implements HasMedia
         'title',
         'slug',
         'price',
-        'sold_quantity',
+        'sold_qty',
         'discount',
         'description',
         'balance',
     ];
 
     protected $appends = ['available'];
-
-
-    public $timestamps = false;
 
     public static function last()
     {

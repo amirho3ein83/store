@@ -3,6 +3,7 @@
 use App\Http\Controllers\BackofficeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,7 +18,7 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::redirect('/','/home');
 Route::get('/home', [ProductController::class, 'index'])->name('home');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
@@ -36,9 +37,7 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/user/profile', function () {
-        return Inertia::render('UserProfile');
-    })->name('profile');
+    Route::get('/user/profile', [UserController::class,'profile'])->name('user.profile');
 
 
 

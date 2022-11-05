@@ -1,5 +1,6 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
+import Logout from "../Pages/Logout.vue";
 
 const storeCart = useCartStore();
 </script>
@@ -43,25 +44,26 @@ const storeCart = useCartStore();
                         <a class="hover:text-gray-200" href="#">
                             <i class="bi bi-heart-fill text-red-500"></i>
                         </a>
+                        <Logout />
 
                         <li
                             class="font-sans block mt-4 lg:inline-block lg:mt-0 lg:ml-6 align-middle text-black hover:text-gray-700"
                         >
                             <a href="/cart" role="button" class="relative flex">
-                              <i class="bi bi-cart3 text-gray-50"></i>
+                                <i class="bi bi-cart3 text-gray-50"></i>
 
                                 <span
                                     class="absolute -right-1 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center"
-                                    >{{storeCart.count_cart}}
+                                    >{{ storeCart.count_cart }}
                                 </span>
                             </a>
                         </li>
                         <!-- Sign In / Register      -->
                         <a
                             class="flex items-center hover:text-gray-200"
-                            href="#"
+                            href="/user/profile"
                         >
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-person text-2xl"></i>
                         </a>
                     </div>
                 </div>
