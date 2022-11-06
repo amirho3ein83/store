@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Wallet;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -25,6 +28,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'amir@amir.com',
             'password' => Hash::make('11111111'),
             'name' => 'amirshafi',
+        ]);
+
+        Wallet::create([
+            'user_id' => 1,
+            'balance' => 4500,
         ]);
     }
 }

@@ -1,6 +1,5 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
-import Logout from "../Pages/Logout.vue";
 
 const storeCart = useCartStore();
 </script>
@@ -44,7 +43,6 @@ const storeCart = useCartStore();
                         <a class="hover:text-gray-200" href="#">
                             <i class="bi bi-heart-fill text-red-500"></i>
                         </a>
-                        <Logout />
 
                         <li
                             class="font-sans block mt-4 lg:inline-block lg:mt-0 lg:ml-6 align-middle text-black hover:text-gray-700"

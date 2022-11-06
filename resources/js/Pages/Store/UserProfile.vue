@@ -1,17 +1,20 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import WalletCard from "@/Components/WalletCard.vue";
+import UserSidebar from "@/Components/UserSidebar.vue";
+import { ref } from "vue";
+
+const previewImage = ref(null);
+
 
 let props = defineProps({
-    user:Object
+    user:Object,
+    wallet:Object
 })
 </script>
 
 <template>
-    <Transition>
-        <AppLayout class="bg-gray-700">
-            <!-- component -->
-                <!-- Container -->
+            <UserSidebar/>                <!-- Container -->
                 <div class="container mx-auto">
                     <div class="flex justify-center px-6 mt-12">
                         <!-- Row -->
@@ -97,7 +100,5 @@ let props = defineProps({
                     
                 </div>
 
-<WalletCard/>
-        </AppLayout>
-    </Transition>
+<WalletCard :balance="wallet.balance"/>
 </template>

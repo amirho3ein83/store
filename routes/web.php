@@ -4,6 +4,7 @@ use App\Http\Controllers\BackofficeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,6 +49,8 @@ Route::middleware([
     Route::get('/cart', [CartController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [CartController::class, 'countCartItems'])->name('cart.count');
 
+    Route::patch('/charge-wallet', [WalletController::class, 'increaseBalance'])->name('charge.wallet');
+   
     Route::patch('/cart/products/{id}/increase-item', [CartController::class, 'increaseCartItem'])->name('cart.increase-item');
     Route::patch('/cart/products/{id}/decrease-item', [CartController::class, 'decreaseCartItem'])->name('cart.decrease-item');
     Route::delete('/cart/products/{id}', [CartController::class, 'deleteCartItem'])->name('cart.delete-item');

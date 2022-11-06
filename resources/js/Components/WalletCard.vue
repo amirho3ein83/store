@@ -1,5 +1,31 @@
 <script setup>
+import JetInput from "@/Components/Input.vue";
+import JetInputError from "@/Components/InputError.vue";
+import JetLabel from "@/Components/Label.vue";
+import { ref } from "vue";
 
+let props = defineProps({
+    balance: Number,
+});
+
+let balance = ref(props.balance);
+let increaseAmount = ref(null);
+let showNotif = ref(false);
+
+const chargeWallet = () => {
+    axios
+        .patch(route("charge.wallet"), {
+            increaseAmount: increaseAmount.value,
+        })
+        .then((res) => {
+            if (res.status == 200) {
+                balance.value += res.data.new_val;
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
 </script>
 
 <template>
@@ -7,12 +33,12 @@
         <div class="flex flex-col space-y-8 w-full px-16 max-w-xl">
             <!-- card -->
             <div
-                class="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-56 w-96 p-6 rounded-xl shadow-md"
+                class="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-72 w-96 p-6 rounded-xl shadow-md"
             >
                 <div class="h-full flex flex-col justify-between">
                     <div class="flex items-start justify-between space-x-4">
                         <div class="text-xl font-semibold tracking-tigh">
-                            SUPERCOMPANY
+                            {{ $page.props.user.name }}
                         </div>
 
                         <div
@@ -50,92 +76,66 @@
                         </div>
                     </div>
 
-                    <div
-                        class="inline-block w-12 h-8 bg-gradient-to-tl from-yellow-200 to-yellow-100 rounded-md shadow-inner overflow-hidden"
-                    >
-                        <div
-                            class="relative w-full h-full grid grid-cols-2 gap-1"
-                        >
-                            <div
-                                class="absolute border border-gray-900 rounded w-4 h-6 left-4 top-1"
-                            ></div>
-                            <div
-                                class="border-b border-r border-gray-900 rounded-br"
-                            ></div>
-                            <div
-                                class="border-b border-l border-gray-900 rounded-bl"
-                            ></div>
-                            <div class=""></div>
-                            <div class=""></div>
-                            <div
-                                class="border-t border-r border-gray-900 rounded-tr"
-                            ></div>
-                            <div
-                                class="border-t border-l border-gray-900 rounded-tl"
-                            ></div>
-                        </div>
-                    </div>
-
                     <div class="">
-                        <div class="text-xs font-semibold tracking-tight">
+                        <div class="text-sm font-semibold tracking-tight">
                             balance
                         </div>
 
-                        <div class="text-2xl font-semibold">$50</div>
+                        <div class="text-2xl font-semibold">${{ balance }}</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- notification -->
-            <div class="relative">
-                <div
-                    class="absolute right-10 flex space-x-2 items-start bg-white text-gray-900 border-gray-200 shadow-2xl -mt-16 w-72 px-2 py-3 rounded-lg"
-                >
-                    <div class="flex-initial">
-                        <div
-                            class="inline-flex items-center justify-center rounded-lg bg-gradient-tl from-green-400 via-green-400 bg-green-300"
-                        >
-                            <div class="p-2">
-                                <svg
-                                    class="h-4 w-4 text-white opacity-90"
-                                    width="24"
-                                    height="24"
-                                    stroke-width="1.5"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    ></path>
-                                    <path
-                                        d="M15 8.5C14.315 7.81501 13.1087 7.33855 12 7.30872M9 15C9.64448 15.8593 10.8428 16.3494 12 16.391M12 7.30872C10.6809 7.27322 9.5 7.86998 9.5 9.50001C9.5 12.5 15 11 15 14C15 15.711 13.5362 16.4462 12 16.391M12 7.30872V5.5M12 16.391V18.5"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    ></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex-1 inline-flex items-start justify-between">
+                    <div
+                        class="mt-8 py-2 flex border-t border-gray-400 justify-between align-baseline"
+                    >
                         <div>
-                            <h2 class="text-xs font-semibold tracking-tight">
-                                Loyalty program
-                            </h2>
-                            <p class="text-xs text-gray-500 font-light">
-                                You received $5 credit
-                            </p>
+                            charge amount
+                            <JetInput
+                                v-model="increaseAmount"
+                                type="number"
+                                class="mt-1 block w-full text-gray-800"
+                                required
+                            />
                         </div>
-
-                        <div class="text-xs text-gray-400">17:15</div>
+                        <button
+                            @click="chargeWallet()"
+                            class="w-1/4 self-end rounded bg-green-600 px-1 py-3 text-center text-sm font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
+                        >
+                            Charge
+                        </button>
                     </div>
                 </div>
             </div>
+            <Transition>
+                <div
+                    v-if="showNotif"
+                    id="toast-default "
+                    class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-gray-900 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+                    role="alert"
+                >
+                    <div class="ml-3 text-sm font-normal text-green-500">
+                        Wallet Charged Successfully
+                    </div>
+                    <button
+                        type="button"
+                        class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                        data-collapse-toggle="toast-default"
+                        aria-label="Close"
+                    >
+                        <span class="sr-only">Close</span>
+                        <svg
+                            class="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+            </Transition>
         </div>
     </div>
 </template>

@@ -2,7 +2,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { defineStore } from "pinia";
 
 export const useCartStore = defineStore("cart", {
-    state: () => ({ count_cart: 0 ,products:[]}),
+    state: () => ({ sub_total: 0 ,count_cart: 0 ,products:[]}),
 
     actions: {
         addToCart(id) {
@@ -37,5 +37,17 @@ export const useCartStore = defineStore("cart", {
                     console.log(error);
                 });
         },
+
+         increaseItem  (id) {
+            axios.patch(route("cart.increase-item", { id: id }));
+        },
+        
+         decreaseItem  (id) {
+            axios.patch(route("cart.decrease-item", { id: id }));
+        },
+        
+         deleteItem  (id) {
+            axios.delete(route("cart.delete-item", { id: id }));
+        }
     },
 });

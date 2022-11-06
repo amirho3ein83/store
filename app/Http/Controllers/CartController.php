@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class CartController extends Controller
@@ -71,8 +74,82 @@ class CartController extends Controller
     {
         return  CartItem::where('user_id', Auth::id())->count();
     }
-    public function payment(Product $product)
+    public function payment(Request $request)
     {
-        // return  CartItem::where('user_id', Auth::id())->sum('quantity');
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'recipient_name' => 'required',
+            'mobile' => 'required|numeric|digits:10',
+            'subtotal' => 'required|numeric',
+            'address' => 'required',
+            'card_number' => 'numeric|digits:16',
+            'expirationYear' => 'numeric|digits:4',
+            'expirationMonth' => 'numeric|digits:2',
+            'cvc' => 'number',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Retrieve the validated input...
+        $validated = $validator->validated();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // check subtotal for free delivery
+        // add tax 
+
+
+        if ($request->saveInfo) {
+            Address::create([
+                'text' => $validated['address'],
+                'user_id' => Auth::id()
+            ]);
+        }
+
+
+
+        if ($request->paymentMethod == 'wallet') {
+
+            $wallet = Wallet::firstWhere('user_id', Auth::id());
+
+            $balance = $wallet->balance;
+
+            if ($balance > $request->subtotal) {
+                return redirect()->back()
+                    ->withErrors('insufficient inventory')
+                    ->withInput();
+            }
+        }
+
+
+
+        $cartItems = CartItem::where('user_id', Auth::id())->get();
+
+        foreach ($cartItems as $key => $item) {
+            Product::where('id',$item->product->id)->increment('sold_qty',$item->qty);
+        }
+
+        return response()->json([
+            'message' => 'success'
+        ], 200);
     }
 }

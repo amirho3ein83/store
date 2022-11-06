@@ -6,6 +6,7 @@ use App\Models\AmazingOffer;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\RecentVisit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -125,6 +126,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        RecentVisit::create([]);
         return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }
