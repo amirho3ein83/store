@@ -28,7 +28,7 @@ class ProductFactory extends Factory
             'discount' => rand(10, 54),
             'sold_qty' => rand(144, 254),
             'balance' => rand(10, 30),
-            'rate' => mt_rand(10, 100) / 10,
+            'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
             'category_id' => 1,
         ];
