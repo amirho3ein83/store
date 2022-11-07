@@ -12,9 +12,7 @@ class UserController extends Controller
     {
         return Inertia::render(
             'User/Profile',
-            [
-
-            ]
+            []
         );
     }
     public function address()

@@ -29,6 +29,7 @@ watch(
             {
                 replace: true,
                 preserveState: true,
+                preserveScroll: true,
                 onSuccess: (res) => {
                     if (res.data) {
                         props.products.value = res.data;
@@ -48,6 +49,7 @@ watch(
             {
                 replace: true,
                 preserveState: true,
+                preserveScroll: true,
                 onSuccess: (res) => {
                     if (res.data) {
                         props.products.value = res.data;
@@ -118,11 +120,42 @@ watch(
                     v-model="order_by"
                     name="option"
                     id="3"
-                    value="newest"
+                    value="rate"
                     class="peer hidden"
                 />
                 <label
                     for="3"
+                    class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                    >rate</label
+                >
+            </div>
+            <div>
+                <input
+                    type="radio"
+                    v-model="order_by"
+                    name="option"
+                    id="4"
+                    value="most_visited"
+                    class="peer hidden"
+                />
+                <label
+                    for="4"
+                    class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                    >most visited</label
+                >
+            </div>
+
+            <div>
+                <input
+                    type="radio"
+                    v-model="order_by"
+                    name="option"
+                    id="5"
+                    value="newest"
+                    class="peer hidden"
+                />
+                <label
+                    for="5"
                     class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
                     >newest</label
                 >
@@ -133,12 +166,12 @@ watch(
                     type="radio"
                     v-model="order_by"
                     name="option"
-                    id="4"
+                    id="6"
                     value="bestselling"
                     class="peer hidden"
                 />
                 <label
-                    for="4"
+                    for="6"
                     class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
                     >bestselling</label
                 >

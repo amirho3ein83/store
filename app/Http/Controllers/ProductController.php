@@ -44,8 +44,6 @@ class ProductController extends Controller
     public function productList($id, Request $request)
     {
 
-
-
         $products = Product::query()
             ->where('category_id', $id)
             ->when($request->search, function ($query, $search) {
@@ -65,9 +63,15 @@ class ProductController extends Controller
                     case 'bsetselling':
                         $query->orderBy('sold_qty', 'DESC');
                         break;
+                    case 'rate':
+                        $query->orderBy('rate', 'DESC');
+                        break;
+                    case 'most_visited':
+                        $query->orderBy('reviews', 'DESC');
+                        break;
                 }
             })
-            ->simplePaginate(5)
+            ->simplePaginate(15)
             ->withQueryString();
 
         $in_cart_products = Order::where('user_id', Auth::id())->pluck('id')->toArray();

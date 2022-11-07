@@ -1,5 +1,6 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
+import { Link } from "@inertiajs/inertia-vue3";
 
 const storeCart = useCartStore();
 </script>
@@ -13,56 +14,58 @@ const storeCart = useCartStore();
             <!-- navbar -->
             <nav class="flex justify-between bg-gray-900 text-white w-screen">
                 <div class="px-5 xl:px-12 py-4 flex w-full items-center">
-                    <a class="text-3xl font-bold font-heading" href="/home">
-                        <!-- <img class="h-9" src="logo.png" alt="logo"> -->
-                        <i class="bi bi-slack text-yellow-500"></i> Space Store
-                    </a>
+                    <Link href="/home" preserve-scroll>
+                        <h3 class="text-3xl font-bold font-heading">
+                            <i class="bi bi-slack text-yellow-500"></i> Space
+                            Store
+                        </h3>
+                    </Link>
                     <!-- Nav Links -->
                     <ul
                         class="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12"
                     >
-                        <li>
-                            <a class="hover:text-yellow-400" href="/home"
-                                >Home</a
-                            >
-                        </li>
-                        <li>
-                            <a class="hover:text-yellow-400" href="/category"
-                                >Catagory</a
-                            >
-                        </li>
-
-                        <li>
-                            <a class="hover:text-yellow-400" href="/contact-us"
-                                >Contact Us</a
-                            >
-                        </li>
+                        <Link href="/home" preserve-scroll>
+                            <p class="hover:text-yellow-400">Home</p>
+                        </Link>
+                        <Link href="/category" preserve-scroll>
+                            <p class="hover:text-yellow-400">Catagory</p>
+                        </Link>
+                        <Link href="/contact-us" preserve-scroll>
+                            <p class="hover:text-yellow-400">ontact Us</p>
+                        </Link>
                     </ul>
                     <!-- Header Icons -->
                     <div class="hidden xl:flex items-center space-x-5">
-                        <a class="hover:text-gray-200" href="#">
-                            <i class="bi bi-heart-fill text-red-500"></i>
-                        </a>
-
-                        <li
-                            class="font-sans block mt-4 lg:inline-block lg:mt-0 lg:ml-6 align-middle text-black hover:text-gray-700"
+                        <Link
+                            class="relative flex"
+                            href="/liked-products"
+                            preserve-scroll
                         >
-                            <a href="/cart" role="button" class="relative flex">
-                                <i class="bi bi-cart3 text-gray-50"></i>
+                            <i class="bi bi-heart-fill text-red-500"></i>
+                        </Link>
+                        <Link
+                            class="relative flex"
+                            href="/cart"
+                            preserve-scroll
+                        >
+                            <i class="bi bi-cart3 text-gray-50"></i>
 
-                                <span
-                                    class="absolute -right-1 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center"
-                                    >{{ storeCart.count_cart }}
-                                </span>
-                            </a>
-                        </li>
+                            <span
+                                v-if="storeCart.count_cart != 0"
+                                class="absolute -right-1 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center"
+                            >
+                                {{ storeCart.count_cart }}
+                            </span>
+                        </Link>
                         <!-- Sign In / Register      -->
-                        <a
-                            class="flex items-center hover:text-gray-200"
-                            href="/user/profile"
+
+                        <Link
+                            class="relative flex"
+                            href="/liked-products"
+                            preserve-scroll
                         >
                             <i class="bi bi-person text-2xl"></i>
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 <!-- Responsive navbar -->

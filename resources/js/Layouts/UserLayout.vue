@@ -21,7 +21,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
                         class="flex gap-4 align-baseline justify-between order-last md:order-first mt-4 md:mt-0"
                     >
                         <a
-                            href="/user/liked-products"
+                            href="/liked-products"
                             class="flex hover:bg-gray-800 duration-150 transition hover:scale-105 cursor-pointer active:scale-100 items-center py-0 rounded-xl bg-gray-700 px-2"
                         >
                             <i class="bi bi-heart-fill text-red-600"></i>

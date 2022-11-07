@@ -32,13 +32,11 @@ onMounted(() => {
             </a>
             <div class="px-5 pb-5">
                 <h2 class="text-yellow-900 text-xl">{{ product.title }}</h2>
-                <a href="#">
                     <h3
                         class="h-14 block text-gray-900 font-semibold text-sm tracking-tight dark:text-white"
                     >
                         {{ product.description }}
                     </h3>
-                </a>
                 <div class="flex items-center mt-2.5 mb-5 justify-between">
                     <div>
                         <i class="bi bi-star-fill"></i>

@@ -31,7 +31,7 @@ class CartController extends Controller
 
         $cart->total = $total;
 
-        return Inertia::render('Store/Cart', ['cart' => $cart, 'total' => $total]);
+        return Inertia::render('Store/PaymentSteps/OrderList', ['cart' => $cart, 'total' => $total]);
     }
 
     public function addToCart(Request $request)

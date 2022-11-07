@@ -1,6 +1,5 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import PaymentLayout from "@/Layouts/PaymentLayout.vue";
 import JetButton from "@/Components/Button.vue";
 import JetInput from "@/Components/Input.vue";
 import JetInputError from "@/Components/InputError.vue";
@@ -44,7 +43,7 @@ onMounted(() => {
         <AppLayout>
             <!-- <div class="absolute bg-black opacity-80 inset-0 z-0"></div> -->
 
-            <!-- <div class="flex justify-evenly">
+            <div class="flex justify-evenly">
                 <div
                     class="flex m-5 h-full flex-col overflow-y-scroll bg-gray-300 shadow-xl w-1/3"
                 >
@@ -82,12 +81,14 @@ onMounted(() => {
                                             </a>
                                         </div>
                                     </div>
+                                    <!-- More products... -->
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- form deatails -->
                 <Transition name="fade">
                     <div
                         v-if="loaded"
@@ -282,10 +283,7 @@ onMounted(() => {
                         </div>
                     </div>
                 </Transition>
-            </div> -->
-
-
-            <PaymentLayout/>
+            </div>
         </AppLayout>
     </Transition>
 </template>

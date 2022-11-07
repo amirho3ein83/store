@@ -47,7 +47,7 @@ Route::middleware([
     Route::get('/user/profile/address', [UserController::class, 'address'])->name('user.address');
     Route::get('/user/profile/wallet', [UserController::class, 'wallet'])->name('user.wallet');
     Route::get('/user/purchases', [UserController::class, 'purchases'])->name('user.purchases');
-    Route::get('/user/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
+    Route::get('/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
 
 
 

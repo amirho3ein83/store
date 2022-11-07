@@ -1,9 +1,22 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
+import { useProductStore } from "@/store/Product.js";
+
+onBeforeMount(() => {
+    //    console.log(props.order.product.id);
+    let final_price = (
+        (props.order.product.price -
+            ((props.order.product.discount / 100) * props.order.product.price).toFixed(2)) *
+        qty
+    ).toFixed(2);
+});
+
+const storeProduct = useProductStore();
 
 const storeCart = useCartStore();
+
 let props = defineProps({
     order: Object,
 });
@@ -12,17 +25,17 @@ let qty = ref(props.order.quantity);
 
 let loaded = ref(false);
 
-const increaseOrder = (id) => {
+const increaseOrder = () => {
     qty.value++;
     storeCart.increaseOrder(order.product.id);
 };
 
-const decreaseOrder = (id) => {
+const decreaseOrder = () => {
     qty.value--;
     storeCart.decreaseOrder(order.product.id);
 };
 
-const deleteOrder = (id) => {
+const deleteOrder = () => {
     loaded.value = false;
     storeCart.count_cart--;
     storeCart.deleteOrder(order.product.id);
@@ -37,9 +50,10 @@ onMounted(() => {
     <Transition name="fade">
         <li class="flex py-4" v-if="loaded">
             <div
-                class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+                class="h-36 w-3h-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
             >
                 <img
+                    @click="storeProduct.showProduct(order.product.id)"
                     src="../Pages/Store/Products/pics/sh2.webp"
                     alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
                     class="h-full w-full object-cover object-center"
