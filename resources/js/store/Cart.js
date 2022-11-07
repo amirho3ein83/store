@@ -11,13 +11,13 @@ export const useCartStore = defineStore("cart", {
                     product_id: id,
                 })
                 .then((res) => {
-                  this.countCartItems(id)
+                  this.countOrders(id)
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
-        countCartItems(id) {
+        countOrders(id) {
             axios
                 .get(route("cart.count"))
                 .then((res) => {
@@ -27,7 +27,7 @@ export const useCartStore = defineStore("cart", {
                     console.log(error);
                 });
         },
-        getCartItems(id) {
+        getOrders(id) {
             axios
                 .get(route("cart.get.items"))
                 .then((res) => {

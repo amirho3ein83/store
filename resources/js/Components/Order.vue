@@ -5,27 +5,27 @@ import { onMounted, ref } from "vue";
 
 const storeCart = useCartStore();
 let props = defineProps({
-    item: Object,
+    order: Object,
 });
 
-let qty = ref(props.item.quantity);
+let qty = ref(props.order.quantity);
 
 let loaded = ref(false);
 
-const increaseItem = (id) => {
+const increaseOrder = (id) => {
     qty.value++;
-    storeCart.increaseItem(item.product.id);
+    storeCart.increaseOrder(order.product.id);
 };
 
-const decreaseItem = (id) => {
+const decreaseOrder = (id) => {
     qty.value--;
-    storeCart.decreaseItem(item.product.id);
+    storeCart.decreaseOrder(order.product.id);
 };
 
-const deleteItem = (id) => {
+const deleteOrder = (id) => {
     loaded.value = false;
     storeCart.count_cart--;
-    storeCart.deleteItem(item.product.id);
+    storeCart.deleteOrder(order.product.id);
 };
 
 onMounted(() => {
@@ -52,17 +52,17 @@ onMounted(() => {
                         class="flex justify-between text-base font-medium text-gray-900"
                     >
                         <h3>
-                            <a href="#">{{ item.product.title }}</a>
+                            <a href="#">{{ order.product.title }}</a>
                         </h3>
                         <div>
                             <!-- final price -->
                             <h3 class="text-xl font-bold text-yellow-700">
                                 {{
                                     (
-                                        (item.product.price -
+                                        (order.product.price -
                                             (
-                                                (item.product.discount / 100) *
-                                                item.product.price
+                                                (order.product.discount / 100) *
+                                                order.product.price
                                             ).toFixed(2)) *
                                         qty
                                     ).toFixed(2)
@@ -72,22 +72,22 @@ onMounted(() => {
                             <span class="text-red-400">{{
                                 -(
                                     (
-                                        (item.product.discount / 100) *
-                                        item.product.price
+                                        (order.product.discount / 100) *
+                                        order.product.price
                                     ).toFixed(2) * qty
                                 ).toFixed(2)
                             }}</span>
                         </div>
                     </div>
-                    <p class="">${{ item.product.price }}</p>
-                    <p class="text-red-400">-%{{ item.product.discount }}</p>
+                    <p class="">${{ order.product.price }}</p>
+                    <p class="text-red-400">-%{{ order.product.discount }}</p>
                 </div>
                 <div class="flex flex-1 items-end justify-between text-sm">
-                    <!-- <p class="text-gray-500">Qty {{ item.quantity }}</p> -->
+                    <!-- <p class="text-gray-500">Qty {{ order.quantity }}</p> -->
 
                     <div class="inline-flex justify-center gap-1">
                         <button
-                            @click="increaseItem(item.product.id)"
+                            @click="increaseOrder(order.product.id)"
                             class="inline-flex h-8 w-8 items-center justify-center text-green-700"
                         >
                             <i class="bi bi-plus"></i>
@@ -109,7 +109,7 @@ onMounted(() => {
 
                         <button
                             v-if="qty != 1"
-                            @click="decreaseItem(item.product.id)"
+                            @click="decreaseOrder(order.product.id)"
                             class="inline-flex h-8 w-8 items-center justify-center text-red-600"
                         >
                             <i class="bi bi-dash"></i>
@@ -118,7 +118,7 @@ onMounted(() => {
 
                     <div class="flex">
                         <button
-                            @click="deleteItem(item.product.id)"
+                            @click="deleteOrder(order.product.id)"
                             type="button"
                             class="font-medium text-red-600 hover:text-red-500"
                         >

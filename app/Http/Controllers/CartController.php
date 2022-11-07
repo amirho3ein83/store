@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\CartItem;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -16,7 +17,7 @@ class CartController extends Controller
 
     public function index(Product $product)
     {
-        $cart = CartItem::with('product')->where('user_id', Auth::id())->get();
+        $cart = Order::with('product')->where('user_id', Auth::id())->get();
 
         // info($cart);
         // foreach ($variable as $key => $value) {
@@ -36,44 +37,46 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         $product = Product::find($request->product_id);
-        $productFoundInCart = CartItem::where('product_id', $request->product_id)->pluck('id');
+        $productFoundInCart = Order::where('product_id', $request->product_id)->pluck('id');
 
         if ($productFoundInCart->isEmpty()) {
-            $cart = CartItem::create([
+            $cart = Order::create([
                 'product_id' => $product->id,
                 'price' => $product->price,
                 'quantity' => 1,
                 'user_id' => Auth::id()
             ]);
         } else {
-            $cart =  CartItem::where('product_id', $product->id)->increment('quantity');
+            $cart =  Order::where('product_id', $product->id)->increment('quantity');
         }
 
 
         if ($cart) {
             return [
-                'message' => 'CartItem updated',
+                'message' => 'Order updated',
             ];
         }
     }
 
-    public function increaseCartItem($id)
+    public function increaseOrder($id)
     {
-        CartItem::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->increment('quantity');
+        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->increment('quantity');
     }
-    public function decreaseCartItem($id)
+    public function decreaseOrder($id)
     {
-        CartItem::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->decrement('quantity');
+        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->decrement('quantity');
     }
-    public function deleteCartItem($id)
+    public function deleteOrder($id)
     {
-        CartItem::where([['user_id', Auth::id()], ['product_id', $id]])->delete();
+        Order::where([['user_id', Auth::id()], ['product_id', $id]])->delete();
     }
 
-    public function countCartItems(Product $product)
+    public function countOrders(Product $product)
     {
-        return  CartItem::where('user_id', Auth::id())->count();
+        return  Order::where('user_id', Auth::id())->count();
     }
+
+
     public function payment(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -121,32 +124,43 @@ class CartController extends Controller
         if ($request->saveInfo) {
             Address::create([
                 'text' => $validated['address'],
+                'recipient_name' => $validated['recipient_name'],
                 'user_id' => Auth::id()
             ]);
         }
 
+        //////////////////////////////////
+        DB::beginTransaction();
 
+        try {
 
-        if ($request->paymentMethod == 'wallet') {
+            if ($request->paymentMethod == 'wallet') {
 
-            $wallet = Wallet::firstWhere('user_id', Auth::id());
+                $wallet = Wallet::firstWhere('user_id', Auth::id());
 
-            $balance = $wallet->balance;
+                $balance = $wallet->balance;
 
-            if ($balance > $request->subtotal) {
-                return redirect()->back()
-                    ->withErrors('insufficient inventory')
-                    ->withInput();
+                if ($balance > $request->subtotal) {
+                    return redirect()->back()
+                        ->withErrors('insufficient inventory')
+                        ->withInput();
+                }
             }
+
+            $orders = Order::where('user_id', Auth::id())->get();
+
+            foreach ($orders as $key => $item) {
+                Product::where('id', $item->product->id)->increment('sold_qty', $item->qty);
+            }
+
+            $orders->delete();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            info($e);
         }
 
-
-
-        $cartItems = CartItem::where('user_id', Auth::id())->get();
-
-        foreach ($cartItems as $key => $item) {
-            Product::where('id',$item->product->id)->increment('sold_qty',$item->qty);
-        }
 
         return response()->json([
             'message' => 'success'

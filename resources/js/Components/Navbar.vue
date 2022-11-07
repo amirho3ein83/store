@@ -13,7 +13,7 @@ const storeCart = useCartStore();
             <!-- navbar -->
             <nav class="flex justify-between bg-gray-900 text-white w-screen">
                 <div class="px-5 xl:px-12 py-4 flex w-full items-center">
-                    <a class="text-3xl font-bold font-heading" href="home">
+                    <a class="text-3xl font-bold font-heading" href="/home">
                         <!-- <img class="h-9" src="logo.png" alt="logo"> -->
                         <i class="bi bi-slack text-yellow-500"></i> Space Store
                     </a>
@@ -22,7 +22,7 @@ const storeCart = useCartStore();
                         class="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12"
                     >
                         <li>
-                            <a class="hover:text-yellow-400" href="home"
+                            <a class="hover:text-yellow-400" href="/home"
                                 >Home</a
                             >
                         </li>

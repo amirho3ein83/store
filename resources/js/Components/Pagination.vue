@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex bg-gray-300 justify-center items-center p-3">
+    <div class="flex bg-gray-300 justify-center items-center p-1 rounded-sm mx-auto w-[200px]">
         <a :href="previousPage" v-if="currentPage != 1" rel="no-refresh">
             <i
                 

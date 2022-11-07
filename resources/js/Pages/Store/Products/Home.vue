@@ -14,7 +14,7 @@ defineProps({
 <template>
     <Head title="Store Page" />
 
-    <AppLayout>
+    <AppLayout class="bg-gray-100">
         <div
             class="carousel relative container mx-auto"
             style="max-width: 1600px"
@@ -41,7 +41,11 @@ Alternatively if you want to just have a single hero
         <section class="bg-white">
             <!-- <img src="./pics/banner1.webp" alt="" class="w-full" /> -->
             <div class="flex px-16 py-4 bg-slate-50">
-                    <img src="./pics/hero4.jpg" alt="" class="object-cover w-full"/>
+                <img
+                    src="./pics/hero4.jpg"
+                    alt=""
+                    class="object-cover w-full"
+                />
             </div>
             <div class="mx-auto flex items-center flex-wrap">
                 <!-- <div class="flex">
@@ -107,21 +111,21 @@ Alternatively if you want to just have a single hero
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(70).webp"
+                                            src="./pics/sh5.webp"
                                         />
                                     </div>
                                     <div class="w-1/2 p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(72).webp"
+                                            src="./pics/sh6.webp"
                                         />
                                     </div>
                                     <div class="w-full p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+                                            src="./pics/sh7.jpg"
                                         />
                                     </div>
                                 </div>
@@ -130,21 +134,21 @@ Alternatively if you want to just have a single hero
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(74).webp"
+                                            src="./pics/13.webp"
                                         />
                                     </div>
                                     <div class="w-1/2 p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(75).webp"
+                                            src="./pics/sh9.avif"
                                         />
                                     </div>
                                     <div class="w-1/2 p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(77).webp"
+                                            src="./pics/sh11.jpeg"
                                         />
                                     </div>
                                 </div>
@@ -153,81 +157,50 @@ Alternatively if you want to just have a single hero
                     </section>
                 </section>
 
-                <div class="py-6">
-                    <div
-                        class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden"
-                    >
-                        <div
-                            class="w-1/3 bg-cover"
-                            style="
-                                background-image: url('https://images.unsplash.com/photo-1494726161322-5360d4d0eeae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80');
-                            "
-                        ></div>
-                        <div class="w-2/3 p-4">
-                            <h1 class="text-gray-900 font-bold text-2xl">
-                                Backpack
-                            </h1>
-                            <p class="mt-2 text-gray-600 text-sm">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit In odit exercitationem fuga id
-                                nam quia
-                            </p>
-                            <div class="flex item-center mt-2">
-                                <svg
-                                    class="w-5 h-5 fill-current text-gray-700"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                                    />
-                                </svg>
-                                <svg
-                                    class="w-5 h-5 fill-current text-gray-700"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                                    />
-                                </svg>
-                                <svg
-                                    class="w-5 h-5 fill-current text-gray-700"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                                    />
-                                </svg>
-                                <svg
-                                    class="w-5 h-5 fill-current text-gray-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                                    />
-                                </svg>
-                                <svg
-                                    class="w-5 h-5 fill-current text-gray-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                                    />
-                                </svg>
-                            </div>
-                            <div class="flex item-center justify-between mt-3">
-                                <h1 class="text-gray-700 font-bold text-xl">
-                                    $220
-                                </h1>
-                                <button
-                                    class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded"
-                                >
-                                    Add to Card
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
+
+            <section
+                class="relative w-5/6 mx-auto overflow-hidden rounded-lg p-10 my-7 80 shadow-2xl lg:pb-0"
+            >
+                <div class="ml-auto p-8 text-center sm:p-12 lg:w-2/3">
+                    <p class="text-sm font-semibold uppercase tracking-widest">
+                        Run with the pack
+                    </p>
+
+                    <h2 class="mt-6 font-black uppercase">
+                        <span class="text-5xl font-black sm:text-6xl"
+                            >Get 20% off</span
+                        >
+                        <span class="mt-2 block text-sm"
+                            >On your next order over $50</span
+                        >
+                    </h2>
+
+                    <a
+                        class="mt-8 inline-block w-full bg-black py-4 text-sm font-bold uppercase tracking-widest text-white"
+                        href=""
+                    >
+                        Get Discount
+                    </a>
+
+                    <p
+                        class="mt-12 text-xs font-medium uppercase text-gray-400"
+                    >
+                        Offer valid until 24th March, 2021 *
+                    </p>
+                </div>
+
+                <div
+                    class="absolute bottom-0 left-0 h-80 w-full lg:h-full lg:w-1/3"
+                >
+                    <img
+                        alt="Trainer"
+                        src="https://images.unsplash.com/photo-1611510338559-2f463335092c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80"
+                        class="absolute inset-0 h-full w-full object-cover"
+                    />
+                </div>
+            </section>
         </section>
     </AppLayout>
 </template>

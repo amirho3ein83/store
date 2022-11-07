@@ -4,7 +4,7 @@ import Logout from "../Pages/Logout.vue";
 
 <template>
     <div
-        class="sidebar  py-8 fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900"
+        class="h-full  py-8  lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900"
     >
         <a
             class="text-3xl text-yellow-50 my-5 font-bold font-heading"
@@ -33,6 +33,9 @@ import Logout from "../Pages/Logout.vue";
             </h1>
             <h1 class="cursor-pointer p-2 hover:bg-gray-600 rounded-md mt-1">
                 Liked
+            </h1>
+            <h1 class="cursor-pointer p-2 hover:bg-gray-600 rounded-md mt-1">
+                previos purchases
             </h1>
         </div>
         <div class="flex justify-start ml-7 ">

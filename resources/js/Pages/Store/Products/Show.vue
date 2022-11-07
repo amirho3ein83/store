@@ -1,210 +1,286 @@
 <script setup>
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Head, buttonnk } from "@inertiajs/inertia-vue3";
 import AddToCartButton from "@/Components/AddToCartButton.vue";
+import InCartButton from "@/Components/InCartButton.vue";
+import SizeRadio from "@/Components/SizeRadio.vue";
+import RateButton from "@/Components/RateButton.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { ref } from "vue";
 
-defineProps({
+let props = defineProps({
     product: Object,
 });
+
+let picked_color = ref("");
+let is_liked = ref(props.product.is_liked);
+
+const chooseColor = (color) => {
+    picked_color.value = color;
+};
+
+let picked_size = ref("");
+
+const chooseSize = (size) => {
+    picked_size.value = size;
+};
+
+const likeProduct = (id) => {
+    is_liked.value = true;
+    axios.patch(route("like-product", { id: id }));
+};
+
+const unlikeProduct = (id) => {
+    is_liked.value = false;
+    axios.patch(route("unlike-product", { id: id }));
+};
 </script>
 <template>
     <AppLayout>
         <!-- component -->
         <div
-            class="relative min-h-screen flex flex-col items-center justify-center"
+            class="min-w-screen h-full animated fadeIn faster flex justify-center items-center inset-0 z-50 outbuttonne-none focus:outbuttonne-none bg-no-repeat bg-center bg-cover"
         >
-            <div class="container">
-                <div
-                    class="max-w-md w-full bg-gray-900 shadow-lg rounded-xl p-6"
-                >
-                    <div class="flex flex-col">
-                        <div class="">
-                            <div class="relative h-62 w-full mb-3">
-                                <div
-                                    class="absolute flex flex-col top-0 right-0 p-3"
-                                >
-                                    <button
-                                        class="transition ease-in duration-300 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-8 h-8 text-center p-1"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="h-6 w-6"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                            />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <img
-                                    src="https://images.unsplash.com/photo-1577982787983-e07c6730f2d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2059&q=80"
-                                    alt="Just a flower"
-                                    class="w-full object-fill rounded-2xl"
-                                />
-                            </div>
-                            <div class="flex-auto justify-evenly">
-                                <div class="flex flex-wrap">
+            <div class="w-full h-screen">
+                <img
+                    class="object-cover w-full h-full brightness-50"
+                    src="./pics/13.webp "
+                    alt=""
+                />
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-h-screen flex flex-col items-center justify-center"
+            >
+                <div class="container">
+                    <div
+                        class="max-w-md w-full bg-gray-800 shadow-lg my-3 rounded-xl p-6"
+                    >
+                        <div class="flex flex-col">
+                            <div>
+                                <div class="relative h-62 w-full mb-3">
                                     <div
-                                        class="w-full flex-none text-sm flex items-center text-gray-600"
+                                        class="absolute flex flex-col top-0 right-0 p-3"
                                     >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="h-4 w-4 text-red-500 mr-1"
-                                            viewBox="0 0 20 20"
-                                            fill="currentColor"
+                                        <button
+                                            v-if="is_liked"
+                                            @click="unlikeProduct(product.id)"
+                                            class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1"
                                         >
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                                            />
-                                        </svg>
-                                        <span
-                                            class="text-gray-400 whitespace-nowrap mr-3"
-                                            >4.60</span
-                                        ><span class="mr-2 text-gray-400"
-                                            >India</span
+                                            <i
+                                                class="bi bi-heart-fill text-red-600"
+                                            ></i>
+                                        </button>
+
+                                        <button
+                                            v-else
+                                            @click="likeProduct(product.id)"
+                                            class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1"
                                         >
+                                            <i
+                                                class="bi bi-heart text-red-600"
+                                            ></i>
+                                        </button>
                                     </div>
-                                    <div
-                                        class="flex items-center w-full justify-between min-w-0"
-                                    >
-                                        <h2
-                                            class="text-lg mr-auto cursor-pointer text-gray-200 hover:text-purple-500 truncate"
-                                        >
-                                            Lorem ipsum is placeholder text
-                                            commonly used in the graphic
-                                        </h2>
-                                        <div
-                                            class="flex items-center bg-green-400 text-white text-xs px-2 py-1 ml-3 rounded-lg"
-                                        >
-                                            INSTOCK
-                                        </div>
-                                    </div>
+                                    <img
+                                        src="https://images.unsplash.com/photo-1577982787983-e07c6730f2d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2059&q=80"
+                                        alt="Just a flower"
+                                        class="w-full object-fill rounded-2xl"
+                                    />
                                 </div>
-                                <div
-                                    class="text-xl text-white font-semibold mt-1"
-                                >
-                                    $240.00
-                                </div>
-                                <div class="lg:flex py-4 text-sm text-gray-600">
-                                    <div
-                                        class="flex-1 inline-flex items-center mb-3"
-                                    >
-                                        <div
-                                            class="w-full flex-none text-sm flex items-center text-gray-600"
+                                <div class="flex-auto justify-evenly">
+                                    <div class="flex flex-wrap">
+                                        <p
+                                            class="ml-2 text-xl font-bold text-fuchsia-100 dark:text-white"
                                         >
-                                            <ul
-                                                class="flex flex-row justify-center items-center space-x-2"
+                                            {{ product.title }}
+                                        </p>
+                                        <div class="flex items-center my-1 justify-end w-full">
+                                            <svg
+                                                aria-hidden="true"
+                                                class="w-5 h-5 text-yellow-400"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
                                             >
-                                                <li class="">
-                                                    <span
-                                                        class="block p-1 border-2 border-gray-900 hover:border-blue-600 rounded-full transition ease-in duration-300"
-                                                    >
-                                                        <a
-                                                            href="#blue"
-                                                            class="block w-3 h-3 bg-blue-600 rounded-full"
-                                                        ></a>
-                                                    </span>
-                                                </li>
-                                                <li class="">
-                                                    <span
-                                                        class="block p-1 border-2 border-gray-900 hover:border-yellow-400 rounded-full transition ease-in duration-300"
-                                                    >
-                                                        <a
-                                                            href="#yellow"
-                                                            class="block w-3 h-3 bg-yellow-400 rounded-full"
-                                                        ></a>
-                                                    </span>
-                                                </li>
-                                                <li class="">
-                                                    <span
-                                                        class="block p-1 border-2 border-gray-900 hover:border-red-500 rounded-full transition ease-in duration-300"
-                                                    >
-                                                        <a
-                                                            href="#red"
-                                                            class="block w-3 h-3 bg-red-500 rounded-full"
-                                                        ></a>
-                                                    </span>
-                                                </li>
-                                                <li class="">
-                                                    <span
-                                                        class="block p-1 border-2 border-gray-900 hover:border-green-500 rounded-full transition ease-in duration-300"
-                                                    >
-                                                        <a
-                                                            href="#green"
-                                                            class="block w-3 h-3 bg-green-500 rounded-full"
-                                                        ></a>
-                                                    </span>
-                                                </li>
-                                            </ul>
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                                ></path>
+                                            </svg>
+                                            <p
+                                                class="ml-2 text-sm font-bold text-cyan-500 dark:text-white"
+                                            >
+                                                {{ product.rate }}
+                                            </p>
+                                            <span
+                                                class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"
+                                            ></span>
+                                            <p
+                                                class="text-sm font-medium text-slate-400 underline hover:no-underline dark:text-white"
+                                                >{{
+                                                    product.reviews
+                                                }}
+                                                reviews</p
+                                            >
+
+                                            <div
+                                                class="flex items-center bg-red-500 text-white text-sm px-2 py-1 ml-3 rounded-lg"
+                                            >
+                                                %{{ product.discount }}
+                                            </div>
+                                            <RateButton />
+                                        </div>
+
+                                        <div
+                                            class="flex items-center w-full justify-between min-w-0"
+                                        >
+                                            <h2
+                                                class="text-lg mr-auto cursor-pointer text-gray-200 truncate"
+                                            >
+                                                {{ product.description }}
+                                            </h2>
                                         </div>
                                     </div>
                                     <div
-                                        class="flex-1 inline-flex items-center mb-3"
+                                        class="text-xl text-yellow-600 font-semibold mt-1"
                                     >
-                                        <span
-                                            class="text-secondary whitespace-nowrap mr-3"
-                                            >Size</span
-                                        >
+                                        ${{ product.price }}
+                                    </div>
+                                    <div
+                                        class="lg:flex py-4 text-sm text-gray-600"
+                                    >
                                         <div
-                                            class="cursor-pointer text-gray-400"
+                                            class="flex-1 inbuttonne-flex items-center mb-3"
                                         >
-                                            <span
-                                                class="hover:text-purple-500 p-1 py-0"
-                                                >S</span
+                                            <div
+                                                class="w-full flex-none text-sm flex items-center text-gray-600"
                                             >
-                                            <span
-                                                class="hover:text-purple-500 p-1 py-0"
-                                                >M</span
+                                                <ul
+                                                    class="flex flex-row justify-center items-center space-x-2"
+                                                >
+                                                    <button
+                                                        @click="
+                                                            chooseColor(`blue`)
+                                                        "
+                                                    >
+                                                        <span
+                                                            :class="{
+                                                                'border-blue-500':
+                                                                    picked_color ==
+                                                                    `blue`,
+                                                            }"
+                                                            class="block p-1 border-2 border-gray-900 hover:border-blue-600 rounded-full transition ease-in duration-300"
+                                                        >
+                                                            <a
+                                                                href="#blue"
+                                                                class="block w-3 h-3 bg-blue-600 rounded-full"
+                                                            ></a>
+                                                        </span>
+                                                    </button>
+                                                    <button
+                                                        @click="
+                                                            chooseColor(
+                                                                `yellow`
+                                                            )
+                                                        "
+                                                    >
+                                                        <span
+                                                            :class="{
+                                                                'border-yellow-500':
+                                                                    picked_color ==
+                                                                    `yellow`,
+                                                            }"
+                                                            class="block p-1 border-2 border-gray-900 hover:border-yellow-600 rounded-full transition ease-in duration-300"
+                                                        >
+                                                            <a
+                                                                href="#yellow"
+                                                                class="block w-3 h-3 bg-yellow-600 rounded-full"
+                                                            ></a>
+                                                        </span>
+                                                    </button>
+                                                    <button
+                                                        @click="
+                                                            chooseColor(`red`)
+                                                        "
+                                                    >
+                                                        <span
+                                                            :class="{
+                                                                'border-red-500':
+                                                                    picked_color ==
+                                                                    `red`,
+                                                            }"
+                                                            class="block p-1 border-2 border-gray-900 hover:border-red-600 rounded-full transition ease-in duration-300"
+                                                        >
+                                                            <a
+                                                                href="#red"
+                                                                class="block w-3 h-3 bg-red-600 rounded-full"
+                                                            ></a>
+                                                        </span>
+                                                    </button>
+                                                    <button
+                                                        @click="
+                                                            chooseColor(
+                                                                `purple`
+                                                            )
+                                                        "
+                                                    >
+                                                        <span
+                                                            :class="{
+                                                                'border-purple-500':
+                                                                    picked_color ==
+                                                                    `purple`,
+                                                            }"
+                                                            class="block p-1 border-2 border-gray-900 hover:border-purple-600 rounded-full transition ease-in duration-300"
+                                                        >
+                                                            <a
+                                                                href="#purple"
+                                                                class="block w-3 h-3 bg-purple-600 rounded-full"
+                                                            ></a>
+                                                        </span>
+                                                    </button>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="flex-1 inbuttonne-flex items-center mb-3"
+                                        >
+                                            <div
+                                                class="cursor-pointer text-gray-400"
                                             >
-                                            <span
-                                                class="hover:text-purple-500 p-1 py-0"
-                                                >L</span
-                                            >
-                                            <span
-                                                class="hover:text-purple-500 p-1 py-0"
-                                                >XL</span
-                                            >
+                                                <SizeRadio
+                                                    :size="`S`"
+                                                    :chosen="picked_size == `S`"
+                                                    @selected="chooseSize(`S`)"
+                                                />
+                                                <SizeRadio
+                                                    :size="`M`"
+                                                    :chosen="picked_size == `M`"
+                                                    @selected="chooseSize(`M`)"
+                                                />
+                                                <SizeRadio
+                                                    :size="`L`"
+                                                    :chosen="picked_size == `L`"
+                                                    @selected="chooseSize(`L`)"
+                                                />
+                                                <SizeRadio
+                                                    :size="`XL`"
+                                                    :chosen="
+                                                        picked_size == `XL`
+                                                    "
+                                                    @selected="chooseSize(`XL`)"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                    class="flex space-x-2 text-sm font-medium justify-start"
-                                >
-                                    <button
-                                        class="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600"
+                                    <div
+                                        class="flex space-x-2 text-sm font-medium justify-start"
                                     >
-                                        <span>Add Cart</span>
-                                    </button>
-                                    <button
-                                        class="transition ease-in duration-300 bg-gray-700 hover:bg-gray-800 border hover:border-gray-500 border-gray-700 hover:text-white hover:shadow-lg text-gray-400 rounded-full w-9 h-9 text-center p-2"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class=""
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                            />
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                            />
-                                        </svg>
-                                    </button>
+                                        <InCartButton
+                                            v-if="product.is_in_cart"
+                                        />
+                                        <AddToCartButton
+                                            v-else
+                                            :id="product.id"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -212,190 +288,5 @@ defineProps({
                 </div>
             </div>
         </div>
-        <!-- <div>
-            <div class="relative mx-auto max-w-screen-xl px-4 py-8">
-                <div class="grid grid-cols-3 items-start gap-8 md:grid-cols-2">
-                    <div class="">
-                        <img alt="Les Paul"
-                            src="https://images.unsplash.com/photo-1456948927036-ad533e53865c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                            class="aspect-square w-full rounded-xl object-cover" />
-                    </div>
-
-                    <div class="sticky top-0">
-                        <div class="mt-8 flex justify-between">
-                            <div class="max-w-[35ch]">
-                                <h1 class="text-2xl font-bold">
-                                    {{ product.name }}
-                                </h1>
-                            </div>
-
-                            <p class="text-lg font-bold">
-                                {{ product.price }} $
-                            </p>
-                        </div>
-                        <div class="flex items-center mb-5">
-                            <svg aria-hidden="true" class="w-7 h-7 text-yellow-400" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <title>First star</title>
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" class="w-7 h-7 text-yellow-400" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <title>Second star</title>
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" class="w-7 h-7 text-yellow-400" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <title>Third star</title>
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" class="w-7 h-7 text-yellow-400" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <title>Fourth star</title>
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" class="w-7 h-7 text-gray-300 dark:text-gray-500" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <title>Fifth star</title>
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                </path>
-                            </svg>
-                        </div>
-                        <details class="group relative mt-4">
-                            <summary class="block">
-                                <div>
-                                    <div class="prose max-w-none group-open:hidden">
-                                        <p>
-                                            {{ product.description }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </summary>
-                        </details>
-
-                        <form class="mt-8">
-                            <fieldset>
-                                <legend class="mb-1 text-sm font-medium">
-                                    Color
-                                </legend>
-
-                                <div class="flow-root">
-                                    <div class="-m-0.5 flex flex-wrap">
-                                        <label for="color_tt" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="color" id="color_tt" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-block rounded-full border px-3 py-1 text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                Texas Tea
-                                            </span>
-                                        </label>
-
-                                        <label for="color_fr" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="color" id="color_fr" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-block rounded-full border px-3 py-1 text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                Fiesta Red
-                                            </span>
-                                        </label>
-
-                                        <label for="color_cb" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="color" id="color_cb" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-block rounded-full border px-3 py-1 text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                Cobalt Blue
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                            <fieldset class="mt-4">
-                                <legend class="mb-1 text-sm font-medium">
-                                    Size
-                                </legend>
-
-                                <div class="flow-root">
-                                    <div class="-m-0.5 flex flex-wrap">
-                                        <label for="size_xs" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="size" id="size_xs" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                XS
-                                            </span>
-                                        </label>
-
-                                        <label for="size_s" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="size" id="size_s" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                S
-                                            </span>
-                                        </label>
-
-                                        <label for="size_m" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="size" id="size_m" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                M
-                                            </span>
-                                        </label>
-
-                                        <label for="size_l" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="size" id="size_l" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                L
-                                            </span>
-                                        </label>
-
-                                        <label for="size_xl" class="cursor-pointer p-0.5">
-                                            <input type="radio" name="size" id="size_xl" class="peer sr-only" />
-
-                                            <span
-                                                class="group inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white">
-                                                XL
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                            <div class="mt-8 flex">
-                                <div class="inline-flex justify-center gap-1">
-                                    <i class="bi bi-plus"></i>
-
-                                    <div>
-                                        <label for="PaginationPage" class="sr-only">Page</label>
-
-                                        <input type="number"
-                                            class="h-8 w-12 rounded border border-gray-100 p-0 text-center text-xs font-medium [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
-                                            min="1" value="2" id="PaginationPage" />
-                                    </div>
-
-                                    <i class="bi bi-minus"></i>
-                                </div>
-
-                                <AddToCartButton :id="product.id" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </AppLayout>
 </template>

@@ -65,4 +65,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Wallet::class);
     }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
+    public function likedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'liked_products', 'liked_by', 'product_id');
+    }
 }

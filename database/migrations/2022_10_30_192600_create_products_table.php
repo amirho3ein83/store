@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreignIdFor(Category::class);
             $table->integer('discount');
             $table->integer('balance');
+            $table->integer('reviews')->default(0);
+            $table->float('rate')->default(0);
             $table->mediumText('description');
             $table->timestamps();
         });

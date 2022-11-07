@@ -13,6 +13,8 @@ class Address extends Model
 
     protected $fillable = [
         'text',
-        'user_id'
+        'recipient_name',
+        'user_id',
+        'mobile'
     ];
 }

@@ -29,7 +29,7 @@ const chargeWallet = () => {
 </script>
 
 <template>
-    <div class="mx-auto container flex justify-center py-16 px-4">
+    <div class="mx-auto container flex justify-center  px-4">
         <div class="flex flex-col space-y-8 w-full px-16 max-w-xl">
             <!-- card -->
             <div

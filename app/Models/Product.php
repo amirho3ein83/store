@@ -21,6 +21,9 @@ class Product extends Model implements HasMedia
         'discount',
         'description',
         'balance',
+        'reviews',
+        'rate',
+
     ];
 
     protected $appends = ['available'];
@@ -35,8 +38,13 @@ class Product extends Model implements HasMedia
         return $this->balance != 0 ? true : false;
     }
 
-    public function rate()
+    public function ratings()
     {
         return Rating::where('product_id', $this->id)->avg('stars_rated');
+    }
+
+    public function likedBy()
+    {
+        return $this->belongsToMany(User::class, 'liked_products', 'product_id', 'liked_by');
     }
 }

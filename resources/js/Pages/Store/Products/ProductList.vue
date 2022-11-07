@@ -5,6 +5,7 @@ import { managePageStore } from "@/store/ManagePages";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Card2 from "@/Components/Card2.vue";
+import ProductCard3 from "@/Components/ProductCard3.vue";
 import Pagination from "@/Components/Pagination.vue";
 import debounce from "lodash/debounce";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -59,7 +60,7 @@ watch(
 </script>
 
 <template>
-    <AppLayout>
+    <AppLayout class="bg-gray-800">
         <!-- component -->
         <div class="max-w-md mx-auto mt-7">
             <div
@@ -145,11 +146,15 @@ watch(
         </div>
 
         <div class="grid grid-cols-5 gap-3 px-12 py-20 w-full">
-            <Card2
+            <!-- <Card2
                 v-for="product of products.data"
                 :key="product.id"
                 :product="product"
-            />
+            /> -->
+            <ProductCard3
+            v-for="product of products.data"
+                :key="product.id"
+                :product="product"            />
         </div>
         <div v-show="products.data != undefined && products.data != {}">
             <Pagination

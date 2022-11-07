@@ -19,7 +19,8 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::redirect('/','/home');
+
+Route::redirect('/', '/home');
 Route::get('/home', [ProductController::class, 'index'])->name('home');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
@@ -38,7 +39,15 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/user/profile', [UserController::class,'profile'])->name('user.profile');
+    Route::get('/contact-us', function () {
+        return Inertia::render('ContactUs');
+    })->name('contactus');
+
+    Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('/user/profile/address', [UserController::class, 'address'])->name('user.address');
+    Route::get('/user/profile/wallet', [UserController::class, 'wallet'])->name('user.wallet');
+    Route::get('/user/purchases', [UserController::class, 'purchases'])->name('user.purchases');
+    Route::get('/user/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
 
 
 
@@ -47,17 +56,20 @@ Route::middleware([
 
     Route::post('/cart', [CartController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [CartController::class, 'index'])->name('Cart');
-    Route::get('/cart/count', [CartController::class, 'countCartItems'])->name('cart.count');
+    Route::get('/cart/count', [CartController::class, 'countOrders'])->name('cart.count');
 
     Route::patch('/charge-wallet', [WalletController::class, 'increaseBalance'])->name('charge.wallet');
-   
-    Route::patch('/cart/products/{id}/increase-item', [CartController::class, 'increaseCartItem'])->name('cart.increase-item');
-    Route::patch('/cart/products/{id}/decrease-item', [CartController::class, 'decreaseCartItem'])->name('cart.decrease-item');
-    Route::delete('/cart/products/{id}', [CartController::class, 'deleteCartItem'])->name('cart.delete-item');
+
+    Route::patch('/cart/products/{id}/increase-item', [CartController::class, 'increaseOrder'])->name('cart.increase-item');
+    Route::patch('/cart/products/{id}/decrease-item', [CartController::class, 'decreaseOrder'])->name('cart.decrease-item');
+    Route::delete('/cart/products/{id}', [CartController::class, 'deleteOrder'])->name('cart.delete-item');
 
 
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::patch('/products/{id}/like', [ProductController::class, 'likeProduct'])->name('like-product');
+    Route::patch('/products/{id}/unlike', [ProductController::class, 'unlikeProduct'])->name('unlike-product');
+    Route::patch('/rate/product', [ProductController::class, 'rateProduct'])->name('rate-product');
 
     Route::get('/product/create', function () {
         return Inertia::render('Store/Products/Create');

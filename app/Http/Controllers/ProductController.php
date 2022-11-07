@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmazingOffer;
-use App\Models\CartItem;
+use App\Models\Order;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Rating;
 use App\Models\RecentVisit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +70,7 @@ class ProductController extends Controller
             ->simplePaginate(5)
             ->withQueryString();
 
-        $in_cart_products = CartItem::where('user_id', Auth::id())->pluck('id')->toArray();
+        $in_cart_products = Order::where('user_id', Auth::id())->pluck('id')->toArray();
 
 
         $products->map(function ($product) use ($in_cart_products) {
@@ -118,6 +120,29 @@ class ProductController extends Controller
         $product->addMediaFromRequest('image')->toMediaCollection();
     }
 
+    public function likeProduct($id)
+    {
+        $user = User::find(Auth::id());
+
+        $user->likedproducts()->attach($id);
+    }
+
+    public function unlikeProduct($id)
+    {
+        $user = User::find(Auth::id());
+
+        $user->likedproducts()->detach($id);
+    }
+
+    public function rateProduct(Request $request)
+    {
+        Rating::create([
+            'user_id' => Auth::id(),
+            'stars_rated' => $request->stars_count,
+            'product_id' => $request->product_id,
+        ]);
+    }
+
 
     public function edit(Product $product)
     {
@@ -126,7 +151,16 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        RecentVisit::create([]);
+
+        // check if user already liked the product
+        $liked_by_user = DB::table('liked_products')->where([['liked_by', Auth::id()], ['product_id', $product->id]])->get();
+        if ($liked_by_user->isNotEmpty()) {
+            $product->is_liked = true;
+        }
+
+        if (Order::where([['user_id', Auth::id()], ['product_id', $product->id]])->exists()) {
+            $product->is_in_cart = true;
+        }
         return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }

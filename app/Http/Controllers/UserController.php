@@ -10,6 +10,49 @@ class UserController extends Controller
 {
     public function profile()
     {
-        return Inertia::render('Store/UserProfile', ['wallet' => Auth::user()->wallet]);
+        return Inertia::render(
+            'User/Profile',
+            [
+
+            ]
+        );
+    }
+    public function address()
+    {
+        return Inertia::render(
+            'User/Address',
+            [
+                'address' => Auth::user()->address
+            ]
+        );
+    }
+    public function wallet()
+    {
+        return Inertia::render(
+            'User/Wallet',
+            [
+                'wallet' => Auth::user()->wallet,
+            ]
+        );
+    }
+
+    public function purchases()
+    {
+        return Inertia::render(
+            'User/Purchase',
+            [
+                'wallet' => Auth::user()->wallet,
+            ]
+        );
+    }
+
+    public function likedProducts()
+    {
+        return Inertia::render(
+            'User/LikedList',
+            [
+                'liked_products' => Auth::user()->likedProducts,
+            ]
+        );
     }
 }

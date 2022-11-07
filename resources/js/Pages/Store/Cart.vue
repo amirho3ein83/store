@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Components/Button.vue";
 import JetInput from "@/Components/Input.vue";
 import JetInputError from "@/Components/InputError.vue";
-import CartItem from "@/Components/CartItem.vue";
+import Order from "@/Components/Order.vue";
 import JetLabel from "@/Components/Label.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import { onMounted, ref } from "vue";
@@ -54,10 +54,7 @@ onMounted(() => {
                                     role="list"
                                     class="-my-6 divide-y divide-gray-200"
                                 >
-                                    <CartItem
-                                        v-for="item of cart"
-                                        :item="item"
-                                    />
+                                    <Order v-for="order of cart" :order="order" />
 
                                     <div class="py-6 px-4 sm:px-6">
                                         <div
@@ -77,7 +74,7 @@ onMounted(() => {
                                             <a
                                                 href="/category"
                                                 type="button"
-                                                class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2"
+                                                class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex orders-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2"
                                             >
                                                 <i class="bi bi-cart mx-1"></i>
                                                 Continue Shopping
@@ -231,7 +228,6 @@ onMounted(() => {
                                     </div>
                                 </fieldset>
                                 <div class="flex justify-center py-4 gap-3">
-
                                     <div>
                                         <input
                                             type="radio"
@@ -245,12 +241,11 @@ onMounted(() => {
 
                                         <label
                                             for="wallet"
-                                            class="block cursor-pointer rounded-lg border border-gray-400 p-4 text-sm font-medium shadow-sm hover:border-gray-200  peer-checked:bg-gray-400 peer-checked:ring-1 peer-checked:ring-gray-50"
+                                            class="block cursor-pointer rounded-lg border border-gray-400 p-4 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:bg-gray-400 peer-checked:ring-1 peer-checked:ring-gray-50"
                                         >
                                             <p class="text-gray-700">
                                                 use my wallet
                                             </p>
-
                                         </label>
                                     </div>
 
@@ -266,13 +261,11 @@ onMounted(() => {
 
                                         <label
                                             for="credit_card"
-                                            class="block cursor-pointer rounded-lg border border-gray-400 p-4 text-sm font-medium shadow-sm hover:border-gray-200  peer-checked:bg-gray-400 peer-checked:ring-1 peer-checked:ring-gray-50"
+                                            class="block cursor-pointer rounded-lg border border-gray-400 p-4 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:bg-gray-400 peer-checked:ring-1 peer-checked:ring-gray-50"
                                         >
                                             <p class="text-gray-700">
-                                               credit card
+                                                credit card
                                             </p>
-
-
                                         </label>
                                     </div>
                                 </div>

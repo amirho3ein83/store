@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Address;
+use App\Models\Product;
 use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Auth;
@@ -34,5 +36,20 @@ class DatabaseSeeder extends Seeder
             'user_id' => 1,
             'balance' => 4500,
         ]);
+
+        Address::create([
+            'text' => 'Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678.',
+            'user_id' => 1,
+            'recipient_name' => 'John',
+            'mobile' => '555-1234'
+        ]);
+
+
+
+        $wanna_like = Product::inRandomOrder()->limit(5)->get();
+
+        foreach ($wanna_like as $key => $product) {
+            $product->likedBy()->attach(1);
+        }
     }
 }
