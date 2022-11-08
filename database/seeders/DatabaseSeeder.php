@@ -46,10 +46,10 @@ class DatabaseSeeder extends Seeder
 
 
 
-        $wanna_like = Product::inRandomOrder()->limit(5)->get();
+        // $wanna_like = Product::inRandomOrder()->limit(5)->get();
 
-        foreach ($wanna_like as $key => $product) {
-            $product->likedBy()->attach(1);
-        }
+        // foreach ($wanna_like as $key => $product) {
+        //     $product->likedBy()->attach(1);
+        // }
     }
 }

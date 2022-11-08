@@ -31,7 +31,7 @@ class CartController extends Controller
 
         $cart->total = $total;
 
-        return Inertia::render('Store/PaymentSteps/OrderList', ['cart' => $cart, 'total' => $total]);
+        return Inertia::render('Store/Cart', ['cart' => $cart, 'total' => $total]);
     }
 
     public function addToCart(Request $request)
@@ -88,7 +88,7 @@ class CartController extends Controller
             'card_number' => 'numeric|digits:16',
             'expirationYear' => 'numeric|digits:4',
             'expirationMonth' => 'numeric|digits:2',
-            'cvc' => 'number',
+            'cvc' => 'numeric',
         ]);
 
         if ($validator->fails()) {

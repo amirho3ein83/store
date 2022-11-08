@@ -182,7 +182,6 @@ const unlikeProduct = (id) => {
                                                                 class="block p-1 border-2 border-gray-900 hover:border-blue-600 rounded-full transition ease-in duration-300"
                                                             >
                                                                 <a
-                                                                    href="#blue"
                                                                     class="block w-3 h-3 bg-blue-600 rounded-full"
                                                                 ></a>
                                                             </span>
@@ -203,7 +202,6 @@ const unlikeProduct = (id) => {
                                                                 class="block p-1 border-2 border-gray-900 hover:border-yellow-600 rounded-full transition ease-in duration-300"
                                                             >
                                                                 <a
-                                                                    href="#yellow"
                                                                     class="block w-3 h-3 bg-yellow-600 rounded-full"
                                                                 ></a>
                                                             </span>
@@ -224,7 +222,6 @@ const unlikeProduct = (id) => {
                                                                 class="block p-1 border-2 border-gray-900 hover:border-red-600 rounded-full transition ease-in duration-300"
                                                             >
                                                                 <a
-                                                                    href="#red"
                                                                     class="block w-3 h-3 bg-red-600 rounded-full"
                                                                 ></a>
                                                             </span>
@@ -245,7 +242,6 @@ const unlikeProduct = (id) => {
                                                                 class="block p-1 border-2 border-gray-900 hover:border-purple-600 rounded-full transition ease-in duration-300"
                                                             >
                                                                 <a
-                                                                    href="#purple"
                                                                     class="block w-3 h-3 bg-purple-600 rounded-full"
                                                                 ></a>
                                                             </span>

@@ -24,6 +24,7 @@ Route::redirect('/', '/home');
 Route::get('/home', [ProductController::class, 'index'])->name('home');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
 
 Route::middleware([
     'auth:sanctum',
@@ -65,7 +66,6 @@ Route::middleware([
     Route::delete('/cart/products/{id}', [CartController::class, 'deleteOrder'])->name('cart.delete-item');
 
 
-    Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
     Route::patch('/products/{id}/like', [ProductController::class, 'likeProduct'])->name('like-product');
     Route::patch('/products/{id}/unlike', [ProductController::class, 'unlikeProduct'])->name('unlike-product');

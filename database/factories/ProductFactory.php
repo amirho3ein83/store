@@ -18,14 +18,14 @@ class ProductFactory extends Factory
     public function definition()
     {
         $name = $this->faker->text(10);
-        $price = $this->faker->numberBetween(100, 900);
+        $price = $this->faker->numberBetween(12, 820);
 
         return [
             'title' => $name,
             'slug' => Str::slug($name),
-            'description' => $this->faker->text(100),
+            'description' => $this->faker->sentence(5),
             'price' => $price,
-            'discount' => rand(10, 54),
+            'discount' => rand(5, 35),
             'sold_qty' => rand(144, 254),
             'balance' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
