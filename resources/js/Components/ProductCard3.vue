@@ -13,7 +13,7 @@ defineProps({
 </script>
 
 <template>
-    <button @click="storeProduct.showProduct(product.id)" class="group block overflow-hidden">
+    <button @click="storeProduct.showProduct(product.id)" class="lg:w-1/4 md:w-1/2 p-4 w-full group block overflow-hidden">
         <img src="../Pages/Store/Products/pics/sh5.webp" alt="Tee"
             class="h-[350px] w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-[250px]" />
         <div class="relative pt-4">

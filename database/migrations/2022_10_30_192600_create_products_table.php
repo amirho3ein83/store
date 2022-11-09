@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('sold_qty')->default(0);
             $table->foreignIdFor(Category::class);
-            $table->integer('discount');
+            $table->integer('sale_price');
             $table->integer('balance');
             $table->integer('reviews')->default(0);
             $table->float('rate')->default(0);

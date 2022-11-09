@@ -63,7 +63,7 @@ watch(
 
 <template>
     <AppLayout class="bg-gray-800">
-        <!-- component -->
+        <!-- search bar -->
         <div class="max-w-md mx-auto mt-7">
             <div
                 class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden"
@@ -178,17 +178,20 @@ watch(
             </div>
         </div>
 
-        <div class="grid grid-cols-5 gap-3 px-12 py-20 w-full">
-            <!-- <Card2
-                v-for="product of products.data"
-                :key="product.id"
-                :product="product"
-            /> -->
-            <ProductCard3
-            v-for="product of products.data"
-                :key="product.id"
-                :product="product"            />
-        </div>
+        <section class="text-gray-600 body-font">
+            <div class="container px-5 py-24 mx-auto">
+                <div class="flex flex-wrap -m-4 ">
+        <ProductCard3
+        v-for="product of products.data"
+            :key="product.id"
+            :product="product"            />
+
+    </div>
+  </div>
+</section>
+
+
+        <!-- pagination -->
         <div v-show="products.data != undefined && products.data != {}">
             <Pagination
                 :nextPage="products.next_page_url"

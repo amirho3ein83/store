@@ -19,14 +19,14 @@ defineProps({
             <div
                 class="flex flex-col justify-between w-56 sm:w-72 h-72 bg-white bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
                 style="
-                    background-image: url('https://st2.depositphotos.com/1000375/9917/v/950/depositphotos_99171422-stock-illustration-gift-coupon-discount-card-template.jpg');
+                    background-image: url('https://st2.depositphotos.com/1000375/9917/v/950/depositphotos_99171422-stock-illustration-gift-coupon-sale_price-card-template.jpg');
                 "
             >
                 <div class="flex justify-between items-center ml-4 pr-8">
                     <div
                         class="bg-red-600 w-12 h-12 shadow flex flex-col-reverse p-2 text-center font-bold text-white rounded-b-full"
                     >
-                        {{ product.discount }}%
+                        {{ product.sale_price }}%
                     </div>
                 </div>
                 <div
@@ -42,7 +42,7 @@ defineProps({
                             </h3>
                             <span class="text-indigo-500">{{
                                 -(
-                                    (product.discount / 100) *
+                                    (product.sale_price / 100) *
                                     product.price
                                 ).toFixed(2)
                             }}</span>
@@ -51,7 +51,7 @@ defineProps({
                             {{
                                 product.price -
                                 (
-                                    (product.discount / 100) *
+                                    (product.sale_price / 100) *
                                     product.price
                                 ).toFixed(2)
                             }}

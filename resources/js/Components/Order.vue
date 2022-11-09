@@ -4,15 +4,6 @@ import axios from "axios";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { useProductStore } from "@/store/Product.js";
 
-onBeforeMount(() => {
-    //    console.log(props.order.product.id);
-    let final_price = (
-        (props.order.product.price -
-            ((props.order.product.discount / 100) * props.order.product.price).toFixed(2)) *
-        qty
-    ).toFixed(2);
-});
-
 const storeProduct = useProductStore();
 
 const storeCart = useCartStore();
@@ -25,101 +16,94 @@ let qty = ref(props.order.quantity);
 
 let loaded = ref(false);
 
+
+
+const calFinalPrice = () => {
+
+    let final_price = props.order.product.price - ((props.order.product.sale_price / 100) * props.order.product.price).toFixed(2)
+
+    // storeCart.addToSubtotal(final_price * qty.value) 
+
+    return final_price * qty.value
+
+
+};
+
+const addToSubtotal = (num) => {
+
+    // storeCart.subtotal += num
+
+};
+
 const increaseOrder = () => {
     qty.value++;
-    storeCart.increaseOrder(order.product.id);
+    storeCart.increaseOrder(props.order.product.id);
 };
 
 const decreaseOrder = () => {
     qty.value--;
-    storeCart.decreaseOrder(order.product.id);
+    storeCart.decreaseOrder(props.order.product.id);
 };
 
 const deleteOrder = () => {
     loaded.value = false;
     storeCart.count_cart--;
-    storeCart.deleteOrder(order.product.id);
+    storeCart.deleteOrder(props.order.product.id);
 };
 
 onMounted(() => {
     loaded.value = true;
+    addToSubtotal(22)
 });
 </script>
 
 <template>
     <Transition name="fade">
-        <div v-if="loaded" class="p-4 lg:w-1/3">
-            <div
-                class="h-full flex sm:flex-row flex-col items-center sm:justify-start justify-center text-center sm:text-left">
+        <div v-if="loaded" class="flex items-center hover:bg-gray-100 -mx-8 2 bg-slate-100 rounded-lg my-1 ">
+            <!-- <div class="w-30"> -->
+            <img class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0" src="./watch.webp"
+                alt="">
+            <!-- </div> -->
+            <div class="flex flex-col justify-between ml-4 flex-grow ">
+                <span class="font-bold text-lg">{{ order.product.title }}</span>
+                <span class="flex flex-col">
+                    <span class="text-yellow-800 text-lg">${{ order.product.sale_price }}</span>
+                    <span class="text-red-800 line-through text-xs">${{ order.product.price }}</span>
+                </span>
+                <button @click="deleteOrder()"
+                    class="text-start w-1/2 pt-4 font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</button>
+            </div>
 
-                <img alt="team" class="flex-shrink-0 rounded-lg w-48 h-48 object-cover object-center sm:mb-0 mb-4"
-                    src="../Pages/Store/Products/pics/sh2.webp">
+            <div class="flex flex-col-reverse xl:flex-row flex-1 justify-center gap-5">
+                <div class="inline-flex justify-center gap-1 ">
+                    <button @click="increaseOrder()"
+                        class="inline-flex h-8 w-8 items-center justify-center text-green-700">
+                        <i class="bi bi-plus"></i>
+                    </button>
 
-                <div class="ml-4 flex flex-1 flex-col">
                     <div>
-                        <div class="flex justify-between text-base font-medium text-gray-900">
-                            <h3>
-                                <a href="#">{{ order.product.title }}</a>
-                            </h3>
-                            <div>
-                                <h3 class="text-xl font-bold text-yellow-700">
-                                    {{
-                                            (
-                                                (order.product.price -
-                                                    (
-                                                        (order.product.discount / 100) *
-                                                        order.product.price
-                                                    ).toFixed(2)) *
-                                                qty
-                                            ).toFixed(2)
-                                    }}
-                                </h3>
-                                <span class="text-red-400">{{
-                                        -(
-                                            (
-                                                (order.product.discount / 100) *
-                                                order.product.price
-                                            ).toFixed(2) * qty
-                                        ).toFixed(2)
-                                }}</span>
-                            </div>
-                        </div>
-                        <p class="">${{ order.product.price }}</p>
-                        <p class="text-red-400">-%{{ order.product.discount }}</p>
+                        <label for="PaginationPage" class="sr-only">Page</label>
+
+                        <input type="number"
+                            class="h-8 w-12 rounded  bg-cyan-50 p-0 text-center text-xs font-medium [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
+                            min="1" :value="qty" id="PaginationPage" />
                     </div>
-                    <div class="flex flex-1 items-end justify-between text-sm">
 
-                        <div class="inline-flex justify-center gap-1">
-                            <button @click="increaseOrder(order.product.id)"
-                                class="inline-flex h-8 w-8 items-center justify-center text-green-700">
-                                <i class="bi bi-plus"></i>
-                            </button>
-
-                            <div>
-                                <label for="PaginationPage" class="sr-only">Page</label>
-
-                                <input type="number"
-                                    class="h-8 w-12 rounded border border-gray-100 p-0 text-center text-xs font-medium [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
-                                    min="1" :value="qty" id="PaginationPage" />
-                            </div>
-
-                            <button v-if="qty != 1" @click="decreaseOrder(order.product.id)"
-                                class="inline-flex h-8 w-8 items-center justify-center text-red-600">
-                                <i class="bi bi-dash"></i>
-                            </button>
-                        </div>
-
-                        <div class="flex">
-                            <button @click="deleteOrder(order.product.id)" type="button"
-                                class="font-medium text-red-600 hover:text-red-500">
-                                Remove
-                            </button>
-                        </div>
-                    </div>
+                    <button :disabled="qty == 1" @click="decreaseOrder()"
+                        class="inline-flex h-8 w-8 items-center justify-center text-red-600">
+                        <i class="bi bi-dash" v-if="qty != 1"></i>
+                        <!-- <i class="bi bi-trash3-fill"></i> -->
+                    </button>
                 </div>
+                <div class="flex-col flex px-8">
+                    <span class="text-center font-semibold text-md">Total</span>
+                    <span class="text-center font-semibold text-fuchsia-900 text-lg">${{ order.product.sale_price * qty
+                    }}</span>
+                </div>
+
+
             </div>
         </div>
-     
     </Transition>
 </template>
 <style scoped>

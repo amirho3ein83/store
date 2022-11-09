@@ -2,7 +2,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { defineStore } from "pinia";
 
 export const useProductStore = defineStore("products", {
-    state: () => ({ sub_total: 0, count_cart: 0, products: [] }),
+    state: () => ({  products: [] }),
 
     actions: {
         unlikeProduct(id) {

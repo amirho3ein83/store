@@ -10,9 +10,15 @@ class UserController extends Controller
 {
     public function profile()
     {
+        // return Inertia::render(
+        //     'User/Profile',
+        //     []
+        // );
         return Inertia::render(
-            'User/Profile',
-            []
+            'User/Address',
+            [
+                'address' => Auth::user()->address
+            ]
         );
     }
     public function address()

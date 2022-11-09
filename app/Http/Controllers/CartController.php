@@ -17,21 +17,9 @@ class CartController extends Controller
 
     public function index(Product $product)
     {
-        $cart = Order::with('product')->where('user_id', Auth::id())->get();
+        $orders = Order::with('product')->where('user_id', Auth::id())->get();
 
-        // info($cart);
-        // foreach ($variable as $key => $value) {
-        //     # code...
-        // }
-        $total = 0;
-
-        foreach ($cart as $key => $item) {
-            $total += $item->price *  $item->quantity;
-        }
-
-        $cart->total = $total;
-
-        return Inertia::render('Store/Cart', ['cart' => $cart, 'total' => $total]);
+        return Inertia::render('Store/Cart', ['orders' => $orders]);
     }
 
     public function addToCart(Request $request)
@@ -80,21 +68,19 @@ class CartController extends Controller
     public function payment(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
             'recipient_name' => 'required',
-            'mobile' => 'required|numeric|digits:10',
-            'subtotal' => 'required|numeric',
+            'mobile' => 'required|numeric',
+            'subtotal' => 'nullable|required|numeric',
             'address' => 'required',
-            'card_number' => 'numeric|digits:16',
-            'expirationYear' => 'numeric|digits:4',
-            'expirationMonth' => 'numeric|digits:2',
-            'cvc' => 'numeric',
+            'card_number' => 'nullable|numeric|digits:16',
+            'expirationYear' => 'nullable|numeric|digits:4',
+            'expirationMonth' => 'nullable|numeric|digits:2',
+            'cvc' => 'nullable|numeric',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+                ->withErrors($validator);
         }
 
         // Retrieve the validated input...
@@ -116,23 +102,24 @@ class CartController extends Controller
 
 
 
-
         // check subtotal for free delivery
         // add tax 
 
 
-        if ($request->saveInfo) {
-            Address::create([
-                'text' => $validated['address'],
-                'recipient_name' => $validated['recipient_name'],
-                'user_id' => Auth::id()
-            ]);
-        }
+
 
         //////////////////////////////////
         DB::beginTransaction();
 
         try {
+
+            if ($request->saveInfo) {
+                Address::create([
+                    'text' => $validated['address'],
+                    'recipient_name' => $validated['recipient_name'],
+                    'user_id' => Auth::id()
+                ]);
+            }
 
             if ($request->paymentMethod == 'wallet') {
 
@@ -150,7 +137,7 @@ class CartController extends Controller
             $orders = Order::where('user_id', Auth::id())->get();
 
             foreach ($orders as $key => $item) {
-                Product::where('id', $item->product->id)->increment('sold_qty', $item->qty);
+                Product::where('id', $item->product_id)->increment('sold_qty', $item->qty);
             }
 
             $orders->delete();

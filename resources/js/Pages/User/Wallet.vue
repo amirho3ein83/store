@@ -16,13 +16,7 @@ let props = defineProps({
 
 <template>
     <UserLayout>
-        <div class="mt-20 text-center border-b pb-12">
-            <div class="flex align-baseline content-center justify-center">
+        <WalletCard :balance="wallet.balance" />
 
-                <div>
-                    <WalletCard :balance="wallet.balance" />
-                </div>
-            </div>
-        </div>
     </UserLayout>
 </template>

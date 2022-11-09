@@ -48,7 +48,7 @@ Route::middleware([
     Route::get('/user/profile/address', [UserController::class, 'address'])->name('user.address');
     Route::get('/user/profile/wallet', [UserController::class, 'wallet'])->name('user.wallet');
     Route::get('/user/purchases', [UserController::class, 'purchases'])->name('user.purchases');
-    Route::get('/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
+    Route::get('/user/profile/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
 
 
 
@@ -61,9 +61,9 @@ Route::middleware([
 
     Route::patch('/charge-wallet', [WalletController::class, 'increaseBalance'])->name('charge.wallet');
 
-    Route::patch('/cart/products/{id}/increase-item', [CartController::class, 'increaseOrder'])->name('cart.increase-item');
-    Route::patch('/cart/products/{id}/decrease-item', [CartController::class, 'decreaseOrder'])->name('cart.decrease-item');
-    Route::delete('/cart/products/{id}', [CartController::class, 'deleteOrder'])->name('cart.delete-item');
+    Route::patch('/cart/products/{id}/increase-order', [CartController::class, 'increaseOrder'])->name('cart.increase-order');
+    Route::patch('/cart/products/{id}/decrease-order', [CartController::class, 'decreaseOrder'])->name('cart.decrease-order');
+    Route::delete('/cart/products/{id}', [CartController::class, 'deleteOrder'])->name('cart.delete-order');
 
 
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');

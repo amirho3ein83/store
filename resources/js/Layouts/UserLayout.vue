@@ -1,108 +1,108 @@
 <script setup>
-import UserSidebar from "@/Components/UserSidebar.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
-
 import "bootstrap-icons/font/bootstrap-icons.css";
 </script>
 
 <template>
-    <AppLayout>
-        <div class="py-8 px-7 bg-gray-500">
-            <div class="p-8 bg-gray-300 shadow mt-4">
-                <div class="flex justify-between">
-                    <div
-                        class="space-x-8 flex justify-between mt-4 md:mt-0 md:justify-center"
-                    >
-                        <h1 class="text-4xl font-medium text-gray-700">
-                            {{ $page.props.user.name }}
-                        </h1>
-                    </div>
-                    <nav
-                        class="flex gap-4 align-baseline justify-between order-last md:order-first mt-4 md:mt-0"
-                    >
-                        <a
-                            href="/liked-products"
-                            class="flex hover:bg-gray-800 duration-150 transition hover:scale-105 cursor-pointer active:scale-100 items-center py-0 rounded-xl bg-gray-700 px-2"
-                        >
-                            <i class="bi bi-heart-fill text-red-600"></i>
-                            <span class="p-2 text-gray-50">Liked</span>
-                        </a>
+    <!-- component -->
+    <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+    <link rel="stylesheet"
+        href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
 
-                        <a
-                            href="/user/purchases"
-                            class="flex hover:bg-gray-800 duration-150 transition hover:scale-105 cursor-pointer active:scale-100 items-center py-0 rounded-xl bg-gray-700 px-2"
-                        >
-                            <i class="bi bi-bag text-yellow-500"></i>
-                            <span class="p-2 text-gray-50">my purchases</span>
-                        </a>
-                        <a
-                            href="/user/profile/wallet"
-                            class="flex hover:bg-gray-800 duration-150 transition hover:scale-105 cursor-pointer active:scale-100 items-center py-0 rounded-xl bg-gray-700 px-2"
-                        >
-                            <i class="bi bi-wallet text-sky-500"></i>
-                            <span class="p-2 text-gray-50">my wallet</span>
-                        </a>
-                        <a
-                            href="/user/profile/address"
-                            class="flex hover:bg-gray-800 duration-150 transition hover:scale-105 cursor-pointer active:scale-100 items-center py-0 rounded-xl bg-gray-700 px-2"
-                        >
-                            <i class="bi bi-wallet text-fuchsia-500"></i>
-                            <span class="p-2 text-gray-50">my address</span>
-                        </a>
-                        <a
-                            href="/user/recent-visits"
-                            class="flex hover:bg-gray-800 duration-150 transition hover:scale-105 cursor-pointer active:scale-100 items-center py-0 rounded-xl bg-gray-700 px-2"
-                        >
-                            <i class="bi bi-wallet text-green-500"></i>
-                            <span class="p-2 text-gray-50">recent visits</span>
-                        </a>
+    <main class="profile-page">
+        <section class="relative block h-500-px">
+            <div class="absolute top-0 w-full h-full bg-center bg-cover" style="
+            background-image: url('https://wallpaperaccess.com/full/187161.jpg');
+          ">
+                <span id="blackOverlay" class="w-full h-full absolute opacity-50 bg-black"></span>
+            </div>
+            <div class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
+                style="transform: translateZ(0px)">
+                <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="none" version="1.1" viewBox="0 0 2560 100" x="0" y="0">
+                    <polygon class="text-blueGray-200 fill-current" points="2560 0 2560 100 0 100"></polygon>
+                </svg>
+            </div>
+        </section>
+        <section class="relative py-16 bg-blueGray-200">
+            <div class="container mx-auto px-4">
+                <div
+                    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+                    <div class="px-6">
+                        <div class="flex flex-wrap justify-center">
+                            <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                                <div class="relative">
+                                    <img alt="..."
+                                        src="https://bareillycollege.org/wp-content/uploads/2022/09/chris-evans.webp"
+                                        class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px">
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
+                                <div class="py-6 px-3 mt-32 sm:mt-0">
 
-                        <Logout />
-                    </nav>
-                </div>
-
-                <slot />
-                <!-- <div class="mt-20 text-center border-b pb-12">
-                    <div
-                        class="flex align-baseline content-center justify-center"
-                    >
-                        <div
-                            class="self-center rounded-xl h-1/2 w-[370px] border border-gray-700 bg-gray-800 p-4"
-                        >
-                            <div class="flex items-center">
-                                <div class="ml-3">
-                                    <h3 class="text-lg font-medium text-white">
-                                        address
-                                    </h3>
+                                    <h1 class="text-2xl "> {{ $page.props.user.name }}</h1>
                                 </div>
                             </div>
 
-                            <ul class="mt-4 space-y-2">
-                                <li>
-                                    <a
-                                        href="#"
-                                        class="block h-full rounded-lg border border-gray-700 p-4 hover:border-pink-600"
-                                    >
-                                        <strong class="font-medium text-white"
-                                            >recipient :
-                                            {{ address.recipient_name }}</strong
-                                        >
+                            <div class="w-full lg:w-4/12 px-4 lg:order-1">
+                                <div class="flex justify-center py-4 lg:pt-4 pt-8">
+                                    <Link :href="'/user/profile/liked-products'" preserve-scroll>
+                                    <div class="mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
+                                        <span
+                                            class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"><i
+                                                class="bi text-red-600 bi-heart-fill"></i></span><span
+                                            class="text-sm text-blueGray-400">Liked</span>
+                                    </div>
+                                    </Link>
+                                    <Link :href="'/user/purchases'" preserve-scroll>
 
-                                        <p
-                                            class="mt-1 text-xs font-medium text-gray-300"
-                                        >
-                                            {{ address.text }}
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
+                                    <div class="mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
+                                        <span
+                                            class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"><i
+                                                class="bi bi-bag-fill"></i></span><span
+                                            class="text-sm text-blueGray-400">Purchases</span>
+                                    </div>
+                                    </Link>
+                                    <Link :href="'/cart'">
+
+                                    <div class="lg:mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
+                                        <span
+                                            class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"><i
+                                                class="bi bi-cart3"></i></span><span
+                                            class="text-sm text-blueGray-400">Cart</span>
+                                    </div>
+                                    </Link>
+
+                                    <Link :href="'/user/profile/wallet'" preserve-scroll>
+
+                                    <div class="lg:mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
+                                        <span
+                                            class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"><i
+                                                class="bi bi-wallet2"></i></span><span
+                                            class="text-sm text-blueGray-400">wallet</span>
+                                    </div>
+                                    </Link>
+
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <WalletCard :balance="wallet.balance" />
+                        <div class="text-center my-12">
+                            <slot />
                         </div>
+
                     </div>
-                </div> -->
+                </div>
             </div>
+            <!-- <footer class="relative bg-blueGray-200 pt-8 pb-6 mt-8">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-wrap items-center md:justify-between justify-center">
+      <div class="w-full md:w-6/12 px-4 mx-auto text-center">
+        <div class="text-sm text-blueGray-500 font-semibold py-1">
+          Made with <a href="https://www.creative-tim.com/product/notus-js" class="text-blueGray-500 hover:text-gray-800" target="_blank">Notus JS</a> by <a href="https://www.creative-tim.com" class="text-blueGray-500 hover:text-blueGray-800" target="_blank"> Creative Tim</a>.
         </div>
-    </AppLayout>
+      </div>
+    </div>
+  </div>
+</footer> -->
+        </section>
+    </main>
 </template>
