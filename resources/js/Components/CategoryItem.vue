@@ -11,7 +11,7 @@ defineProps({
 <template>
     <div
         @click="storePages.chooseCategory(category.id)"
-        class="lg:w-1/5 md:w-1/3 sm:w-1/2 p-4 w-full relative mb-2 cursor-pointer group active:scale-95 transition-all duration-150"
+        class="lg:w-1/5 md:w-1/3 sm:w-1/2 p-4 w-full  relative mb-2 cursor-pointer group active:scale-95 transition-all duration-150"
     >
         <img
             alt="Art"

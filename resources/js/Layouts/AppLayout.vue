@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
     <div
-        class="bg-gray-100 text-gray-600 work-sans leading-normal text-base tracking-normal"
+        class="bg-gray-100  work-sans leading-normal text-base tracking-normal"
     >
         <Navbar />
 

@@ -15,6 +15,7 @@ class Address extends Model
         'text',
         'recipient_name',
         'user_id',
+        'postal_code',
         'mobile'
     ];
 }

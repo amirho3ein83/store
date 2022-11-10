@@ -38,9 +38,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Address::create([
-            'text' => 'Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678.',
+            'text' => 'S2r 1234 NW Bobcat Lane, St. Robert, MO ghgt',
+            'postal_code' => '1789654-5224',
             'user_id' => 1,
-            'recipient_name' => 'John',
+            'recipient_name' => 'Robert Robertson',
             'mobile' => '555-1234'
         ]);
 

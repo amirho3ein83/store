@@ -33,6 +33,7 @@ class ProductSeeder extends Seeder
         for ($i = 1; $i <= 7; $i++) {
             AmazingOffer::create([
                 'product_id' => $i,
+                'discount' => rand(7,36),
                 'expiration_date' => Carbon::now()->addHour(rand(1, 14))
             ]);
         }

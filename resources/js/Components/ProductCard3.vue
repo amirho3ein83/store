@@ -1,19 +1,72 @@
-<script setup>
-import { Head, Link } from "@inertiajs/inertia-vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Inertia } from "@inertiajs/inertia";
-import { useProductStore } from "@/store/Product.js";
 
+
+<script setup>
+import { onMounted, ref } from "vue";
+import { useProductStore } from "@/store/Product.js";
+import { useCartStore } from "@/store/Cart.js";
+
+const storeCart = useCartStore();
 const storeProduct = useProductStore();
 
-defineProps({
+let showItem = ref(false);
+
+let props = defineProps({
     product: Object,
 });
 
+const addToCart = (id) => {
+    props.product.is_in_cart = true;
+    storeCart.addToCart( props.product.id)
+};
+
+onMounted(() => {
+    setTimeout(() => {
+        showItem.value = true;
+    }, 1);
+});
 </script>
 
 <template>
-    <button @click="storeProduct.showProduct(product.id)" class="lg:w-1/4 md:w-1/2 p-4 w-full group block overflow-hidden">
+    <Transition>
+        <div v-if="showItem"
+            class="flex lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2 px-1 flex-col justify-center items-center max-w-sm mx-auto my-2">
+            <img @click="storeProduct.showProduct(product.id)" src="./watch.webp" alt="" class="cursor-pointer"/>
+            <div class=" bg-gray-100 w-full shadow-lg  overflow-hidden">
+                <div class="flex justify-between items-center">
+                    <div class="py-2 text-center font-bold uppercase tracking-wide text-gray-800">
+                        {{ product.title }}
+                    </div>
+<div class="flex gap-2">
+    <p class="ml-2 text-sm font-bold text-yellow-700 dark:text-white">
+                        {{ product.rate }}<i class="bi bi-star-fill text-yellow-500"></i>
+                    </p>
+                    <p class="text-sm font-medium text-slate-900 underline hover:no-underline dark:text-white">{{
+                            product.reviews
+                    }}
+                        reviews</p>
+</div>
+                </div>
+
+                <span class="truncate text-xs h-24 text-slate-600 mx-2">
+                    {{ product.description }}
+                </span>
+                <div class="flex items-center justify-between py-2 px-3 bg-gray-400">
+                    <h1 class="text-gray-800 font-bold">
+                        $<span class="text-yellow-800">{{ product.price }}</span>
+                    </h1>
+                    <button v-if="product.is_in_cart" @click="storeCart.addToCart(id)" class="bg-[#dbae1a] text-gray-700 px-2 rounded hover:underline">
+                        in your cart
+                    </button>
+                    <button v-else @click="addToCart()" class="bg-gray-800 text-gray-100 px-2 rounded hover:underline">
+                        add to cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Transition>
+</template>
+
+    <!-- <button @click="storeProduct.showProduct(product.id)" class="lg:w-1/5 md:w-1/3 sm:w-1/2 p-4 w-full group block overflow-hidden">
         <img src="../Pages/Store/Products/pics/sh5.webp" alt="Tee"
             class="h-[350px] w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-[250px]" />
         <div class="relative pt-4">
@@ -48,5 +101,4 @@ defineProps({
             </div>
             </p>
         </div>
-    </button>
-</template>
+    </button> -->

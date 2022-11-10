@@ -3,36 +3,19 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 </script>
 
 <template>
-    <!-- component -->
-    <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
-    <link rel="stylesheet"
-        href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
 
     <main class="profile-page">
-        <section class="relative block h-500-px">
-            <div class="absolute top-0 w-full h-full bg-center bg-cover" style="
-            background-image: url('https://wallpaperaccess.com/full/187161.jpg');
-          ">
-                <span id="blackOverlay" class="w-full h-full absolute opacity-50 bg-black"></span>
-            </div>
-            <div class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
-                style="transform: translateZ(0px)">
-                <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="none" version="1.1" viewBox="0 0 2560 100" x="0" y="0">
-                    <polygon class="text-blueGray-200 fill-current" points="2560 0 2560 100 0 100"></polygon>
-                </svg>
-            </div>
-        </section>
+
         <section class="relative py-16 bg-blueGray-200">
             <div class="container mx-auto px-4">
                 <div
-                    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+                    class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb-6 shadow-xl rounded-lg">
                     <div class="px-6">
                         <div class="flex flex-wrap justify-center">
                             <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                                 <div class="relative">
                                     <img alt="..."
-                                        src="https://bareillycollege.org/wp-content/uploads/2022/09/chris-evans.webp"
+                                        src="../Pages/Store/Products/pics/sh3.webp"
                                         class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px">
                                 </div>
                             </div>

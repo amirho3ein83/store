@@ -6,9 +6,9 @@ import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Card2 from "@/Components/Card2.vue";
 import ProductCard3 from "@/Components/ProductCard3.vue";
+import ProductCard4 from "@/Components/ProductCard4.vue";
 import Pagination from "@/Components/Pagination.vue";
 import debounce from "lodash/debounce";
-import AppLayout from "@/Layouts/AppLayout.vue";
 
 const storePages = managePageStore();
 
@@ -60,11 +60,16 @@ watch(
     }, 300)
 );
 </script>
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default{
+  layout:AppLayout
+}
+</script>
 <template>
-    <AppLayout class="bg-gray-800">
         <!-- search bar -->
-        <div class="max-w-md mx-auto mt-7">
+        <div class="max-w-md mx-auto px-2 mt-7">
             <div
                 class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden"
             >
@@ -79,7 +84,7 @@ watch(
 
         <!-- tabs -->
         <div
-            class="mx-auto my-2 grid w-1/2 grid-cols-4 space-x-2 rounded-xl bg-gray-200 p-1"
+            class="mx-auto px-2 max-w-xl my-2 flex flex-wrap gap-1 justify-between align-baseline rounded-xl bg-gray-200 p-1"
             x-data="app"
         >
             <div>
@@ -199,5 +204,4 @@ watch(
                 :currentPage="products.current_page"
             />
         </div>
-    </AppLayout>
 </template>

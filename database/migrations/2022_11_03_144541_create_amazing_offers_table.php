@@ -15,8 +15,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('amazing_offers', function (Blueprint $table) {
-            $table->timestamp('expiration_date');
             $table->foreignIdFor(Product::class);
+            $table->integer('discount');
+            $table->timestamp('expiration_date');
         });
     }
 

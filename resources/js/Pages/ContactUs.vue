@@ -1,9 +1,15 @@
 <script setup>
+</script>
+
+<script>
 import AppLayout from "@/Layouts/AppLayout.vue";
+
+export default{
+  layout:AppLayout
+}
 </script>
 
 <template>
-    <AppLayout >
 <section class="px-10 relative z-10 overflow-hidden  bg-gray-800 py-2 lg:py-[20px]">
   <div class="container mx-auto">
     <div class="-mx-4 flex flex-wrap lg:justify-between">
@@ -136,7 +142,5 @@ import AppLayout from "@/Layouts/AppLayout.vue";
     </div>
   </div>
 </section>
-<!-- ====== Contact Section End -->
 
-    </AppLayout>
 </template>

@@ -6,13 +6,22 @@ let props = defineProps({
     liked_products: Object,
 });
 </script>
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default {
+    layout: AppLayout
+}
+</script>
 <template>
     <UserLayout>
-        <ProductCard4
+        <ProductCard4 v-if="Object.keys(liked_products).length != 0"
                     v-for="product of liked_products"
                     :key="product.id"
                     :product="product"
                 />
+                <div class="flex justify-center" v-else >
+                    <img src="https://cdn.dribbble.com/users/760295/screenshots/4433975/media/03494b209a1511a61868ced337b97931.png?compress=1&resize=400x300" alt="">
+                </div>
     </UserLayout>
 </template>

@@ -5,7 +5,7 @@
 
 
 
-  <section class="text-gray-600 body-font lg:px-14">
+  <section class="bg-gray-200 body-font lg:px-14 py-4">
     <div class="container mx-auto flex px-5 py-4 lg:flex-row flex-col items-center justify-center">
       <div class="lg:max-w-lg lg:w-full  mb-10 md:mb-0">
         <img

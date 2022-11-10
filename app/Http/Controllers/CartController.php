@@ -18,8 +18,8 @@ class CartController extends Controller
     public function index(Product $product)
     {
         $orders = Order::with('product')->where('user_id', Auth::id())->get();
-
-        return Inertia::render('Store/Cart', ['orders' => $orders]);
+        $user_address = Auth::user()->address;
+        return Inertia::render('Store/Cart', ['orders' => $orders, 'user_address' => $user_address]);
     }
 
     public function addToCart(Request $request)

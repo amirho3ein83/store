@@ -5,8 +5,7 @@ import InCartButton from "@/Components/InCartButton.vue";
 import SkeletonLoading from "@/Components/SkeletonLoading.vue";
 import SizeRadio from "@/Components/SizeRadio.vue";
 import RateButton from "@/Components/RateButton.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref } from "vue";
+import { KeepAlive, ref, Suspense } from "vue";
 import { useProductStore } from "@/store/Product.js";
 
 const storeProduct = useProductStore();
@@ -38,34 +37,46 @@ const unlikeProduct = (id) => {
     storeProduct.unlikeProduct(id);
 };
 </script>
+
+
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
+
+export default {
+    layout: AppLayout,
+}
+</script>
+
+
 <template>
-    <AppLayout>
 
-        <section class="bg-gray-600 body-font">
-            <div class=" mx-auto flex w-full  items-center justify-center flex-col">
-                <div>
-                    <div class="max-w-md w-full bg-gray-800 shadow-lg my-3  p-6">
-                        <div class="flex flex-col">
-                            <div>
-                                <div class="relative h-62 w-full mb-3">
-                                    <div class="absolute flex flex-col top-0 right-0 p-3">
-                                        <button v-if="is_liked" @click="
-                                            unlikeProduct(product.id)
-                                        "
-                                            class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1">
-                                            <i class="bi bi-heart-fill text-red-600"></i>
-                                        </button>
+    <section class=" bg-gray-600 body-font ">
+        <div class=" mx-auto flex  items-center justify-center ">
+            <div>
+                <div class="max-w-sm  bg-gray-800 shadow-lg sm:rounded-lg my-3  sm:p-5">
+                    <div class="flex flex-col">
+                        <div>
+                            <div class="relative h-62 w-full mb-3">
+                                <div class="absolute flex flex-col top-0 right-0 p-3">
+                                    <button v-if="is_liked" @click="
+                                        unlikeProduct(product.id)
+                                    "
+                                        class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1">
+                                        <i class="bi bi-heart-fill text-red-600"></i>
+                                    </button>
 
-                                        <button v-else @click="likeProduct(product.id)"
-                                            class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1">
-                                            <i class="bi bi-heart text-red-600"></i>
-                                        </button>
-                                    </div>
-                                    <img src="https://images.unsplash.com/photo-1577982787983-e07c6730f2d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2059&q=80"
-                                        alt="Just a flower" class="w-full object-fill rounded-2xl" />
+                                    <button v-else @click="likeProduct(product.id)"
+                                        class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1">
+                                        <i class="bi bi-heart text-red-600"></i>
+                                    </button>
                                 </div>
-                                <div class="flex-auto justify-evenly">
-                                    <div class="flex flex-wrap">
+                                <img src="./pics/shoe.avif" alt="Just a flower"
+                                    class="w-full object-fill sm:rounded-2xl" />
+
+                            </div>
+                            <div class="flex-auto justify-between px-3">
+                                <div class="flex flex-col">
+                                    <div class="flex justify-between">
                                         <p class="ml-2 text-xl font-bold text-fuchsia-100 dark:text-white">
                                             {{ product.title }}
                                         </p>
@@ -88,131 +99,121 @@ const unlikeProduct = (id) => {
                                                 }}
                                                 reviews
                                             </p>
-
-                                            <RateButton />
-                                        </div>
-
-                                        <div class="flex items-center w-full justify-between min-w-0">
-                                            <h2 class="text-lg mr-auto cursor-pointer text-gray-200 truncate">
-                                                {{ product.description }}
-                                            </h2>
                                         </div>
                                     </div>
+
+                                    <div class="flex items-center w-full justify-between min-w-0">
+                                        <h2 class="text-sm mr-auto cursor-pointer text-gray-200 truncate">
+                                            {{ product.description }}
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
                                     <div class="text-xl text-yellow-600 font-semibold mt-1">
                                         $ {{ product.sale_price }}
                                     </div>
-                    <span class="text-pink-400 line-through text-sm">$ {{ product.price }}</span>
+                                    <span class="text-pink-400 line-through text-sm">$ {{ product.price }}</span>
+                                </div>
 
-                                    <div class="flex py-4 text-sm text-gray-600">
-                                        <div class="flex-1 inbuttonne-flex items-center mb-3">
-                                            <div class="w-full flex-none text-sm flex items-center text-gray-600">
-                                                <ul class="flex flex-row justify-center items-center space-x-2">
-                                                    <button @click="
-                                                        chooseColor(
-                                                            `blue`
-                                                        )
-                                                    ">
-                                                        <span :class="{
-                                                            'border-blue-500':
-                                                                picked_color ==
-                                                                `blue`,
-                                                        }"
-                                                            class="block p-1 border-2 border-gray-900 hover:border-blue-600 rounded-full transition ease-in duration-300">
-                                                            <a class="block w-3 h-3 bg-blue-600 rounded-full"></a>
-                                                        </span>
-                                                    </button>
-                                                    <button @click="
-                                                        chooseColor(
-                                                            `yellow`
-                                                        )
-                                                    ">
-                                                        <span :class="{
-                                                            'border-yellow-500':
-                                                                picked_color ==
-                                                                `yellow`,
-                                                        }"
-                                                            class="block p-1 border-2 border-gray-900 hover:border-yellow-600 rounded-full transition ease-in duration-300">
-                                                            <a class="block w-3 h-3 bg-yellow-600 rounded-full"></a>
-                                                        </span>
-                                                    </button>
-                                                    <button @click="
-                                                        chooseColor(
-                                                            `red`
-                                                        )
-                                                    ">
-                                                        <span :class="{
-                                                            'border-red-500':
-                                                                picked_color ==
-                                                                `red`,
-                                                        }"
-                                                            class="block p-1 border-2 border-gray-900 hover:border-red-600 rounded-full transition ease-in duration-300">
-                                                            <a class="block w-3 h-3 bg-red-600 rounded-full"></a>
-                                                        </span>
-                                                    </button>
-                                                    <button @click="
-                                                        chooseColor(
-                                                            `purple`
-                                                        )
-                                                    ">
-                                                        <span :class="{
-                                                            'border-purple-500':
-                                                                picked_color ==
-                                                                `purple`,
-                                                        }"
-                                                            class="block p-1 border-2 border-gray-900 hover:border-purple-600 rounded-full transition ease-in duration-300">
-                                                            <a class="block w-3 h-3 bg-purple-600 rounded-full"></a>
-                                                        </span>
-                                                    </button>
-                                                </ul>
-                                            </div>
+                                <div class="flex py-4 text-sm text-gray-600 items-center">
+                                    <div class="flex-1 inbuttonne-flex items-center mb-3">
+                                        <div
+                                            class="w-full flex-none text-sm flex items-center text-gray-600 justify-center">
+                                            <ul class="flex flex-row justify-center items-center space-x-2">
+                                                <button @click="
+                                                    chooseColor(
+                                                        `blue`
+                                                    )
+                                                ">
+                                                    <span :class="{
+                                                        'border-blue-500':
+                                                            picked_color ==
+                                                            `blue`,
+                                                    }"
+                                                        class="block p-1 border-2 border-gray-900 hover:border-blue-600 rounded-full transition ease-in duration-300">
+                                                        <a class="block w-3 h-3 bg-blue-600 rounded-full"></a>
+                                                    </span>
+                                                </button>
+                                                <button @click="
+                                                    chooseColor(
+                                                        `yellow`
+                                                    )
+                                                ">
+                                                    <span :class="{
+                                                        'border-yellow-500':
+                                                            picked_color ==
+                                                            `yellow`,
+                                                    }"
+                                                        class="block p-1 border-2 border-gray-900 hover:border-yellow-600 rounded-full transition ease-in duration-300">
+                                                        <a class="block w-3 h-3 bg-yellow-600 rounded-full"></a>
+                                                    </span>
+                                                </button>
+                                                <button @click="
+                                                    chooseColor(
+                                                        `red`
+                                                    )
+                                                ">
+                                                    <span :class="{
+                                                        'border-red-500':
+                                                            picked_color ==
+                                                            `red`,
+                                                    }"
+                                                        class="block p-1 border-2 border-gray-900 hover:border-red-600 rounded-full transition ease-in duration-300">
+                                                        <a class="block w-3 h-3 bg-red-600 rounded-full"></a>
+                                                    </span>
+                                                </button>
+                                                <button @click="
+                                                    chooseColor(
+                                                        `purple`
+                                                    )
+                                                ">
+                                                    <span :class="{
+                                                        'border-purple-500':
+                                                            picked_color ==
+                                                            `purple`,
+                                                    }"
+                                                        class="block p-1 border-2 border-gray-900 hover:border-purple-600 rounded-full transition ease-in duration-300">
+                                                        <a class="block w-3 h-3 bg-purple-600 rounded-full"></a>
+                                                    </span>
+                                                </button>
+                                            </ul>
                                         </div>
-                                        <div class="flex-1 inbuttonne-flex items-center mb-3">
-                                            <div class="cursor-pointer text-gray-400">
-                                                <SizeRadio :size="`S`" :chosen="
-                                                    picked_size == `S`
-                                                " @selected="
+                                    </div>
+                                    <div class="flex-1 inbuttonne-flex items-center mb-3">
+                                        <div class="cursor-pointer text-gray-400">
+                                            <SizeRadio :size="`S`" :chosen="
+                                                picked_size == `S`
+                                            " @selected="
     chooseSize(`S`)
 " />
-                                                <SizeRadio :size="`M`" :chosen="
-                                                    picked_size == `M`
-                                                " @selected="
+                                            <SizeRadio :size="`M`" :chosen="
+                                                picked_size == `M`
+                                            " @selected="
     chooseSize(`M`)
 " />
-                                                <SizeRadio :size="`L`" :chosen="
-                                                    picked_size == `L`
-                                                " @selected="
+                                            <SizeRadio :size="`L`" :chosen="
+                                                picked_size == `L`
+                                            " @selected="
     chooseSize(`L`)
 " />
-                                                <SizeRadio :size="`XL`" :chosen="
-                                                    picked_size == `XL`
-                                                " @selected="
+                                            <SizeRadio :size="`XL`" :chosen="
+                                                picked_size == `XL`
+                                            " @selected="
     chooseSize(`XL`)
 " />
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class="flex space-x-2 text-sm font-medium justify-start">
-                                        <InCartButton v-if="product.is_in_cart" />
-                                        <AddToCartButton v-else :id="product.id" />
-                                    </div>
+                                </div>
+                                <div class="flex space-x-2 text-sm font-medium justify-start">
+                                    <InCartButton v-if="product.is_in_cart" />
+                                    <AddToCartButton v-else :id="product.id" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-
-
-
-
-
-
-
-
-
-
-
-    </AppLayout>
 </template>

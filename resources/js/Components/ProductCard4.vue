@@ -26,11 +26,11 @@ onMounted(() => {
     <Transition>
         <div
             v-if="showItem"
-            class="flex flex-col justify-center items-center max-w-sm mx-auto my-8"
+            class="flex lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2 px-1 flex-col justify-center items-center max-w-sm mx-auto my-2"
         >
-            <img @click="storeProduct.showProduct(product.id)" src="./amazing-offer.jpg" alt="" />
+            <img @click="storeProduct.showProduct(product.id)" src="./watch.webp" alt="" />
             <div
-                class="w-56 md:w-64 bg-white -mt-10 shadow-lg rounded-lg overflow-hidden"
+                class=" bg-white w-full shadow-lg rounded-lg overflow-hidden"
             >
                 <div
                     class="py-2 text-center font-bold uppercase tracking-wide text-gray-800"

@@ -14,6 +14,7 @@ class AmazingOffer extends Model
 
     protected $fillable = [
         'expiration_date',
+        'discount',
         'product_id'
     ];
 

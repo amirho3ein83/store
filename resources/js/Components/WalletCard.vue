@@ -30,7 +30,7 @@ const chargeWallet = () => {
 
 <template>
     <div class="mx-auto container flex justify-center  px-4">
-        <div class="flex flex-col space-y-8 w-full px-16 max-w-xl">
+        <div class="flex flex-col space-y-8 w-full px-16 max-w-xl items-center">
             <!-- card -->
             <div
                 class="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-72 w-96 p-6 rounded-xl shadow-md"

@@ -3,25 +3,28 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Hero2 from "@/Components/Hero2.vue";
 import AmazingOffer from "@/Components/AmazingOffer.vue";
 import Slider from "@/Components/Slider.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
 import "vue-horizontal-scroll/dist/vue-horizontal-scroll.css";
 
 defineProps({
     amazing_offers: Object,
 });
 </script>
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default{
+  layout:AppLayout
+}
+</script>
 <template>
     <Head title="Store Page" />
-
-    <AppLayout class="bg-gray-100">
         <div
             class="carousel relative container mx-auto"
             style="max-width: 1600px"
         ></div>
         <section class="bg-white">
             <!-- <img src="./pics/banner1.webp" alt="" class="w-full" /> -->
-            <div class="flex px-16 py-7 bg-slate-50">
+            <div class="flex sm:px-16 sm:py-7 bg-slate-50">
                 <img
                     src="./pics/black-friday.webp"
                     alt=""
@@ -57,8 +60,7 @@ defineProps({
                         <Hero2
                             v-for="amazing_offer of amazing_offers"
                             :key="amazing_offer.product_id"
-                            :product="amazing_offer.product"
-                            :remaining_time="amazing_offer.remaining_time"
+                            :amazing_offer="amazing_offer"
                         />
                     </div>
                 </div>
@@ -76,7 +78,7 @@ defineProps({
                     />
                     <img
                         class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
-                        src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/mens-clothing-sale-portrait-flyer-template-1627835dd392414eb308cf84fde379a1_screen.jpg?ts=1636966283"
+                        src="https://9thwatchgroup.com/wp-content/uploads/2021/08/9th-Watch-Poster-01-01-scaled.jpg"
                         alt="https://www.pngegg.com/en/png-zquqj/download"
                     />
                 </section>
@@ -175,11 +177,10 @@ defineProps({
                 >
                     <img
                         alt="Trainer"
-                        src="https://images.unsplash.com/photo-1611510338559-2f463335092c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80"
+                        src="https://i.pinimg.com/550x/e0/6d/bf/e06dbfa4febaea3a3735eba741626771.jpg"
                         class="absolute inset-0 h-full w-full object-cover"
                     />
                 </div>
             </section>
         </section>
-    </AppLayout>
 </template>

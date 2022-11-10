@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->mediumText('text');
             $table->string('recipient_name');
+            $table->string('postal_code');
             $table->string('mobile');
             $table->foreignIdFor(User::class);
         });
