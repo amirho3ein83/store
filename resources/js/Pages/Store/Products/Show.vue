@@ -2,9 +2,9 @@
 import { Head, buttonnk } from "@inertiajs/inertia-vue3";
 import AddToCartButton from "@/Components/AddToCartButton.vue";
 import InCartButton from "@/Components/InCartButton.vue";
-import SkeletonLoading from "@/Components/SkeletonLoading.vue";
+import CommentForm from "@/Pages/Store/Partial/CommentForm.vue";
 import SizeRadio from "@/Components/SizeRadio.vue";
-import RateButton from "@/Components/RateButton.vue";
+import Comment from "@/Components/Comment.vue";
 import { KeepAlive, ref, Suspense } from "vue";
 import { useProductStore } from "@/store/Product.js";
 
@@ -12,6 +12,7 @@ const storeProduct = useProductStore();
 
 let props = defineProps({
     product: Object,
+    comments: Object,
 });
 
 let picked_color = ref("");
@@ -213,6 +214,26 @@ export default {
                     </div>
                 </div>
             </div>
+
+        </div>
+        <div class="flex flex-col items-center">
+            <CommentForm v-if="$page.props.auth" :product_id="product.id" />
+            <div v-else>
+                <!-- component -->
+                <div class="bg-gray-800 text-white w-[350px] flex rounded-xl shadow-lg p-4 justify-between">
+                    gotta login to post comment
+                    <Link :href="'/login'">
+                    <button class="bg-[#26ed3a] text-gray-900 px-2 py-1 rounded-sm hover:scale-105 hover:bg-[#30d140]">
+                        Log in
+                    </button>
+                    </Link>
+                </div>
+            </div>
+            <button
+              class="w-52 my-3 bg-gray-500 tracking-wide text-gray-100 font-bold rounded border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-gray-900 shadow-md py-2 px-6 inline-flex items-center">
+              <span class="mx-auto">see comments</span>
+            </button>
+            <!-- <Comment v-if="Object.keys(comments).length != 0" v-for="comment of comments" :key="comment.id" :comment="comment" /> -->
         </div>
     </section>
 

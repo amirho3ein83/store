@@ -9,7 +9,7 @@ defineProps({
         <div
             class="mx-2  flex max-w-md bg-gray-300 shadow-lg rounded-lg overflow-hidden"
         >
-            <img src="./amazing-offer.jpg" alt="" class="object-cover w-1/2" />
+            <img src="./watch.webp" alt="" class="object-cover w-1/2" />
 
             <div class="w-1/2 p-4">
                 <h1 class="text-gray-900 font-bold text-2xl">{{product.title}}</h1>

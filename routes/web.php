@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\BackofficeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
@@ -21,7 +22,7 @@ use Inertia\Inertia;
 */
 
 Route::redirect('/', '/home');
-Route::get('/home', [ProductController::class, 'index'])->name('home');
+Route::get('/home', [ProductController::class, 'index'])->name('home')->middleware('admin');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
@@ -32,8 +33,13 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::group(['middleware' => ['role:backoffice'], 'prefix' => 'backoffice', 'name' => 'backoffice.'], function () {
-        Route::get('/products-list', [BackofficeController::class, 'productsList'])->name('products.list');
+
+    Route::get('/admin/dashboard', function () {
+        return Inertia::render('Admin/Dashboard');
+    })->name('admin.dashboard')->middleware('admin');
+
+    Route::group([ 'prefix' => 'admin', 'name' => 'admin.'], function () {
+        Route::get('/products-list', [AdminController::class, 'productsList'])->name('products.list');
     });
 
     Route::get('/dashboard', function () {
@@ -51,6 +57,8 @@ Route::middleware([
     Route::get('/user/profile/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
 
 
+    Route::post('/comment', [CommentController::class, 'storeComment'])->name('comment');
+    Route::get('products/{product}/comments', [CommentController::class, 'getComments'])->name('comments.get');
 
 
     Route::post('/payment', [CartController::class, 'payment'])->name('payment');

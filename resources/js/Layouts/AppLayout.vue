@@ -6,6 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Footer from "../Pages/Footer.vue";
 import Navbar from "@/Components/Navbar.vue";
 import { managePageStore } from "@/store/ManagePages";
+import { Head } from "@inertiajs/inertia-vue3";
 
 const storePages = managePageStore();
 const storeCart = useCartStore();

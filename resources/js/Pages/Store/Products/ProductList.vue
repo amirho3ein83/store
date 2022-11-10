@@ -6,7 +6,6 @@ import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Card2 from "@/Components/Card2.vue";
 import ProductCard3 from "@/Components/ProductCard3.vue";
-import ProductCard4 from "@/Components/ProductCard4.vue";
 import Pagination from "@/Components/Pagination.vue";
 import debounce from "lodash/debounce";
 
@@ -64,7 +63,8 @@ watch(
 import AppLayout from "@/Layouts/AppLayout.vue";
 
 export default{
-  layout:AppLayout
+    layout: AppLayout,
+    components: { Comment }
 }
 </script>
 <template>
@@ -81,7 +81,6 @@ export default{
                 />
             </div>
         </div>
-
         <!-- tabs -->
         <div
             class="mx-auto px-2 max-w-xl my-2 flex flex-wrap gap-1 justify-between align-baseline rounded-xl bg-gray-200 p-1"

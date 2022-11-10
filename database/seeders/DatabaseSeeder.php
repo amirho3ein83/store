@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Auth;
@@ -22,14 +23,23 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeeder::class,
+            ProductSeeder::class,
             ProductSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::create([
+        $admin = User::create([
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('11111111'),
+            'name' => 'Admin',
+        ]);
+
+        $admin->assignRole('admin');
+
+        User::create([
             'email' => 'amir@amir.com',
             'password' => Hash::make('11111111'),
-            'name' => 'amirshafi',
+            'name' => 'Amirhossein',
         ]);
 
         Wallet::create([

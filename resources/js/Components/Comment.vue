@@ -1,41 +1,21 @@
 <script setup>
-
+defineProps({
+  comment: Object
+})
 </script>
 
 <template>
-    <!-- component -->
-    <div class="flex justify-center relative top-1/3">
-        <!-- This is an example component -->
-        <div
-            class="relative grid grid-cols-1 gap-4 p-4 mb-8 border rounded-lg bg-white shadow-lg"
-        >
-            <div class="relative flex gap-4">
-                <img
-                    src="https://icons.iconarchive.com/icons/diversity-avatars/avatars/256/charlie-chaplin-icon.png"
-                    class="relative rounded-lg -top-8 -mb-4 bg-white border h-20 w-20"
-                    alt=""
-                    loading="lazy"
-                />
-                <div class="flex flex-col w-full">
-                    <div class="flex flex-row justify-between">
-                        <p
-                            class="relative text-xl whitespace-nowrap truncate overflow-hidden"
-                        >
-                            COMMENTOR
-                        </p>
-                        <a class="text-gray-500 text-xl" href="#"
-                            ><i class="fa-solid fa-trash"></i
-                        ></a>
-                    </div>
-                    <p class="text-gray-400 text-sm">
-                        20 April 2022, at 14:88 PM
-                    </p>
-                </div>
-            </div>
-            <p class="-mt-4 text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                <br />Maxime quisquam vero adipisci beatae voluptas dolor ame.
-            </p>
+  <!-- component -->
+  <div class=" text-black dark:text-gray-200 py-1 antialiased flex w-[350px]">
+    <div>
+      <div class="bg-gray-400 dark:bg-gray-700 rounded px-4 pt-2 pb-2.5">
+        <div class="flex align-baseline ">
+          <img class="rounded-full h-8 w-8 mr-2 mt-1 " src="https://i.pravatar.cc/60?u=" />
+          <span class="font-semibold text-sm leading-relaxed">{{comment.author}}</span>
         </div>
+        <div class="text-normal leading-snug md:leading-normal">{{ comment.body }}</div>
+        <div class="text-sm ml-4 mt-0.5 text-gray-700 dark:text-gray-400">{{ comment.created_at }}</div>
+      </div>
     </div>
+  </div>
 </template>

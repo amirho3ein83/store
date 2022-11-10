@@ -1,5 +1,7 @@
 <script setup>
 import "bootstrap-icons/font/bootstrap-icons.css";
+
+import Logout from '../Pages/Auth/Logout.vue'
 </script>
 
 <template>
@@ -28,6 +30,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
                             <div class="w-full lg:w-4/12 px-4 lg:order-1">
                                 <div class="flex justify-center py-4 lg:pt-4 pt-8">
+                                    <Logout/>
                                     <Link :href="'/user/profile/liked-products'" preserve-scroll>
                                     <div class="mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
                                         <span

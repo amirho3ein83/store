@@ -28,7 +28,7 @@ export default{
                 <img
                     src="./pics/black-friday.webp"
                     alt=""
-                    class="object-cover w-full"
+                    class="w-full object-cover h-full object-center"
                 />
             </div>
             <div class="mx-auto flex items-center flex-wrap">

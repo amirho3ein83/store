@@ -19,7 +19,7 @@ export default{
 </script>
 <template>
 
-    <Head title="Store Page" />
+    <Head title="Category" />
 
         <div class="carousel relative container mx-auto" style="max-width: 1600px"></div>
 

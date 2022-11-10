@@ -2,7 +2,7 @@
 
 
 import Order from "@/Components/Order.vue";
-import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import { useStorage } from "@/store/useStorage";
 import EmptyCart from "../Store/Partial/EmptyCart.vue";
 import { onUnmounted, ref } from "vue";
@@ -44,10 +44,11 @@ onUnmounted(() => {
 import AppLayout from "@/Layouts/AppLayout.vue";
 
 export default {
-    layout: AppLayout
+    layout: AppLayout,
 }
 </script>
 <template>
+    <Head title="Cart" />
 
     <div v-if="Object.keys(orders).length != 0" class="flex flex-col w-full pt-4">
         <div class=" flex  justify-center sm:gap-x-14">
@@ -228,6 +229,9 @@ export default {
                     </div>
                     <div class="my-5 flex flex-col justify-around   cursor-pointer rounded-xl">
                         <!-- use default address button -->
+                        <template v-if="user_address">
+                        
+                        
                         <div class="self-center m-2">
                             <button @click="step = 3"
                                 class="group relative inline-block overflow-hidden border border-[#b0870b] bg-[#b0870b] px-8 py-3 focus:outline-none focus:ring">
@@ -240,7 +244,7 @@ export default {
                                 </span>
                             </button>
                         </div>
-                        <div class="shadow-lg rounded-lg bg-gray-700 mx-auto px-8 p-4 notification-box flex">
+                        <div  class="shadow-lg rounded-lg bg-gray-700 mx-auto px-8 p-4 notification-box flex">
 
                             <div>
                                 <h3 class="text-lg pb-2 text-cyan-50">
@@ -260,6 +264,8 @@ export default {
 
                             </div>
                         </div>
+                    </template>
+
 
                     </div>
                 </div>
@@ -268,7 +274,7 @@ export default {
 
         <Transition name="fade">
             <div v-if="step == 3"
-                class="flex mx-auto m-5  w-full lg:w-1/3  flex-col my-20 bg-gray-500 rounded-lg shadow-xl">
+                class="container px-5 py-24 mx-autol bg-gray-500">
                 <div class=" max-w-lg px-4 ">
                     <fieldset class="col-span-6 border-t border-gray-200 my-1 py-2">
                         <legend class="mb-1 block text-sm text-gray-100 py-5">

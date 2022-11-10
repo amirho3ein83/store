@@ -165,6 +165,7 @@ class ProductController extends Controller
         if (Order::where([['user_id', Auth::id()], ['product_id', $product->id]])->exists()) {
             $product->is_in_cart = true;
         }
+        
         return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }

@@ -34,6 +34,8 @@ onMounted(() => {
 </script>
 
 <template>
+    <Head title="Register" />
+
     <div class="flex">
         <img
             class="object-cover w-full h-screen"

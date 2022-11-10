@@ -1,5 +1,5 @@
 <script setup>
-import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import JetButton from "@/Components/Button.vue";
 import JetInput from "@/Components/Input.vue";
 import JetInputError from "@/Components/InputError.vue";
@@ -32,6 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
+    <Head title="Login" />
     <div class="flex">
         <div class="w-full h-screen">
             <img

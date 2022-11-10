@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AmazingOffer;
+use App\Models\Comment;
 use App\Models\Product;
 use Carbon\Carbon;
 use GuzzleHttp\Promise\Create;
@@ -19,21 +20,25 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 1; $i < 20  ; $i++) {
 
             $product =  Product::factory()->create();
 
             $pic = rand(1, 4);
-            File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
+            // File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
 
-            $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
-                ->toMediaCollection('photo');
+            // $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
+            //     ->toMediaCollection('photo');
+
+            Comment::factory(4)->create([
+                'product_id' => $i
+            ]);
         }
 
         for ($i = 1; $i <= 7; $i++) {
             AmazingOffer::create([
                 'product_id' => $i,
-                'discount' => rand(7,36),
+                'discount' => rand(7, 36),
                 'expiration_date' => Carbon::now()->addHour(rand(1, 14))
             ]);
         }
