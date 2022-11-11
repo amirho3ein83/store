@@ -5,9 +5,11 @@ import Table from "@/Components/Table.vue";
 </script>
 
 <template>
-    <BackofficeLayout> </BackofficeLayout>
+    <AdminLayout> </AdminLayout>
     <div class="flex">
         <Sidebar />
-        <div class="flex-1"> <Table/> </div>
+        <div class="flex-1">
+            <Table />
+        </div>
     </div>
 </template>

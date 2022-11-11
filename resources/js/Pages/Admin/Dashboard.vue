@@ -1,13 +1,11 @@
 <script setup>
-import Sidebar from "./Sidebar.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
+import Sidebar from "../../Layouts/Sidebar.vue";
 </script>
 
 <template>
-    <BackofficeLayout>
-        
-    </BackofficeLayout>
-    <div class="flex">
-        <Sidebar />
-        <div class="flex-1">dashboard</div>
-    </div>
+    <AdminLayout>
+
+        DASHSDFSD </AdminLayout>
+
 </template>

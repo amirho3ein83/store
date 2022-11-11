@@ -33,18 +33,14 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-
-    Route::get('/admin/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard')->middleware('admin');
-
-    Route::group([ 'prefix' => 'admin', 'name' => 'admin.'], function () {
+    // admin routes
+    Route::group(['middleware' => ['role:admin'], 'prefix' => 'admin', 'name' => 'admin.'], function () {
         Route::get('/products-list', [AdminController::class, 'productsList'])->name('products.list');
-    });
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+        Route::get('/admin/dashboard', function () {
+            return Inertia::render('Admin/Dashboard');
+        })->name('admin.dashboard');
+    });
 
     Route::get('/contact-us', function () {
         return Inertia::render('ContactUs');
