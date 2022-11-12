@@ -36,8 +36,9 @@ Route::middleware([
     // admin routes
     Route::group(['middleware' => ['role:admin'], 'prefix' => 'admin', 'name' => 'admin.'], function () {
         Route::get('/products-list', [AdminController::class, 'productsList'])->name('products.list');
+        Route::get('/users-list', [AdminController::class, 'usersList'])->name('users.list');
 
-        Route::get('/admin/dashboard', function () {
+        Route::get('/dashboard', function () {
             return Inertia::render('Admin/Dashboard');
         })->name('admin.dashboard');
     });
@@ -54,7 +55,7 @@ Route::middleware([
 
 
     Route::post('/comment', [CommentController::class, 'storeComment'])->name('comment');
-    Route::get('products/{product}/comments', [CommentController::class, 'getComments'])->name('comments.get');
+    Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
 
 
     Route::post('/payment', [CartController::class, 'payment'])->name('payment');
@@ -75,9 +76,8 @@ Route::middleware([
     Route::patch('/products/{id}/unlike', [ProductController::class, 'unlikeProduct'])->name('unlike-product');
     Route::patch('/rate/product', [ProductController::class, 'rateProduct'])->name('rate-product');
 
-    Route::get('/product/create', function () {
-        return Inertia::render('Store/Products/Create');
-    });
+
+    Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 });
 

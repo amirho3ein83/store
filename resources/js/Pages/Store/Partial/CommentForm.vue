@@ -4,7 +4,9 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import JetInput from "@/Components/Input.vue";
 import JetInputError from "@/Components/InputError.vue";
 import JetLabel from "@/Components/Label.vue";
+import { useProductStore } from "@/store/Product.js";
 
+const storeProduct = useProductStore();
 
 let props = defineProps({
   product_id: Number
@@ -21,6 +23,7 @@ const submit = () => {
     preserveScroll: true,
     onSuccess: () => {
       form.reset();
+      storeProduct.fetchComments(props.product_id)
     },
   });
 };

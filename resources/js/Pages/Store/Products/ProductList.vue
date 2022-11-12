@@ -1,7 +1,5 @@
 <script setup>
-import axios from "axios";
-import { computed, onMounted, ref, watch } from "vue";
-import { managePageStore } from "@/store/ManagePages";
+import { onUnmounted, ref, watch } from "vue";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Card2 from "@/Components/Card2.vue";
@@ -9,11 +7,9 @@ import ProductCard3 from "@/Components/ProductCard3.vue";
 import Pagination from "@/Components/Pagination.vue";
 import debounce from "lodash/debounce";
 
-const storePages = managePageStore();
 
 let props = defineProps({
     products: Object,
-    filters: Object,
 });
 
 let search = useStorage("search");
@@ -58,6 +54,11 @@ watch(
         );
     }, 300)
 );
+
+onUnmounted(() => {
+    localStorage.removeItem("search");
+    localStorage.removeItem("order_by");
+})
 </script>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";

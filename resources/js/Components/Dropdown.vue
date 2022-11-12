@@ -70,10 +70,33 @@ const alignmentClasses = computed(() => {
                 style="display: none;"
                 @click="open = false"
             >
-                <div class="rounded-md bg-gray-700 ring-1 ring-black ring-opacity-5" :class="contentClasses">
+                <div class="rounded-md max-h-52 overflow-y-auto bg-gray-700 ring-1 ring-black ring-opacity-5" :class="contentClasses">
                     <slot name="content" />
                 </div>
             </div>
         </transition>
     </div>
 </template>
+<style>
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+</style>

@@ -23,8 +23,8 @@ class CommentController extends Controller
         ]);
     }
 
-    public function getComments(Product $product)
+    public function getComments($id)
     {
-        return $product->comments;
+        return Comment::where('product_id', $id)->limit(30)->get();
     }
 }

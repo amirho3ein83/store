@@ -229,11 +229,14 @@ export default {
                     </Link>
                 </div>
             </div>
-            <button
-              class="w-52 my-3 bg-gray-500 tracking-wide text-gray-100 font-bold rounded border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-gray-900 shadow-md py-2 px-6 inline-flex items-center">
-              <span class="mx-auto">see comments</span>
+
+            <div v-if="Object.keys(storeProduct.comments).length != 0">
+                <Comment v-for="comment of storeProduct.comments" :key="comment.id" :comment="comment" />
+            </div>
+            <button v-else @click="storeProduct.fetchComments(product.id)"
+                class="w-52 my-3 bg-gray-500 tracking-wide text-gray-100 font-bold rounded border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-gray-900 shadow-md py-2 px-6 inline-flex items-center">
+                <span class="mx-auto">see comments</span>
             </button>
-            <!-- <Comment v-if="Object.keys(comments).length != 0" v-for="comment of comments" :key="comment.id" :comment="comment" /> -->
         </div>
     </section>
 

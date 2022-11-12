@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('slug');
             $table->integer('price');
             $table->integer('sold_qty')->default(0);
-            $table->foreignIdFor(Category::class);
+            $table->foreignIdFor(Category::class)
+                ->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->integer('sale_price');
             $table->integer('balance');
             $table->integer('reviews')->default(0);

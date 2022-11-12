@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('recipient_name');
             $table->string('postal_code');
             $table->string('mobile');
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->cascadeOnDelete();
         });
     }
 

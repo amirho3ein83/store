@@ -30,7 +30,7 @@ class ProductSeeder extends Seeder
             // $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
             //     ->toMediaCollection('photo');
 
-            Comment::factory(4)->create([
+            Comment::factory()->create([
                 'product_id' => $i
             ]);
         }

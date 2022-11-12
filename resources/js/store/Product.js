@@ -2,7 +2,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { defineStore } from "pinia";
 
 export const useProductStore = defineStore("products", {
-    state: () => ({  products: [] }),
+    state: () => ({ products: [], comments: [] }),
 
     actions: {
         unlikeProduct(id) {
@@ -12,7 +12,19 @@ export const useProductStore = defineStore("products", {
             axios.patch(route("like-product", { id: id }));
         },
         showProduct(id) {
-            Inertia.get("/products/" +id);
+            Inertia.get("/products/" + id);
+        },
+        fetchComments(id) {
+            axios
+                .get(route("product.comment", {
+                    id: id,
+                }), [])
+                .then((res) => {
+                    this.comments = res.data
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
     },
 });

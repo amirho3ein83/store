@@ -12,13 +12,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
 
     protected $_validation = [
-        'name' => 'bail|required|unique:products|max:255',
+        'title' => 'bail|required|unique:products|max:255',
         'description' => 'required|max:255',
         'price' => 'required | integer',
         'image' => 'required ',
@@ -30,6 +31,12 @@ class ProductController extends Controller
     {
         $amazing_offers = AmazingOffer::with('product')->get();
         return Inertia::render('Store/Products/Home', ['amazing_offers' => $amazing_offers]);
+    }
+    public function create(Request $request)
+    {
+        $categories = Category::all();
+
+        return Inertia::render('Admin/Products/Create', ['categories' => $categories]);
     }
 
     public function category(Request $request)
@@ -87,18 +94,21 @@ class ProductController extends Controller
             'Store/Products/ProductList',
             [
                 'products' => $products,
-                'filters' => $request->get('search', 'order_by')
             ]
         );
     }
 
     public function store(Request $request)
     {
+
         $product = Product::create([
-            'name' => $request->name,
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
             'description' => $request->description,
             'price' => $request->price,
-            'balance' => $request->balance
+            'sale_price' => $request->sale_price,
+            'balance' => $request->balance,
+            'category_id' => $request->category_id
         ]);
 
         $product->addMediaFromRequest('image')->toMediaCollection();
@@ -107,7 +117,7 @@ class ProductController extends Controller
     public function update(Product $product, Request $request)
     {
         $request->validate([
-            'name' => 'bail|required|unique:products|max:255',
+            'title' => 'bail|required|unique:products|max:255',
             'description' => 'required|max:255',
             'price' => 'required | integer',
             'image' => 'required ',
@@ -115,7 +125,7 @@ class ProductController extends Controller
 
 
         $product->update([
-            'name' => $request->name,
+            'title' => $request->title,
             'description' => $request->description,
             'price' => $request->price,
         ]);
@@ -150,7 +160,9 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        return Inertia::render('Store/Product/Edit', ['product' => $product]);
+        $categories = Category::all();
+
+        return Inertia::render('Admin/Products/Edit', ['product' => $product,'categories' => $categories]);
     }
 
     public function show(Product $product)
@@ -165,7 +177,7 @@ class ProductController extends Controller
         if (Order::where([['user_id', Auth::id()], ['product_id', $product->id]])->exists()) {
             $product->is_in_cart = true;
         }
-        
+
         return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }

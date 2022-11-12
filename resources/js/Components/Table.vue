@@ -1,7 +1,11 @@
-<script setup></script>
+<script setup>
+defineProps({
+  users:Object
+})
+</script>
 
 <template>
-    <table class="min-w-full">
+    <table class="w-[450px]">
         <thead>
             <tr>
                 <th
@@ -12,24 +16,14 @@
                 <th
                     class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
-                    Title
-                </th>
-                <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                    Status
-                </th>
-                <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
                     Role
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+
             </tr>
         </thead>
 
         <tbody>
-            <tr>
+            <tr v-for="user of users">
                 <td
                     class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
                 >
@@ -46,46 +40,32 @@
                             <div
                                 class="text-sm leading-5 font-medium text-gray-900"
                             >
-                                John Doe
+                                {{user.name}}
                             </div>
                             <div class="text-sm leading-5 text-gray-500">
-                                john@example.com
+                                {{user.email}}
+
                             </div>
                         </div>
                     </div>
                 </td>
 
-                <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
-                >
-                    <div class="text-sm leading-5 text-gray-900">
-                        Software Engineer
-                    </div>
-                    <div class="text-sm leading-5 text-gray-500">Web dev</div>
-                </td>
+
 
                 <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
-                >
-                    <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                        >Active</span
-                    >
-                </td>
-
-                <td
+                v-if="Object.keys(user.roles).length != 0"
                     class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
                 >
-                    Owner
-                </td>
+                <span  v-for="role of user.roles" :key="role.id">{{role.name}}</span>
 
-                <td
-                    class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+            </td>
+                <td v-else
+                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
                 >
-                    <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                        >Edit</a
-                    >
-                </td>
+                <span >user</span>
+
+            </td>
+
             </tr>
         </tbody>
     </table>

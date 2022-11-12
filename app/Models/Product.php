@@ -22,6 +22,7 @@ class Product extends Model implements HasMedia
         'description',
         'balance',
         'reviews',
+        'category_id',
         'rate',
 
     ];
@@ -51,5 +52,10 @@ class Product extends Model implements HasMedia
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

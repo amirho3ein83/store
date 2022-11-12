@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'balance' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
-            'category_id' => 1,
+            'category_id' => rand(1,10)
         ];
     }
 }
