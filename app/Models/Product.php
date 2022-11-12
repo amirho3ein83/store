@@ -58,4 +58,14 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function sizes()
+    {
+        return $this->morphMany(Size::class, 'sizeable');
+    }
+
+    public function availableColors()
+    {
+        return $this->morphMany(Color::class, 'colorable');
+    }
 }

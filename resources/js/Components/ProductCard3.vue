@@ -14,7 +14,7 @@ let props = defineProps({
     product: Object,
 });
 
-const addToCart = (id) => {
+const addToCart = () => {
     props.product.is_in_cart = true;
     storeCart.addToCart(props.product.id)
 };
@@ -33,7 +33,7 @@ onMounted(() => {
             <img @click="storeProduct.showProduct(product.id)" src="./watch.webp" alt="" class="cursor-pointer" />
             <div class=" bg-gray-100 w-full shadow-lg  overflow-hidden">
                 <div class="flex justify-between items-center">
-                    <div class="py-2 text-center font-bold uppercase tracking-wide text-gray-800">
+                    <div class="py-2 text-center font-bold   text-gray-800">
                         {{ product.title }}
                     </div>
                     <div class="flex gap-2">
@@ -54,10 +54,10 @@ onMounted(() => {
                     <h1 class="text-gray-800 font-bold">
                         $<span class="text-yellow-800">{{ product.price }}</span>
                     </h1>
-                    <button v-if="product.is_in_cart" @click="storeCart.addToCart(id)"
+                    <Link v-if="product.is_in_cart" :href="'/cart'"
                         class="bg-[#dbae1a] text-gray-700 px-2 rounded hover:underline">
                         in your cart
-                    </button>
+                    </Link>
                     <button v-else @click="addToCart()" class="bg-gray-800 text-gray-100 px-2 rounded hover:underline">
                         add to cart
                     </button>

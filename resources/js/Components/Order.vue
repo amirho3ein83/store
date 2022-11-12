@@ -1,7 +1,6 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
-import axios from "axios";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, toRef } from "vue";
 import { useProductStore } from "@/store/Product.js";
 
 const storeProduct = useProductStore();
@@ -12,57 +11,45 @@ let props = defineProps({
     order: Object,
 });
 
-let qty = ref(props.order.quantity);
+let qty = ref(props.order.qty);
 
 let loaded = ref(false);
 
 
-
-const calFinalPrice = () => {
-
-    let final_price = props.order.product.price - ((props.order.product.sale_price / 100) * props.order.product.price).toFixed(2)
-
-    // storeCart.addToSubtotal(final_price * qty.value) 
-
-    return final_price * qty.value
-
-
-};
-
-const addToSubtotal = (num) => {
-
-    // storeCart.subtotal += num
-
-};
-
 const increaseOrder = () => {
     qty.value++;
-    storeCart.increaseOrder(props.order.product.id);
+    storeCart.increaseOrder(
+        props.order.product.id,
+        props.order.product.sale_price);
 };
 
 const decreaseOrder = () => {
     qty.value--;
-    storeCart.decreaseOrder(props.order.product.id);
+    storeCart.decreaseOrder(
+        props.order.product.id,
+        props.order.product.sale_price);
 };
 
 const deleteOrder = () => {
     loaded.value = false;
     storeCart.count_cart--;
-    storeCart.deleteOrder(props.order.product.id);
+    storeCart.deleteOrder(
+        props.order.product.id,
+        props.order.product.sale_price,
+        props.order.qty);
 };
 
 onMounted(() => {
     loaded.value = true;
-    addToSubtotal(22)
 });
 </script>
 
 <template>
     <Transition name="fade">
-        <div v-if="loaded" class="flex items-center hover:bg-gray-100 -mx-8 2 bg-slate-100 rounded-lg my-1 ">
+        <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-slate-200 rounded-lg my-1 ">
             <!-- <div class="w-30"> -->
-            <img class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0" src="./watch.webp"
-                alt="">
+            <img @click="storeProduct.showProduct(order.product.id)"
+                class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0" src="./watch.webp" alt="">
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow ">
                 <span class="font-bold text-lg">{{ order.product.title }}</span>

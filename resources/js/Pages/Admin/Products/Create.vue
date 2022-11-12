@@ -72,6 +72,8 @@ export default {
         <div class="mx-auto max-w-screen-xl px-4 py-5 sm:px-6 lg:px-8">
             <div class="flex justify-around ">
 
+
+                <!-- preview card -->
                 <div class="flex  px-1 flex-col justify-center items-center w-1/3 my-2">
 
                     <img v-if="previewImage == null" alt="Headphones" src="../pics/image-prev.png"
@@ -106,6 +108,7 @@ export default {
                     </div>
                 </div>
 
+                <!-- form -->
                 <div class="rounded-lg bg-gray-500 p-4 shadow-lg lg:col-span-3 lg:p-4 ">
                     <form @submit.prevent="addproduct" class="space-y-4" enctype="multipart/form-data">
                         <div>
@@ -150,11 +153,98 @@ export default {
                             </div>
                             <div>
                                 <InputLabel for="sale_price" value="sale_price" />
-                                <TextInput id="sale_price" v-model="form.sale_price" type="number" placeholder="sale_price"
-                                    class="mt-1 block w-full" required />
+                                <TextInput id="sale_price" v-model="form.sale_price" type="number"
+                                    placeholder="sale_price" class="mt-1 block w-full" required />
                                 <InputError class="mt-2" :message="form.errors.sale_price" />
                             </div>
                         </div>
+
+                        <!-- ///////////// -->
+
+                        <div class="flex  text-sm text-gray-600 items-center">
+                            <div class="flex-1 inbuttonne-flex items-center mb-3">
+                                <div class="w-full flex-none text-sm flex items-center text-gray-600 justify-center">
+                                    <ul class="flex flex-row justify-center items-center space-x-2">
+
+
+                                        <!-- gotta loop here for available colors -->
+
+
+                                        <button @click="
+                                            chooseColor(
+                                                `blue`
+                                            )
+                                        ">
+                                            <span :class="{
+                                                'border-blue-500':
+                                                    picked_color ==
+                                                    `blue`,
+                                            }"
+                                                class="block p-1 border-2 border-gray-900 hover:border-blue-600 rounded-full transition ease-in duration-300">
+                                                <a class="block w-3 h-3 bg-blue-600 rounded-full"></a>
+                                            </span>
+                                        </button>
+                                        <button @click="
+                                            chooseColor(
+                                                `yellow`
+                                            )
+                                        ">
+                                            <span :class="{
+                                                'border-yellow-500':
+                                                    picked_color ==
+                                                    `yellow`,
+                                            }"
+                                                class="block p-1 border-2 border-gray-900 hover:border-yellow-600 rounded-full transition ease-in duration-300">
+                                                <a class="block w-3 h-3 bg-yellow-600 rounded-full"></a>
+                                            </span>
+                                        </button>
+                                        <button @click="
+                                            chooseColor(
+                                                `red`
+                                            )
+                                        ">
+                                            <span :class="{
+                                                'border-red-500':
+                                                    picked_color ==
+                                                    `red`,
+                                            }"
+                                                class="block p-1 border-2 border-gray-900 hover:border-red-600 rounded-full transition ease-in duration-300">
+                                                <a class="block w-3 h-3 bg-red-600 rounded-full"></a>
+                                            </span>
+                                        </button>
+                                        <button @click="
+                                            chooseColor(
+                                                `purple`
+                                            )
+                                        ">
+                                            <span :class="{
+                                                'border-purple-500':
+                                                    picked_color ==
+                                                    `purple`,
+                                            }"
+                                                class="block p-1 border-2 border-gray-900 hover:border-purple-600 rounded-full transition ease-in duration-300">
+                                                <a class="block w-3 h-3 bg-purple-600 rounded-full"></a>
+                                            </span>
+                                        </button>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex-1 inbuttonne-flex items-center mb-3">
+                                <div class="cursor-pointer text-gray-400">
+
+
+                                    <!-- gotta loop here for available sizes -->
+                                    <button type="button">
+                                        <span 
+                                            class="mx-1 p-2 py-1 rounded-full w-4 h-4 bg-gray-700">S</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- ///////////// -->
+
                         <div>
                             <InputLabel for="balance" value="balance" />
                             <TextInput id="balance" v-model="form.balance" type="number" placeholder="balance"

@@ -1,13 +1,14 @@
 <script setup>
-import { Head, buttonnk } from "@inertiajs/inertia-vue3";
 import AddToCartButton from "@/Components/AddToCartButton.vue";
 import InCartButton from "@/Components/InCartButton.vue";
 import CommentForm from "@/Pages/Store/Partial/CommentForm.vue";
 import SizeRadio from "@/Components/SizeRadio.vue";
 import Comment from "@/Components/Comment.vue";
-import { KeepAlive, ref, Suspense } from "vue";
+import { ref } from "vue";
 import { useProductStore } from "@/store/Product.js";
+import { useCartStore } from "@/store/Cart.js";
 
+const storeCart = useCartStore();
 const storeProduct = useProductStore();
 
 let props = defineProps({
@@ -15,6 +16,7 @@ let props = defineProps({
     comments: Object,
 });
 
+// let picked_color = ref(props.product.availableColors[0]);
 let picked_color = ref("");
 let is_liked = ref(props.product.is_liked);
 
@@ -22,6 +24,7 @@ const chooseColor = (color) => {
     picked_color.value = color;
 };
 
+// let picked_size = ref(props.product.availableSizes[0]);
 let picked_size = ref("");
 
 const chooseSize = (size) => {
@@ -36,6 +39,11 @@ const likeProduct = (id) => {
 const unlikeProduct = (id) => {
     is_liked.value = false;
     storeProduct.unlikeProduct(id);
+};
+
+const addToCart = (id) => {
+    props.product.is_in_cart = true;
+    storeCart.addToCart(id);
 };
 </script>
 
@@ -121,6 +129,11 @@ export default {
                                         <div
                                             class="w-full flex-none text-sm flex items-center text-gray-600 justify-center">
                                             <ul class="flex flex-row justify-center items-center space-x-2">
+
+
+                                                <!-- gotta loop here for available colors -->
+
+
                                                 <button @click="
                                                     chooseColor(
                                                         `blue`
@@ -182,32 +195,28 @@ export default {
                                     </div>
                                     <div class="flex-1 inbuttonne-flex items-center mb-3">
                                         <div class="cursor-pointer text-gray-400">
+
+
+                                            <!-- gotta loop here for available sizes -->
+
                                             <SizeRadio :size="`S`" :chosen="
                                                 picked_size == `S`
-                                            " @selected="
-    chooseSize(`S`)
-" />
+                                            " @selected="chooseSize(`S`)" />
                                             <SizeRadio :size="`M`" :chosen="
                                                 picked_size == `M`
-                                            " @selected="
-    chooseSize(`M`)
-" />
+                                            " @selected="chooseSize(`M`)" />
                                             <SizeRadio :size="`L`" :chosen="
                                                 picked_size == `L`
-                                            " @selected="
-    chooseSize(`L`)
-" />
+                                            " @selected="chooseSize(`L`)" />
                                             <SizeRadio :size="`XL`" :chosen="
                                                 picked_size == `XL`
-                                            " @selected="
-    chooseSize(`XL`)
-" />
+                                            " @selected="chooseSize(`XL`)" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="flex space-x-2 text-sm font-medium justify-start">
-                                    <InCartButton v-if="product.is_in_cart" />
-                                    <AddToCartButton v-else :id="product.id" />
+                                    <InCartButton v-if="product.is_in_cart" @addanother="addToCart(product.id)" />
+                                    <AddToCartButton v-else :id="product.id" @pressed="addToCart(product.id)" />
                                 </div>
                             </div>
                         </div>

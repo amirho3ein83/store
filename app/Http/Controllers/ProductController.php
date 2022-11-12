@@ -81,8 +81,8 @@ class ProductController extends Controller
             ->simplePaginate(15)
             ->withQueryString();
 
-        $in_cart_products = Order::where('user_id', Auth::id())->pluck('id')->toArray();
-
+        // $in_cart_products = Order::where('user_id', Auth::id())->with('product:id')->pluck('id')->toArray();
+        $in_cart_products = Order::with('product:id')->get()->pluck('product.id')->toArray();
 
         $products->map(function ($product) use ($in_cart_products) {
             if (in_array($product->id, $in_cart_products)) {
@@ -110,6 +110,17 @@ class ProductController extends Controller
             'balance' => $request->balance,
             'category_id' => $request->category_id
         ]);
+
+        $product->sizes->attach($request->sizes);
+        $product->colors->attach($request->colors);
+        // for availalfm;dsa
+        // $post->comments()->save($request->size);
+
+        // foreach ($request->tags as $id)
+        //     $tags[] = Tag::find($id);
+
+        // $post = Post::find($id);
+        // $post->tags()->saveMany($tags);
 
         $product->addMediaFromRequest('image')->toMediaCollection();
     }
@@ -162,7 +173,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
 
-        return Inertia::render('Admin/Products/Edit', ['product' => $product,'categories' => $categories]);
+        return Inertia::render('Admin/Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
     public function show(Product $product)

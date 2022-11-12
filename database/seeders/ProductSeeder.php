@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i < 20  ; $i++) {
+        for ($i = 1; $i < 200  ; $i++) {
 
             $product =  Product::factory()->create();
 

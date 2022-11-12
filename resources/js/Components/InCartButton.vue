@@ -13,14 +13,13 @@ defineProps({
 
         <Link href="/cart" preserve-scroll>
         <button
-            class="w-full rounded-xl bg-cyan-500 px-4 py-2 text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-cyan-500">
-            <span class="text-gray-900 bold font-thin text-lg">
-                in your cart</span>
+            class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
+            <span>see in your cart</span>
         </button>
         </Link>
-        <button @click="storeCart.addToCart(id)" type="button"
-            class="rounded-xl bg-indigo-400 p-2 duration-200 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-cyan-500">
-            <i class="bi bi-cart-plus-fill text-slate-700"></i>
+        <button @click="$emit('addanother')">
+            <i
+                class="bi bi-cart-plus-fill active:text-cyan-500 text-[25px] text-slate-200 duration-200 transition hover:scale-125 hover:shadow-xl"></i>
         </button>
     </div>
 </template>

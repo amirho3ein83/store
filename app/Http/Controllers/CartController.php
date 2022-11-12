@@ -18,8 +18,18 @@ class CartController extends Controller
     public function index(Product $product)
     {
         $orders = Order::with('product')->where('user_id', Auth::id())->get();
+
+        $subtotal = 0;
+        foreach ($orders as $key => $order) {
+            $subtotal += $order->qty * $order->product->sale_price;
+        }
         $user_address = Auth::user()->address;
-        return Inertia::render('Store/Cart', ['orders' => $orders, 'user_address' => $user_address]);
+
+        return Inertia::render('Store/Cart', [
+            'orders' => $orders,
+            'subtotal' => $subtotal,
+            'user_address' => $user_address ?? null
+        ]);
     }
 
     public function addToCart(Request $request)
@@ -31,11 +41,11 @@ class CartController extends Controller
             $cart = Order::create([
                 'product_id' => $product->id,
                 'price' => $product->price,
-                'quantity' => 1,
+                'qty' => 1,
                 'user_id' => Auth::id()
             ]);
         } else {
-            $cart =  Order::where('product_id', $product->id)->increment('quantity');
+            $cart =  Order::where('product_id', $product->id)->increment('qty');
         }
 
 
@@ -48,11 +58,11 @@ class CartController extends Controller
 
     public function increaseOrder($id)
     {
-        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->increment('quantity');
+        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->increment('qty');
     }
     public function decreaseOrder($id)
     {
-        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->decrement('quantity');
+        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->decrement('qty');
     }
     public function deleteOrder($id)
     {
