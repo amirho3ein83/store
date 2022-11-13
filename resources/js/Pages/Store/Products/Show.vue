@@ -16,16 +16,16 @@ let props = defineProps({
     comments: Object,
 });
 
-// let picked_color = ref(props.product.availableColors[0]);
-let picked_color = ref("");
+let picked_color = ref(props.product.availableColors[0]);
+// let picked_color = ref("");
 let is_liked = ref(props.product.is_liked);
 
 const chooseColor = (color) => {
     picked_color.value = color;
 };
 
-// let picked_size = ref(props.product.availableSizes[0]);
-let picked_size = ref("");
+let picked_size = ref(props.product.availableSizes[0]);
+// let picked_size = ref("");
 
 const chooseSize = (size) => {
     picked_size.value = size;
@@ -41,9 +41,20 @@ const unlikeProduct = (id) => {
     storeProduct.unlikeProduct(id);
 };
 
-const addToCart = (id) => {
-    props.product.is_in_cart = true;
-    storeCart.addToCart(id);
+const order_form = useForm({
+    product_id: props.product.id,
+    color: picked_color.value,
+    size: picked_size.value
+});
+
+const addToCart = () => {
+    order_form.post(route('order.register'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            props.product.is_in_cart = true;
+        },
+    });
+
 };
 </script>
 
@@ -215,8 +226,8 @@ export default {
                                     </div>
                                 </div>
                                 <div class="flex space-x-2 text-sm font-medium justify-start">
-                                    <InCartButton v-if="product.is_in_cart" @addanother="addToCart(product.id)" />
-                                    <AddToCartButton v-else :id="product.id" @pressed="addToCart(product.id)" />
+                                    <InCartButton v-if="product.is_in_cart" @addanother="addToCart()" />
+                                    <AddToCartButton v-else :id="product.id" @pressed="addToCart()" />
                                 </div>
                             </div>
                         </div>

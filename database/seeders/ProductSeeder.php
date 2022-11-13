@@ -20,7 +20,30 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i < 200  ; $i++) {
+
+        $sizes = [
+            'S',
+            'M',
+            'L',
+            'XL',
+            'XXL',
+            'XXXL',
+        ];
+
+        $colors = [
+            'blue',
+            'red',
+            'yellow',
+            'black',
+            'white',
+            'green',
+            'purple',
+            'orange',
+            'gray',
+        ];
+
+
+        for ($i = 1; $i < 95; $i++) {
 
             $product =  Product::factory()->create();
 
@@ -29,6 +52,19 @@ class ProductSeeder extends Seeder
 
             // $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
             //     ->toMediaCollection('photo');
+
+
+            for ($i=0; $i < 3; $i++) { 
+                $available_sizes = $sizes[array_rand($sizes)];
+    
+                $product->availableSizes()->save($available_sizes);
+            }
+
+            for ($i=0; $i < 4; $i++) { 
+                $available_colors = $colors[array_rand($colors)];
+    
+                $product->availableColors()->save($available_colors);
+            }
 
             Comment::factory()->create([
                 'product_id' => $i

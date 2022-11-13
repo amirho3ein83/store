@@ -43,14 +43,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Wallet::create([
-            'user_id' => 1,
+            'user_id' => 2,
             'balance' => 4500,
         ]);
 
         Address::create([
             'text' => 'S2r 1234 NW Bobcat Lane, St. Robert, MO ghgt',
             'postal_code' => '1789654-5224',
-            'user_id' => 1,
+            'user_id' => 2,
             'recipient_name' => 'Robert Robertson',
             'mobile' => '555-1234'
         ]);

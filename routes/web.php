@@ -58,7 +58,7 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
 
 
-    Route::post('/payment', [CartController::class, 'payment'])->name('payment');
+    Route::post('/payment', [CartController::class, 'payment'])->name('order.register');
 
     Route::post('/cart', [CartController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [CartController::class, 'index'])->name('Cart');
