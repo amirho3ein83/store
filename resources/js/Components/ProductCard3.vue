@@ -29,7 +29,7 @@ onMounted(() => {
 <template>
     <Transition>
         <div v-if="showItem"
-            class="flex lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2 px-1 flex-col justify-center items-center max-w-sm mx-auto my-2">
+            class="flex  lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2 px-1 flex-col justify-center items-center max-w-sm mx-auto my-2">
             <img @click="storeProduct.showProduct(product.id)" src="./watch.webp" alt="" class="cursor-pointer" />
             <div class=" bg-gray-100 w-full shadow-lg  overflow-hidden">
                 <div class="flex justify-between items-center">
@@ -54,11 +54,11 @@ onMounted(() => {
                     <h1 class="text-gray-800 font-bold">
                         $<span class="text-yellow-800">{{ product.price }}</span>
                     </h1>
-                    <Link v-if="product.is_in_cart" :href="'/cart'"
+                    <Link v-if="product.is_in_cart && $page.props.auth" :href="'/cart'"
                         class="bg-[#dbae1a] text-gray-700 px-2 rounded hover:underline">
                         in your cart
                     </Link>
-                    <button v-else @click="addToCart()" class="bg-gray-800 text-gray-100 px-2 rounded hover:underline">
+                    <button v-else-if="$page.props.auth" @click="addToCart()" class="bg-gray-800 text-gray-100 px-2 rounded hover:underline">
                         add to cart
                     </button>
                 </div>

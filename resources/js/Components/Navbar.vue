@@ -61,7 +61,7 @@ const storeCart = useCartStore();
                         </div>
                         <div class=" lg:hidden items-center space-x-5 flex">
 
-                            <!-- 
+                            
                         <Link class="relative flex" href="/cart" preserve-scroll>
                         <i class="bi bi-cart3 text-gray-50"></i>
 
@@ -69,7 +69,7 @@ const storeCart = useCartStore();
                             class="absolute -right-1 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center">
                             {{ storeCart.count_cart }}
                         </span>
-                        </Link> -->
+                        </Link>
 
                             <Dropdown align="right" width="48">
                                 <template #trigger>
@@ -130,3 +130,9 @@ const storeCart = useCartStore();
         </section>
     </div>
 </template>
+<style>
+i{
+    font-size: 24px;
+}
+
+</style>

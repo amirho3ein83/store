@@ -9,12 +9,14 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { useCartStore } from "@/store/Cart.js";
 import LoadingModal from "@/Modals/LoadingModal.vue";
 import SuccessModal from "@/Modals/SuccessModal.vue";
+import Navbar from "@/Components/Navbar.vue";
 
 const storeCart = useCartStore();
 let props = defineProps({
     orders: Object,
     subtotal: Number,
     user_address: Object,
+    wallet: Object,
 });
 
 let form_step = useStorage("form_step", 1);
@@ -42,29 +44,37 @@ const pay = () => {
     show_loading_modal.value = true
     form.post(route("payment"), {
         onSuccess: () => {
-                console.log('yeas');
-                show_success_modal.value = true
+    show_loading_modal.value = false
+            show_success_modal.value = true
         },
-        onFinish: () => {
-                console.log('asdasd');
-                show_loading_modal.value = false
+        onError: (e) => {
+            show_loading_modal.value = false
+            console.log(e);
         }
     });
 };
 
 onMounted(() => {
     storeCart.subtotal = props.subtotal
-})
+}
+)
 
 onUnmounted(() => {
     localStorage.removeItem("form_step");
 })
 </script>
+<!-- <script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default{
+  layout:AppLayout
+}
+</script> -->
 <template>
 
     <Head title="Cart" />
 
+    <Navbar v-if="step == 1" />
     <div v-if="Object.keys(orders).length != 0" class="flex flex-col w-full pt-4">
         <div class=" flex  justify-center sm:gap-x-14">
             <div class="flex relative px-2 flex-col items-center">
@@ -290,109 +300,115 @@ onUnmounted(() => {
 
         </Transition>
 
+        <Transition name="fade">
 
-        <div class=" mx-auto w-full m-auto  max-w-md self-center" v-if="step == 3">
-            <div class="credit-card w-full sm:w-auto shadow-lg mx-auto rounded-xl my-12 bg-gray-400 ">
-                <header class="flex flex-col justify-center items-center">
+            <div class=" mx-auto w-full m-auto  max-w-md self-center" v-if="step == 3">
+                <div class="credit-card w-full sm:w-auto shadow-lg mx-auto rounded-xl my-12 bg-gray-400 ">
+                    <header class="flex items-center px-2">
 
-                    <h1 class="text-2xl py-4 font-semibold text-gray-700 text-center">Card payment</h1>
+                        <p class="text-xl py-4 font-semibold text-gray-700 text-center">disbursement amount</p>
+                        <p class="text-xl py-4 font-semibold text-yellow-700 text-center ml-3"> {{ subtotal }}$</p>
 
-                </header>
-                <main class="mt-4 p-4">
-                    <div class="">
+                    </header>
+                    <main class="mt-4 p-4">
+                        <div class="">
 
-                        <div class="my-3">
-                            <input type="text"
-                                class="block w-full text-2xl px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                placeholder="Card number" v-model="form.card_number" maxlength="16" />
-                        </div>
-                        <div class="my-3 flex flex-col">
-                            <div class="mb-2">
-                                <label for="" class="text-gray-700">Expired</label>
-                            </div>
-                            <div class="flex  gap-2">
-                                <select name="" id=""
-                                    class="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                    v-model="form.expirationMonth">
-                                    <option value="" selected disabled>MM</option>
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
-                                    <option value="04">04</option>
-                                    <option value="05">05</option>
-                                    <option value="06">06</option>
-                                    <option value="07">07</option>
-                                    <option value="08">08</option>
-                                    <option value="09">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                                <select name="" id=""
-                                    class="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                    v-model="form.expirationYear">
-                                    <option value="" selected disabled>YY</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                </select>
+                            <div class="my-3">
                                 <input type="text"
-                                    class="block w-full col-span-2 px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                    placeholder="cvc" maxlength="3" v-model="form.cvc" />
+                                    class="block w-full text-2xl px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
+                                    placeholder="Card number" v-model="form.card_number" maxlength="16" />
                             </div>
-
-
-                            <div class="flex justify-center mt-5 gap-2 w-full max-w-screen-sm">
-                                <div>
-                                    <input v-model="form.paymentMethod" value="wallet" class="hidden" id="radio_1"
-                                        type="radio" name="radio" checked>
-                                    <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
-                                        for="radio_1">
-                                        <span class="text-xs font-semibold uppercase"> my wallet</span>
-
-                                    </label>
+                            <div class="my-3 flex flex-col">
+                                <div class="mb-2">
+                                    <label for="" class="text-gray-700">Expired</label>
                                 </div>
-                                <div>
-                                    <input v-if="user_address != null" v-model="form.paymentMethod" value="credit_card"
-                                        class="hidden" id="radio_2" type="radio" name="radio" disabled>
-                                    <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
-                                        for="radio_2">
-                                        <span class="text-xs font-semibold uppercase"> credit card</span>
+                                <div class="flex  gap-2">
+                                    <select name="" id=""
+                                        class="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
+                                        v-model="form.expirationMonth">
+                                        <option value="" selected disabled>MM</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <select name="" id=""
+                                        class="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
+                                        v-model="form.expirationYear">
+                                        <option value="" selected disabled>YY</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                    </select>
+                                    <input type="text"
+                                        class="block w-full col-span-2 px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
+                                        placeholder="cvc" maxlength="4" v-model="form.cvc" />
+                                </div>
 
-                                    </label>
+
+                                <div class="flex justify-center mt-5 gap-2 w-full max-w-screen-sm">
+                                    <div>
+                                        <input v-model="form.paymentMethod" value="wallet" class="hidden" id="radio_1"
+                                            type="radio" name="radio" checked>
+                                        <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
+                                            for="radio_1">
+                                            <span class="text-sm text-yellow-800 font-semibold uppercase"> my wallet
+                                                {{ wallet.balance }}$</span>
+
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input v-if="user_address != null" v-model="form.paymentMethod"
+                                            value="credit_card" class="hidden" id="radio_2" type="radio" name="radio"
+                                            disabled>
+                                        <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
+                                            for="radio_2">
+                                            <span class="text-sm font-semibold uppercase"> credit card</span>
+
+                                        </label>
+                                    </div>
+
                                 </div>
 
                             </div>
-
                         </div>
-                    </div>
-                </main>
-                <footer class="p-2 flex justify-between">
-                    <button @click="step = 2"
-                        class="group relative inline-flex items-center overflow-hidden rounded bg-indigo-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-indigo-500">
-                        <span class="absolute left-0 -translate-x-full transition-transform group-hover:translate-x-4">
-                            <i class="bi bi-arrow-left"></i>
+                    </main>
+                    <footer class="p-2 flex justify-between">
+                        <button @click="step = 2"
+                            class="group relative inline-flex items-center overflow-hidden rounded bg-indigo-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-indigo-500">
+                            <span
+                                class="absolute left-0 -translate-x-full transition-transform group-hover:translate-x-4">
+                                <i class="bi bi-arrow-left"></i>
 
-                        </span>
+                            </span>
 
-                        <span class="text-sm font-medium transition-all group-hover:ml-4">
-                            previous
-                        </span>
-                    </button>
-                    <button @click="pay"
-                        class="inline-block rounded bg-[#6fe60e] px-8 py-3 text-sm font-medium text-slate-700 transition hover:scale-105 hover:shadow-xl ">
-                        Pay now
-                    </button>
-                </footer>
+                            <span class="text-sm font-medium transition-all group-hover:ml-4">
+                                previous
+                            </span>
+                        </button>
+                        <button @click="pay"
+                            class="inline-block rounded bg-[#6fe60e] px-8 py-3 text-sm font-medium text-slate-700 transition hover:scale-105 hover:shadow-xl ">
+                            Pay now
+                        </button>
+                    </footer>
+                </div>
             </div>
-        </div>
+        </Transition>
+
         <LoadingModal v-if="show_loading_modal" />
         <SuccessModal v-if="show_success_modal" />
     </div>
-
 </template>
 
 <style scoped>

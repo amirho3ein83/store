@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Wallet;
@@ -13,22 +14,24 @@ use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class OrderController extends Controller
-{    
+{
 
     public function index(Product $product)
     {
-        $orders = Order::with('product')->pending()->get();
+        $orders = Order::with('product')->pendingPurchase()->get();
 
         $subtotal = 0;
         foreach ($orders as $key => $order) {
             $subtotal += $order->qty * $order->product->sale_price;
         }
         $user_address = Auth::user()->address;
+        $wallet = Auth::user()->wallet;
 
         return Inertia::render('Store/Cart', [
             'orders' => $orders,
             'subtotal' => $subtotal,
-            'user_address' => $user_address ?? null
+            'user_address' => $user_address ?? null,
+            'wallet' => $wallet ?? null
         ]);
     }
 
@@ -43,7 +46,7 @@ class OrderController extends Controller
                 'price' => $product->price,
                 'qty' => 1,
                 'user_id' => Auth::id(),
-                'status'=> 'pending_purchase'
+                'status' => 'pending_purchase'
             ]);
         } else {
             $cart =  Order::where('product_id', $product->id)->increment('qty');
@@ -59,22 +62,22 @@ class OrderController extends Controller
 
     public function increaseOrder($id)
     {
-        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id],['status', 'pending_purchase']])-> increment('qty');
+        Order::where('product_id', $id)->pendingPurchase()->increment('qty');
     }
 
     public function decreaseOrder($id)
     {
-        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id],['status', 'pending_purchase']])->decrement('qty');
+        Order::where('product_id', $id)->pendingPurchase()->decrement('qty');
     }
 
     public function deleteOrder($id)
     {
-        Order::where([['user_id', Auth::id()], ['product_id', $id],['status', 'pending_purchase']])->delete();
+        Order::where('product_id', $id)->pendingPurchase()->delete();
     }
 
     public function countOrders(Product $product)
     {
-        return  Order::where('user_id', Auth::id())->count();
+        return  Order::pendingPurchase()->count();
     }
 
 
@@ -100,7 +103,7 @@ class OrderController extends Controller
         $validated = $validator->validated();
 
 
-        $delivery_cost = 12;
+        $delivery_cost = env('DELIRVERY_COST');
         // check subtotal for free delivery
         if ($request->subtotal >= 500) {
             $delivery_cost = 0;
@@ -122,32 +125,30 @@ class OrderController extends Controller
                     'postal_code' => $validated['postal_code'],
                     'mobile' => $validated['mobile']
                 ]);
+            } else {
+                // use defaul address
             }
 
             if ($request->paymentMethod == 'wallet') {
-
                 $wallet = Wallet::firstWhere('user_id', Auth::id());
-
+                
                 $balance = $wallet->balance;
+                info('walllllllet');
 
-                if ($balance > $after_tax) {
+                if ($balance < $after_tax) {
                     return redirect()->back()
                         ->withErrors('insufficient inventory')
                         ->withInput();
                 }
-
-                $wallet->decrement('balance', $after_tax);
+                Wallet::where('user_id', Auth::id())->decrement('balance', $after_tax);
             }
-
             $orders = Order::where('user_id', Auth::id())->get();
 
-            foreach ($orders as $key => $item) {
-                $product = Product::where('id', $item->product_id);
-                $product->increment('sold_qty', $item->qty);
-                $product->update(['status' => 'purchased']);
+            foreach ($orders as $key => $order) {
+                $product = Product::where('id', $order->product_id);
+                $product->increment('sold_qty', $order->qty);
+                $order->update(['status' => 'purchased']);
             }
-
-            $orders->delete();
 
             DB::commit();
         } catch (\Exception $e) {
@@ -156,8 +157,8 @@ class OrderController extends Controller
         }
 
 
-        return response()->json([
-            'message' => 'success'
-        ], 200);
+        // return response()->json([
+        //     'message' => 'success'
+        // ], 200);
     }
 }

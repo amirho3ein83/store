@@ -8,7 +8,7 @@ let showLogoutModal = ref(false);
 <template>
     <button
         @click="showLogoutModal = true"
-        class="hover:scale-105 duration-150 ease-out p-2 text-red-500 mt-3 hover:text-red-600"
+        class="hover:scale-105 duration-150 ease-out  text-red-500  hover:text-red-600"
     >
         <i class="bi bi-box-arrow-right"></i>
     </button>

@@ -18,25 +18,15 @@ class Order extends Model
         'status',
     ];
 
-    /**
-     * Scope a query to only include popular users.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopePending($query)
+
+    public function scopePendingPurchase($query)
     {
         return $query->where([['user_id', Auth::id()],['status', 'pending_purchase']]);
     }
-    /**
-     * Scope a query to only include popular users.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+
     public function scopePurchased($query)
     {
-        return $query->where('votes', '>', 100);
+        return $query->where([['user_id', Auth::id()],['status', 'purchased']]);
     }
 
     public function product()

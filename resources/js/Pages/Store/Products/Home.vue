@@ -23,13 +23,21 @@ export default{
             style="max-width: 1600px"
         ></div>
         <section class="bg-white">
-            <!-- <img src="./pics/banner1.webp" alt="" class="w-full" /> -->
-            <div class="flex sm:px-16 sm:py-7 bg-slate-50">
-                <img
-                    src="./pics/black-friday.webp"
-                    alt=""
-                    class="w-full object-cover h-full object-center"
-                />
+            <div class="relative overflow-hidden bg-no-repeat bg-cover" style="
+      background-position: 50%;
+      background-image: url('https://www.grandhotelgardone.it/images/slide/shopping/slides_shopping.jpg');
+      height: 500px;
+    ">
+                <div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
+                    style="background-color: rgba(0, 0, 0, 0.75)">
+                    <div class="flex justify-center items-center h-full">
+                        <div class="text-center text-white px-6 md:px-12">
+                            <h1 class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight mb-12 text-cyan-400">
+                                your best shopping experience <br /><span class="text-pink-600">starts here</span>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="mx-auto flex items-center flex-wrap">
                 <!-- <div class="flex">
@@ -51,11 +59,11 @@ export default{
                 <!-- <HorizontalScroll> -->
 
                 <div class="flex-col flex bg-gray-100 w-full">
-                    <p class="text-2xl self-center text-indigo-500 p-3">
+                    <p class="text-2xl text-center w-full bold bg-gray-900 text-yellow-500 p-3">
                         Amazing offers
                     </p>
                     <div
-                        class="flex touch-pan-x overflow-x-scroll items-center justify-center"
+                        class="py-2 flex touch-pan-x overflow-x-scroll items-center justify-center"
                     >
                         <Hero2
                             v-for="amazing_offer of amazing_offers"
@@ -65,19 +73,19 @@ export default{
                     </div>
                 </div>
 
-                <section class="flex h-full p-2 my-4">
+                <section class="flex flex-wrap h-full p-2 my-4 justify-center">
                     <img
-                        class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
+                        class="sm:w-1/3 w-[300px] h-auto sm:p-7 hover:scale-105 duration-200 transition object-cover active:scale-100"
                         src="https://i.pinimg.com/736x/a2/8a/2e/a28a2ec311907cea02fee60b3e26fc1c.jpg"
                         alt="https://www.pngegg.com/en/png-nllal/download"
                     />
                     <img
-                        class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
+                        class="sm:w-1/3 w-[300px] h-auto sm:p-7 hover:scale-105 duration-200 transition object-cover active:scale-100"
                         src="https://i.pinimg.com/originals/5c/cb/8c/5ccb8cf7968659ba21f827a945cf4b22.jpg"
                         alt="https://www.pngegg.com/en/png-epwii/download"
                     />
                     <img
-                        class="w-1/3 h-auto p-12 hover:scale-105 duration-200 transition object-cover active:scale-100"
+                        class="sm:w-1/3 w-[300px] h-auto sm:p-7 hover:scale-105 duration-200 transition object-cover active:scale-100"
                         src="https://9thwatchgroup.com/wp-content/uploads/2021/08/9th-Watch-Poster-01-01-scaled.jpg"
                         alt="https://www.pngegg.com/en/png-zquqj/download"
                     />

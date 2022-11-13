@@ -1,6 +1,6 @@
 <script setup>
-import { useCartStore } from "@/store/Cart.js";
 import { Link } from "@inertiajs/inertia-vue3";
+import { useCartStore } from "@/store/Cart.js";
 
 const storeCart = useCartStore();
 defineProps({

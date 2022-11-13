@@ -230,7 +230,11 @@ export default {
                                     </div>
                                 </div>
                                 <div class="flex space-x-2 text-sm font-medium justify-start">
-                                    <InCartButton v-if="product.is_in_cart" @addanother="addToCart()" />
+                                    <Link href="/login" v-if="!$page.props.auth"
+                                        class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600">
+                                        Log in to access your cart
+                                    </Link>
+                                    <InCartButton v-else-if="product.is_in_cart" @addanother="addToCart()" />
                                     <AddToCartButton v-else :id="product.id" @pressed="addToCart()" />
                                 </div>
                             </div>

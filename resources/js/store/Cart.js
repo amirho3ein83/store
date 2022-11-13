@@ -2,7 +2,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { defineStore } from "pinia";
 
 export const useCartStore = defineStore("cart", {
-    state: () => ({ subtotal: 0, count_cart: 0, products: [], user_address: '' }),
+    state: () => ({ subtotal: 0, count_cart: 0, form_step: 1, products: [], user_address: '' }),
 
     actions: {
         addToCart(id) {

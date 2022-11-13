@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -14,7 +16,6 @@ class UserController extends Controller
             'User/Profile',
             []
         );
-
     }
     public function address()
     {
@@ -30,12 +31,18 @@ class UserController extends Controller
         );
     }
 
-    public function purchases()
+    public function purchaseList()
     {
+        // $invoices = Invoice::whereHas('orders', function ($query) {
+        //     $query->where('orders.buyer_id', Auth::id());
+        // })->get();
+
+        $orders = Order::purchased()->get();
+
         return Inertia::render(
-            'User/Purchase',
+            'User/PurchaseList',
             [
-                'wallet' => Auth::user()->wallet,
+                'orders' => $orders
             ]
         );
     }
