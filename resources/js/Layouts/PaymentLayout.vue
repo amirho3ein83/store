@@ -1,6 +1,5 @@
 <script setup>
 import UserSidebar from "@/Components/UserSidebar.vue";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import { useStorage } from "@/store/useStorage";
 import { ref } from "vue";
 

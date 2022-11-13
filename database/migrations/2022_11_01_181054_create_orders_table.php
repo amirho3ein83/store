@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->integer('qty');
             $table->float('price');
+            $table->string('status');
 
             $table->foreignIdFor(Product::class);
             $table->foreignIdFor(User::class);

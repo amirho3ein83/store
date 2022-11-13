@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -58,17 +58,17 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
 
 
-    Route::post('/payment', [CartController::class, 'payment'])->name('order.register');
+    Route::post('/payment', [OrderController::class, 'payment'])->name('payment');
 
-    Route::post('/cart', [CartController::class, 'addToCart'])->name('addToCart');
-    Route::get('/cart', [CartController::class, 'index'])->name('Cart');
-    Route::get('/cart/count', [CartController::class, 'countOrders'])->name('cart.count');
+    Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
+    Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
+    Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');
 
     Route::patch('/charge-wallet', [WalletController::class, 'increaseBalance'])->name('charge.wallet');
 
-    Route::patch('/cart/products/{id}/increase-order', [CartController::class, 'increaseOrder'])->name('cart.increase-order');
-    Route::patch('/cart/products/{id}/decrease-order', [CartController::class, 'decreaseOrder'])->name('cart.decrease-order');
-    Route::delete('/cart/products/{id}', [CartController::class, 'deleteOrder'])->name('cart.delete-order');
+    Route::patch('/cart/products/{id}/increase-order', [OrderController::class, 'increaseOrder'])->name('cart.increase-order');
+    Route::patch('/cart/products/{id}/decrease-order', [OrderController::class, 'decreaseOrder'])->name('cart.decrease-order');
+    Route::delete('/cart/products/{id}', [OrderController::class, 'deleteOrder'])->name('cart.delete-order');
 
 
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');

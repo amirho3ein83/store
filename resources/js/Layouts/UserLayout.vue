@@ -1,5 +1,4 @@
 <script setup>
-import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Logout from '../Pages/Auth/Logout.vue'
 </script>
@@ -10,14 +9,12 @@ import Logout from '../Pages/Auth/Logout.vue'
 
         <section class="relative py-16 bg-blueGray-200">
             <div class="container mx-auto px-4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb-6 shadow-xl rounded-lg">
+                <div class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb-6 shadow-xl rounded-lg">
                     <div class="px-6">
                         <div class="flex flex-wrap justify-center">
                             <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                                 <div class="relative">
-                                    <img alt="..."
-                                        src="../Pages/Store/Products/pics/sh3.webp"
+                                    <img alt="..." src="../Pages/Store/Products/pics/sh3.webp"
                                         class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px">
                                 </div>
                             </div>
@@ -30,7 +27,7 @@ import Logout from '../Pages/Auth/Logout.vue'
 
                             <div class="w-full lg:w-4/12 px-4 lg:order-1">
                                 <div class="flex justify-center py-4 lg:pt-4 pt-8">
-                                    <Logout/>
+                                    <Logout />
                                     <Link :href="'/user/profile/liked-products'" preserve-scroll>
                                     <div class="mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
                                         <span

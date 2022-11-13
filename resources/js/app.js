@@ -1,5 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 import { createApp, h } from 'vue';
 import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';
@@ -18,7 +19,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(pinia)
-            .component('Link',Link)
+            .component('Link', Link)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },

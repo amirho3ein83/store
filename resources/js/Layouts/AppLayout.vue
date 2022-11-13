@@ -2,7 +2,6 @@
 import { onMounted, ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useCartStore } from "@/store/Cart.js";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import Footer from "../Pages/Footer.vue";
 import Navbar from "@/Components/Navbar.vue";
 import { managePageStore } from "@/store/ManagePages";

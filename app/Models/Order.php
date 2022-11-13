@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
@@ -14,7 +15,29 @@ class Order extends Model
         'user_id',
         'qty',
         'price',
+        'status',
     ];
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePending($query)
+    {
+        return $query->where([['user_id', Auth::id()],['status', 'pending_purchase']]);
+    }
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePurchased($query)
+    {
+        return $query->where('votes', '>', 100);
+    }
 
     public function product()
     {
@@ -29,5 +52,10 @@ class Order extends Model
     public function pickedColor()
     {
         return $this->morphOne(Color::class, 'colorable');
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
     }
 }

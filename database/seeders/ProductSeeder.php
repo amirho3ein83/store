@@ -54,17 +54,17 @@ class ProductSeeder extends Seeder
             //     ->toMediaCollection('photo');
 
 
-            for ($i=0; $i < 3; $i++) { 
-                $available_sizes = $sizes[array_rand($sizes)];
+            // for ($i=0; $i < 3; $i++) { 
+            //     $available_sizes = $sizes[array_rand($sizes)];
     
-                $product->availableSizes()->save($available_sizes);
-            }
+            //     $product->availableSizes()->save($available_sizes);
+            // }
 
-            for ($i=0; $i < 4; $i++) { 
-                $available_colors = $colors[array_rand($colors)];
+            // for ($i=0; $i < 4; $i++) { 
+            //     $available_colors = $colors[array_rand($colors)];
     
-                $product->availableColors()->save($available_colors);
-            }
+            //     $product->availableColors()->save($available_colors);
+            // }
 
             Comment::factory()->create([
                 'product_id' => $i

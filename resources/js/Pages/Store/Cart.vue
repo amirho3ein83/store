@@ -19,33 +19,36 @@ let props = defineProps({
 
 let form_step = useStorage("form_step", 1);
 
-const payment_form = useForm({
-    cardNumber: '',
-    expired_month: '',
-    expiredyear: '',
-    securityCode: '',
-});
-
 let show_loading_modal = ref(false)
 let show_success_modal = ref(false)
 
 let step = ref(form_step)
 
 const form = useForm({
+    subtotal: storeCart.subtotal,
     recipient_name: "",
-    mobile: "",
     address: "",
+    mobile: "",
+    postal_code: "",
+    save_address: 0,
     card_number: null,
     expirationYear: null,
     expirationMonth: null,
     cvc: null,
-    saveInfo: null,
-    paymentMethod: null,
+    paymentMethod: 'wallet',
 });
 
 const pay = () => {
+    show_loading_modal.value = true
     form.post(route("payment"), {
-        onFinish: () => console.log("done"),
+        onSuccess: () => {
+                console.log('yeas');
+                show_success_modal.value = true
+        },
+        onFinish: () => {
+                console.log('asdasd');
+                show_loading_modal.value = false
+        }
     });
 };
 
@@ -57,13 +60,7 @@ onUnmounted(() => {
     localStorage.removeItem("form_step");
 })
 </script>
-<script>
-import AppLayout from "@/Layouts/AppLayout.vue";
 
-export default {
-    layout: AppLayout,
-}
-</script>
 <template>
 
     <Head title="Cart" />
@@ -184,40 +181,56 @@ export default {
                     <div class="mt-5 bg-gray-400 rounded-lg shadow">
 
 
-                        <div class="flex">
-                            <div class="flex-1 py-5 pl-5 overflow-hidden">
 
-                                <h1 class="inline text-gray-900 text-2xl font-semibold leading-none">Receiver</h1>
-                            </div>
-                        </div>
-                        <div class="px-5 pb-5 max-w-md mx-auto">
-                            <input placeholder="Name"
+                        <div class="px-5 pt-3 pb-5 max-w-md mx-auto">
+                            <input placeholder="Name" v-model="form.recipient_name"
                                 class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                                <input
-                                placeholder="Address"
+                            <input v-model="form.address" placeholder="Address"
                                 class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
                             <div class="flex-grow w-full ">
 
 
-                                <input placeholder="Postal code"
+                                <input placeholder="Postal code" v-model="form.postal_code"
                                     class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
                             </div>
                             <div class="flex-grow">
-                                <input placeholder="Mobile"
+                                <input placeholder="Mobile" v-model="form.mobile"
                                     class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
                             </div>
 
                         </div>
-                        <div class="flex items-center justify-center mb-6">
+                        <!-- <div class="flex items-center justify-center mb-6">
                             <div class="flex items-center h-5">
-                                <input id="remember" type="checkbox"
+                                <input  type="checkbox" v-model="form.save_address"
                                     class="w-5 h-5 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
                                     required>
                             </div>
                             <label for="remember"
                                 class="ml-2 text-sm font-medium text-gray-900 dark:text-slate-700">save as default
                                 address</label>
+                        </div> -->
+
+                        <!-- Component Start -->
+                        <div class="flex justify-center gap-2 w-full max-w-screen-sm">
+                            <div>
+                                <input v-model="form.save_address" value="1" class="hidden" id="radio_1" type="radio"
+                                    name="radio" disabled>
+                                <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer" for="radio_1">
+                                    <span class="text-xs font-semibold uppercase">save for later</span>
+
+                                </label>
+                            </div>
+                            <div>
+                                <input v-if="user_address != null" v-model="form.save_address" value="0" class="hidden"
+                                    id="radio_2" type="radio" name="radio" checked>
+                                <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer" for="radio_2">
+                                    <span class="text-xs font-semibold uppercase">use default address</span>
+
+                                </label>
+                            </div>
+
                         </div>
+
                         <hr class="mt-4">
                         <div class="flex justify-between p-3">
                             <button @click="step = 1"
@@ -247,18 +260,6 @@ export default {
                     </div>
                     <div class="my-5 flex flex-col justify-around   cursor-pointer rounded-xl">
                         <template v-if="user_address != null">
-                            <div class="self-center m-2">
-                                <button @click="step = 3"
-                                    class="group relative inline-block overflow-hidden border border-[#b0870b] bg-[#b0870b] px-8 py-3 focus:outline-none focus:ring">
-                                    <span
-                                        class="absolute inset-y-0 left-0 w-[2px] bg-[#bf930f] transition-all group-hover:w-full group-active:bg-[#bf930f]"></span>
-
-                                    <span
-                                        class="relative text-md bold text-[#000000] transition-colors group-hover:text-white">
-                                        use default address
-                                    </span>
-                                </button>
-                            </div>
                             <div class="shadow-lg rounded-lg bg-gray-700 mx-auto px-8 p-4 notification-box flex">
 
                                 <div>
@@ -303,16 +304,16 @@ export default {
                         <div class="my-3">
                             <input type="text"
                                 class="block w-full text-2xl px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                placeholder="Card number" v-model="payment_form.cardNumber" maxlength="16" />
+                                placeholder="Card number" v-model="form.card_number" maxlength="16" />
                         </div>
                         <div class="my-3 flex flex-col">
                             <div class="mb-2">
                                 <label for="" class="text-gray-700">Expired</label>
                             </div>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <div class="flex  gap-2">
                                 <select name="" id=""
                                     class="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                    v-model="payment_form.expired_month">
+                                    v-model="form.expirationMonth">
                                     <option value="" selected disabled>MM</option>
                                     <option value="01">01</option>
                                     <option value="02">02</option>
@@ -329,7 +330,7 @@ export default {
                                 </select>
                                 <select name="" id=""
                                     class="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                    v-model="payment_form.expiredyear">
+                                    v-model="form.expirationYear">
                                     <option value="" selected disabled>YY</option>
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
@@ -340,8 +341,32 @@ export default {
                                 </select>
                                 <input type="text"
                                     class="block w-full col-span-2 px-5 py-2 border rounded-lg bg-gray-200 shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
-                                    placeholder="Security code" maxlength="3" v-model="payment_form.securityCode" />
+                                    placeholder="cvc" maxlength="3" v-model="form.cvc" />
                             </div>
+
+
+                            <div class="flex justify-center mt-5 gap-2 w-full max-w-screen-sm">
+                                <div>
+                                    <input v-model="form.paymentMethod" value="wallet" class="hidden" id="radio_1"
+                                        type="radio" name="radio" checked>
+                                    <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
+                                        for="radio_1">
+                                        <span class="text-xs font-semibold uppercase"> my wallet</span>
+
+                                    </label>
+                                </div>
+                                <div>
+                                    <input v-if="user_address != null" v-model="form.paymentMethod" value="credit_card"
+                                        class="hidden" id="radio_2" type="radio" name="radio" disabled>
+                                    <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
+                                        for="radio_2">
+                                        <span class="text-xs font-semibold uppercase"> credit card</span>
+
+                                    </label>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 </main>
@@ -357,7 +382,7 @@ export default {
                             previous
                         </span>
                     </button>
-                    <button @click="show_loading_modal = true"
+                    <button @click="pay"
                         class="inline-block rounded bg-[#6fe60e] px-8 py-3 text-sm font-medium text-slate-700 transition hover:scale-105 hover:shadow-xl ">
                         Pay now
                     </button>
@@ -371,6 +396,11 @@ export default {
 </template>
 
 <style scoped>
+input:checked+label {
+    border-color: black;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
 .fade-enter-active {
     transition: all 0.3s ease-out;
 }

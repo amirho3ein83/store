@@ -1,6 +1,5 @@
 <script setup>
 import Sidebar from "./Sidebar.vue";
-import "bootstrap-icons/font/bootstrap-icons.css";
 
 </script>
 

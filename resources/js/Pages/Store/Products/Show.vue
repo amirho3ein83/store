@@ -16,16 +16,16 @@ let props = defineProps({
     comments: Object,
 });
 
-let picked_color = ref(props.product.availableColors[0]);
-// let picked_color = ref("");
+// let picked_color = ref(props.product.availableColors[0]);
+let picked_color = ref("");
 let is_liked = ref(props.product.is_liked);
 
 const chooseColor = (color) => {
     picked_color.value = color;
 };
 
-let picked_size = ref(props.product.availableSizes[0]);
-// let picked_size = ref("");
+// let picked_size = ref(props.product.availableSizes[0]);
+let picked_size = ref("");
 
 const chooseSize = (size) => {
     picked_size.value = size;
@@ -48,12 +48,15 @@ const order_form = useForm({
 });
 
 const addToCart = () => {
-    order_form.post(route('order.register'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            props.product.is_in_cart = true;
-        },
-    });
+    props.product.is_in_cart = true;
+    storeCart.addToCart(props.product.id)
+
+    // order_form.post(route('product.store'), {
+    //     preserveScroll: true,
+    //     onSuccess: () => {
+    //         props.product.is_in_cart = true;
+    //     },
+    // });
 
 };
 </script>
@@ -61,6 +64,7 @@ const addToCart = () => {
 
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
     layout: AppLayout,

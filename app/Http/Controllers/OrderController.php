@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
-class CartController extends Controller
-{
+class OrderController extends Controller
+{    
 
     public function index(Product $product)
     {
-        $orders = Order::with('product')->where('user_id', Auth::id())->get();
+        $orders = Order::with('product')->pending()->get();
 
         $subtotal = 0;
         foreach ($orders as $key => $order) {
@@ -42,7 +42,8 @@ class CartController extends Controller
                 'product_id' => $product->id,
                 'price' => $product->price,
                 'qty' => 1,
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
+                'status'=> 'pending_purchase'
             ]);
         } else {
             $cart =  Order::where('product_id', $product->id)->increment('qty');
@@ -51,22 +52,24 @@ class CartController extends Controller
 
         if ($cart) {
             return [
-                'message' => 'Order updated',
+                'message' => 'Order registered',
             ];
         }
     }
 
     public function increaseOrder($id)
     {
-        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->increment('qty');
+        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id],['status', 'pending_purchase']])-> increment('qty');
     }
+
     public function decreaseOrder($id)
     {
-        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id]])->decrement('qty');
+        Order::firstWhere([['user_id', Auth::id()], ['product_id', $id],['status', 'pending_purchase']])->decrement('qty');
     }
+
     public function deleteOrder($id)
     {
-        Order::where([['user_id', Auth::id()], ['product_id', $id]])->delete();
+        Order::where([['user_id', Auth::id()], ['product_id', $id],['status', 'pending_purchase']])->delete();
     }
 
     public function countOrders(Product $product)
@@ -78,14 +81,14 @@ class CartController extends Controller
     public function payment(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'recipient_name' => 'required',
-            'mobile' => 'required|numeric',
-            'subtotal' => 'nullable|required|numeric',
-            'address' => 'required',
+            'recipient_name' => 'nullable',
+            'mobile' => 'nullable|numeric',
+            'subtotal' => 'required|numeric',
+            'address' => 'nullable',
             'card_number' => 'nullable|numeric|digits:16',
-            'expirationYear' => 'nullable|numeric|digits:4',
-            'expirationMonth' => 'nullable|numeric|digits:2',
-            'cvc' => 'nullable|numeric',
+            'expirationYear' => 'nullable',
+            'expirationMonth' => 'nullable',
+            'cvc' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -97,37 +100,27 @@ class CartController extends Controller
         $validated = $validator->validated();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        $delivery_cost = 12;
         // check subtotal for free delivery
+        if ($request->subtotal >= 500) {
+            $delivery_cost = 0;
+        }
+
         // add tax 
+        $after_tax = $request->subtotal / 100 * 9;
 
 
-
-
-        //////////////////////////////////
         DB::beginTransaction();
 
         try {
 
-            if ($request->saveInfo) {
+            if ($request->save_address) {
                 Address::create([
                     'text' => $validated['address'],
                     'recipient_name' => $validated['recipient_name'],
-                    'user_id' => Auth::id()
+                    'user_id' => Auth::id(),
+                    'postal_code' => $validated['postal_code'],
+                    'mobile' => $validated['mobile']
                 ]);
             }
 
@@ -137,17 +130,21 @@ class CartController extends Controller
 
                 $balance = $wallet->balance;
 
-                if ($balance > $request->subtotal) {
+                if ($balance > $after_tax) {
                     return redirect()->back()
                         ->withErrors('insufficient inventory')
                         ->withInput();
                 }
+
+                $wallet->decrement('balance', $after_tax);
             }
 
             $orders = Order::where('user_id', Auth::id())->get();
 
             foreach ($orders as $key => $item) {
-                Product::where('id', $item->product_id)->increment('sold_qty', $item->qty);
+                $product = Product::where('id', $item->product_id);
+                $product->increment('sold_qty', $item->qty);
+                $product->update(['status' => 'purchased']);
             }
 
             $orders->delete();
