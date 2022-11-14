@@ -190,7 +190,7 @@ export default {
                     <th class="p-3">name</th>
                     <th class="p-3 text-left">Category</th>
                     <th class="p-3 text-left">Price</th>
-                    <th class="p-3 text-left">Balance</th>
+                    <th class="p-3 text-left">Stock</th>
                     <th class="p-3 text-left"></th>
                 </tr>
             </thead>
@@ -213,14 +213,15 @@ export default {
                         {{ product.price }}$
                     </td>
                     <td class="p-3">
-                        <span class=" text-gray-500 rounded-md px-2"> {{ product.balance }}</span>
+                        <span class=" text-gray-500 rounded-md px-2"> {{ product.stock }}</span>
                     </td>
                     <td class="p-3 ">
                         <Link class="text-gray-400 hover:text-gray-100 mr-2">
 
                         <i class="bi bi-trash3-fill"></i>
                         </Link>
-                        <Link :href="`/products/` + product.id + `/edit`"  class="text-gray-400 hover:text-gray-100  mx-2">
+                        <Link :href="`/products/` + product.id + `/edit`"
+                            class="text-gray-400 hover:text-gray-100  mx-2">
                         <i class="material-icons-outlined text-base text-yellow-500"><i class="bi bi-pen-fill"></i></i>
                         </Link>
                     </td>

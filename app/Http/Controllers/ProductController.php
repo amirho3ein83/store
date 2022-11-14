@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller
 {
@@ -27,11 +28,12 @@ class ProductController extends Controller
 
 
 
-    public function index(Request $request)
+    public function homePage(Request $request)
     {
-        $amazing_offers = AmazingOffer::with('product')->get();
+        $amazing_offers = Product::inRandomOrder()->featured()->limit(10)->get();
         return Inertia::render('Store/Products/Home', ['amazing_offers' => $amazing_offers]);
     }
+
     public function create(Request $request)
     {
         $categories = Category::all();
@@ -107,7 +109,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'sale_price' => $request->sale_price,
-            'balance' => $request->balance,
+            'stock' => $request->stock,
             'category_id' => $request->category_id
         ]);
 
@@ -189,6 +191,15 @@ class ProductController extends Controller
             $product->is_in_cart = true;
         }
 
-        return Inertia::render('Store/Products/Show', ['product' => $product]);
+        $image_url = $product->getFirstMedia()->getUrl();
+        $product->image_url = $image_url;
+        // info($product->image_url);
+
+        // $image_url = $product->getFirstMedia()->toHtml();
+        // $product->image_url = $image_url;
+        // $product->loadMedia('');
+
+
+        return Inertia::render('Store/Products/Show2', ['product' => $product]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Product;
+use App\Models\OrderAttribute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,11 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('amazing_offers', function (Blueprint $table) {
-            $table->foreignIdFor(Product::class)->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('discount');
-            $table->timestamp('expiration_date');
-        });
+        // Schema::create('attribute_value_product_attribute', function (Blueprint $table) {
+        //     $table->foreignIdFor(OrderAttribute::class)->cascadeOnDelete();
+        // });
     }
 
     /**
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('amazing_offers');
+        // Schema::dropIfExists('attribute_value_product_attribute');
     }
 };

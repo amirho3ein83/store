@@ -7,7 +7,7 @@ import Logout from '../Pages/Auth/Logout.vue'
 
     <main class="profile-page">
 
-        <section class="relative py-16 bg-blueGray-200">
+        <section class="relative sm:py-16 bg-blueGray-200">
             <div class="container mx-auto px-4">
                 <div class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb-6 shadow-xl rounded-lg">
                     <div class="px-6">
@@ -19,7 +19,7 @@ import Logout from '../Pages/Auth/Logout.vue'
                                 </div>
                             </div>
                             <div class="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                                <div class="py-6 px-3 mt-32 sm:mt-0">
+                                <div class="py-6 px-3 ">
 
                                     <h1 class="text-2xl "> {{ $page.props.user.name }}</h1>
                                 </div>

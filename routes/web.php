@@ -22,7 +22,7 @@ use Inertia\Inertia;
 */
 
 Route::redirect('/', '/home');
-Route::get('/home', [ProductController::class, 'index'])->name('home')->middleware('admin');
+Route::get('/home', [ProductController::class, 'homePage'])->name('home')->middleware('admin');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
@@ -64,7 +64,7 @@ Route::middleware([
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');
 
-    Route::patch('/charge-wallet', [WalletController::class, 'increaseBalance'])->name('charge.wallet');
+    Route::patch('/charge-wallet', [WalletController::class, 'increaseWalletBalance'])->name('charge.wallet');
 
     Route::patch('/cart/products/{id}/increase-order', [OrderController::class, 'increaseOrder'])->name('cart.increase-order');
     Route::patch('/cart/products/{id}/decrease-order', [OrderController::class, 'decreaseOrder'])->name('cart.decrease-order');

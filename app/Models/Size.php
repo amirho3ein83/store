@@ -10,15 +10,13 @@ class Size extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'sizeable_type',
-        'sizeable_id',
+        'name'
     ];
 
     public $timestamps = false;
 
-    public function sizeable()
+    public function availableProducts()
     {
-        return $this->morphTo();
+        return $this->belongsToMany(Product::class);
     }
 }

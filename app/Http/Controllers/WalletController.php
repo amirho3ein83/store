@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
-    public function increaseBalance(Request $request)
+    public function increaseWalletBalance(Request $request)
     {
-        $res =   Wallet::where('user_id', Auth::id())->increment('balance', $request->increaseAmount);
+        $res =   Wallet::where('user_id', Auth::id())->increment('stock', $request->increaseAmount);
         $new_val = $request->increaseAmount;
         if (!$res) {
             return response()->json([

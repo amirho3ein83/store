@@ -1,7 +1,7 @@
 <script setup>
 import VueCountdown from "@chenfengyuan/vue-countdown";
-import { useProductStore } from "@/store/Product.js";
 import { ref } from "vue";
+import { useProductStore } from "@/store/Product.js";
 
 const storeProduct = useProductStore();
 
@@ -9,15 +9,15 @@ const props = defineProps({
     amazing_offer: Object,
 });
 
-let product = ref(props.amazing_offer.product)
+// let product = ref(props.amazing_offer.product)
 </script>
 
 <template>
     <Transition>
         <div @click="storeProduct.showProduct(amazing_offer.product.id)" class="p-2 flex justify-center items-center">
-            <div class="flex flex-col justify-between w-56 sm:w-72 h-72 bg-white bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
+            <div class="flex flex-col justify-between w-56 sm:w-72 h-72  bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
                 style="
-                    background-image: url('https://st2.depositphotos.com/1000375/9917/v/950/depositphotos_99171422-stock-illustration-gift-coupon-sale_price-card-template.jpg');
+                    background-image: url('https://cdn2.vectorstock.com/i/1000x1000/05/26/amazing-deals-golden-label-offers-badge-vector-19610526.jpg');
                 ">
                 <div class="flex justify-between items-center ml-4 pr-8">
                     <div
@@ -32,23 +32,22 @@ let product = ref(props.amazing_offer.product)
                             {{ product.title }}
                         </h3>
 
-<div class="flex align-baseline gap-x-1">
-    <p class="text-red-400 line-through">{{
+                        <div class="flex align-baseline gap-x-1">
+                            <p class="text-red-400 line-through">{{
                                     product.sale_price
                             }}</p>
-                        <h3 class="text-xl font-bold pb-2 text-yellow-600">
-                            {{
-                                    product.price
-                            }}
-                        </h3>
-</div>
+                            <h3 class="text-xl font-bold pb-2 text-yellow-600">
+                                {{
+                                        product.price
+                                }}
+                            </h3>
+                        </div>
                     </div>
-                    <p class="truncate text-gray-500 text-sm">
-                        {{ product.description }}
-                    </p>
+
                     <div class="flex justify-between items-center">
                         <span class="text-gray-400 text-xs">
-                            <VueCountdown :time="amazing_offer.remaining_time * 1000" v-slot="{ days, hours, minutes, seconds }">
+                            <VueCountdown :time="amazing_offer.remaining_time * 1000"
+                                v-slot="{ days, hours, minutes, seconds }">
                                 <span class="text-red-700">
                                     {{ days }}:{{ hours }}:{{ minutes }}:{{
         seconds

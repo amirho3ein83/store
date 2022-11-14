@@ -21,61 +21,34 @@ class ProductSeeder extends Seeder
     public function run()
     {
 
-        $sizes = [
-            'S',
-            'M',
-            'L',
-            'XL',
-            'XXL',
-            'XXXL',
-        ];
+        for ($i = 1; $i < 2; $i++) {
 
-        $colors = [
-            'blue',
-            'red',
-            'yellow',
-            'black',
-            'white',
-            'green',
-            'purple',
-            'orange',
-            'gray',
-        ];
+            $product =  Product::factory()->create([
+                'title' => 'watch Rolex'
+            ]);
 
-
-        for ($i = 1; $i < 95; $i++) {
-
-            $product =  Product::factory()->create();
-
+            //set image
             $pic = rand(1, 4);
-            // File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
+            File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
 
-            // $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
-            //     ->toMediaCollection('photo');
+            $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
+                ->toMediaCollection();
 
 
-            // for ($i=0; $i < 3; $i++) { 
-            //     $available_sizes = $sizes[array_rand($sizes)];
-    
-            //     $product->availableSizes()->save($available_sizes);
-            // }
+            for ($i = 0; $i < 3; $i++) {
+                $available_sizes = rand(1, 7);
 
-            // for ($i=0; $i < 4; $i++) { 
-            //     $available_colors = $colors[array_rand($colors)];
-    
-            //     $product->availableColors()->save($available_colors);
-            // }
+                $product->availableSizes()->attach($available_sizes);
+            }
+
+            for ($i = 0; $i < 4; $i++) {
+                $available_colors = rand(1, 7);
+
+                $product->availableColors()->attach($available_colors);
+            }
 
             Comment::factory()->create([
                 'product_id' => $i
-            ]);
-        }
-
-        for ($i = 1; $i <= 7; $i++) {
-            AmazingOffer::create([
-                'product_id' => $i,
-                'discount' => rand(7, 36),
-                'expiration_date' => Carbon::now()->addHour(rand(1, 14))
             ]);
         }
     }

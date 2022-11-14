@@ -13,9 +13,6 @@ class Order extends Model
     protected $fillable = [
         'product_id',
         'user_id',
-        'qty',
-        'price',
-        'status',
     ];
 
 
@@ -36,12 +33,12 @@ class Order extends Model
 
     public function size()
     {
-        return $this->morphOne(Size::class, 'sizeable');
+        return $this->hasOne(Size::class);
     }
 
-    public function pickedColor()
+    public function color()
     {
-        return $this->morphOne(Color::class, 'colorable');
+        return $this->hasOne(Color::class);
     }
 
     public function address()

@@ -14,9 +14,9 @@ const logout = () => {
     Inertia.post(route("logout"));
 };
 
-onMounted(() => {
-    storeCart.countOrders();
-});
+// onMounted(() => {
+//     storeCart.countOrders();
+// });
 </script>
 
 <template>

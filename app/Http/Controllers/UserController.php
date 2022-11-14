@@ -37,7 +37,7 @@ class UserController extends Controller
         //     $query->where('orders.buyer_id', Auth::id());
         // })->get();
 
-        $orders = Order::purchased()->get();
+        $orders = Order::purchased()->with('product')->latest()->get();
 
         return Inertia::render(
             'User/PurchaseList',

@@ -40,36 +40,20 @@ export default{
                 </div>
             </div>
             <div class="mx-auto flex items-center flex-wrap">
-                <!-- <div class="flex">
-                    <div class="flex flex-col">
-                        <div class="flex flex-wrap">
-                            <Product
-                                v-for="product of products.data"
-                                :product="product"
-                                :key="product.id"
-                            />
-                        </div>
-                        <Pagination
-                            :nextPage="products.next_page_url"
-                            :previousPage="products.prev_page_url"
-                            :currentPage="products.current_page"
-                        />
-                    </div>
-                </div> -->
-                <!-- <HorizontalScroll> -->
+
 
                 <div class="flex-col flex bg-gray-100 w-full">
                     <p class="text-2xl text-center w-full bold bg-gray-900 text-yellow-500 p-3">
                         Amazing offers
                     </p>
                     <div
-                        class="py-2 flex touch-pan-x overflow-x-scroll items-center justify-center"
+                        class="py-2 flex touch-pan-x bg-gray-900 overflow-x-scroll items-center justify-center"
                     >
-                        <Hero2
+                        <!-- <Hero2
                             v-for="amazing_offer of amazing_offers"
                             :key="amazing_offer.product_id"
                             :amazing_offer="amazing_offer"
-                        />
+                        /> -->
                     </div>
                 </div>
 

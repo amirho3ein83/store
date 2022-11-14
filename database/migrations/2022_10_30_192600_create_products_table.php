@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,15 +18,17 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug');
-            $table->integer('price');
+            $table->decimal('price', 8, 2)->nullable();
+            $table->decimal('sale_price', 8, 2)->nullable();
             $table->integer('sold_qty')->default(0);
             $table->foreignIdFor(Category::class)
                 ->nullable()->cascadeOnUpdate()->nullOnDelete();
-            $table->integer('sale_price');
-            $table->integer('balance');
+            $table->foreignIdFor(Brand::class)
+                ->nullable()->cascadeOnUpdate()->nullOnDelete();
+            $table->integer('stock');
             $table->integer('reviews')->default(0);
             $table->float('rate')->default(0);
+            $table->boolean('featured')->default(0);
             $table->mediumText('description');
             $table->timestamps();
         });

@@ -11,14 +11,12 @@ class Color extends Model
 
     protected $fillable = [
         'name',
-        'colorable_type',
-        'colorable_id',
     ];
 
     public $timestamps = false;
 
-    public function colorable()
+    public function availableProducts()
     {
-        return $this->morphTo();
+        return $this->belongsToMany(Product::class);
     }
 }

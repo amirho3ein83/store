@@ -131,16 +131,16 @@ class OrderController extends Controller
 
             if ($request->paymentMethod == 'wallet') {
                 $wallet = Wallet::firstWhere('user_id', Auth::id());
-                
-                $balance = $wallet->balance;
+
+                $stock = $wallet->stock;
                 info('walllllllet');
 
-                if ($balance < $after_tax) {
+                if ($stock < $after_tax) {
                     return redirect()->back()
                         ->withErrors('insufficient inventory')
                         ->withInput();
                 }
-                Wallet::where('user_id', Auth::id())->decrement('balance', $after_tax);
+                Wallet::where('user_id', Auth::id())->decrement('stock', $after_tax);
             }
             $orders = Order::where('user_id', Auth::id())->get();
 

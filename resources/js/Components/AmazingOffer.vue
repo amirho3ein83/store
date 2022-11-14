@@ -13,9 +13,6 @@ defineProps({
 
             <div class="w-1/2 p-4">
                 <h1 class="text-gray-900 font-bold text-2xl">{{product.title}}</h1>
-                <p class="mt-2 text-gray-600 text-sm">
-                    {{product.description}}
-                </p>
                 <div class="flex item-center mt-2">
                     <svg
                         class="w-5 h-5 fill-current text-gray-700"

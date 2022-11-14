@@ -22,15 +22,16 @@ class ProductFactory extends Factory
 
         return [
             'title' => $name,
-            'slug' => Str::slug($name),
             'description' => $this->faker->sentence(5),
             'price' => $price,
             'sale_price' => $price - rand(5, 35),
             'sold_qty' => rand(144, 254),
-            'balance' => rand(10, 30),
+            'brand_id' => rand(1,8),
+            'stock' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
-            'category_id' => rand(1,10)
+            'category_id' => rand(1, 10),
+            'featured' => true ?? false
         ];
     }
 }

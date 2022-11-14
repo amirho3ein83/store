@@ -20,7 +20,7 @@ const form = useForm({
     description: props.product.description,
     price: props.product.price,
     sale_price: props.product.sale_price,
-    balance: props.product.balance,
+    stock: props.product.stock,
     category_id: props.product.category_id,
     image: null,
 });
@@ -75,7 +75,7 @@ export default {
 
                 <div class="flex  px-1 flex-col justify-center items-center w-1/3 my-2">
 
-                    <img  alt="Headphones" src="../pics/sh5.webp"
+                    <img alt="Headphones" src="../pics/sh5.webp"
                         class="h-[300px] w-full shadow-lg spacity-20 object-cover sm:h-[350px]" />
 
                     <div class=" bg-gray-100 w-full shadow-lg rounded-sm overflow-hidden">
@@ -126,7 +126,7 @@ export default {
                                             :value="category.id" class="peer hidden" />
                                         <label :for="category.id"
                                             class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none rounded-xl p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white">{{
-                                                    category.name
+                                                category.name
                                             }}</label>
                                     </div>
                                 </template>
@@ -134,34 +134,35 @@ export default {
                         </div>
                         <div>
                             <InputLabel for="title" value="title" />
-                            <TextInput id="title" v-model="form.title" :value="product.title" type="text" placeholder="title"
-                                class="mt-1 block w-full" required />
+                            <TextInput id="title" v-model="form.title" :value="product.title" type="text"
+                                placeholder="title" class="mt-1 block w-full" required />
                             <InputError class="mt-2" :message="form.errors.title" />
                         </div>
                         <div class="flex justify-between gap-x-2">
                             <div>
                                 <InputLabel for="price" value="price" />
-                                <TextInput id="price" v-model="form.price" :value="product.price" type="number" placeholder="price"
-                                    class="mt-1 block w-full" required />
+                                <TextInput id="price" v-model="form.price" :value="product.price" type="number"
+                                    placeholder="price" class="mt-1 block w-full" required />
                                 <InputError class="mt-2" :message="form.errors.price" />
                             </div>
                             <div>
                                 <InputLabel for="sale_price" value="sale_price" />
-                                <TextInput id="sale_price" v-model="form.sale_price" :value="product.sale_price"  type="number" placeholder="sale_price"
-                                    class="mt-1 block w-full" required />
+                                <TextInput id="sale_price" v-model="form.sale_price" :value="product.sale_price"
+                                    type="number" placeholder="sale_price" class="mt-1 block w-full" required />
                                 <InputError class="mt-2" :message="form.errors.sale_price" />
                             </div>
                         </div>
                         <div>
-                            <InputLabel for="balance" value="balance" />
-                            <TextInput id="balance" v-model="form.balance" :value="product.balance" type="number" placeholder="balance"
-                                class="mt-1 block w-full" required />
-                            <InputError class="mt-2" :message="form.errors.balance" />
+                            <InputLabel for="stock" value="stock" />
+                            <TextInput id="stock" v-model="form.stock" :value="product.stock" type="number"
+                                placeholder="stock" class="mt-1 block w-full" required />
+                            <InputError class="mt-2" :message="form.errors.stock" />
                         </div>
                         <div>
                             <InputLabel for="description" value="description" />
                             <textarea class="w-full rounded-lg border-gray-200 p-3 text-md" placeholder="Description"
-                                rows="2" v-model="form.description" name="description">{{product.description}}</textarea>
+                                rows="2" v-model="form.description"
+                                name="description">{{product.description}}</textarea>
                         </div>
 
 

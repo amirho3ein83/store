@@ -14,12 +14,18 @@ let props = defineProps({
     categories: Object,
 });
 
+let picked_color = ref([]);
+
+const addColor = (color) => {
+
+};
+
 const form = useForm({
     title: "",
     description: "",
     price: "",
     sale_price: "",
-    balance: null,
+    stock: null,
     category_id: null,
     image: null,
 });
@@ -37,6 +43,7 @@ const addproduct = () => {
         },
     });
 };
+
 
 const pickFile = (event) => {
     console.log(event);
@@ -118,10 +125,11 @@ export default {
                             <InputError class="mt-2" :message="form.errors.image" />
                         </div>
                         <div class="w-1/3 py-3 px-4 rounded-lg bg-gray-400 text-gray-500 font-semibold cursor-pointer">
-
+<!-- 
                             <Dropdown align="left" width="52">
                                 <template #trigger>
-                                    <span class="text-gray-50 " v-if="form.category_id == null"> categorie</span>
+                                    <span class="text-gray-50 " v-if="f
+                                    rm.category_id == null"> categorie</span>
                                     <span class="text-gray-50 " v-else> {{ categories[form.category_id].name }}</span>
                                     <i class="text-gray-50 bi bi-chevron-down px-2"></i>
                                 </template>
@@ -132,11 +140,11 @@ export default {
                                             :value="category.id" class="peer hidden" />
                                         <label :for="category.id"
                                             class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none rounded-xl p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white">{{
-                                                    category.name
+                                                category.name
                                             }}</label>
                                     </div>
                                 </template>
-                            </Dropdown>
+                            </Dropdown> -->
                         </div>
                         <div>
                             <InputLabel for="title" value="title" />
@@ -171,9 +179,9 @@ export default {
 
 
                                         <button @click="
-                                            chooseColor(
+                                                addColor(
                                                 `blue`
-                                            )
+                                                )
                                         ">
                                             <span :class="{
                                                 'border-blue-500':
@@ -185,7 +193,7 @@ export default {
                                             </span>
                                         </button>
                                         <button @click="
-                                            chooseColor(
+                                            addColor(
                                                 `yellow`
                                             )
                                         ">
@@ -199,7 +207,7 @@ export default {
                                             </span>
                                         </button>
                                         <button @click="
-                                            chooseColor(
+                                            addColor(
                                                 `red`
                                             )
                                         ">
@@ -213,7 +221,7 @@ export default {
                                             </span>
                                         </button>
                                         <button @click="
-                                            chooseColor(
+                                            addColor(
                                                 `purple`
                                             )
                                         ">
@@ -230,15 +238,22 @@ export default {
                                 </div>
                             </div>
                             <div class="flex-1 inbuttonne-flex items-center mb-3">
-                                <div class="cursor-pointer text-gray-400">
 
 
-                                    <!-- gotta loop here for available sizes -->
-                                    <button type="button">
-                                        <span 
-                                            class="mx-1 p-2 py-1 rounded-full w-4 h-4 bg-gray-700">S</span>
-                                    </button>
-                                </div>
+                                <input type="checkbox" id="S" value="S" v-model="checked_sizes">
+                                <label class="m-2" for="S">S</label>
+
+                                <input type="checkbox" id="M" value="M" v-model="checked_sizes">
+                                <label class="m-2" for="M">M</label>
+
+                                <input type="checkbox" id="L" value="L" v-model="checked_sizes">
+                                <label class="m-2" for="L">L</label>
+
+                                <input type="checkbox" id="XL" value="XL" v-model="checked_sizes">
+                                <label class="m-2" for="XL">XL</label>
+
+                                <input type="checkbox" id="XXL" value="XXL" v-model="checked_sizes">
+                                <label class="m-2" for="XXL">XXL</label>
                             </div>
                         </div>
 
@@ -246,10 +261,10 @@ export default {
                         <!-- ///////////// -->
 
                         <div>
-                            <InputLabel for="balance" value="balance" />
-                            <TextInput id="balance" v-model="form.balance" type="number" placeholder="balance"
+                            <InputLabel for="stock" value="stock" />
+                            <TextInput id="stock" v-model="form.stock" type="number" placeholder="stock"
                                 class="mt-1 block w-full" required />
-                            <InputError class="mt-2" :message="form.errors.balance" />
+                            <InputError class="mt-2" :message="form.errors.stock" />
                         </div>
                         <div>
                             <InputLabel for="description" value="description" />

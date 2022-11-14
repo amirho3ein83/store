@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeeder::class,
+            BrandSeeder::class,
             ProductSeeder::class,
             PermissionSeeder::class
         ]);
@@ -44,7 +45,7 @@ class DatabaseSeeder extends Seeder
 
         Wallet::create([
             'user_id' => 2,
-            'balance' => 4500,
+            'stock' => 4500,
         ]);
 
         Address::create([

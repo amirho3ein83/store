@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->string('name');
-            $table->morphs('colorable');
+            $table->id();
         });
     }
 
@@ -26,7 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropMorphs('colorable');
         Schema::dropIfExists('colors');
     }
 };

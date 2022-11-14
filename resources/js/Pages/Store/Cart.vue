@@ -364,7 +364,7 @@ export default{
                                         <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
                                             for="radio_1">
                                             <span class="text-sm text-yellow-800 font-semibold uppercase"> my wallet
-                                                {{ wallet.balance }}$</span>
+                                                {{ wallet.stock }}$</span>
 
                                         </label>
                                     </div>
