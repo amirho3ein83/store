@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -16,10 +17,21 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->text(10);
+        $price = $this->faker->numberBetween(12, 820);
+
         return [
-            'name'=>$this->faker->name,
-            'description'=>$this->faker->sentence(4),
-            'price'=>$this->faker->randomDigit,
+            'title' => $name,
+            'description' => $this->faker->sentence(5),
+            'price' => $price,
+            'sale_price' => $price - rand(5, 35),
+            'sold_qty' => rand(144, 254),
+            'brand_id' => rand(1,8),
+            'stock' => rand(10, 30),
+            'rate' => mt_rand(10, 50) / 10,
+            'reviews' => rand(10, 30),
+            'category_id' => rand(1, 10),
+            'featured' => true ?? false
         ];
     }
 }

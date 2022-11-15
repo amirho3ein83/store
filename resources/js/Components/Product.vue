@@ -1,27 +1,48 @@
+<script setup>
+import { Head, Link } from "@inertiajs/inertia-vue3";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import { Inertia } from "@inertiajs/inertia";
+
+let props = defineProps({
+    product: Object,
+});
+
+let show = () => {
+    Inertia.get("/products/" + props.product.id);
+};
+</script>
+
 <template>
-    <a href="#" class="block sm:w-1/3 lg:w-1/4 w-1/2 p-2 ">
-        <div class="flex justify-center">
-            <strong
-                class="relative h-6 bg-black px-4 text-xs uppercase leading-6 text-white"
+
+
+    <!-- component -->
+    <div
+        class="flex flex-col justify-center items-center max-w-sm mx-auto my-8 px-3"
+    >
+        <div
+            style="
+                background-image: url(https://images.unsplash.com/photo-1539185441755-769473a23570?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1951&q=80;
+            "
+            class="bg-gray-300 h-64 w-full rounded-lg shadow-md bg-cover bg-center"
+        ></div>
+        <div
+            class="w-56 md:w-64 bg-white -mt-10 shadow-lg rounded-lg overflow-hidden"
+        >
+            <div
+                class="py-2 text-center font-bold uppercase tracking-wide text-gray-800"
             >
-                New
-            </strong>
+                Nike Revolt
+            </div>
+            <div
+                class="flex items-center justify-between py-2 px-3 bg-gray-400"
+            >
+                <h1 class="text-gray-800 font-bold">$129</h1>
+                <button
+                    class="bg-gray-800 text-xs text-white px-2 py-1 font-semibold rounded uppercase hover:bg-gray-700"
+                >
+                    Add to cart
+                </button>
+            </div>
         </div>
-
-        <img
-            alt="Trainer"
-            src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-            class="-mt-3 h-[350px] w-full object-cover sm:h-[450px]"
-        />
-
-        <h3 class="mt-4 text-sm text-gray-700">
-            Limited Edition Sports Trainer
-        </h3>
-
-        <div class="mt-4 flex items-center justify-between font-medium">
-            <p>$189.99</p>
-
-            <p class="text-xs uppercase tracking-wide">6 Colors</p>
-        </div>
-    </a>
+    </div>
 </template>
