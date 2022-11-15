@@ -35,16 +35,12 @@ class ProductSeeder extends Seeder
                 ->toMediaCollection();
 
 
-            for ($i = 0; $i < 3; $i++) {
-                $available_sizes = rand(1, 7);
-
-                $product->availableSizes()->attach($available_sizes);
+            for ($i = 1; $i < 3; $i++) {
+                $product->availableSizes()->attach($i);
             }
 
-            for ($i = 0; $i < 4; $i++) {
-                $available_colors = rand(1, 7);
-
-                $product->availableColors()->attach($available_colors);
+            for ($i = 1; $i < 4; $i++) {
+                $product->availableColors()->attach($i);
             }
 
             Comment::factory()->create([

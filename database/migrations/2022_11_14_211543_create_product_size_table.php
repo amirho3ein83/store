@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products_sizes', function (Blueprint $table) {
+        Schema::create('product_size', function (Blueprint $table) {
             $table->foreignIdFor(Product::class)
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products_sizes');
+        Schema::dropIfExists('product_size');
     }
 };

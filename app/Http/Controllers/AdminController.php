@@ -6,16 +6,19 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AdminController extends Controller
 {
     public function productsList(Request $request)
     {
+        $product = Product::where('id', 1)->with('availableColors')->get();
+        Log::info($product);
         $products = Product::query()
-            ->when($request->category_id, function ($query, $category_id) {
-                $query->where('category_id', $category_id);
-            })
+            // ->when($request->category_id, function ($query, $category_id) {
+            //     $query->where('category_id', $category_id);
+            // })
             ->when($request->search, function ($query, $search) {
                 $query->where('slug', 'like', "%{$search}%");
             })
@@ -41,7 +44,7 @@ class AdminController extends Controller
                         break;
                 }
             })
-            ->with('category')
+            ->with('availableColors', 'brand')
             ->simplePaginate(10)
             ->withQueryString();
 
@@ -54,28 +57,24 @@ class AdminController extends Controller
                 'categories' => $categories,
             ]
         );
-
-
     }
     public function usersList(Request $request)
     {
         $users = User::query()
-        ->when($request->search, function ($query, $search) {
-            $query->where('name', 'like', "{$search}%")
-            ->orWhere('email', 'like', "{$search}%");
-        })
-        ->with('roles')
-        ->simplePaginate(10)
-        ->withQueryString();
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "{$search}%")
+                    ->orWhere('email', 'like', "{$search}%");
+            })
+            ->with('roles')
+            ->simplePaginate(10)
+            ->withQueryString();
 
 
-    return Inertia::render(
-        'Admin/Users',
-        [
-            'users' => $users,
-        ]
-    );
+        return Inertia::render(
+            'Admin/Users',
+            [
+                'users' => $users,
+            ]
+        );
     }
-
-
 }

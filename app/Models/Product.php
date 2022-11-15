@@ -53,11 +53,6 @@ class Product extends Model implements HasMedia
         return $this->stock != 0 ? true : false;
     }
 
-    public function ratings()
-    {
-        return Rating::where('product_id', $this->id)->avg('stars_rated');
-    }
-
     public function scopeFeatured($query)
     {
         return $query->where('featured', 1);
@@ -80,12 +75,12 @@ class Product extends Model implements HasMedia
 
     public function availableSizes()
     {
-        return $this->belongsToMany(Size::class, 'products_sizes');
+        return $this->belongsToMany(Size::class);
     }
 
     public function availableColors()
     {
-        return $this->belongsToMany(Color::class, 'products_colors');
+        return $this->belongsToMany(Color::class,'color_product','product_id','color_id');
     }
 
     public function brand()
