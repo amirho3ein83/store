@@ -28,7 +28,7 @@ class ColorSeeder extends Seeder
         ];
 
         foreach ($colors as $key => $color) {
-            Color::factory()->create([
+            Color::create([
                 'name' => $color
             ]);
         }

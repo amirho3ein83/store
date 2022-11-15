@@ -26,8 +26,9 @@ class SizeSeeder extends Seeder
         ];
 
         foreach ($sizes as $key => $size) {
-            Size::factory()->create([
+            Size::create([
                 'name' => $size
             ]);
-        }    }
+        }
+    }
 }
