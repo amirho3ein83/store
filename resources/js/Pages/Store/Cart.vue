@@ -5,13 +5,14 @@ import Order from "@/Components/Order.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import { useStorage } from "@/store/useStorage";
 import EmptyCart from "../Store/Partial/EmptyCart.vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useCartStore } from "@/store/Cart.js";
 import LoadingModal from "@/Modals/LoadingModal.vue";
 import SuccessModal from "@/Modals/SuccessModal.vue";
 import Navbar from "@/Components/Navbar.vue";
 
 const storeCart = useCartStore();
+
 let props = defineProps({
     orders: Object,
     subtotal: Number,
@@ -27,7 +28,6 @@ let show_success_modal = ref(false)
 let step = ref(form_step)
 
 const form = useForm({
-    subtotal: storeCart.subtotal,
     recipient_name: "",
     address: "",
     mobile: "",
@@ -42,9 +42,9 @@ const form = useForm({
 
 const pay = () => {
     show_loading_modal.value = true
-    form.post(route("payment"), {
+    form.post(route("register.order"), {
         onSuccess: () => {
-    show_loading_modal.value = false
+            show_loading_modal.value = false
             show_success_modal.value = true
         },
         onError: (e) => {
@@ -63,13 +63,7 @@ onUnmounted(() => {
     localStorage.removeItem("form_step");
 })
 </script>
-<!-- <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
 
-export default{
-  layout:AppLayout
-}
-</script> -->
 <template>
 
     <Head title="Cart" />
@@ -168,7 +162,7 @@ export default{
                     <div class="flex items-center pb-6 justify-between lg:pt-5 pt-2">
                         <p class="text-2xl leading-normal text-gray-800 dark:text-white">Subtotal</p>
                         <p class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white">
-                            {{ storeCart.subtotal }}$
+                            {{ Math.trunc(storeCart.subtotal + (9 / 100 * storeCart.subtotal)) }}$
                         </p>
                     </div>
                     <button @click="step = 2"
@@ -364,7 +358,7 @@ export default{
                                         <label class="flex flex-col p-4 border-2 border-gray-400 cursor-pointer"
                                             for="radio_1">
                                             <span class="text-sm text-yellow-800 font-semibold uppercase"> my wallet
-                                                {{ wallet.stock }}$</span>
+                                                {{ wallet.balance }}$</span>
 
                                         </label>
                                     </div>

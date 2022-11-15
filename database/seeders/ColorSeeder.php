@@ -16,9 +16,9 @@ class ColorSeeder extends Seeder
     public function run()
     {
         $colors = [
-            1 => 'red',
-            2 => 'blue',
-            3 => 'black',
+            1 => 'black',
+            2 => 'red',
+            3 => 'blue',
             4 => 'white',
             5 => 'pink',
             6 => 'gray',

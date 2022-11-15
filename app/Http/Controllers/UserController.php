@@ -39,6 +39,11 @@ class UserController extends Controller
 
         $orders = Order::purchased()->with('product')->latest()->get();
 
+        $orders->map(function ($order) {
+            $image_url = $order->product->getFirstMedia()->getUrl();
+            $order->product->image_url = $image_url;
+        });
+
         return Inertia::render(
             'User/PurchaseList',
             [

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('color');
             $table->string('size');
             $table->boolean('status');
-            $table->decimal('amount_paid')->nullable();
+            $table->integer('amount_paid')->nullable();
             $table->foreignIdFor(Order::class)->cascadeOnDelete();
         });
     }

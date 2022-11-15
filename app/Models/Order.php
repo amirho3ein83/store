@@ -12,23 +12,44 @@ class Order extends Model
 
     protected $fillable = [
         'product_id',
-        'user_id',
+        'buyer_id',
+        'picked_color',
+        'picked_size',
+        'amount_paid',
+        'status',
     ];
 
+    protected $casts = [
+        'qty'  =>  'integer',
+    ];
 
     public function scopePendingPurchase($query)
     {
-        return $query->where([['user_id', Auth::id()],['status', 'pending_purchase']]);
+        return $query->where([['buyer_id', Auth::id()], ['status', 'pending_purchase']]);
     }
 
     public function scopePurchased($query)
     {
-        return $query->where([['user_id', Auth::id()],['status', 'purchased']]);
+        return $query->where([['buyer_id', Auth::id()], ['status', 'purchased']]);
+    }
+
+    public function scopeIsInCart($query, $product_id, $picked_color, $picked_size)
+    {
+        return $query->where([
+            ['product_id', $product_id],
+            ['picked_color', $picked_color],
+            ['picked_size', $picked_size]
+        ]);
     }
 
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+
+    public function buyer()
+    {
+        return $this->hasOne(User::class, 'id', 'buyer_id');
     }
 
     public function size()
@@ -41,8 +62,4 @@ class Order extends Model
         return $this->hasOne(Color::class);
     }
 
-    public function address()
-    {
-        return $this->hasOne(Address::class);
-    }
 }

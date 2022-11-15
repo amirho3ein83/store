@@ -48,15 +48,7 @@ const order_form = useForm({
 });
 
 const addToCart = () => {
-    props.product.is_in_cart = true;
     storeCart.addToCart(props.product.id)
-
-    // order_form.post(route('product.store'), {
-    //     preserveScroll: true,
-    //     onSuccess: () => {
-    //         props.product.is_in_cart = true;
-    //     },
-    // });
 
 };
 </script>
@@ -99,15 +91,18 @@ export default {
                 </div>
 
                 <div class="sticky top-0">
-                    <strong
+                    <strong v-if="product.featured"
                         class="rounded-full border bg-gray-800 px-3 py-0.5 text-xs font-medium tracking-wide text-[#e8a138]">
-                        Pre Order
+                        Featured Order
                     </strong>
 
                     <div class="mt-8 flex justify-between">
                         <div class="max-w-[35ch]">
                             <h1 class="text-2xl font-bold">
                                 {{ product.title }}
+                            </h1>
+                            <h1 class="text-sm text-cyan-900">
+                                {{ product.brand.name }}
                             </h1>
 
 
@@ -139,144 +134,112 @@ export default {
                         </div>
                     </div>
 
-                    <details class="group relative mt-4">
-                        <summary class="block">
-                            <div>
-                                <div class="prose max-w-none group-open:hidden">
-                                    <p>
-                                        {{ product.description }}
-                                    </p>
-                                </div>
+                    <p class="my-4">
+                        {{ product.description }}
+                    </p>
 
-                                <span
-                                    class="mt-4 cursor-pointer text-sm font-medium underline group-open:absolute group-open:bottom-0 group-open:left-0 group-open:mt-0">
-                                    Read More
-                                </span>
-                            </div>
-                        </summary>
+                    <fieldset>
+                        <legend class="mt-3 text-sm font-medium">Color</legend>
 
-                        <div class="prose max-w-none pb-6">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-                                veniam dicta beatae eos ex error culpa delectus rem tenetur,
-                                architecto quam nesciunt, dolor veritatis nisi minus inventore,
-                                rerum at recusandae?
-                            </p>
-
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
-                                nam sapiente nobis ea veritatis error consequatur nisi
-                                exercitationem iure laudantium culpa, animi temporibus non! Maxime
-                                et quisquam amet. A, deserunt!
-                            </p>
-                        </div>
-                    </details>
-
-                    <form class="mt-8">
-                        <fieldset>
-                            <legend class="mb-1 text-sm font-medium">Color</legend>
-
-                            <div class="flow-root">
-                                <div class="-m-0.5 flex flex-wrap">
-                                    <ul class="flex flex-row justify-center items-center space-x-2">
+                        <div class="flow-root">
+                            <div class="-m-0.5 flex flex-wrap">
+                                <ul class="flex flex-row justify-center items-center space-x-2">
 
 
-                                        <!-- gotta loop here for available colors -->
+                                    <!-- gotta loop here for available colors -->
 
 
-                                        <button @click="
-                                            chooseColor(
-                                                `blue`
-                                            )
-                                        ">
-                                            <span :class="{
-                                                'border-blue-500':
-                                                    picked_color ==
-                                                    `blue`,
-                                            }"
-                                                class="block p-1 border-2  hover:border-blue-600 rounded-full transition ease-in duration-300">
-                                                <a class="block w-3 h-3 bg-blue-600 rounded-full"></a>
-                                            </span>
-                                        </button>
-                                        <button @click="
-                                            chooseColor(
-                                                `yellow`
-                                            )
-                                        ">
-                                            <span :class="{
-                                                'border-yellow-500':
-                                                    picked_color ==
-                                                    `yellow`,
-                                            }"
-                                                class="block p-1 border-2  hover:border-yellow-600 rounded-full transition ease-in duration-300">
-                                                <a class="block w-3 h-3 bg-yellow-600 rounded-full"></a>
-                                            </span>
-                                        </button>
-                                        <button @click="
-                                            chooseColor(
-                                                `red`
-                                            )
-                                        ">
-                                            <span :class="{
-                                                'border-red-500':
-                                                    picked_color ==
-                                                    `red`,
-                                            }"
-                                                class="block p-1 border-2  hover:border-red-600 rounded-full transition ease-in duration-300">
-                                                <a class="block w-3 h-3 bg-red-600 rounded-full"></a>
-                                            </span>
-                                        </button>
-                                        <button @click="
-                                            chooseColor(
-                                                `purple`
-                                            )
-                                        ">
-                                            <span :class="{
-                                                'border-purple-500':
-                                                    picked_color ==
-                                                    `purple`,
-                                            }"
-                                                class="block p-1 border-2  hover:border-purple-600 rounded-full transition ease-in duration-300">
-                                                <a class="block w-3 h-3 bg-purple-600 rounded-full"></a>
-                                            </span>
-                                        </button>
-                                    </ul>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="mt-4">
-                            <legend class="mb-1 text-sm font-medium">Size</legend>
-
-                            <div class="flow-root">
-                                <div class="-m-0.5 flex flex-wrap">
-                                    <SizeRadio :size="`S`" :chosen="
-                                        picked_size == `S`
-                                    " @selected="chooseSize(`S`)" />
-                                    <SizeRadio :size="`M`" :chosen="
-                                        picked_size == `M`
-                                    " @selected="chooseSize(`M`)" />
-                                    <SizeRadio :size="`L`" :chosen="
-                                        picked_size == `L`
-                                    " @selected="chooseSize(`L`)" />
-                                    <SizeRadio :size="`XL`" :chosen="
-                                        picked_size == `XL`
-                                    " @selected="chooseSize(`XL`)" />
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <div class="mt-8 flex">
-                            <div class="flex space-x-2 text-sm font-medium justify-start">
-                                <Link href="/login" v-if="!$page.props.auth"
-                                    class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600">
-                                Log in to access your cart
-                                </Link>
-                                <InCartButton v-else-if="product.is_in_cart" @addanother="addToCart()" />
-                                <AddToCartButton v-else :id="product.id" @pressed="addToCart()" />
+                                    <button @click="
+                                        chooseColor(
+                                            `blue`
+                                        )
+                                    ">
+                                        <span :class="{
+                                            'border-blue-500':
+                                                picked_color ==
+                                                `blue`,
+                                        }"
+                                            class="block p-1 border-2  hover:border-blue-600 rounded-full transition ease-in duration-300">
+                                            <a class="block w-3 h-3 bg-blue-600 rounded-full"></a>
+                                        </span>
+                                    </button>
+                                    <button @click="
+                                        chooseColor(
+                                            `yellow`
+                                        )
+                                    ">
+                                        <span :class="{
+                                            'border-yellow-500':
+                                                picked_color ==
+                                                `yellow`,
+                                        }"
+                                            class="block p-1 border-2  hover:border-yellow-600 rounded-full transition ease-in duration-300">
+                                            <a class="block w-3 h-3 bg-yellow-600 rounded-full"></a>
+                                        </span>
+                                    </button>
+                                    <button @click="
+                                        chooseColor(
+                                            `red`
+                                        )
+                                    ">
+                                        <span :class="{
+                                            'border-red-500':
+                                                picked_color ==
+                                                `red`,
+                                        }"
+                                            class="block p-1 border-2  hover:border-red-600 rounded-full transition ease-in duration-300">
+                                            <a class="block w-3 h-3 bg-red-600 rounded-full"></a>
+                                        </span>
+                                    </button>
+                                    <button @click="
+                                        chooseColor(
+                                            `purple`
+                                        )
+                                    ">
+                                        <span :class="{
+                                            'border-purple-500':
+                                                picked_color ==
+                                                `purple`,
+                                        }"
+                                            class="block p-1 border-2  hover:border-purple-600 rounded-full transition ease-in duration-300">
+                                            <a class="block w-3 h-3 bg-purple-600 rounded-full"></a>
+                                        </span>
+                                    </button>
+                                </ul>
                             </div>
                         </div>
-                    </form>
+                    </fieldset>
+
+                    <fieldset class="mt-4">
+                        <legend class="mb-1 text-sm font-medium">Size</legend>
+
+                        <div class="flow-root">
+                            <div class="-m-0.5 flex flex-wrap">
+                                <SizeRadio :size="`S`" :chosen="
+                                    picked_size == `S`
+                                " @selected="chooseSize(`S`)" />
+                                <SizeRadio :size="`M`" :chosen="
+                                    picked_size == `M`
+                                " @selected="chooseSize(`M`)" />
+                                <SizeRadio :size="`L`" :chosen="
+                                    picked_size == `L`
+                                " @selected="chooseSize(`L`)" />
+                                <SizeRadio :size="`XL`" :chosen="
+                                    picked_size == `XL`
+                                " @selected="chooseSize(`XL`)" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="mt-8 flex">
+                        <div class="flex space-x-2 text-sm font-medium justify-start">
+                            <Link href="/login" v-if="!$page.props.auth"
+                                class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600">
+                            Log in to access your cart
+                            </Link>
+                            <AddToCartButton :id="product.id" @pressed="addToCart()" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -21,27 +21,26 @@ class ProductSeeder extends Seeder
     public function run()
     {
 
-        for ($i = 1; $i < 2; $i++) {
+        for ($i = 1; $i < 5; $i++) {
 
             $product =  Product::factory()->create([
                 'title' => 'watch Rolex'
             ]);
 
             //set image
-            $pic = rand(1, 4);
-            File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
+            File::copy(public_path('/watches/' . $i . '.webp'), public_path('/watches2/' . $i . '.webp'));
 
-            $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
+            $product->addMedia(public_path('/watches2/' . $i . '.webp'))
                 ->toMediaCollection();
 
-
-            for ($i = 1; $i < 3; $i++) {
-                $product->availableSizes()->attach($i);
+            for ($d = 1; $d < 5; $d++) {
+                $product->availableSizes()->attach($d);
             }
 
-            for ($i = 1; $i < 4; $i++) {
-                $product->availableColors()->attach($i);
+            for ($f = 3; $f < 7; $f++) {
+                $product->availableColors()->attach($f);
             }
+
 
             Comment::factory()->create([
                 'product_id' => $i

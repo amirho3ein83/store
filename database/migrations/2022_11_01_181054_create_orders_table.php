@@ -17,12 +17,14 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('qty');
-            $table->float('price');
+            $table->integer('qty')->default(1);
+            $table->integer('amount_paid')->nullable();
             $table->string('status');
+            $table->string('picked_color');
+            $table->string('picked_size');
 
             $table->foreignIdFor(Product::class);
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class, 'buyer_id');
 
             $table->timestamps();
         });

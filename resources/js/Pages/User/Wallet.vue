@@ -22,6 +22,6 @@ export default {
 </script>
 <template>
     <UserLayout>
-        <WalletCard :stock="wallet.stock" />
+        <WalletCard :stock="wallet.balance" />
     </UserLayout>
 </template>

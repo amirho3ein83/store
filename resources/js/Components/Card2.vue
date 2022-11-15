@@ -50,8 +50,7 @@ onMounted(() => {
                     >
                 </div>
                 <div class="w-full">
-                    <InCartButton v-if="product.is_in_cart" />
-                    <AddToCartButton v-else :id="product.id" />
+                    <AddToCartButton :id="product.id" />
                 </div>
             </div>
         </div>

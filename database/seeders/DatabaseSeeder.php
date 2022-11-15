@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
 
         Wallet::create([
             'user_id' => 2,
-            'stock' => 4500,
+            'balance' => 4500,
         ]);
 
         Address::create([

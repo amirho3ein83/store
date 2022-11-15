@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->foreignIdFor(User::class)->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('stock')->default(0);
+            $table->integer('balance');
         });
     }
 

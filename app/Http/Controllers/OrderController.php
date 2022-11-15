@@ -20,6 +20,11 @@ class OrderController extends Controller
     {
         $orders = Order::with('product')->pendingPurchase()->get();
 
+        $orders->map(function ($order) {
+            $image_url = $order->product->getFirstMedia()->getUrl();
+            $order->product->image_url = $image_url;
+        });
+
         $subtotal = 0;
         foreach ($orders as $key => $order) {
             $subtotal += $order->qty * $order->product->sale_price;
@@ -38,20 +43,26 @@ class OrderController extends Controller
     public function addToCart(Request $request)
     {
         $product = Product::find($request->product_id);
-        $productFoundInCart = Order::where('product_id', $request->product_id)->pluck('id');
 
-        if ($productFoundInCart->isEmpty()) {
+        $found_in_cart = Order::isInCart(
+            $request->product_id,
+            $request->picked_color,
+            $request->picked_size,
+        )
+            ->get();
+
+        if ($found_in_cart->isNotEmpty()) {
+            $cart =  Order::isInCart()->increment('qty');
+        } else {
             $cart = Order::create([
                 'product_id' => $product->id,
-                'price' => $product->price,
+                'picked_color' => $request->picked_color,
+                'picked_size' => $request->picked_size,
                 'qty' => 1,
-                'user_id' => Auth::id(),
+                'buyer_id' => Auth::id(),
                 'status' => 'pending_purchase'
             ]);
-        } else {
-            $cart =  Order::where('product_id', $product->id)->increment('qty');
         }
-
 
         if ($cart) {
             return [
@@ -81,12 +92,11 @@ class OrderController extends Controller
     }
 
 
-    public function payment(Request $request)
+    public function registerOrder(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'recipient_name' => 'nullable',
             'mobile' => 'nullable|numeric',
-            'subtotal' => 'required|numeric',
             'address' => 'nullable',
             'card_number' => 'nullable|numeric|digits:16',
             'expirationYear' => 'nullable',
@@ -102,15 +112,19 @@ class OrderController extends Controller
         // Retrieve the validated input...
         $validated = $validator->validated();
 
+        info($request->subtotal);
 
         $delivery_cost = env('DELIRVERY_COST');
         // check subtotal for free delivery
-        if ($request->subtotal >= 500) {
-            $delivery_cost = 0;
-        }
-
+        // if ($validated['subtotal'] >= 500) {
+        //     $delivery_cost = 0;
+        // } else {
+        //     $validated['subtotal'] += $delivery_cost;
+        // }
+        info($request->subtotal);
+        dd();
         // add tax 
-        $after_tax = $request->subtotal / 100 * 9;
+        $after_tax = $validated['subtotal'] / 100 * 9;
 
 
         DB::beginTransaction();
@@ -132,28 +146,35 @@ class OrderController extends Controller
             if ($request->paymentMethod == 'wallet') {
                 $wallet = Wallet::firstWhere('user_id', Auth::id());
 
-                $stock = $wallet->stock;
-                info('walllllllet');
+                $balance = $wallet->balance;
 
-                if ($stock < $after_tax) {
+                if ($balance <= $after_tax) {
                     return redirect()->back()
                         ->withErrors('insufficient inventory')
                         ->withInput();
                 }
-                Wallet::where('user_id', Auth::id())->decrement('stock', $after_tax);
+                Wallet::where('user_id', Auth::id())->decrement('balance', $after_tax);
             }
-            $orders = Order::where('user_id', Auth::id())->get();
+            $orders = Order::where('buyer_id', Auth::id())->get();
 
+            $subtotal = 0;
             foreach ($orders as $key => $order) {
                 $product = Product::where('id', $order->product_id);
                 $product->increment('sold_qty', $order->qty);
-                $order->update(['status' => 'purchased']);
+
+                $amount_paid = ($order->qty * $product->sale_price) + (9 / 100 * ($order->qty * $product->sale_price));
+
+                $subtotal += $amount_paid;
+                $order->update(['status' => 'purchased', 'amount_paid' => $amount_paid]);
             }
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             info($e);
+            return redirect()->back()
+                ->withErrors($e->getMessage())
+                ->withInput();
         }
 
 

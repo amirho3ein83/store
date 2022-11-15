@@ -18,11 +18,11 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->decimal('price', 8, 2)->nullable();
-            $table->decimal('sale_price', 8, 2)->nullable();
+            $table->integer('price')->nullable();
+            $table->integer('sale_price')->nullable();
             $table->integer('sold_qty')->default(0);
             $table->foreignIdFor(Category::class)
-                ->nullable()->cascadeOnUpdate()->nullOnDelete();
+                ->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(Brand::class)
                 ->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->integer('stock');

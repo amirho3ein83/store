@@ -33,6 +33,7 @@ class Product extends Model implements HasMedia
         'reviews'  =>  'integer',
         'rate'  =>  'integer',
         'status'    =>  'boolean',
+        'created_at' => 'date:Y-m-d',
         'featured'  =>  'boolean'
     ];
 

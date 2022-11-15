@@ -46,16 +46,21 @@ onMounted(() => {
 
 <template>
     <Transition name="fade">
-        <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-slate-200 rounded-lg my-1 ">
+        <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-slate-100 rounded-lg my-1 ">
             <!-- <div class="w-30"> -->
             <img @click="storeProduct.showProduct(order.product.id)"
-                class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0" src="./watch.webp" alt="">
+                class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0"
+                :src="order.product.image_url" alt="">
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow ">
                 <span class="font-bold text-lg">{{ order.product.title }}</span>
                 <span class="flex flex-col">
                     <span class="text-yellow-800 text-lg">${{ order.product.sale_price }}</span>
-                    <span class="text-red-800 line-through text-xs">${{ order.product.price }}</span>
+                    <span :style="{ backgroundColor: order.picked_color }"
+                        class="block my-1 w-3 h-3 rounded-full"></span>
+                    <p class="text-xs text-slate-900  my-1">
+                        {{ order.picked_size }}
+                    </p>
                 </span>
                 <button @click="deleteOrder()"
                     class="text-start w-1/2 pt-4 font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</button>
