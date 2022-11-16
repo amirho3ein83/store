@@ -10,6 +10,7 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -42,26 +43,37 @@ class OrderController extends Controller
 
     public function addToCart(Request $request)
     {
-        $product = Product::find($request->product_id);
+        DB::beginTransaction();
 
-        $found_in_cart = Order::isInCart(
-            $request->product_id,
-            $request->picked_color,
-            $request->picked_size,
-        )
-            ->get();
+        try {
 
-        if ($found_in_cart->isNotEmpty()) {
-            $cart =  Order::isInCart()->increment('qty');
-        } else {
-            $cart = Order::create([
-                'product_id' => $product->id,
-                'picked_color' => $request->picked_color,
-                'picked_size' => $request->picked_size,
-                'qty' => 1,
-                'buyer_id' => Auth::id(),
-                'status' => 'pending_purchase'
-            ]);
+            $product = Product::find($request->product_id);
+
+            $found_in_cart = Order::isInCart(
+                $request->product_id,
+                $request->picked_color,
+                $request->picked_size,
+            )
+                ->first();
+
+            if (!empty($found_in_cart)) {
+                $cart =  Order::where('id', $found_in_cart->id)->increment('qty');
+            } else {
+                $cart = Order::create([
+                    'product_id' => $product->id,
+                    'picked_color' => $request->picked_color,
+                    'picked_size' => $request->picked_size,
+                    'qty' => 1,
+                    'buyer_id' => Auth::id(),
+                    'status' => 'pending_purchase'
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            info($e);
+            return Response::json(['error' => $e], 422);
         }
 
         if ($cart) {
@@ -71,6 +83,9 @@ class OrderController extends Controller
         }
     }
 
+    public function switchToSaveForLater()
+    {
+    }
     public function increaseOrder($id)
     {
         Order::where('product_id', $id)->pendingPurchase()->increment('qty');

@@ -132,20 +132,7 @@ onUnmounted(() => {
 
             <div id="summary" class="w-full xl:w-1/3 px-8 py-4 sm:py-10 ">
                 <div>
-                    <p class="lg:text-4xl text-3xl font-black leading-9 text-gray-800 dark:text-white">Summary
-                    </p>
 
-                    <div class="my-8">
-
-                        <div class="flex items-center justify-between pt-5">
-                            <p class="text-base leading-none text-gray-800 dark:text-white">Delivery cost</p>
-                            <p class="text-base leading-none text-gray-800 dark:text-white">$12</p>
-                        </div>
-                        <div class="flex items-center justify-between pt-5">
-                            <p class="text-base leading-none text-gray-800 dark:text-white">Tax </p>
-                            <p class="text-base leading-none text-gray-800 dark:text-white">%9</p>
-                        </div>
-                    </div>
                     <div>
                         <div class="flex w-full items-center  shadow-lg mb-4  bg-yellow-500 p-2 rounded text-white">
                             <div class="w-64">
@@ -157,10 +144,23 @@ onUnmounted(() => {
                             </div>
                         </div>
                     </div>
+                    <p class="lg:text-4xl text-3xl font-black leading-9 text-gray-800 dark:text-white">Summary
+                    </p>
+                    <div class="my-8">
+
+                        <div class="flex items-center justify-between pt-5">
+                            <p class="text-base leading-none text-gray-800 dark:text-white">Subtotal</p>
+                            <p class="text-base leading-none text-gray-800 dark:text-white">{{storeCart.subtotal}}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-5">
+                            <p class="text-base leading-none text-gray-800 dark:text-white">Tax </p>
+                            <p class="text-base leading-none text-gray-800 dark:text-white">{{Math.trunc(9 / 100 * storeCart.subtotal)}}</p>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <div class="flex items-center pb-6 justify-between lg:pt-5 pt-2">
-                        <p class="text-2xl leading-normal text-gray-800 dark:text-white">Subtotal</p>
+                        <p class="text-2xl font-bold leading-normal text-gray-800 dark:text-white">Total</p>
                         <p class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white">
                             {{ Math.trunc(storeCart.subtotal + (9 / 100 * storeCart.subtotal)) }}$
                         </p>

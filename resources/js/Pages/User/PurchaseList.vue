@@ -82,7 +82,7 @@ export default {
                     <div v-if="Object.keys(orders).length != 0 && showItem" v-for="order of orders" :key="order.id"
                         class="flex text-justify items-center p-2  bg-slate-200 rounded-lg my-1 md:w-1/3  sm:w-1/2 w-full">
                         <!-- <div class="w-30"> -->
-                        <img @click="storeProduct.showProduct(order.product.id)"
+                        <img @click="storeProduct.showProduct(order.product.slug)"
                             class="flex-shrink-0 mr-2 rounded-lg w-36 h-36 object-cover object-center sm:mb-0"
                             :src="order.product.image_url" alt="">
                         <!-- </div> -->

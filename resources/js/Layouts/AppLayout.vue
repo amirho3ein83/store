@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useCartStore } from "@/store/Cart.js";
 import Footer from "../Pages/Footer.vue";
@@ -14,15 +14,20 @@ const logout = () => {
     Inertia.post(route("logout"));
 };
 
+let props = defineProps({
+    errors: Object
+})
+
+watch(props.errors, (val) => {
+    alert(val)
+})
 // onMounted(() => {
 //     storeCart.countOrders();
 // });
 </script>
 
 <template>
-    <div
-        class="bg-gray-100  work-sans leading-normal text-base tracking-normal"
-    >
+    <div class="bg-gray-100  work-sans leading-normal text-base tracking-normal">
         <Navbar />
 
         <slot />
@@ -35,6 +40,7 @@ const logout = () => {
 i {
     font-size: 24px;
 }
+
 /* width */
 ::-webkit-scrollbar {
     width: 10px;

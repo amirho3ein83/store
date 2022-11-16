@@ -101,9 +101,11 @@ export default {
                                 {{ product.title }}
                             </h1>
                             <h1 class="text-sm font-thin">
-                                {{ product.brand.name }}
+                                Brand: <span class="text-indigo-700">{{ product.brand.name }}</span>
                             </h1>
-
+                            <h4 class="text-slate-600 font-extralight">
+                                {{ product.details }}
+                            </h4>
 
                             <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
                             <p class="text-sm font-medium text-slate-800 underline hover:no-underline dark:text-white">

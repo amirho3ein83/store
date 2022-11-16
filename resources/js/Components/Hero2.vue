@@ -9,7 +9,7 @@ const props = defineProps({
     amazing_offer: Object,
 });
 
-// let product = ref(props.amazing_offer.product)
+let product = ref(props.amazing_offer.product)
 </script>
 
 <template>
@@ -17,13 +17,13 @@ const props = defineProps({
         <div @click="storeProduct.showProduct(amazing_offer.product.id)" class="p-2 flex justify-center items-center">
             <div class="flex flex-col justify-between w-56 sm:w-72 h-72  bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
                 style="
-                    background-image: url('https://cdn2.vectorstock.com/i/1000x1000/05/26/amazing-deals-golden-label-offers-badge-vector-19610526.jpg');
+            background-image: url('https://cdn2.vectorstock.com/i/1000x1000/05/26/amazing-deals-golden-label-offers-badge-vector-19610526.jpg');
                 ">
                 <div class="flex justify-between items-center ml-4 pr-8">
                     <div
                         class="bg-red-600 w-12 h-12 shadow flex flex-col-reverse p-2 text-center font-bold text-white rounded-b-full">
 
-                        {{ amazing_offer.discount }}%
+                        {{ amazing_offer.discount_amount }}%
                     </div>
                 </div>
                 <div class="bg-gray-100 bg-opacity-95 shadow-md rounded-r-xl p-2 flex flex-col mr-4 mb-4">

@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             BrandSeeder::class,
             ProductSeeder::class,
+            AmazingOfferSeeder::class,
             PermissionSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();

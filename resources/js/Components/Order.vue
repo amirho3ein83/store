@@ -48,7 +48,7 @@ onMounted(() => {
     <Transition name="fade">
         <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-slate-100 rounded-lg my-1 ">
             <!-- <div class="w-30"> -->
-            <img @click="storeProduct.showProduct(order.product.id)"
+            <img @click="storeProduct.showProduct(order.product.slug)"
                 class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0"
                 :src="order.product.image_url" alt="">
             <!-- </div> -->

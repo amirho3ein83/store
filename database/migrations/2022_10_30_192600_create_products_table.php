@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug');
             $table->integer('price')->nullable();
             $table->integer('sale_price')->nullable();
             $table->integer('sold_qty')->default(0);
@@ -29,7 +30,8 @@ return new class extends Migration
             $table->integer('reviews')->default(0);
             $table->float('rate')->default(0);
             $table->boolean('featured')->default(0);
-            $table->mediumText('description');
+            $table->mediumText('details');
+            $table->text('description');
             $table->timestamps();
         });
     }

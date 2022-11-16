@@ -49,11 +49,12 @@ export default{
                     <div
                         class="py-2 flex touch-pan-x bg-gray-900 overflow-x-scroll items-center justify-center"
                     >
-                        <!-- <Hero2
+                    <!-- {{amazing_offers}} -->
+                        <AmazingOffer
                             v-for="amazing_offer of amazing_offers"
-                            :key="amazing_offer.product_id"
+                            :key="amazing_offer.id"
                             :amazing_offer="amazing_offer"
-                        /> -->
+                        />
                     </div>
                 </div>
 
@@ -86,21 +87,21 @@ export default{
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="./pics/sh5.webp"
+                                            src="./Products/pics/sh5.webp"
                                         />
                                     </div>
                                     <div class="w-1/2 p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="./pics/sh6.webp"
+                                            src="./Products/pics/sh6.webp"
                                         />
                                     </div>
                                     <div class="w-full p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="./pics/sh7.jpg"
+                                            src="./Products/pics/sh7.jpg"
                                         />
                                     </div>
                                 </div>
@@ -109,21 +110,21 @@ export default{
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="./pics/13.webp"
+                                            src="./Products/pics/13.webp"
                                         />
                                     </div>
                                     <div class="w-1/2 p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="./pics/sh9.avif"
+                                            src="./Products/pics/sh9.avif"
                                         />
                                     </div>
                                     <div class="w-1/2 p-1 md:p-2">
                                         <img
                                             alt="gallery"
                                             class="block object-cover object-center w-full h-full rounded-lg"
-                                            src="./pics/sh11.jpeg"
+                                            src="./Products/pics/sh11.jpeg"
                                         />
                                     </div>
                                 </div>

@@ -22,10 +22,10 @@ use Inertia\Inertia;
 */
 
 Route::redirect('/', '/home');
-Route::get('/home', [ProductController::class, 'homePage'])->name('home')->middleware('admin');
+Route::get('/home', [ProductController::class, 'homePage'])->name('home');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
-Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::middleware([
     'auth:sanctum',

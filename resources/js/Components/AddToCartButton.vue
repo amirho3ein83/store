@@ -6,7 +6,7 @@ defineProps({
 
 <template>
     <button @click="$emit('pressed')"
-        class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
-        <span>Add Cart</span>
+        class="transition ease-in duration-100 font-semibold inbuttonne-flex items-center text-sm  mb-2 md:mb-0 bg-[#ebc931] px-5 py-2 hover:shadow-lg hover:scale-105 active:scale-100 tracking-wider text-slate-700 rounded-full hover:bg-[#ebc941]">
+        <span>Add to cart</span>
     </button>
 </template>

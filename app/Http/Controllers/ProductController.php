@@ -31,8 +31,14 @@ class ProductController extends Controller
 
     public function homePage(Request $request)
     {
-        $amazing_offers = Product::inRandomOrder()->featured()->limit(10)->get();
-        return Inertia::render('Store/Products/Home', ['amazing_offers' => $amazing_offers]);
+        $amazing_offers = AmazingOffer::inRandomOrder()->with('product')->get();
+
+        $amazing_offers->map(function ($order) {
+            $image_url = $order->product->getFirstMedia()->getUrl();
+            $order->product->image_url = $image_url;
+        });
+
+        return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers]);
     }
 
     public function create(Request $request)
@@ -174,25 +180,25 @@ class ProductController extends Controller
         return Inertia::render('Admin/Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function show(Product $product)
+    public function show($slug)
     {
 
+        $product = Product::where('slug', $slug)->firstOrFail();
         // check if user already liked the product
         $liked_by_user = DB::table('liked_products')->where([['liked_by', Auth::id()], ['product_id', $product->id]])->get();
         if ($liked_by_user->isNotEmpty()) {
             $product->is_liked = true;
         }
 
+        // check if user already save product in cart
         if (Order::where([['buyer_id', Auth::id()], ['product_id', $product->id]])->exists()) {
             $product->is_in_cart = true;
         }
 
+        // load images
         $image_url = $product->getFirstMedia()->getUrl();
         $product->image_url = $image_url;
-        // info($product->image_url);
 
-        // $image_url = $product->getFirstMedia()->toHtml();
-        // $product->image_url = $image_url;
         $product->load('brand', 'availableColors', 'availableSizes');
 
 
