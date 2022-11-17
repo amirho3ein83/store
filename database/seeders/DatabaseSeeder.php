@@ -51,7 +51,8 @@ class DatabaseSeeder extends Seeder
             'balance' => 4500,
         ]);
 
-        Address::create([
+        $user = User::find(2);
+        $user->addresses()->create([
             'text' => 'S2r 1234 NW Bobcat Lane, St. Robert, MO ghgt',
             'postal_code' => '1789654-5224',
             'user_id' => 2,
@@ -61,10 +62,10 @@ class DatabaseSeeder extends Seeder
 
 
 
-        // $wanna_like = Product::inRandomOrder()->limit(5)->get();
+        $wanna_like = Product::inRandomOrder()->limit(2)->get();
 
-        // foreach ($wanna_like as $key => $product) {
-        //     $product->likedBy()->attach(1);
-        // }
+        foreach ($wanna_like as $key => $product) {
+            $product->likedBy()->attach(2);
+        }
     }
 }

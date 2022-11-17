@@ -46,27 +46,29 @@ onMounted(() => {
 
 <template>
     <Transition name="fade">
-        <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-slate-100 rounded-lg my-1 ">
+        <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-stone-50 rounded-lg my-1 ">
             <!-- <div class="w-30"> -->
             <img @click="storeProduct.showProduct(order.product.slug)"
-                class="flex-shrink-0 rounded-lg w-36 h-36 object-cover object-center sm:mb-0"
+                class="flex-shrink-0 rounded-lg w-24 h-24 object-cover object-center sm:mb-0"
                 :src="order.product.image_url" alt="">
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow ">
-                <span class="font-bold text-lg">{{ order.product.title }}</span>
+                <span class="text-sm">{{ order.product.title }}</span>
                 <span class="flex flex-col">
-                    <span class="text-yellow-800 text-lg">${{ order.product.sale_price }}</span>
-                    <span :style="{ backgroundColor: order.picked_color }"
-                        class="block my-1 w-3 h-3 rounded-full"></span>
-                    <p class="text-xs text-slate-900  my-1">
-                        {{ order.picked_size }}
-                    </p>
+                    <span class="text-yellow-900 text-sm">${{ order.product.sale_price }}</span>
+                    <div class="flex gap-x-2">
+                        <span :style="{ backgroundColor: order.picked_color }"
+                            class="block my-1 w-3 h-3 rounded-full"></span>
+                        <p class="text-xs text-slate-900  my-1">
+                            {{ order.picked_size }}
+                        </p>
+                    </div>
                 </span>
                 <button @click="deleteOrder()"
-                    class="text-start w-1/2 pt-4 font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</button>
+                    class="text-start w-1/2 pt-2 font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</button>
             </div>
 
-            <div class="flex flex-col-reverse xl:flex-row flex-1 justify-center gap-5">
+            <div class="flex flex-col-reverse  flex-1 justify-center gap-5">
                 <div class="inline-flex justify-center gap-1 ">
                     <button @click="increaseOrder()"
                         class="inline-flex h-8 w-8 items-center justify-center text-green-700">
@@ -74,11 +76,9 @@ onMounted(() => {
                     </button>
 
                     <div>
-                        <label for="PaginationPage" class="sr-only">Page</label>
-
-                        <input type="number"
-                            class="h-8 w-12 rounded  bg-cyan-50 p-0 text-center text-xs font-medium [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
-                            min="1" :value="qty" id="PaginationPage" />
+                        <div type="number"
+                            class="h-8 w-12 rounded  bg-cyan-50 p-0 text-center text-sm font-medium [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
+                            min="1">{{ qty }}</div>
                     </div>
 
                     <button :disabled="qty == 1" @click="decreaseOrder()"
@@ -88,8 +88,8 @@ onMounted(() => {
                     </button>
                 </div>
                 <div class="flex-col flex px-8">
-                    <span class="text-center font-semibold text-md">Total</span>
-                    <span class="text-center font-semibold text-fuchsia-900 text-lg">${{ order.product.sale_price * qty
+                    <span class="text-center font-semibold text-sm">Total</span>
+                    <span class="text-center font-semibold text-stone-800 text-sm">${{ order.product.sale_price * qty
                     }}</span>
                 </div>
 

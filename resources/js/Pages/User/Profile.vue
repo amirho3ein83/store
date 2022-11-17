@@ -12,8 +12,8 @@ let props = defineProps({
 import AppLayout from "@/Layouts/AppLayout.vue";
 
 export default {
-    layout: AppLayout
-}
+    layout: AppLayout,
+};
 </script>
 <template>
     <UserLayout>
@@ -30,7 +30,7 @@ export default {
                         </div>
                     </div>
 
-                    <ul class="mt-4 space-y-2">
+                    <!-- <ul class="mt-4 space-y-2">
                         <li>
                             <a
                                 href="#"
@@ -48,8 +48,9 @@ export default {
                                 </p>
                             </a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </div>
             </div>
-        </div>    </UserLayout>
+        </div>
+    </UserLayout>
 </template>

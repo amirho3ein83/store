@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentVisit;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,7 @@ class ProductController extends Controller
 
     public function homePage(Request $request)
     {
-        $amazing_offers = AmazingOffer::inRandomOrder()->with('product')->get();
+        $amazing_offers = AmazingOffer::where('expiry_date', '>', Carbon::now())->inRandomOrder()->with('product')->get();
 
         $amazing_offers->map(function ($order) {
             $image_url = $order->product->getFirstMedia()->getUrl();
@@ -198,10 +199,15 @@ class ProductController extends Controller
         // load images
         $image_url = $product->getFirstMedia()->getUrl();
         $product->image_url = $image_url;
+        
 
         $product->load('brand', 'availableColors', 'availableSizes');
 
-
-        return Inertia::render('Store/Products/Show', ['product' => $product]);
+        $similar_products = Product::where('category_id', $product->category_id)->inRandomOrder()->take(4)->get();
+        $similar_products->map(function ($product) {
+            $image_url = $product->getFirstMedia()->getUrl();
+            $product->image_url = $image_url;
+        });
+        return Inertia::render('Store/Products/Show', ['product' => $product,'similar_products' => $similar_products]);
     }
 }

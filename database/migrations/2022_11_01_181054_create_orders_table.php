@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Product;
+use App\Models\RefOrder;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -28,6 +29,7 @@ return new class extends Migration
 
             $table->foreignIdFor(Product::class);
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(RefOrder::class, 'reforder_id')->nullable()->cascadeOnUpdate()->nullOnDelete();
 
             $table->timestamps();
         });

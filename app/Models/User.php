@@ -66,9 +66,9 @@ class User extends Authenticatable
         return $this->hasOne(Wallet::class);
     }
 
-    public function address()
+    public function addresses()
     {
-        return $this->hasOne(Address::class);
+        return $this->morphMany(Address::class, 'addressable');
     }
 
     public function likedProducts()

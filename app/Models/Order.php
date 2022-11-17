@@ -12,10 +12,11 @@ class Order extends Model
 
     protected $fillable = [
         'product_id',
+        'reforder_id',
         'buyer_id',
         'picked_color',
         'picked_size',
-        'amount_paid',
+        'billing_total',
         'status',
     ];
 
@@ -61,5 +62,13 @@ class Order extends Model
     {
         return $this->hasOne(Color::class);
     }
+    
+    public function refOrder()
+    {
+        return $this->belongsTo(RefOrder::class,'reforder_id');
+    }
+
+
+
 
 }

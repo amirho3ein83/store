@@ -14,8 +14,20 @@ class Address extends Model
     protected $fillable = [
         'text',
         'recipient_name',
-        'user_id',
         'postal_code',
-        'mobile'
+        'mobile',
+        'is_default',
+        'user_id',
+        'addressable_id',
+        'addressable_type',
     ];
+
+    protected $casts = [
+        'is_default'  =>  'boolean',
+    ];
+
+    public function addressable()
+    {
+        return $this->morphTo();
+    }
 }

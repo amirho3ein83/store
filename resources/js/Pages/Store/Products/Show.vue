@@ -12,6 +12,7 @@ const storeCart = useCartStore();
 const storeProduct = useProductStore();
 
 let props = defineProps({
+    similar_products: Object,
     product: Object,
     comments: Object,
 });
@@ -41,17 +42,14 @@ const unlikeProduct = (id) => {
     storeProduct.unlikeProduct(id);
 };
 
-
 const addToCart = () => {
     storeCart.addToCart(
         props.product.id,
         picked_color.value,
-        picked_size.value,
-    )
-
+        picked_size.value
+    );
 };
 </script>
-
 
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -59,79 +57,103 @@ import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
     layout: AppLayout,
-}
+};
 </script>
 
-
 <template>
-
-
     <section>
-        <div class="relative mx-auto max-w-screen-xl xl:px-24 px-4 py-8 bg-gray-100">
+        <div
+            class="relative mx-auto max-w-screen-xl xl:px-24 px-4 py-8 bg-gray-100"
+        >
             <div class="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
                 <div class="w-full sm:1/3">
                     <div class="relative h-62 w-full mb-3">
                         <div class="absolute flex flex-col top-0 right-0 p-3">
-                            <button v-if="is_liked" @click="
-                                unlikeProduct(product.id)
-                            "
-                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1">
+                            <button
+                                v-if="is_liked"
+                                @click="unlikeProduct(product.id)"
+                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1"
+                            >
                                 <i class="bi bi-heart-fill text-red-600"></i>
                             </button>
 
-                            <button v-else @click="likeProduct(product.id)"
-                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1">
+                            <button
+                                v-else
+                                @click="likeProduct(product.id)"
+                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1"
+                            >
                                 <i class="bi bi-heart text-red-600"></i>
                             </button>
                         </div>
-                        <img :src="product.image_url" alt="Just a flower" class="w-full object-fill sm:rounded-2xl" />
-
+                        <img
+                            :src="product.image_url"
+                            alt="Just a flower"
+                            class="w-full object-fill sm:rounded-2xl"
+                        />
                     </div>
                 </div>
 
                 <div class="sticky top-2">
-                    <strong v-if="product.featured"
-                        class="rounded-full border bg-gray-800 px-3 py-1 text-xs font-medium tracking-wide text-[#e8a138]">
+                    <strong
+                        v-if="product.featured"
+                        class="rounded-full border bg-gray-800 px-3 py-1 text-xs font-medium tracking-wide text-[#e8a138]"
+                    >
                         Featured Order
                     </strong>
 
                     <div class="mt-8 flex justify-between">
                         <div class="max-w-[35ch]">
-                            <h1 class="text-2xl font-bold">
+                            <h1 class="text-2xl font-bold pb-2">
                                 {{ product.title }}
                             </h1>
                             <h1 class="text-sm font-thin">
-                                Brand: <span class="text-indigo-700">{{ product.brand.name }}</span>
+                                Brand:
+                                <span class="text-indigo-700">{{
+                                    product.brand.name
+                                }}</span>
                             </h1>
                             <h4 class="text-slate-600 font-extralight">
                                 {{ product.details }}
                             </h4>
 
-                            <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                            <p class="text-sm font-medium text-slate-800 underline hover:no-underline dark:text-white">
-                                {{
-                                        product.reviews
-                                }}
+                            <span
+                                class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"
+                            ></span>
+                            <p
+                                class="text-sm font-medium text-slate-800 underline hover:no-underline dark:text-white"
+                            >
+                                {{ product.reviews }}
                                 reviews
                             </p>
                             <div class="mt-2 -ml-0.5 flex">
-                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20" fill="currentColor">
+                                <svg
+                                    class="h-5 w-5 text-yellow-400"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
                                     <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                    />
                                 </svg>
 
-                                <p class=" text-sm font-bold text-cyan-700 dark:text-white">
+                                <p
+                                    class="text-sm font-bold text-cyan-700 dark:text-white"
+                                >
                                     {{ product.rate }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center gap-2">
-                            <div class="text-xl text-yellow-600 font-semibold mt-1">
+                            <div
+                                class="text-xl text-yellow-600 font-semibold mt-1"
+                            >
                                 $ {{ product.sale_price }}
                             </div>
-                            <span class="text-red-400 line-through text-sm">$ {{ product.price }}</span>
+                            <span class="text-red-400 line-through text-sm"
+                                >$ {{ product.price }}</span
+                            >
                         </div>
                     </div>
 
@@ -144,17 +166,27 @@ export default {
 
                         <div class="flow-root">
                             <div class="-m-0.5 flex flex-wrap">
-                                <ul class="flex flex-row justify-center items-center space-x-2">
-
-                                    <button v-for="color of product.available_colors" @click="
-                                        chooseColor(
-                                            color.name
-                                        )
-                                    ">
-                                        <span :class="{ 'border-blue-600': picked_color == color.name }"
-                                            class="block p-1 border-2 hover:border-blue-600 rounded-full transition ease-in duration-300">
-                                            <a :style="{ backgroundColor: color.name }"
-                                                class="block w-3 h-3 rounded-full"></a>
+                                <ul
+                                    class="flex flex-row justify-center items-center space-x-2"
+                                >
+                                    <button
+                                        v-for="color of product.available_colors"
+                                        :key="color.id"
+                                        @click="chooseColor(color.name)"
+                                    >
+                                        <span
+                                            :class="{
+                                                'border-blue-600':
+                                                    picked_color == color.name,
+                                            }"
+                                            class="block p-1 border-2 hover:border-blue-600 rounded-full transition ease-in duration-300"
+                                        >
+                                            <a
+                                                :style="{
+                                                    backgroundColor: color.name,
+                                                }"
+                                                class="block w-3 h-3 rounded-full"
+                                            ></a>
                                         </span>
                                     </button>
                                 </ul>
@@ -167,28 +199,87 @@ export default {
 
                         <div class="flow-root">
                             <div class="-m-0.5 flex flex-wrap">
-                                <SizeRadio v-for="size of product.available_sizes" :size="size.name" :chosen="
-                                    picked_size == size.name
-                                " @selected="chooseSize(size.name)" />
+                                <SizeRadio
+                                    v-for="size of product.available_sizes"
+                                    :key="size.id"
+                                    :size="size.name"
+                                    :chosen="picked_size == size.name"
+                                    @selected="chooseSize(size.name)"
+                                />
                             </div>
                         </div>
                     </fieldset>
 
                     <div class="mt-8 flex">
-                        <div class="flex space-x-2 text-sm font-medium justify-start">
-                            <Link href="/login" v-if="!$page.props.auth"
-                                class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600">
-                            Log in to access your cart
+                        <div
+                            class="flex space-x-2 text-sm font-medium justify-start"
+                        >
+                            <Link
+                                href="/login"
+                                v-if="!$page.props.auth"
+                                class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600"
+                            >
+                                Log in to access your cart
                             </Link>
-                            <AddToCartButton v-else :id="product.id" @pressed="addToCart()" />
+                            <AddToCartButton
+                                v-else
+                                :id="product.id"
+                                @pressed="addToCart()"
+                            />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <h3>similar</h3>
+    <section class="text-gray-600 body-font">
+        <div class="container px-5 py-12 mx-auto">
+            <div class="flex flex-wrap -m-4">
+                <div
+                    v-for="product of similar_products"
+                    :key="product.id"
+                    @click="storeProduct.showProduct(product.slug)"
+                    class="xl:w-1/4 md:w-1/2 p-4"
+                >
+                    <img
+                        alt="image"
+                        :src="product.image_url"
+                        class="w-full object-cover"
+                    />
+                    <div class="mt-2 space-y-3">
+                        <div class="flex justify-between text-sm truncate">
+                            <h3>{{ product.title }}</h3>
 
+                            <p
+                                class="ml-2 text-sm font-bold text-yellow-700 dark:text-white"
+                            >
+                                {{ product.rate
+                                }}<i
+                                    class="bi bi-star-fill text-yellow-500"
+                                ></i>
+                            </p>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <div class="flex gap-1">
+                                <span
+                                    :style="{ backgroundColor: color.name }"
+                                    v-for="color of product.available_colors"
+                                    :key="color.id"
+                                    class="block h-3 w-3 shadow rounded-full"
+                                >
+                                </span>
+                            </div>
+                            <p class="text-yellow-800">
+                                ${{ product.sale_price }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+    </section>
 </template>
 <style scoped>
 .picked-color {
