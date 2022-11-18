@@ -15,4 +15,8 @@ class Wallet extends Model
         'user_id',
         'balance'
     ];
+
+    protected $casts = [
+        'balance'  =>  'integer',
+    ];
 }

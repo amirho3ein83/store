@@ -17,11 +17,11 @@ class AmazingOfferSeeder extends Seeder
      */
     public function run()
     {
-        $featured_products = Product::inRandomOrder()->featured()->get();
+        $featured_products = Product::take(5)->featured()->get();
 
         foreach ($featured_products as $key => $product) {
 
-            $discount_percent = (int)(($product->sale_price  / $product->price) * 10);
+            $discount_percent = (int)($product->sale_price  / $product->price * 10);
 
             AmazingOffer::create([
                 'product_id' => $product->id,

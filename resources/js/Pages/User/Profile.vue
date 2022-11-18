@@ -1,11 +1,74 @@
 <script setup>
 import UserLayout from "@/Layouts/UserLayout.vue";
 import WalletCard from "@/Components/WalletCard.vue";
-
-// const previewImage = ref(null);
+import { useForm } from "@inertiajs/inertia-vue3";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { ref, watch } from "vue";
 
 let props = defineProps({
     user: Object,
+});
+
+const previewImage = ref(props.user.image_url);
+const imageUrl = ref(null);
+const photoInput = ref(null);
+
+const form = useForm({
+    name: props.user.name,
+    email: props.user.email,
+    mobile: props.user.mobile,
+    profile_photo: null,
+});
+
+const updateInfo = () => {
+    // let data = new FormData();
+
+    // data.append("profile_photo", form.profile_photo);
+    // data.append("name", form.name);
+    // data.append("email", form.email);
+    // data.append("mobile", form.mobile);
+    // axios
+    //     .put(route("user.updateInfo"), data)
+    //     .then(() => {
+    //         alert("done");
+    //     })
+    //     .catch((error) => {
+    //         alert("shit");
+    //     });
+
+    form.put(route("user.updateInfo"), {
+        onSuccess: () => {
+            alert("updated successfully");
+            // form.reset();
+            // previewImage.value = null
+        },
+        onError: (error) => {
+            console.log("failed:" + error);
+            // form.reset();
+        },
+    });
+};
+
+const pickFile = (event) => {
+    console.log(event);
+    if (event.target.files.length == 0) {
+        return;
+    }
+    previewImage.value = event.target.files[0];
+    form.profile_photo = event.target.files[0];
+};
+
+watch(previewImage, (previewImage) => {
+    let reader = new FileReader();
+
+    reader.readAsDataURL(previewImage);
+
+    reader.addEventListener("load", () => {
+        imageUrl.value = reader.result;
+    });
 });
 </script>
 <script>
@@ -17,40 +80,90 @@ export default {
 </script>
 <template>
     <UserLayout>
-        <div class="mt-20 text-center border-b pb-12">
-            <div class="flex align-baseline content-center justify-center">
-                <div
-                    class="self-center rounded-xl h-1/2 w-[370px] border border-gray-700 bg-gray-800 p-4"
-                >
-                    <div class="flex items-center">
-                        <div class="ml-3">
-                            <h3 class="text-lg font-medium text-white">
-                                address
-                            </h3>
+        <section
+            class="lg:w-1/3 md:w-1/2 w-full mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
+        >
+            <div class="mt-6 w-fit mx-auto">
+                <img
+                    v-if="previewImage == null"
+                    src="https://as1.ftcdn.net/v2/jpg/02/10/49/86/1000_F_210498655_ywivjjUe6cgyt52n4BxktRgDCfFg8lKx.jpg"
+                    class="rounded-full w-36 h-36 object-cover"
+                    alt="profile picture"
+                    srcset=""
+                />
+                <img
+                    v-else
+                    :src="imageUrl"
+                    class="rounded-full w-36 h-36 object-cover"
+                    alt="profile picture"
+                    srcset=""
+                />
+            </div>
+
+            <div class="my-5">
+                <h2 class="text-white font-bold text-2xl tracking-wide">
+                    {{ user.name }}
+                </h2>
+            </div>
+            <form
+                @submit.prevent="updateInfo()"
+                class="space-y-4"
+                enctype="multipart/form-data"
+            >
+                <div class="px-5 pb-5">
+                    <TextInput
+                        id="image"
+                        type="file"
+                        ref="photoInput"
+                        @change="pickFile"
+                        class="mt-1 block w-full"
+                        accept="image/png, image/jpeg, image/jpg"
+                    />
+                    <InputError class="mt-2" :message="form.errors.image" />
+
+                    <input
+                        v-model="form.name"
+                        type="text"
+                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
+                    />
+
+                    <input
+                        v-model="form.email"
+                        type="email"
+                        placeholder="email"
+                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
+                    />
+                    <div class="flex">
+                        <div class="flex-grow w-1/2">
+                            <input
+                                type="text"
+                                v-model="form.mobile"
+                                placeholder="mobile"
+                                class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
+                            />
                         </div>
                     </div>
-
-                    <!-- <ul class="mt-4 space-y-2">
-                        <li>
-                            <a
-                                href="#"
-                                class="block h-full rounded-lg border border-gray-700 p-4 hover:border-pink-600"
-                            >
-                                <strong class="font-medium text-white"
-                                    >recipient :
-                                    {{ address.recipient_name }}</strong
-                                >
-
-                                <p
-                                    class="mt-1 text-xs font-medium text-gray-300"
-                                >
-                                    {{ address.text }}
-                                </p>
-                            </a>
-                        </li>
-                    </ul> -->
+                    <div class="flex justify-end mt-4">
+                        <PrimaryButton
+                            class="ml-4 bg-stone-600"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            update
+                        </PrimaryButton>
+                    </div>
                 </div>
-            </div>
-        </div>
+                <div
+                    v-for="error of form.errors"
+                    :key="error"
+                    class="shadow w-2/3 p-2 flex justify-center rounded-lg"
+                >
+                    <div
+                        class="bg-red-500 animate-pulse inline-block rounded-lg p-1 mr-1"
+                    ></div>
+                    <p class="p-1 text-stone-50">{{ error }}!</p>
+                </div>
+            </form>
+        </section>
     </UserLayout>
 </template>

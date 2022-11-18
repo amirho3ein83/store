@@ -48,6 +48,8 @@ Route::middleware([
     })->name('contactus');
 
     Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::put('/user/update-info', [UserController::class, 'updateInfo'])->name('user.updateInfo');
+
     Route::get('/user/address', [UserController::class, 'address'])->name('user.address');
     Route::get('/user/profile/wallet', [UserController::class, 'wallet'])->name('user.wallet');
     Route::get('/user/purchases', [UserController::class, 'purchaseList'])->name('user.purchases');
