@@ -32,7 +32,7 @@ class ProductController extends Controller
 
     public function homePage(Request $request)
     {
-        $amazing_offers = AmazingOffer::where('expiry_date', '>', Carbon::now())->inRandomOrder()->with('product')->get();
+        $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
 
         $amazing_offers->map(function ($order) {
             $image_url = $order->product->getFirstMedia()->getUrl();

@@ -17,7 +17,7 @@ class AmazingOfferSeeder extends Seeder
      */
     public function run()
     {
-        $featured_products = Product::inRandomOrder()->featured()->take(5)->get();
+        $featured_products = Product::inRandomOrder()->featured()->get();
 
         foreach ($featured_products as $key => $product) {
 
