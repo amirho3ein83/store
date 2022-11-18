@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -16,7 +17,12 @@ class UserController extends Controller
     public function updateInfo(Request $request)
     {
 
-        // dd($request->profile_photo);
+        if ($request->mobile == null && is_null($request->email)) {
+            // return response()->json(['errors' => 'ssssssssssssssss']);
+            // return redirect()->back()->with('error', 'keep email or mobile');
+            // return Response::json(['error' => 'keep email or mobile'], 422);
+            return null;
+        }
 
         $validate_mobile = $request->mobile != Auth::user()->mobile ? ['unique:users,mobile', 'regex:/(09)[0-9]{9}/'] : 'nullable';
         $validate_email = $request->email != Auth::user()->email ? ['email', 'max:255', 'unique:users,email'] : 'nullable';
@@ -28,7 +34,7 @@ class UserController extends Controller
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
         ], [
-            'profile_photo.max' => 'iamge volume is too much!',
+            'profile_photo.max' => 'Image volume is too much!',
 
         ])->validate();
 
@@ -41,19 +47,46 @@ class UserController extends Controller
             'name' => $request->name
         ]);
 
-        if ($request->profile_photo ) {
-            info($request->profile_photo);
-            // $user->addMediaFromRequest($request->profile_photo)
-            //     ->toMediaCollection();
+        if ($request->profile_photo) {
+
+            if ($user->hasMedia()) {
+
+                $mediaItems = $user->getMedia();
+                $mediaItems[0]->delete();
+
+                $user->addMediaFromRequest('profile_photo')
+                    ->toMediaCollection();
+            } else {
+                $user->addMediaFromRequest('profile_photo')
+                    ->toMediaCollection();
+            }
+
         }
     }
 
     public function profile()
     {
+        $user = User::find(Auth::id());
+
+        if ($user->hasMedia()) {
+            $image_url = $user->getFirstMedia()->getUrl();
+            $image_url = $image_url;
+        } else {
+            $image_url = null;
+        }
+
+        try {
+            $user = User::find(Auth::id());
+            $image_url = $user->getFirstMedia()->getUrl();
+            $user->image_url = $image_url;
+        } catch (\Throwable $th) {
+            $user->image_url = null;
+        }
+
         $address = Auth::user()->address;
         return Inertia::render(
             'User/Profile',
-            ['address' => $address]
+            ['address' => $address, 'image_url' => $image_url]
         );
     }
 

@@ -79,6 +79,12 @@ export default {
                             </div>
                         </div>
                     </div>
+                    <div class="flex mx-auto justify-center" v-else>
+                    <img
+                        src="https://cdn.dribbble.com/users/760295/screenshots/4433975/media/03494b209a1511a61868ced337b97931.png?compress=1&resize=400x300"
+                        alt=""
+                    />
+                </div>
                 </div>
             </div>
         </section>

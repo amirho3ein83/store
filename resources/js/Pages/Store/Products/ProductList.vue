@@ -1,5 +1,5 @@
 <script setup>
-import { onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Card2 from "@/Components/Card2.vue";
@@ -58,6 +58,10 @@ watch(
 onUnmounted(() => {
     localStorage.removeItem("search");
     localStorage.removeItem("order_by");
+})
+onMounted(() => {
+    this.$alert("Hello Vue Simple Alert.");
+
 })
 </script>
 <script>

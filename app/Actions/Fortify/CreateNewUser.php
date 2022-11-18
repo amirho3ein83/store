@@ -37,7 +37,7 @@ class CreateNewUser implements CreatesNewUsers
         $use_email = false;
         if (preg_match("/[-0-9a-zA-Z.+]+@[-0-9a-zA-Z.+]+.[a-zA-Z]{2,4}/", $input['mobile'])) {
             unset($userValidation['mobile']);
-            $userValidation['email'] =  ['required', 'email', 'max:255', 'unique:users,email'];
+            $userValidation['mobile'] =  ['required', 'email', 'max:255', 'unique:users,email'];
             $use_email = true;
         }
 

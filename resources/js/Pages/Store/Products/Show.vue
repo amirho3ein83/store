@@ -61,12 +61,13 @@ export default {
 </script>
 
 <template>
+
     <section>
         <div
             class="relative mx-auto max-w-screen-xl xl:px-24 px-4 py-8 bg-gray-100"
         >
             <div class="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
-                <div class="w-full sm:1/3">
+                <div class="w-full ">
                     <div class="relative h-62 w-full mb-3">
                         <div class="absolute flex flex-col top-0 right-0 p-3">
                             <button
@@ -88,7 +89,7 @@ export default {
                         <img
                             :src="product.image_url"
                             alt="Just a flower"
-                            class="w-full object-fill sm:rounded-2xl"
+                            class="object-contain h-full w-full sm:rounded-2xl"
                         />
                     </div>
                 </div>

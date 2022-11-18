@@ -57,7 +57,7 @@ class ProductSeeder extends Seeder
             $product =  Product::factory()->create();
 
             //set image
-            $pic = rand(1, 4);
+            $pic = rand(1, 17);
             File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
 
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))

@@ -10,11 +10,13 @@ import { ref, watch } from "vue";
 
 let props = defineProps({
     user: Object,
+    image_url: String,
 });
 
-const previewImage = ref(props.user.image_url);
+const previewImage = ref(props.image_url);
 const imageUrl = ref(null);
 const photoInput = ref(null);
+const profile_photo = ref(null);
 
 const form = useForm({
     name: props.user.name,
@@ -24,12 +26,27 @@ const form = useForm({
 });
 
 const updateInfo = () => {
+    // const config = {
+    //     headers: {
+    //         "content-type": "multipart/form-data",
+    //     },
+    // };
     // let data = new FormData();
-
-    // data.append("profile_photo", form.profile_photo);
+    // data.append("profile_photo", profile_photo.value);
     // data.append("name", form.name);
     // data.append("email", form.email);
     // data.append("mobile", form.mobile);
+    // axios
+    //     .put(route("user.updateInfo"), data, config)
+    //     .then((res) => {
+    //         console.log(res);
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     });
+
+    // let data = new FormData();
+
     // axios
     //     .put(route("user.updateInfo"), data)
     //     .then(() => {
@@ -39,17 +56,46 @@ const updateInfo = () => {
     //         alert("shit");
     //     });
 
-    form.put(route("user.updateInfo"), {
-        onSuccess: () => {
-            alert("updated successfully");
-            // form.reset();
-            // previewImage.value = null
+    // form.put(
+    //     route("user.updateInfo"),
+    //     {
+
+    //         onSuccess: () => {
+    //             alert("updated successfully");
+    //             // form.reset();
+    //             // previewImage.value = null
+    //         },
+    //         onError: (error) => {
+    //             console.log("failed:" + error);
+    //             // form.reset();
+    //         },
+    //     }
+    // );
+
+    Inertia.post(
+        route("user.updateInfo"),
+        {
+            _method: "put",
+            name: form.name,
+            email: form.email,
+            mobile: form.mobile,
+            profile_photo: form.profile_photo,
         },
-        onError: (error) => {
-            console.log("failed:" + error);
-            // form.reset();
-        },
-    });
+        {
+            preserveScroll: true,
+            forceFormData: true,
+
+            onSuccess: (res) => {
+                alert("success");
+            },
+            onFinish: () => {
+                console.log("finish");
+            },
+            onError:(err)=>{
+                alert(err)
+            }
+        }
+    );
 };
 
 const pickFile = (event) => {
@@ -58,7 +104,7 @@ const pickFile = (event) => {
         return;
     }
     previewImage.value = event.target.files[0];
-    form.profile_photo = event.target.files[0];
+    // form.profile_photo = event.target.files[0];
 };
 
 watch(previewImage, (previewImage) => {
@@ -73,6 +119,7 @@ watch(previewImage, (previewImage) => {
 </script>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
     layout: AppLayout,
@@ -81,12 +128,19 @@ export default {
 <template>
     <UserLayout>
         <section
-            class="lg:w-1/3 md:w-1/2 w-full mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
+            class="lg:w-2/6 md:w-2/3 w-full mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
         >
             <div class="mt-6 w-fit mx-auto">
                 <img
                     v-if="previewImage == null"
                     src="https://as1.ftcdn.net/v2/jpg/02/10/49/86/1000_F_210498655_ywivjjUe6cgyt52n4BxktRgDCfFg8lKx.jpg"
+                    class="rounded-full w-36 h-36 object-cover"
+                    alt="profile picture"
+                    srcset=""
+                />
+                <img
+                    v-else-if="!imageUrl"
+                    :src="previewImage"
                     class="rounded-full w-36 h-36 object-cover"
                     alt="profile picture"
                     srcset=""
@@ -112,6 +166,7 @@ export default {
             >
                 <div class="px-5 pb-5">
                     <TextInput
+                        @input="form.profile_photo = $event.target.files[0]"
                         id="image"
                         type="file"
                         ref="photoInput"
@@ -124,13 +179,14 @@ export default {
                     <input
                         v-model="form.name"
                         type="text"
+                        placeholder="Name"
                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                     />
 
                     <input
                         v-model="form.email"
                         type="email"
-                        placeholder="email"
+                        placeholder="Email"
                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                     />
                     <div class="flex">
@@ -138,7 +194,8 @@ export default {
                             <input
                                 type="text"
                                 v-model="form.mobile"
-                                placeholder="mobile"
+                                autocomplete
+                                placeholder="Mobile"
                                 class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                             />
                         </div>
@@ -153,6 +210,13 @@ export default {
                         </PrimaryButton>
                     </div>
                 </div>
+                <progress
+                    v-if="form.progress"
+                    :value="form.progress.percentage"
+                    max="100"
+                >
+                    {{ form.progress.percentage }}%
+                </progress>
                 <div
                     v-for="error of form.errors"
                     :key="error"

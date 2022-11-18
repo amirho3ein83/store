@@ -33,7 +33,7 @@ onMounted(() => {
             <img
                 alt="image"
                 :src="product.image_url"
-                class="w-full object-cover"
+                class="w-full h-full object-cover"
             />
             <div class="mt-2 space-y-3">
                 <div class="flex justify-between text-sm truncate">
