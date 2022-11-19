@@ -64,10 +64,10 @@ export default {
 
     <section>
         <div
-            class="relative mx-auto max-w-screen-xl xl:px-24 px-4 py-8 bg-gray-100"
+            class="px-8 relative mx-auto max-w-screen-xl xl:px-24 sm:container py-8 bg-gray-100"
         >
-            <div class="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
-                <div class="w-full ">
+            <div class="flex flex-col items-start gap-8 sm:flex-row">
+                <div class=" md:w-1/2 mx-md:auto  w-full">
                     <div class="relative h-62 w-full mb-3">
                         <div class="absolute flex flex-col top-0 right-0 p-3">
                             <button
@@ -94,7 +94,7 @@ export default {
                     </div>
                 </div>
 
-                <div class="sticky top-2">
+                <div class="sticky top-2 md:w-1/2 w-full">
                     <strong
                         v-if="product.featured"
                         class="rounded-full border bg-gray-800 px-3 py-1 text-xs font-medium tracking-wide text-[#e8a138]"
@@ -233,7 +233,7 @@ export default {
             </div>
         </div>
     </section>
-    <h3>similar</h3>
+    <!-- <h3>similar</h3>
     <section class="text-gray-600 body-font">
         <div class="container px-5 py-12 mx-auto">
             <div class="flex flex-wrap -m-4">
@@ -280,7 +280,7 @@ export default {
 
             </div>
         </div>
-    </section>
+    </section> -->
 </template>
 <style scoped>
 .picked-color {

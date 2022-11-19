@@ -81,9 +81,9 @@ class OrderController extends Controller
         }
 
         if ($cart) {
-            return [
+            return response()->json([
                 'message' => 'Order registered',
-            ];
+            ]);
         }
     }
 
@@ -148,7 +148,6 @@ class OrderController extends Controller
                 }])->first();
 
                 $user_default_address = $user_default_address->addresses;
-
             } else if ($request->save_address_as_default) {
 
                 $user_default_address =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
@@ -164,7 +163,6 @@ class OrderController extends Controller
                     'mobile' => $request->mobile,
                     'is_default' => true,
                 ]);
-
             }
             //  else {
             //     $reforder->address()->create([

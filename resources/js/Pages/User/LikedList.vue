@@ -17,13 +17,13 @@ export default {
     <UserLayout>
         <section class="text-gray-600 body-font">
             <div class="flex flex-wrap -m-4">
-                <div v-if="Object.keys(liked_products).length != 0">
+                <template v-if="Object.keys(liked_products).length != 0">
                     <ProductCard4
                         v-for="product of liked_products"
                         :key="product.id"
                         :product="product"
                     />
-                </div>
+                </template>
                 <div class="flex mx-auto justify-center" v-else>
                     <img
                         src="https://cdn.dribbble.com/users/760295/screenshots/4433975/media/03494b209a1511a61868ced337b97931.png?compress=1&resize=400x300"

@@ -28,7 +28,7 @@ onMounted(() => {
             v-if="showItem"
             class="flex lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2 px-1 flex-col justify-center items-center max-w-sm mx-auto my-2"
         >
-            <img @click="storeProduct.showProduct(product.slug)" src="./watch.webp" alt="" />
+            <img @click="storeProduct.showProduct(product.slug)" :src="product.image_url" alt="" />
             <div
                 class=" bg-white w-full shadow-lg rounded-lg overflow-hidden"
             >

@@ -24,40 +24,15 @@ class ProductSeeder extends Seeder
     public function run()
     {
 
+        File::deleteDirectory(public_path('storage/images'));
 
-        // $folders =   Storage::allFiles('/home/amirhossein/Documents/GitHub/store/public');
-        // info($folders);
-        // dd();
-        // foreach ($folders as $key => $folder) {
-        //     Storage::deleteDirectory($folder);
-        // }
-        // $foldersForDelete = array_filter(glob(storage_path() . '/app/public/*'), function ($file) {
-        //     return false === strpos($file, '.gitignore');
-        // });
-
-        // $directories = array_map('basename', File::directories($path));
-
-        // foreach ($foldersForDelete as $key => $folder) {
-        //     info($folder);
-        //     Storage::deleteDirectory(public_path() . '/storage/*');
-        // }
-        // dd();
-
-        // $filesForDelete = array_filter(glob(storage_path() . '/app/public/*'), function ($file) {
-        //     return false === strpos($file, '.gitignore');
-        // });
-        // foreach ($filesForDelete as $key => $file) {
-        //     // info($file);
-        //     Storage::deleteDirectory($file);
-        // }
-        // dd();
 
         for ($i = 1; $i < 25; $i++) {
 
             $product =  Product::factory()->create();
 
             //set image
-            $pic = rand(1, 17);
+            $pic = rand(1, 11);
             File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
 
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))

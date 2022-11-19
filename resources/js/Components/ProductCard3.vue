@@ -28,7 +28,7 @@ onMounted(() => {
         <div
             v-if="showItem"
             @click="storeProduct.showProduct(product.slug)"
-            class="block px-4 lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2"
+            class="block px-4 lg:w-1/6 my-2 md:w-1/4 sm:w-1/3 w-1/2"
         >
             <img
                 alt="image"

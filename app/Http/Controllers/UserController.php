@@ -128,10 +128,18 @@ class UserController extends Controller
 
     public function likedProducts()
     {
+
+        $liked_products = Auth::user()->likedProducts;
+
+        $liked_products->map(function ($product) {
+            $image_url = $product->getFirstMedia()->getUrl();
+            $product->image_url = $image_url;
+        });
+
         return Inertia::render(
             'User/LikedList',
             [
-                'liked_products' => Auth::user()->likedProducts,
+                'liked_products' => $liked_products,
             ]
         );
     }

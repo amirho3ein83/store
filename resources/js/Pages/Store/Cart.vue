@@ -44,6 +44,7 @@ const pay = () => {
         onSuccess: () => {
             show_loading_modal.value = false;
             show_success_modal.value = true;
+            storeCart.count_cart = 0;
         },
         onError: (e) => {
             show_loading_modal.value = false;
@@ -199,7 +200,7 @@ onMounted(() => {
                                     <input
                                         v-model="form.use_default_address"
                                         type="checkbox"
-                                        class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md "
+                                        class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
                                     /><label
                                         for="use_default_address"
                                         class="block ml-2 text-sm text-gray-900"
