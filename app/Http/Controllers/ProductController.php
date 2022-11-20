@@ -58,11 +58,14 @@ class ProductController extends Controller
             ['categories' => $categories]
         );
     }
+
     public function productList($id, Request $request)
     {
 
         $products = Product::query()
-            ->where('category_id', $id)
+            ->whereHas('categories', function ($query) use ($id) {
+                $query->where('categories.id', $id);
+            })
             ->when($request->search, function ($query, $search) {
                 $query->where('slug', 'like', "%{$search}%");
             })
@@ -88,7 +91,7 @@ class ProductController extends Controller
                         break;
                 }
             })
-            ->with('brand', 'availableColors')
+            ->with('brand')
             ->simplePaginate(15)
             ->withQueryString();
 
@@ -185,6 +188,9 @@ class ProductController extends Controller
     {
 
         $product = Product::where('slug', $slug)->firstOrFail();
+
+        $product->increment('reviews');
+
         // check if user already liked the product
         $liked_by_user = DB::table('liked_products')->where([['liked_by', Auth::id()], ['product_id', $product->id]])->get();
         if ($liked_by_user->isNotEmpty()) {
@@ -192,22 +198,24 @@ class ProductController extends Controller
         }
 
         // check if user already save product in cart
-        if (Order::where([['buyer_id', Auth::id()], ['product_id', $product->id]])->exists()) {
-            $product->is_in_cart = true;
-        }
+        // if (Order::where([['buyer_id', Auth::id()], ['product_id', $product->id]])->exists()) {
+        //     $product->is_in_cart = true;
+        // }
 
         // load images
         $image_url = $product->getFirstMedia()->getUrl();
         $product->image_url = $image_url;
-        
 
-        $product->load('brand', 'availableColors', 'availableSizes');
 
-        $similar_products = Product::where('category_id', $product->category_id)->inRandomOrder()->take(4)->get();
-        $similar_products->map(function ($product) {
-            $image_url = $product->getFirstMedia()->getUrl();
-            $product->image_url = $image_url;
-        });
-        return Inertia::render('Store/Products/Show', ['product' => $product,'similar_products' => $similar_products]);
+        // $product->load('brand', 'availableColors', 'availableSizes');
+        $product->load('brand');
+
+        // $similar_products = Product::where('category_id', $product->category_id)->inRandomOrder()->take(4)->get();
+        // $similar_products->map(function ($product) {
+        //     $image_url = $product->getFirstMedia()->getUrl();
+        //     $product->image_url = $image_url;
+        // });
+
+        return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }

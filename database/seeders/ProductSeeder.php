@@ -31,6 +31,8 @@ class ProductSeeder extends Seeder
 
             $product =  Product::factory()->create();
 
+            $product->categories()->attach(rand(1, 10));
+
             //set image
             $pic = rand(1, 11);
             File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
@@ -38,18 +40,15 @@ class ProductSeeder extends Seeder
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
                 ->toMediaCollection();
 
-            $colors = Color::inRandomOrder()->take(rand(2, 5))->get();
-            foreach ($colors as $key => $color) {
-                $product->availableColors()->attach($color->id);
-            }
+            // $colors = Color::inRandomOrder()->take(rand(2, 5))->get();
+            // foreach ($colors as $key => $color) {
+            //     $product->availableColors()->attach($color->id);
+            // }
 
-            $sizes = Size::inRandomOrder()->take(rand(3, 5))->get();
-            foreach ($sizes as $key => $size) {
-                $product->availableSizes()->attach($size->id);
-            }
-
-            for ($f = 1; $f < 5; $f++) {
-            }
+            // $sizes = Size::inRandomOrder()->take(rand(3, 5))->get();
+            // foreach ($sizes as $key => $size) {
+            //     $product->availableSizes()->attach($size->id);
+            // }
 
             Comment::factory()->create([
                 'product_id' => $i

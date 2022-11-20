@@ -139,9 +139,9 @@ class OrderController extends Controller
 
 
 
-        DB::beginTransaction();
 
         try {
+            DB::beginTransaction();
             if ($request->use_default_address) {
 
                 $user_default_address =  User::whereId(Auth::id())->with(['addresses' => function ($query) {

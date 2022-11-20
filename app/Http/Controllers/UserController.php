@@ -60,7 +60,6 @@ class UserController extends Controller
                 $user->addMediaFromRequest('profile_photo')
                     ->toMediaCollection();
             }
-
         }
     }
 

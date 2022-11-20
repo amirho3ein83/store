@@ -25,7 +25,7 @@ export default{
         <section class="bg-white">
             <div class="relative overflow-hidden bg-no-repeat bg-cover" style="
       background-position: 50%;
-      background-image: url('https://www.grandhotelgardone.it/images/slide/shopping/slides_shopping.jpg');
+      background-image: url('https://cdn.searchenginejournal.com/wp-content/uploads/2022/07/shopify-store-examples-62d01563935c4-sej-1520x800.png');
       height: 500px;
     ">
                 <div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"

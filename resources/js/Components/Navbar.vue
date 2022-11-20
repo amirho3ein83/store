@@ -8,9 +8,7 @@ const storeCart = useCartStore();
 </script>
 
 <template>
-    <div class="flex flex-wrap place-items-center">
-        <section class="relative mx-auto">
-            <!-- navbar -->
+
             <nav class="flex justify-between bg-gray-900 text-white w-screen">
                 <div
                     class="px-5 xl:px-12 py-2 flex w-full items-center justify-between"
@@ -184,8 +182,7 @@ const storeCart = useCartStore();
                     </div>
                 </div>
             </nav>
-        </section>
-    </div>
+
 </template>
 <style>
 i {

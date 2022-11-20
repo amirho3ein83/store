@@ -24,48 +24,33 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SizeSeeder::class,
             ColorSeeder::class,
+            MaterialSeeder::class,
+            CriticismSeeder::class,
             CategorySeeder::class,
             BrandSeeder::class,
             ProductSeeder::class,
             AmazingOfferSeeder::class,
             PermissionSeeder::class
         ]);
-        // \App\Models\User::factory(10)->create();
 
         $admin = User::create([
             'email' => 'admin@admin.com',
-            'password' => Hash::make('11111111'),
+            'password' => Hash::make('111111'),
             'name' => 'Admin',
         ]);
 
         $admin->assignRole('admin');
 
-        User::create([
-            'email' => 'amir@amir.com',
-            'password' => Hash::make('11111111'),
-            'name' => 'Amirhossein',
+        $user = User::create([
+            'email' => 'demo@demo.com',
+            'password' => Hash::make('111111'),
+            'name' => 'Demo',
         ]);
-
-        Wallet::create([
-            'user_id' => 2,
-            'balance' => 4500,
-        ]);
-
-        $user = User::find(2);
-        $user->addresses()->create([
-            'text' => 'S2r 1234 NW Bobcat Lane, St. Robert, MO ghgt',
-            'postal_code' => '1789654-5224',
-            'user_id' => 2,
-            'recipient_name' => 'Robert Robertson',
-            'mobile' => '555-1234'
-        ]);
-
-
 
         $wanna_like = Product::inRandomOrder()->limit(2)->get();
 
         foreach ($wanna_like as $key => $product) {
-            $product->likedBy()->attach(2);
+            $product->likedBy()->attach($user->id);
         }
     }
 }

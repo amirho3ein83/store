@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Coupon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CouponSeeder extends Seeder
+class OrderItemSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +14,6 @@ class CouponSeeder extends Seeder
      */
     public function run()
     {
-        Coupon::create([
-            'code' => '3333',
-            'type' => 'fixed',
-            'value' => '52',
-        ]);
+        //
     }
 }

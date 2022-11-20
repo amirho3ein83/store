@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -24,7 +25,6 @@ class Product extends Model implements HasMedia
         'description',
         'stock',
         'reviews',
-        'category_id',
         'brand_id',
         'rate',
         'featured',
@@ -44,6 +44,20 @@ class Product extends Model implements HasMedia
     public  function slug()
     {
         return Str::slug($this->title);
+    }
+
+    protected function salePrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value + 0,
+        );
+    }
+
+    protected function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value + 0,
+        );
     }
 
     public static function last()
@@ -71,9 +85,9 @@ class Product extends Model implements HasMedia
         return $this->hasMany(Comment::class);
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
     }
 
     public function availableSizes()
@@ -83,7 +97,7 @@ class Product extends Model implements HasMedia
 
     public function availableColors()
     {
-        return $this->belongsToMany(Color::class,'color_product','product_id','color_id');
+        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id');
     }
 
     public function brand()
@@ -93,6 +107,6 @@ class Product extends Model implements HasMedia
 
     public function attributes()
     {
-        return $this->hasMany(OrderAttribute::class);
+        return $this->hasMany(ProductAttribute::class);
     }
 }

@@ -5,14 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rating extends Model
+class Criticism extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
+    const UPDATED_AT = null;
+
     protected $fillable = [
-        'product_id',
-        'user_id',
-        'stars_rated',
+        'desc',
+        'critic_mobile',
+        'critic_email',
+        'critic_name'
     ];
+
+    protected $dates = ['date_reported'];
 }

@@ -75,7 +75,7 @@ onMounted(() => {
                 <Order v-for="order of orders" :order="order" :key="order.id" />
                 <div>
                     <p
-                        class="lg:text-2xl text-xl border-t-2 py-3 font-black leading-9 text-gray-800 dark:text-white"
+                        class="lg:text-2xl text-xl py-3 font-black leading-9 text-gray-800 dark:text-white"
                     >
                         Summary
                     </p>
@@ -128,6 +128,23 @@ onMounted(() => {
                                 )
                             }}$
                         </p>
+                    </div>
+                    <div class="flex w-full shadow-sm rounded-lg">
+                        <div
+                            class="bg-yellow-600 py-4 px-6 rounded-l-lg flex items-center"
+                        >
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <div
+                            class="px-4 py-6 rounded-r-lg flex justify-between items-center w-full"
+                        >
+                            <div>
+                                Free delivery
+                                <span class="text-stone-700 text-sm"
+                                    >for purchase over 700$</span
+                                >
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

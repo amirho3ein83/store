@@ -11,17 +11,13 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
-        'reforder_id',
         'buyer_id',
-        'picked_color',
-        'picked_size',
+        'billing_subtotal',
+        'billing_tax',
         'billing_total',
+        'delivery_cost',
         'status',
-    ];
-
-    protected $casts = [
-        'qty'  =>  'integer',
+        'no_of_items',
     ];
 
     public function scopePendingPurchase($query)
@@ -34,41 +30,8 @@ class Order extends Model
         return $query->where([['buyer_id', Auth::id()], ['status', 'purchased']]);
     }
 
-    public function scopeIsInCart($query, $product_id, $picked_color, $picked_size)
+    public function items()
     {
-        return $query->where([
-            ['product_id', $product_id],
-            ['picked_color', $picked_color],
-            ['picked_size', $picked_size]
-        ]);
+        return $this->hasMany(OrderItem::class);
     }
-
-    public function product()
-    {
-        return $this->hasOne(Product::class, 'id', 'product_id');
-    }
-
-    public function buyer()
-    {
-        return $this->hasOne(User::class, 'id', 'buyer_id');
-    }
-
-    public function size()
-    {
-        return $this->hasOne(Size::class);
-    }
-
-    public function color()
-    {
-        return $this->hasOne(Color::class);
-    }
-    
-    public function refOrder()
-    {
-        return $this->belongsTo(RefOrder::class,'reforder_id');
-    }
-
-
-
-
 }

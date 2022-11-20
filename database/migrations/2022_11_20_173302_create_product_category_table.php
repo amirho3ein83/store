@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Product;
-use App\Models\Size;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,13 +15,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_size', function (Blueprint $table) {
+        Schema::create('product_category', function (Blueprint $table) {
             $table->foreignIdFor(Product::class)
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignIdFor(Size::class)
+                ->nullOnDelete();
+
+            $table->foreignIdFor(Category::class)
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->nullOnDelete();
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_size');
+        Schema::dropIfExists('product_categories');
     }
 };

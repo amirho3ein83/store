@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Criticism;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -78,6 +80,35 @@ class AdminController extends Controller
             'Admin/Users',
             [
                 'users' => $users,
+            ]
+        );
+    }
+
+    public function report(Request $request)
+    {
+        Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'mobile' => ['string', 'unique:users,mobile', 'regex:/(09)[0-9]{9}/'],
+            'email' => ['email', 'max:255'],
+            'desc' => 'required|max:255',
+        ], [
+            'mobile.regex' => 'Invalid mobile format',
+        ])->validate();
+
+        Criticism::create([
+            'desc' => $request->desc,
+            'critic_mobile' => $request->mobile,
+            'critic_email' => $request->email,
+            'critic_name' => $request->name,
+        ]);
+    }
+
+    public function criticismList()
+    {
+        return Inertia::render(
+            'Admin/Users',
+            [
+                'criticisms' => Criticism::all(),
             ]
         );
     }

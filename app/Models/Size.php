@@ -17,6 +17,6 @@ class Size extends Model
 
     public function availableProducts()
     {
-        return $this->belongsToMany(Product::class);
+        // return $this->belongsToMany(Product::class);
     }
 }

@@ -12,12 +12,12 @@ const storeCart = useCartStore();
 const storeProduct = useProductStore();
 
 let props = defineProps({
-    similar_products: Object,
+    // similar_products: Object,
     product: Object,
     comments: Object,
 });
 
-let picked_color = ref(props.product.available_colors[0].name);
+// let picked_color = ref(props.product.available_colors[0].name);
 // let picked_color = ref("");
 let is_liked = ref(props.product.is_liked);
 
@@ -25,7 +25,7 @@ const chooseColor = (color) => {
     picked_color.value = color;
 };
 
-let picked_size = ref(props.product.available_sizes[0].name);
+// let picked_size = ref(props.product.available_sizes[0].name);
 // let picked_size = ref("");
 
 const chooseSize = (size) => {
@@ -161,7 +161,7 @@ export default {
                     <p class="my-4">
                         {{ product.description }}
                     </p>
-
+<!-- 
                     <fieldset>
                         <legend class="mt-3 text-sm font-medium">Color</legend>
 
@@ -209,7 +209,7 @@ export default {
                                 />
                             </div>
                         </div>
-                    </fieldset>
+                    </fieldset> -->
 
                     <div class="mt-8 flex">
                         <div

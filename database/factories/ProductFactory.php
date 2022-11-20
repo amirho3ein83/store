@@ -18,7 +18,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         $title = $this->faker->sentence(3);
-        $price = $this->faker->numberBetween(12, 820);
+        $price = $this->faker->randomFloat('2', 0, 2);
 
         return [
             'title' => $title,
@@ -32,7 +32,6 @@ class ProductFactory extends Factory
             'stock' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
-            'category_id' => rand(1, 10),
             'featured' => rand(1, 0)
         ];
     }

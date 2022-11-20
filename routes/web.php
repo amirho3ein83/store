@@ -9,7 +9,7 @@ use App\Http\Controllers\WalletController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use Stevebauman\Location\Facades\Location;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +26,11 @@ Route::get('/home', [ProductController::class, 'homePage'])->name('home');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/contact-us', function () {
+    return Inertia::render('ContactUs');
+})->name('contactus');
+
+Route::post('/contact-us/report', [AdminController::class, 'report'])->name('contact.us.report');
 
 Route::middleware([
     'auth:sanctum',
@@ -37,15 +42,14 @@ Route::middleware([
     Route::group(['middleware' => ['role:admin'], 'prefix' => 'admin', 'name' => 'admin.'], function () {
         Route::get('/products-list', [AdminController::class, 'productsList'])->name('products.list');
         Route::get('/users-list', [AdminController::class, 'usersList'])->name('users.list');
+        Route::get('/criticisms-list', [AdminController::class, 'criticismList'])->name('criticisms.list');
 
         Route::get('/dashboard', function () {
             return Inertia::render('Admin/Dashboard');
         })->name('admin.dashboard');
     });
 
-    Route::get('/contact-us', function () {
-        return Inertia::render('ContactUs');
-    })->name('contactus');
+
 
     Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::put('/user/update-info', [UserController::class, 'updateInfo'])->name('user.updateInfo');

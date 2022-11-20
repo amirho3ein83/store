@@ -19,13 +19,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->integer('price')->nullable();
-            $table->integer('sale_price')->nullable();
+            $table->decimal('price', 8, 2)->nullable();
+            $table->decimal('sale_price', 8, 2)->nullable();
             $table->integer('sold_qty')->default(0);
-            $table->foreignIdFor(Category::class)
-                ->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(Brand::class)
-                ->nullable()->cascadeOnUpdate()->nullOnDelete();
+                ->index()->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->integer('stock');
             $table->integer('reviews')->default(0);
             $table->float('rate')->default(0);
