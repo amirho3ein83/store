@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendUserInvoice;
 use App\Mail\OrderPlaced;
 use App\Models\Address;
 use App\Models\Invoice;
@@ -222,6 +223,7 @@ class OrderController extends Controller
                 ]);
             }
 
+            // SendUserInvoice::dispatch();
 
 
 
