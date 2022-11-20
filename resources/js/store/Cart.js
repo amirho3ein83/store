@@ -5,15 +5,19 @@ export const useCartStore = defineStore("cart", {
     state: () => ({ subtotal: 0, count_cart: 0, form_step: 1, products: [], user_address: '' }),
 
     actions: {
-        addToCart(id) {
+        addToCart(id, picked_color, picked_size) {
             axios
                 .post(route("addToCart"), {
                     product_id: id,
+                    picked_color: picked_color,
+                    picked_size: picked_size,
                 })
                 .then((res) => {
+                    console.log(res)
                     this.countOrders(id)
                 })
                 .catch((error) => {
+                    alert('sorry something went wrong')
                     console.log(error);
                 });
         },
@@ -34,6 +38,7 @@ export const useCartStore = defineStore("cart", {
                     this.products = res.data;
                 })
                 .catch((error) => {
+                    alert('sorry something went wrong')
                     console.log(error);
                 });
         },

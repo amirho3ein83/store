@@ -1,68 +1,63 @@
 <script setup>
-defineProps({
-    product: Object,
-    remaining_time: Number,
+import VueCountdown from "@chenfengyuan/vue-countdown";
+import { ref } from "vue";
+import { useProductStore } from "@/store/Product.js";
+
+const storeProduct = useProductStore();
+
+const props = defineProps({
+    amazing_offer: Object,
 });
+
+let product = ref(props.amazing_offer.product)
 </script>
 
 <template>
-        <div
-            class="mx-2  flex max-w-md bg-gray-300 shadow-lg rounded-lg overflow-hidden"
-        >
-            <img src="./watch.webp" alt="" class="object-cover w-1/2" />
+    <Transition>
+        <div @click="storeProduct.showProduct(amazing_offer.product.slug)" class="p-2 flex justify-center items-center">
+            <div class="flex flex-col justify-between w-56 sm:w-72 h-72  bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
+                v-bind:style="{ 'background-image': 'url(' + amazing_offer.product.image_url + ')' }">
+                <div class="flex justify-between items-center ml-4 pr-8">
+                    <div
+                        class="bg-red-600 w-12 h-12 shadow flex flex-col-reverse p-2 text-center font-bold text-white rounded-b-full">
 
-            <div class="w-1/2 p-4">
-                <h1 class="text-gray-900 font-bold text-2xl">{{product.title}}</h1>
-                <div class="flex item-center mt-2">
-                    <svg
-                        class="w-5 h-5 fill-current text-gray-700"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                        />
-                    </svg>
-                    <svg
-                        class="w-5 h-5 fill-current text-gray-700"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                        />
-                    </svg>
-                    <svg
-                        class="w-5 h-5 fill-current text-gray-700"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                        />
-                    </svg>
-                    <svg
-                        class="w-5 h-5 fill-current text-gray-500"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                        />
-                    </svg>
-                    <svg
-                        class="w-5 h-5 fill-current text-gray-500"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                        />
-                    </svg>
+                        {{ amazing_offer.discount_percent }}%
+                    </div>
                 </div>
-                <div class="flex item-center justify-between mt-3">
-                    <h1 class="text-gray-700 font-bold text-xl">{{product.price}}</h1>
-                    <button
-                        class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded"
-                    >
-                        Add to Card
-                    </button>
+                <div class="bg-gray-700 bg-opacity-95 shadow-md rounded-r-xl p-2 flex flex-col mr-4 mb-4">
+                    <div class="flex justify-between">
+                        <h3 class="text-xl text-slate-200 font-bold truncate">
+                            {{ product.title }}
+                        </h3>
+
+                        <div class="flex align-baseline gap-x-1">
+                            <p class="text-red-200 line-through">{{
+                                    product.sale_price
+                            }}</p>
+                            <h3 class="text-xl font-bold pb-1 text-yellow-400">
+                                ${{
+                                        product.price
+                                }}
+                            </h3>
+                        </div>
+                    </div>
+                    <h4 class="text-slate-400 font-extralight truncate">
+                        {{ product.details }}
+                    </h4>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-xs">
+                            <VueCountdown :time="amazing_offer.remaining_time * 1000"
+                                v-slot="{ days, hours, minutes, seconds }">
+                                <span class="text-red-300">
+                                    {{ days }}:{{ hours }}:{{ minutes }}:{{
+        seconds
+                                    }}
+                                </span>
+                            </VueCountdown>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
+    </Transition>
 </template>

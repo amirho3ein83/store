@@ -12,12 +12,10 @@ import { ref, onMounted } from "vue";
 let showForm = ref(false);
 
 const form = useForm({
-    profile: null,
-    email: "",
-    username: "",
+    mobile: "",
     password: "",
     password_confirmation: "",
-    terms: false,
+    // terms: false,
 });
 
 const submit = () => {
@@ -45,45 +43,37 @@ onMounted(() => {
         <Transition name="slide-fade">
             <div
                 v-if="showForm"
-                class="w-[400px]  p-4 absolute  top-20 left-24 m-5 backdrop-blur-sm bg-white/20"
+                class="w-[400px] p-4 absolute top-20 left-24 m-5 backdrop-blur-sm bg-white/20"
             >
                 <form @submit.prevent="submit">
-                    <h1 class="text-2xl font-bold mb-4">
-                        Sign in to your account
-                    </h1>
+                    <h1 class="text-2xl font-bold mb-4">Register</h1>
 
                     <div class="mt-4">
-                        <JetLabel for="username" value="username" />
+                        <JetLabel
+                            class="text-stone-800"
+                            for="mobile"
+                            value="Email or Mobile"
+                        />
                         <JetInput
-                            id="username"
-                            v-model="form.username"
+                            id="mobile"
+                            v-model="form.mobile"
                             type="text"
                             class="mt-1 block w-full"
                             required
                         />
                         <JetInputError
                             class="mt-2"
-                            :message="form.errors.username"
-                        />
-                    </div>
-                    <div class="mt-4">
-                        <JetLabel for="email" value="email" />
-                        <JetInput
-                            id="email"
-                            v-model="form.email"
-                            type="text"
-                            class="mt-1 block w-full"
-                            required
-                        />
-                        <JetInputError
-                            class="mt-2"
-                            :message="form.errors.email"
+                            :message="form.errors.mobile"
                         />
                     </div>
 
                     <div class="flex gap-2">
                         <div class="mt-4">
-                            <JetLabel for="password" value="Password" />
+                            <JetLabel
+                                class="text-stone-800"
+                                for="password"
+                                value="Password"
+                            />
                             <JetInput
                                 id="password"
                                 v-model="form.password"
@@ -100,6 +90,7 @@ onMounted(() => {
 
                         <div class="mt-4">
                             <JetLabel
+                                class="text-stone-800"
                                 for="password_confirmation"
                                 value="Confirm Password"
                             />
@@ -122,7 +113,7 @@ onMounted(() => {
                         class="flex w-full mt-8 justify-between items-baseline"
                     >
                         <JetButton
-                            class="m-4 w-1/2"
+                            class="m-4 w-1/2 bg-stone-400 hover:bg-yellow-500 hover:text-stone-800"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
@@ -130,7 +121,7 @@ onMounted(() => {
                         </JetButton>
                         <Link
                             :href="route('login')"
-                            class="text-lg animate-pulse align-middle text-gray-200 hover:text-gray-900"
+                            class="text-md animate-pulse align-middle text-gray-200 hover:text-gray-900"
                         >
                             Already registered?
                         </Link>

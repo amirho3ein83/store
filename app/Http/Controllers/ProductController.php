@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentVisit;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,8 +32,14 @@ class ProductController extends Controller
 
     public function homePage(Request $request)
     {
-        $amazing_offers = Product::inRandomOrder()->featured()->limit(10)->get();
-        return Inertia::render('Store/Products/Home', ['amazing_offers' => $amazing_offers]);
+        $amazing_offers = AmazingOffer::where('expiry_date', '>', Carbon::now())->inRandomOrder()->with('product')->get();
+
+        $amazing_offers->map(function ($amazing_offer) {
+            $image_url = $amazing_offer->product->getFirstMedia()->getUrl();
+            $amazing_offer->product->image_url = $image_url;
+        });
+
+        return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers]);
     }
 
     public function create(Request $request)
@@ -81,7 +88,7 @@ class ProductController extends Controller
                         break;
                 }
             })
-            ->with('brand','availableSizes','availableColors')
+            ->with('brand', 'availableColors')
             ->simplePaginate(15)
             ->withQueryString();
 
@@ -89,9 +96,8 @@ class ProductController extends Controller
         $in_cart_products = Order::with('product:id')->get()->pluck('product.id')->toArray();
 
         $products->map(function ($product) use ($in_cart_products) {
-            if (in_array($product->id, $in_cart_products)) {
-                $product->is_in_cart = true;
-            }
+            $image_url = $product->getFirstMedia()->getUrl();
+            $product->image_url = $image_url;
         });
 
         return Inertia::render(
@@ -165,11 +171,6 @@ class ProductController extends Controller
 
     public function rateProduct(Request $request)
     {
-        Rating::create([
-            'user_id' => Auth::id(),
-            'stars_rated' => $request->stars_count,
-            'product_id' => $request->product_id,
-        ]);
     }
 
 
@@ -180,28 +181,33 @@ class ProductController extends Controller
         return Inertia::render('Admin/Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function show(Product $product)
+    public function show($slug)
     {
 
+        $product = Product::where('slug', $slug)->firstOrFail();
         // check if user already liked the product
         $liked_by_user = DB::table('liked_products')->where([['liked_by', Auth::id()], ['product_id', $product->id]])->get();
         if ($liked_by_user->isNotEmpty()) {
             $product->is_liked = true;
         }
 
-        if (Order::where([['user_id', Auth::id()], ['product_id', $product->id]])->exists()) {
+        // check if user already save product in cart
+        if (Order::where([['buyer_id', Auth::id()], ['product_id', $product->id]])->exists()) {
             $product->is_in_cart = true;
         }
 
+        // load images
         $image_url = $product->getFirstMedia()->getUrl();
         $product->image_url = $image_url;
-        // info($product->image_url);
+        
 
-        // $image_url = $product->getFirstMedia()->toHtml();
-        // $product->image_url = $image_url;
-        // $product->loadMedia('');
+        $product->load('brand', 'availableColors', 'availableSizes');
 
-
-        return Inertia::render('Store/Products/Show2', ['product' => $product]);
+        $similar_products = Product::where('category_id', $product->category_id)->inRandomOrder()->take(4)->get();
+        $similar_products->map(function ($product) {
+            $image_url = $product->getFirstMedia()->getUrl();
+            $product->image_url = $image_url;
+        });
+        return Inertia::render('Store/Products/Show', ['product' => $product,'similar_products' => $similar_products]);
     }
 }

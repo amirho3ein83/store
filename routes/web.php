@@ -22,10 +22,10 @@ use Inertia\Inertia;
 */
 
 Route::redirect('/', '/home');
-Route::get('/home', [ProductController::class, 'homePage'])->name('home')->middleware('admin');
+Route::get('/home', [ProductController::class, 'homePage'])->name('home');
 Route::get('/category', [ProductController::class, 'category'])->name('category');
 Route::get('/category/{id}', [ProductController::class, 'productList'])->name('product-list');
-Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::middleware([
     'auth:sanctum',
@@ -48,6 +48,8 @@ Route::middleware([
     })->name('contactus');
 
     Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::put('/user/update-info', [UserController::class, 'updateInfo'])->name('user.updateInfo');
+
     Route::get('/user/address', [UserController::class, 'address'])->name('user.address');
     Route::get('/user/profile/wallet', [UserController::class, 'wallet'])->name('user.wallet');
     Route::get('/user/purchases', [UserController::class, 'purchaseList'])->name('user.purchases');
@@ -58,7 +60,7 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
 
 
-    Route::post('/payment', [OrderController::class, 'payment'])->name('payment');
+    Route::post('/register-order', [OrderController::class, 'registerOrder'])->name('register.order');
 
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');

@@ -16,9 +16,11 @@ class Product extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'slug',
         'price',
         'sold_qty',
         'sale_price',
+        'details',
         'description',
         'stock',
         'reviews',
@@ -33,6 +35,7 @@ class Product extends Model implements HasMedia
         'reviews'  =>  'integer',
         'rate'  =>  'integer',
         'status'    =>  'boolean',
+        'created_at' => 'date:Y-m-d',
         'featured'  =>  'boolean'
     ];
 

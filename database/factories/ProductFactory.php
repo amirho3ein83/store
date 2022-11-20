@@ -17,21 +17,23 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->text(10);
+        $title = $this->faker->sentence(3);
         $price = $this->faker->numberBetween(12, 820);
 
         return [
-            'title' => $name,
-            'description' => $this->faker->sentence(5),
+            'title' => $title,
+            'slug' => Str::slug($title),
+            'description' => $this->faker->sentence(35,true),
+            'details' => $this->faker->sentence(5,true),
             'price' => $price,
             'sale_price' => $price - rand(5, 35),
             'sold_qty' => rand(144, 254),
-            'brand_id' => rand(1,8),
+            'brand_id' => rand(1, 8),
             'stock' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
             'category_id' => rand(1, 10),
-            'featured' => true ?? false
+            'featured' => rand(1, 0)
         ];
     }
 }

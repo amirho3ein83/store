@@ -7,7 +7,7 @@ import Logout from '../Pages/Auth/Logout.vue'
 
     <main class="profile-page">
 
-        <section class="relative sm:py-16 bg-blueGray-200">
+        <section class="relative sm:py-6 bg-blueGray-200">
             <div class="container mx-auto px-4">
                 <div class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb-6 shadow-xl rounded-lg">
                     <div class="px-6">
@@ -73,7 +73,7 @@ import Logout from '../Pages/Auth/Logout.vue'
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center my-12">
+                        <div class="text-center my-8">
                             <slot />
                         </div>
 

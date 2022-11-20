@@ -121,7 +121,7 @@ export default {
                                 </template>
 
                                 <template #content>
-                                    <div v-for="category of categories">
+                                    <div v-for="category of categories" :key="category.id">
                                         <input type="radio" v-model="form.category_id" name="option" :id="category.id"
                                             :value="category.id" class="peer hidden" />
                                         <label :for="category.id"
@@ -162,7 +162,7 @@ export default {
                             <InputLabel for="description" value="description" />
                             <textarea class="w-full rounded-lg border-gray-200 p-3 text-md" placeholder="Description"
                                 rows="2" v-model="form.description"
-                                name="description">{{product.description}}</textarea>
+                                name="description" v-text="product.description"></textarea>
                         </div>
 
 

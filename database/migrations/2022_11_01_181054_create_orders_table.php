@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Product;
+use App\Models\RefOrder;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,12 +18,18 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('qty');
-            $table->float('price');
+            $table->integer('qty')->default(1);
+            $table->integer('amount_paid')->nullable();
+            $table->integer('billing_subtotal')->nullable();
+            $table->integer('billing_tax')->nullable();
+            $table->integer('billing_total')->nullable();
             $table->string('status');
+            $table->string('picked_color');
+            $table->string('picked_size');
 
             $table->foreignIdFor(Product::class);
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(RefOrder::class, 'reforder_id')->nullable()->cascadeOnUpdate()->nullOnDelete();
 
             $table->timestamps();
         });

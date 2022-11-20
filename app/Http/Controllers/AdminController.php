@@ -13,12 +13,11 @@ class AdminController extends Controller
 {
     public function productsList(Request $request)
     {
-        $product = Product::where('id', 1)->with('availableColors')->get();
-        Log::info($product);
+
         $products = Product::query()
-            // ->when($request->category_id, function ($query, $category_id) {
-            //     $query->where('category_id', $category_id);
-            // })
+            ->when($request->category_id, function ($query, $category_id) {
+                $query->where('category_id', $category_id);
+            })
             ->when($request->search, function ($query, $search) {
                 $query->where('slug', 'like', "%{$search}%");
             })
@@ -44,9 +43,14 @@ class AdminController extends Controller
                         break;
                 }
             })
-            ->with('availableColors', 'brand')
+            ->with('availableColors', 'brand', 'category')
             ->simplePaginate(10)
             ->withQueryString();
+
+        $products->map(function ($product) {
+            $image_url = $product->getFirstMedia()->getUrl();
+            $product->image_url = $image_url;
+        });
 
         $categories = Category::all();
 

@@ -11,8 +11,8 @@ export const useProductStore = defineStore("products", {
         likeProduct(id) {
             axios.patch(route("like-product", { id: id }));
         },
-        showProduct(id) {
-            Inertia.get("/products/" + id);
+        showProduct(slug) {
+            Inertia.get("/products/" + slug);
         },
         fetchComments(id) {
             axios

@@ -13,6 +13,10 @@ class Wallet extends Model
 
     protected $fillable = [
         'user_id',
-        'stock'
+        'balance'
+    ];
+
+    protected $casts = [
+        'balance'  =>  'integer',
     ];
 }
