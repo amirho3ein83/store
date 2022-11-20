@@ -35,7 +35,7 @@ class OrderController extends Controller
         foreach ($orders as $key => $order) {
             $subtotal += $order->qty * $order->product->sale_price;
         }
-        $user_address = Auth::user()->addresses[0];
+        $user_address = Auth::user()->addresses->first();
         $wallet = Auth::user()->wallet;
 
         return Inertia::render('Store/Cart', [
