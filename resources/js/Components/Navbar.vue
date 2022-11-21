@@ -34,9 +34,9 @@ const storeCart = useCartStore();
                         <Link href="/home" preserve-scroll>
                             <p class="hover:text-yellow-400">Home</p>
                         </Link>
-                        <Link href="/category" preserve-scroll>
+                        <!-- <Link href="/category" preserve-scroll>
                             <p class="hover:text-yellow-400">Catagory</p>
-                        </Link>
+                        </Link> -->
                         <Link href="/contact-us" preserve-scroll>
                             <p class="hover:text-yellow-400">Contact Us</p>
                         </Link>

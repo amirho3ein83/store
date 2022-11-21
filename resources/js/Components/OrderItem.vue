@@ -46,14 +46,14 @@ onMounted(() => {
 
 <template>
     <Transition name="fade">
-        <div v-if="loaded" class="flex items-center p-2 -mx-8 2 bg-stone-50 rounded-lg my-1 ">
+        <div v-if="loaded" class="flex items-center p-2 bg-stone-50 rounded-lg my-1 ">
             <!-- <div class="w-30"> -->
             <img @click="storeProduct.showProduct(order.product.slug)"
                 class="flex-shrink-0 rounded-lg w-24 h-24 object-cover object-center sm:mb-0"
                 :src="order.product.image_url" alt="">
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow ">
-                <span class="text-sm">{{ order.product.title }}</span>
+                <span class="text-xs sm:text-sm">{{ order.product.title }}</span>
                 <span class="flex flex-col">
                     <span class="text-yellow-900 text-sm">${{ order.product.sale_price }}</span>
                     <div class="flex gap-x-2">
@@ -70,14 +70,14 @@ onMounted(() => {
 
             <div class="flex flex-col-reverse  flex-1 justify-center gap-5">
                 <div class="inline-flex justify-center gap-1 ">
-                    <button @click="increaseOrder()"
+                    <button :disabled="qty == 10" @click="increaseOrder()"
                         class="inline-flex h-8 w-8 items-center justify-center text-green-700">
-                        <i class="bi bi-plus"></i>
+                        <i class="bi bi-plus" v-if="qty != 10"></i>
                     </button>
 
                     <div>
-                        <div type="number"
-                            class="h-8 w-12 rounded  bg-cyan-50 p-0 text-center text-sm font-medium [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
+                        <div 
+                            class=" inline-flex h-8 w-8 items-center justify-center"
                             min="1">{{ qty }}</div>
                     </div>
 

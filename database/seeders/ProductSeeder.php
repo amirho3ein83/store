@@ -6,6 +6,8 @@ use App\Models\AmazingOffer;
 use App\Models\Color;
 use App\Models\Comment;
 use App\Models\Product;
+use App\Models\ProductAttribute;
+use App\Models\ProductAttributeQty;
 use App\Models\Size;
 use Carbon\Carbon;
 use GuzzleHttp\Promise\Create;
@@ -27,7 +29,7 @@ class ProductSeeder extends Seeder
         File::deleteDirectory(public_path('storage/images'));
 
 
-        for ($i = 1; $i < 25; $i++) {
+        for ($i = 1; $i < 80; $i++) {
 
             $product =  Product::factory()->create();
 
@@ -40,15 +42,41 @@ class ProductSeeder extends Seeder
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
                 ->toMediaCollection();
 
-            // $colors = Color::inRandomOrder()->take(rand(2, 5))->get();
-            // foreach ($colors as $key => $color) {
-            //     $product->availableColors()->attach($color->id);
-            // }
+            $productQty = 0;
+            for ($h = 0; $h < rand(1, 5); $h++) {
 
-            // $sizes = Size::inRandomOrder()->take(rand(3, 5))->get();
-            // foreach ($sizes as $key => $size) {
-            //     $product->availableSizes()->attach($size->id);
-            // }
+
+                $color = Color::inRandomOrder()
+                    ->take(1)
+                    ->first();
+
+                $size = Size::inRandomOrder()
+                    ->take(1)
+                    ->first();
+
+                $items = [$product->price, $product->sale_price, $product->sale_price + 100];
+                $randomPrice = $items[array_rand($items)];
+
+
+                $productAttribute = ProductAttribute::create([
+                    'product_id' => $product->id,
+                    'size' => $size->name,
+                    'color' => $color->name,
+                    'price' => $randomPrice
+
+                ]);
+
+                $productAttributeQty = ProductAttributeQty::create([
+                    'qty' => rand(5, 50),
+                    'product_attribute_id' => $productAttribute->id
+                ]);
+
+                $productQty += $productAttributeQty->qty;
+            }
+
+            $product->update([
+                'stock' => $productQty
+            ]);
 
             Comment::factory()->create([
                 'product_id' => $i

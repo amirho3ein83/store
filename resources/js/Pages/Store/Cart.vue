@@ -1,7 +1,7 @@
 <script setup>
 import JetInputError from "@/Components/InputError.vue";
 
-import Order from "@/Components/Order.vue";
+import OrderItem from "@/Components/OrderItem.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import { useStorage } from "@/store/useStorage";
 import EmptyCart from "../Store/Partial/EmptyCart.vue";
@@ -15,14 +15,16 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 const storeCart = useCartStore();
 
 let props = defineProps({
-    orders: Object,
+    orderItems: Object,
     subtotal: Number,
-    user_address: Object,
+    userAddress: Object,
     wallet: Object,
 });
 
 let show_loading_modal = ref(false);
 let show_success_modal = ref(false);
+
+const deliveryCost = 18;
 
 const form = useForm({
     recipient_name: "",
@@ -35,7 +37,7 @@ const form = useForm({
     expirationYear: null,
     expirationMonth: null,
     cvc: null,
-    useWallet: true,
+    useWallet: false,
 });
 
 const pay = () => {
@@ -53,6 +55,13 @@ const pay = () => {
     });
 };
 
+// const calculateTotal = () => {
+//     return (
+//         parseFloat(storeCart.subtotal) +
+//         parseFloat(((9 / 100) * storeCart.subtotal).toFixed(2))
+//     );
+// };
+
 onMounted(() => {
     storeCart.subtotal = props.subtotal;
 });
@@ -65,14 +74,18 @@ onMounted(() => {
 
     <div class="xl:container mx-auto lg:px-28">
         <div
-            v-if="Object.keys(orders).length != 0"
+            v-if="Object.keys(orderItems).length != 0"
             class="flex flex-col md:flex-row shadow-transparent"
         >
             <div
                 id="summary"
-                class="w-full xl:w-1/2 px-12 py-8 sm:py-10 bg-stone-50"
+                class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50"
             >
-                <Order v-for="order of orders" :order="order" :key="order.id" />
+                <OrderItem
+                    v-for="order of orderItems"
+                    :order="order"
+                    :key="order.id"
+                />
                 <div>
                     <p
                         class="lg:text-2xl text-xl py-3 font-black leading-9 text-gray-800 dark:text-white"
@@ -107,6 +120,25 @@ onMounted(() => {
                                 }}$
                             </p>
                         </div>
+                        <div class="flex items-center justify-between pt-5">
+                            <p
+                                class="text-base leading-none text-gray-800 dark:text-white"
+                            >
+                                Delivey cost
+                            </p>
+                            <p
+                                v-if="!storeCart.subtotal >= 700"
+                                class="text-base leading-none text-gray-800 dark:text-white"
+                            >
+                                {{ deliveryCost }}$
+                            </p>
+                            <p
+                                v-else
+                                class="text-base leading-none text-gray-800 dark:text-white"
+                            >
+                                0$
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -125,18 +157,18 @@ onMounted(() => {
                                 Math.trunc(
                                     storeCart.subtotal +
                                         (9 / 100) * storeCart.subtotal
-                                )
+                                ) + deliveryCost
                             }}$
                         </p>
                     </div>
                     <div class="flex w-full shadow-sm rounded-lg">
                         <div
-                            class="bg-yellow-600 py-4 px-6 rounded-l-lg flex items-center"
+                            class="bg-yellow-600 py-1 px-3 rounded-lg flex items-center"
                         >
                             <i class="bi bi-truck"></i>
                         </div>
                         <div
-                            class="px-4 py-6 rounded-r-lg flex justify-between items-center w-full"
+                            class="px-1 py-2 flex justify-between items-center w-full"
                         >
                             <div>
                                 Free delivery
@@ -149,6 +181,31 @@ onMounted(() => {
                 </div>
             </div>
             <div class="w-full xl:w-1/2 px-8 sm:py-4">
+                <div class="p-2 mb-3 border px-3">
+                    <div class="flex">
+                        <div class="flex items-center py-3 gap-2">
+                            <input
+                                v-model="form.use_default_address"
+                                type="checkbox"
+                                class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
+                            />
+                            <p>use default address</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        {{ userAddress.text }}
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                        {{ userAddress.recipient_name }}
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                        {{ userAddress.postal_code }}
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                        {{ userAddress.mobile }}
+                    </p>
+                </div>
+
                 <form @submit.prevent="pay()" class="space-y-4">
                     <div class="mt-5 bg-stone-50 rounded-lg shadow">
                         <div class="flex">
@@ -199,7 +256,7 @@ onMounted(() => {
                             </div>
                             <div class="flex justify-between">
                                 <div
-                                    v-if="user_address"
+                                    v-if="userAddress"
                                     class="flex items-center pt-3"
                                 >
                                     <input
@@ -212,86 +269,6 @@ onMounted(() => {
                                         class="block ml-2 text-sm text-gray-900"
                                         >Save as default address</label
                                     >
-                                </div>
-                                <div class="flex items-center pt-3">
-                                    <input
-                                        v-model="form.use_default_address"
-                                        type="checkbox"
-                                        class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
-                                    /><label
-                                        for="use_default_address"
-                                        class="block ml-2 text-sm text-gray-900"
-                                        >Use default address</label
-                                    >
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="ml-5 border-t-2 pt-2 flex justify-between px-2 align-baseline items-center gap-2"
-                        >
-                            <h1
-                                class="inline text-md font-semibold leading-none"
-                            >
-                                Card details
-                            </h1>
-                            <div class="flex items-center pt-3">
-                                <input
-                                    :checked="form.useWallet"
-                                    v-model="form.useWallet"
-                                    type="checkbox"
-                                    class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent"
-                                /><label
-                                    for="safeAdress"
-                                    class="block ml-2 text-sm text-gray-900"
-                                    >Use my wallet</label
-                                >
-                            </div>
-                        </div>
-                        <div class="px-5 pb-5">
-                            <input
-                                :disabled="form.useWallet"
-                                v-model="form.card_number"
-                                type="number"
-                                max="16"
-                                min="16"
-                                placeholder="card number"
-                                class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                            />
-
-                            <div class="flex">
-                                <div class="flex-grow w-1/4 pr-2">
-                                    <input
-                                        :disabled="form.useWallet"
-                                        type="number"
-                                        min="2"
-                                        max="2"
-                                        v-model="form.expirationMonth"
-                                        placeholder="expiry month"
-                                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                                    />
-                                </div>
-                                <div class="flex-grow w-1/4 pr-2">
-                                    <input
-                                        :disabled="form.useWallet"
-                                        v-model="form.expirationYear"
-                                        placeholder="expiry year"
-                                        type="number"
-                                        min="4"
-                                        max="4"
-                                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                                    />
-                                </div>
-                                <div class="flex-grow w-1/4 pr-2">
-                                    <input
-                                        :disabled="form.useWallet"
-                                        v-model="form.cvc"
-                                        placeholder="CVC"
-                                        type="number"
-                                        min="4"
-                                        max="4"
-                                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                                    />
                                 </div>
                             </div>
                         </div>
@@ -319,7 +296,7 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <EmptyCart v-if="Object.keys(orders).length == 0" />
+        <EmptyCart v-if="Object.keys(orderItems).length == 0" />
 
         <LoadingModal v-if="show_loading_modal" />
         <SuccessModal v-if="show_success_modal" />

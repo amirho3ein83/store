@@ -11,12 +11,12 @@ defineProps({
 <template>
     <div
         @click="storePages.chooseCategory(category.id)"
-        class="lg:w-1/5 md:w-1/3 sm:w-1/2 p-4 w-full  relative mb-2 cursor-pointer group active:scale-95 transition-all duration-150"
+        class="lg:w-1/5 md:w-1/4 sm:w-1/3 p-4 w-1/2  relative mb-2 cursor-pointer group active:scale-95 transition-all duration-150"
     >
         <img
             alt="Art"
             src="../Pages/Store/Products/pics/category.avif"
-            class="brightness-50 hover:brightness-95 transition-all duration-200 h-72 w-full object-cover"
+            class="brightness-50 hover:brightness-95 transition-all duration-200 h-32 w-full object-cover"
         />
         <span
             class="group-hover:hidden absolute top-1/2 left-1/2 transform uppercase text-2xl text-white -translate-x-1/2 -translate-y-1/2"

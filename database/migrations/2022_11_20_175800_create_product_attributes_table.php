@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use App\Models\ProductAttribute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,9 +15,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_attributes_qty', function (Blueprint $table) {
-            $table->foreignIdFor(ProductAttribute::class)->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('qty');
+        Schema::create('product_attributes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Product::class)->cascadeOnUpdate()->nullOnDelete();
+            $table->integer('price')->nullable();
+            $table->string('color')->nullable();
+            $table->string('size')->nullable();
         });
     }
 

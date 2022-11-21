@@ -5,26 +5,26 @@ import JetLabel from "@/Components/Label.vue";
 import { ref } from "vue";
 
 let props = defineProps({
-    stock: Number,
+    balance: Number,
 });
 
-let stock = ref(props.stock);
+let balance = ref(props.balance);
 let increaseAmount = ref(null);
 let showNotif = ref(false);
 
 const chargeWallet = () => {
-    axios
-        .patch(route("charge.wallet"), {
-            increaseAmount: increaseAmount.value,
-        })
-        .then((res) => {
-            if (res.status == 200) {
-                stock.value += res.data.new_val;
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    // axios
+    //     .patch(route("charge.wallet"), {
+    //         increaseAmount: increaseAmount.value,
+    //     })
+    //     .then((res) => {
+    //         if (res.status == 200) {
+    //             props.balance += increaseAmount.value;
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     });
 };
 </script>
 
@@ -58,10 +58,10 @@ const chargeWallet = () => {
 
                     <div class="">
                         <div class="text-sm font-semibold tracking-tight">
-                            stock
+                            balance
                         </div>
 
-                        <div class="text-2xl font-semibold">${{ stock }}</div>
+                        <div class="text-2xl font-semibold">${{ props.balance }}</div>
                     </div>
                     <div class="mt-8 py-2 flex border-t border-gray-400 justify-between align-baseline">
                         <div>

@@ -76,4 +76,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $date->format('Y-m-d');
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'buyer_id', 'id');
+    }
 }

@@ -11,10 +11,17 @@ class ProductAttribute extends Model
 
     protected $table = 'product_attributes';
 
-    protected $fillable = ['product_id', 'qty', 'price', 'color', 'size'];
+    public $timestamps = false;
+
+    protected $fillable = ['product_id', 'price', 'color', 'size'];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function qty()
+    {
+        return $this->hasOne(ProductAttributeQty::class);
     }
 }

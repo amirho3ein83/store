@@ -39,7 +39,9 @@ class ProductController extends Controller
             $amazing_offer->product->image_url = $image_url;
         });
 
-        return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers]);
+        $categories = Category::all();
+
+        return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
     }
 
     public function create(Request $request)
@@ -91,11 +93,10 @@ class ProductController extends Controller
                         break;
                 }
             })
-            ->with('brand')
+            ->with('brand', 'attributes', 'attributes.qty')
             ->simplePaginate(15)
             ->withQueryString();
 
-        // $in_cart_products = Order::where('user_id', Auth::id())->with('product:id')->pluck('id')->toArray();
         $in_cart_products = Order::with('product:id')->get()->pluck('product.id')->toArray();
 
         $products->map(function ($product) use ($in_cart_products) {
@@ -187,7 +188,9 @@ class ProductController extends Controller
     public function show($slug)
     {
 
-        $product = Product::where('slug', $slug)->firstOrFail();
+        $product = Product::where('slug', $slug)
+            ->with('brand', 'attributes', 'attributes.qty')
+            ->firstOrFail();
 
         $product->increment('reviews');
 
@@ -215,6 +218,8 @@ class ProductController extends Controller
         //     $image_url = $product->getFirstMedia()->getUrl();
         //     $product->image_url = $image_url;
         // });
+
+
 
         return Inertia::render('Store/Products/Show', ['product' => $product]);
     }

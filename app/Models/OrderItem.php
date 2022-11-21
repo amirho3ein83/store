@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class OrderItem extends Model
 {
@@ -11,10 +12,13 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
+        'buyer_id',
         'product_id',
         'picked_color',
         'picked_size',
         'billing_total',
+        'status',
+        'qty',
     ];
 
     protected $casts = [
@@ -24,6 +28,11 @@ class OrderItem extends Model
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+
+    public function scopePendingPurchase($query)
+    {
+        return $query->where([['buyer_id', Auth::id()], ['status', 'pending_purchase']]);
     }
 
     public function buyer()

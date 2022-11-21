@@ -90,15 +90,15 @@ class Product extends Model implements HasMedia
         return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
     }
 
-    public function availableSizes()
-    {
-        return $this->belongsToMany(Size::class);
-    }
+    // public function availableSizes()
+    // {
+    //     return $this->belongsToMany(Size::class);
+    // }
 
-    public function availableColors()
-    {
-        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id');
-    }
+    // public function availableColors()
+    // {
+    //     return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id');
+    // }
 
     public function brand()
     {

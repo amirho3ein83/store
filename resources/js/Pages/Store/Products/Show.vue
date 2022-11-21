@@ -17,16 +17,15 @@ let props = defineProps({
     comments: Object,
 });
 
-// let picked_color = ref(props.product.available_colors[0].name);
-// let picked_color = ref("");
+let picked_color = ref(props.product.attributes[0].color);
+
 let is_liked = ref(props.product.is_liked);
 
 const chooseColor = (color) => {
     picked_color.value = color;
 };
 
-// let picked_size = ref(props.product.available_sizes[0].name);
-// let picked_size = ref("");
+let picked_size = ref(props.product.attributes[0].size);
 
 const chooseSize = (size) => {
     picked_size.value = size;
@@ -61,15 +60,17 @@ export default {
 </script>
 
 <template>
-
     <section>
         <div
             class="px-8 relative mx-auto max-w-screen-xl xl:px-24 sm:container py-8 bg-gray-100"
         >
             <div class="flex flex-col items-start gap-8 sm:flex-row">
-                <div class=" md:w-1/2 mx-md:auto  w-full">
+                <div class="md:w-1/2 mx-md:auto w-full">
                     <div class="relative h-62 w-full mb-3">
-                        <div class="absolute flex flex-col top-0 right-0 p-3">
+                        <div
+                            v-if="$page.props.auth"
+                            class="absolute flex flex-col top-0 right-0 p-3"
+                        >
                             <button
                                 v-if="is_liked"
                                 @click="unlikeProduct(product.id)"
@@ -97,7 +98,7 @@ export default {
                 <div class="sticky top-2 md:w-1/2 w-full">
                     <strong
                         v-if="product.featured"
-                        class="rounded-full border bg-gray-800 px-3 py-1 text-xs font-medium tracking-wide text-[#e8a138]"
+                        class="rounded-full border bg-gray-700 px-3 py-1 text-xs font-medium tracking-wide text-[#37fa51]"
                     >
                         Featured Order
                     </strong>
@@ -152,7 +153,7 @@ export default {
                             >
                                 $ {{ product.sale_price }}
                             </div>
-                            <span class="text-red-400 line-through text-sm"
+                            <span  v-if="product.sale_price != product.price" class="text-red-400 line-through text-sm"
                                 >$ {{ product.price }}</span
                             >
                         </div>
@@ -161,7 +162,10 @@ export default {
                     <p class="my-4">
                         {{ product.description }}
                     </p>
-<!-- 
+                    <!-- <p class="my-4">
+                        {{ product.attributes }}
+                    </p> -->
+
                     <fieldset>
                         <legend class="mt-3 text-sm font-medium">Color</legend>
 
@@ -171,20 +175,22 @@ export default {
                                     class="flex flex-row justify-center items-center space-x-2"
                                 >
                                     <button
-                                        v-for="color of product.available_colors"
-                                        :key="color.id"
-                                        @click="chooseColor(color.name)"
+                                        v-for="attribute of product.attributes"
+                                        :key="attribute.color"
+                                        @click="chooseColor(attribute.color)"
                                     >
                                         <span
                                             :class="{
                                                 'border-blue-600':
-                                                    picked_color == color.name,
+                                                    picked_color ==
+                                                    attribute.color,
                                             }"
                                             class="block p-1 border-2 hover:border-blue-600 rounded-full transition ease-in duration-300"
                                         >
                                             <a
                                                 :style="{
-                                                    backgroundColor: color.name,
+                                                    backgroundColor:
+                                                        attribute.color,
                                                 }"
                                                 class="block w-3 h-3 rounded-full"
                                             ></a>
@@ -201,15 +207,15 @@ export default {
                         <div class="flow-root">
                             <div class="-m-0.5 flex flex-wrap">
                                 <SizeRadio
-                                    v-for="size of product.available_sizes"
-                                    :key="size.id"
-                                    :size="size.name"
-                                    :chosen="picked_size == size.name"
-                                    @selected="chooseSize(size.name)"
+                                    v-for="attribute of product.attributes"
+                                    :key="attribute.size"
+                                    :size="attribute.size"
+                                    :chosen="picked_size == attribute.size"
+                                    @selected="chooseSize(attribute.size)"
                                 />
                             </div>
                         </div>
-                    </fieldset> -->
+                    </fieldset>
 
                     <div class="mt-8 flex">
                         <div

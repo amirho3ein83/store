@@ -6,12 +6,13 @@ import { ref } from "vue";
 import { add } from "lodash";
 
 // const previewImage = ref(null);
-
 let props = defineProps({
     user: Object,
     address: Object,
     wallet: Object,
 });
+
+
 </script>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -22,6 +23,6 @@ export default {
 </script>
 <template>
     <UserLayout>
-        <WalletCard :stock="wallet.balance" />
+        <WalletCard :balance="wallet.balance" />
     </UserLayout>
 </template>

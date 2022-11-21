@@ -22,8 +22,9 @@ return new class extends Migration
             $table->integer('billing_subtotal')->nullable();
             $table->integer('billing_tax')->nullable();
             $table->integer('billing_total')->nullable();
+            $table->integer('delivery_cost')->nullable();
             $table->string('status');
-            $table->integer('no_of_items');
+            $table->integer('no_of_items')->nullable();
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });

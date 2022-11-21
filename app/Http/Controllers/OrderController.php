@@ -7,6 +7,7 @@ use App\Mail\OrderPlaced;
 use App\Models\Address;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\RefOrder;
 use App\Models\User;
@@ -24,68 +25,68 @@ class OrderController extends Controller
 
     public function index(Product $product)
     {
-        $orders = Order::with('product')->pendingPurchase()->get();
+        $orderItems = OrderItem::with('product')->get();
 
-        $orders->map(function ($order) {
+        $orderItems->map(function ($order) {
             $image_url = $order->product->getFirstMedia()->getUrl();
             $order->product->image_url = $image_url;
         });
 
         $subtotal = 0;
-        foreach ($orders as $key => $order) {
-            $subtotal += $order->qty * $order->product->sale_price;
+        foreach ($orderItems as $key => $item) {
+            $subtotal += $item->qty * $item->product->sale_price;
         }
-        $user_address = Auth::user()->addresses->first();
+        $userAddress = Auth::user()->addresses->first();
         $wallet = Auth::user()->wallet;
 
         return Inertia::render('Store/Cart', [
-            'orders' => $orders,
+            'orderItems' => $orderItems,
             'subtotal' => $subtotal,
-            'user_address' => $user_address ?? null,
+            'userAddress' => $userAddress ?? null,
             'wallet' => $wallet ?? null
         ]);
     }
 
     public function addToCart(Request $request)
     {
-        DB::beginTransaction();
 
-        try {
+        // try {
+        // DB::beginTransaction();
 
-            $product = Product::find($request->product_id);
+        $product = Product::find($request->product_id);
 
-            $found_in_cart = Order::isInCart(
-                $request->product_id,
-                $request->picked_color,
-                $request->picked_size,
-            )
-                ->first();
+        $found_in_cart = OrderItem::isInCart(
+            $request->product_id,
+            $request->picked_color,
+            $request->picked_size,
+        )
+            ->first();
 
-            if (!empty($found_in_cart)) {
-                $cart =  Order::where('id', $found_in_cart->id)->increment('qty');
-            } else {
-                $cart = Order::create([
-                    'product_id' => $product->id,
-                    'picked_color' => $request->picked_color,
-                    'picked_size' => $request->picked_size,
-                    'qty' => 1,
-                    'buyer_id' => Auth::id(),
-                    'status' => 'pending_purchase'
-                ]);
-            }
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            info($e);
-            return Response::json(['error' => $e], 422);
-        }
-
-        if ($cart) {
-            return response()->json([
-                'message' => 'Order registered',
+        if (!empty($found_in_cart)) {
+            $cart =  OrderItem::where('id', $found_in_cart->id)->increment('qty');
+        } else {
+            $cart = OrderItem::create([
+                'product_id' => $product->id,
+                'picked_color' => $request->picked_color,
+                'picked_size' => $request->picked_size,
+                'qty' => 1,
+                'buyer_id' => Auth::id(),
+                'status' => 'pending_purchase'
             ]);
         }
+
+        //     DB::commit();
+        // } catch (\Exception $e) {
+        //     DB::rollback();
+        //     info($e);
+        //     return Response::json(['error' => $e], 422);
+        // }
+
+        // if ($cart) {
+        return response()->json([
+            'message' => 'Order registered',
+        ]);
+        // }
     }
 
     public function switchToSaveForLater()
@@ -93,22 +94,22 @@ class OrderController extends Controller
     }
     public function increaseOrder($id)
     {
-        Order::where('product_id', $id)->pendingPurchase()->increment('qty');
+        OrderItem::where('product_id', $id)->pendingPurchase()->increment('qty');
     }
 
     public function decreaseOrder($id)
     {
-        Order::where('product_id', $id)->pendingPurchase()->decrement('qty');
+        OrderItem::where('product_id', $id)->pendingPurchase()->decrement('qty');
     }
 
     public function deleteOrder($id)
     {
-        Order::where('product_id', $id)->pendingPurchase()->delete();
+        OrderItem::where('product_id', $id)->pendingPurchase()->delete();
     }
 
     public function countOrders(Product $product)
     {
-        return  Order::pendingPurchase()->count();
+        return  OrderItem::pendingPurchase()->count();
     }
 
 
@@ -122,19 +123,11 @@ class OrderController extends Controller
             'save_address_as_default ' => 'boolean',
             'use_default_address' => 'boolean',
             'useWallet' => 'boolean|required',
-            'card_number' => 'required_if:useWallet,false',
-            'expirationYear' => 'required_if:useWallet,false',
-            'expirationMonth' => 'required_if:useWallet,false',
-            'cvc' => 'required_if:useWallet,false',
         ], [
             'recipient_name.required' => 'fill in name field please',
             'mobile.required' => 'fill in mobile field please',
             'address.required' => 'fill in address field please',
             'postal_code.required' => 'fill in postal_code field please',
-            'card_number.required' => 'fill in card_number field please',
-            'expirationYear.required' => 'fill in expirationYear field please',
-            'expirationMonth.required' => 'fill in expirationMonth field please',
-            'cvc.required' => 'fill in cvc field please',
         ])->validate();
 
 
@@ -144,14 +137,14 @@ class OrderController extends Controller
             DB::beginTransaction();
             if ($request->use_default_address) {
 
-                $user_default_address =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
+                $userDefaultAddress =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
                     $query->where('is_default', true);
                 }])->first();
 
-                $user_default_address = $user_default_address->addresses;
+                $userDefaultAddress = $userDefaultAddress->addresses;
             } else if ($request->save_address_as_default) {
 
-                $user_default_address =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
+                $userDefaultAddress =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
                     $query->where('is_default', true)->update(['is_default' => false]);
                 }]);
 
@@ -192,6 +185,10 @@ class OrderController extends Controller
             $billing_tax = 9 / 100 * $billing_subtotal;
             $billing_total = $billing_tax + $billing_subtotal;
 
+            $delivery_cost = env('DELIRVERY_COST', 18);
+            if ($billing_total >= 700) {
+                $delivery_cost = 0;
+            }
 
             if ($request->useWallet) {
                 $wallet = Wallet::firstWhere('user_id', Auth::id());
@@ -216,16 +213,22 @@ class OrderController extends Controller
 
                 $subtotal += $billing_total;
                 $order->update([
-                    'status' => 'purchased',
                     'billing_subtotal' => $billing_subtotal,
                     'billing_tax' => $billing_tax,
                     'billing_total' => $billing_total,
                 ]);
             }
 
+            $order = Order::create([
+                'status' => 'purchased',
+                'billing_subtotal' => $billing_subtotal,
+                'billing_tax' => $billing_tax,
+                'billing_total' => $billing_total,
+                'delivery_cost' => $delivery_cost,
+                'no_of_items' => $orders->count(),
+                'buyer_id' => Auth::id()
+            ]);
             // SendUserInvoice::dispatch();
-
-
 
             DB::commit();
         } catch (\Exception $e) {

@@ -18,15 +18,18 @@ class ProductFactory extends Factory
     public function definition()
     {
         $title = $this->faker->sentence(3);
-        $price = $this->faker->randomFloat('2', 0, 2);
+        $price = mt_rand(12, 2000);
+
+        $prices = [$price, $price - rand(5, 35)];
+        $randomPrice = $prices[array_rand($prices)];
 
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'description' => $this->faker->sentence(35,true),
-            'details' => $this->faker->sentence(5,true),
+            'description' => $this->faker->sentence(35, true),
+            'details' => $this->faker->sentence(5, true),
             'price' => $price,
-            'sale_price' => $price - rand(5, 35),
+            'sale_price' => $randomPrice,
             'sold_qty' => rand(144, 254),
             'brand_id' => rand(1, 8),
             'stock' => rand(10, 30),

@@ -10,7 +10,7 @@ class WalletController extends Controller
 {
     public function increaseWalletBalance(Request $request)
     {
-        $res =   Wallet::where('user_id', Auth::id())->increment('stock', $request->increaseAmount);
+        $res =   Wallet::where('user_id', Auth::id())->increment('balance', $request->increaseAmount);
         $new_val = $request->increaseAmount;
         if (!$res) {
             return response()->json([

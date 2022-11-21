@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->decimal('price', 8, 2)->nullable();
-            $table->decimal('sale_price', 8, 2)->nullable();
+            $table->integer('price')->nullable();
+            $table->integer('sale_price')->nullable();
             $table->integer('sold_qty')->default(0);
             $table->foreignIdFor(Brand::class)
                 ->index()->nullable()->cascadeOnUpdate()->nullOnDelete();
