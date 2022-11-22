@@ -41,10 +41,10 @@ let product = ref(props.amazing_offer.product);
 
                         <div class="flex align-baseline gap-x-1">
                             <p
-                                v-if="product.sale_price != product.price"
+                                v-if="product.default_price != product.price"
                                 class="text-red-400 line-through"
                             >
-                                {{ product.sale_price }}
+                                {{ product.default_price }}
                             </p>
                             <h3 class="text-xl font-bold pb-2 text-yellow-600">
                                 {{ product.price }}

@@ -20,16 +20,12 @@ class ProductFactory extends Factory
         $title = $this->faker->sentence(3);
         $price = mt_rand(12, 2000);
 
-        $prices = [$price, $price - rand(5, 35)];
-        $randomPrice = $prices[array_rand($prices)];
-
         return [
             'title' => $title,
             'slug' => Str::slug($title),
             'description' => $this->faker->sentence(35, true),
             'details' => $this->faker->sentence(5, true),
-            'price' => $price,
-            'sale_price' => $randomPrice,
+            'default_price' => $price,
             'sold_qty' => rand(144, 254),
             'brand_id' => rand(1, 8),
             'stock' => rand(10, 30),

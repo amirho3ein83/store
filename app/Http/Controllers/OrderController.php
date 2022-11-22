@@ -34,7 +34,7 @@ class OrderController extends Controller
 
         $subtotal = 0;
         foreach ($orderItems as $key => $item) {
-            $subtotal += $item->qty * $item->product->sale_price;
+            $subtotal += $item->qty * $item->product->default_price;
         }
         $userAddress = Auth::user()->addresses->first();
         $wallet = Auth::user()->wallet;
@@ -179,7 +179,7 @@ class OrderController extends Controller
 
             $billing_subtotal = 0;
             foreach ($orders as $key => $order) {
-                $billing_subtotal += $order->qty * $order->product->sale_price;
+                $billing_subtotal += $order->qty * $order->product->default_price;
             }
 
             $billing_tax = 9 / 100 * $billing_subtotal;
@@ -209,7 +209,7 @@ class OrderController extends Controller
                 $product = Product::FirstWhere('id', $order->product_id);
                 $product->increment('sold_qty', $order->qty);
 
-                $billing_total = ($order->qty * $product->sale_price) + (9 / 100 * ($order->qty * $product->sale_price));
+                $billing_total = ($order->qty * $product->default_price) + (9 / 100 * ($order->qty * $product->default_price));
 
                 $subtotal += $billing_total;
                 $order->update([

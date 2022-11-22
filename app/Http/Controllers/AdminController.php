@@ -18,7 +18,9 @@ class AdminController extends Controller
 
         $products = Product::query()
             ->when($request->category_id, function ($query, $category_id) {
-                $query->where('category_id', $category_id);
+                $query->whereHas('categories', function ($query) use ($category_id) {
+                    $query->where('categories.id', $category_id);
+                });
             })
             ->when($request->search, function ($query, $search) {
                 $query->where('slug', 'like', "%{$search}%");
@@ -45,7 +47,7 @@ class AdminController extends Controller
                         break;
                 }
             })
-            ->with('availableColors', 'brand', 'category')
+            ->with('brand', 'categories')
             ->simplePaginate(10)
             ->withQueryString();
 
@@ -106,9 +108,9 @@ class AdminController extends Controller
     public function criticismList()
     {
         return Inertia::render(
-            'Admin/Users',
+            'Admin/Criticisms',
             [
-                'criticisms' => Criticism::all(),
+                'criticisms' => Criticism::simplePaginate(),
             ]
         );
     }

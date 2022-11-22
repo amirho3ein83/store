@@ -54,7 +54,9 @@ export default {
                                 <span class="flex flex-col">
                                     <span
                                         class="text-yellow-800 text-sm sm:text-lg"
-                                        >${{ order.product.sale_price }}</span
+                                        >${{
+                                            order.product.default_price
+                                        }}</span
                                     >x {{ order.qty }}
                                     <div class="flex gap-2">
                                         <span
@@ -80,11 +82,11 @@ export default {
                         </div>
                     </div>
                     <div class="flex mx-auto justify-center" v-else>
-                    <img
-                        src="https://cdn.dribbble.com/users/760295/screenshots/4433975/media/03494b209a1511a61868ced337b97931.png?compress=1&resize=400x300"
-                        alt=""
-                    />
-                </div>
+                        <img
+                            src="https://cdn.dribbble.com/users/760295/screenshots/4433975/media/03494b209a1511a61868ced337b97931.png?compress=1&resize=400x300"
+                            alt=""
+                        />
+                    </div>
                 </div>
             </div>
         </section>

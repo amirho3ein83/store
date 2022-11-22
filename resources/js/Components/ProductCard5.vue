@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import { onMounted, ref } from "vue";
 import { useProductStore } from "@/store/Product.js";
 import { useCartStore } from "@/store/Cart.js";
@@ -49,7 +49,7 @@ onMounted(() => {
             </h3>
 
             <div class="mt-4 flex items-center justify-between font-medium">
-                <p class="text-yellow-800">${{ product.sale_price }}</p>
+                <p class="text-yellow-800">${{ product.default_price }}</p>
 
                 <div class="flex gap-1">
                     <span

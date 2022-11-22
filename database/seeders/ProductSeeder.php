@@ -54,7 +54,7 @@ class ProductSeeder extends Seeder
                     ->take(1)
                     ->first();
 
-                $items = [$product->price, $product->sale_price, $product->sale_price + 100];
+                $items = [$product->price, $product->default_price, $product->default_price + 100];
                 $randomPrice = $items[array_rand($items)];
 
 

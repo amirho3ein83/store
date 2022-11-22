@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmazingOffer;
+use App\Models\Brand;
 use App\Models\Order;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductAttribute;
+use App\Models\ProductAttributeQty;
 use App\Models\Rating;
 use App\Models\RecentVisit;
+use App\Models\Size;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,8 +52,19 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         $categories = Category::all();
+        $sizes = Size::all();
+        $colors = Color::all();
+        $brands = Brand::all();
 
-        return Inertia::render('Admin/Products/Create', ['categories' => $categories]);
+        return Inertia::render(
+            'Admin/Products/Create',
+            [
+                'categories' => $categories,
+                'sizes' => $sizes,
+                'colors' => $colors,
+                'brands' => $brands,
+            ]
+        );
     }
 
     public function category(Request $request)
@@ -115,28 +131,46 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        $product = Product::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'description' => $request->description,
-            'price' => $request->price,
-            'sale_price' => $request->sale_price,
-            'stock' => $request->stock,
-            'category_id' => $request->category_id
-        ]);
+        DB::transaction(function () use ($request) {
 
-        $product->sizes->attach($request->sizes);
-        $product->colors->attach($request->colors);
-        // for availalfm;dsa
-        // $post->comments()->save($request->size);
+            $product = Product::create([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'description' => $request->description,
+                'price' => $request->attribute_groups[0]->price,
+                'default_price' => $request->attribute_groups[0]->default_price,
+                'stock' => $request->stock,
+            ]);
 
-        // foreach ($request->tags as $id)
-        //     $tags[] = Tag::find($id);
+            $product->categories()->attach($request->category_ids);
 
-        // $post = Post::find($id);
-        // $post->tags()->saveMany($tags);
+            $productQty = 0;
 
-        $product->addMediaFromRequest('image')->toMediaCollection();
+            foreach ($request->attribute_groups as $key => $attributeGroup) {
+
+
+                $productAttribute = ProductAttribute::create([
+                    'product_id' => $product->id,
+                    'size' => $attributeGroup->size,
+                    'color' => $attributeGroup->color,
+                    'price' => $attributeGroup->price
+
+                ]);
+
+                $productAttributeQty = ProductAttributeQty::create([
+                    'qty' => rand(5, 50),
+                    'product_attribute_id' => $productAttribute->id
+                ]);
+
+                $productQty += $productAttributeQty->qty;
+            }
+
+            $product->update([
+                'stock' => $productQty
+            ]);
+
+            $product->addMediaFromRequest('image')->toMediaCollection();
+        });
     }
 
     public function update(Product $product, Request $request)

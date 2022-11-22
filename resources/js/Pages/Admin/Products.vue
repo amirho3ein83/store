@@ -277,7 +277,7 @@ export default {
                         </div>
                     </td>
                     <td class="p-3 text-slate-900">
-                        {{ product.category.name }}
+                        {{ product.categories[0].name }}
                     </td>
                     <td class="p-3 font-bold text-yellow-600">
                         {{ product.price }}$

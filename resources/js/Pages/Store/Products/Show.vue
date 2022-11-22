@@ -151,9 +151,11 @@ export default {
                             <div
                                 class="text-xl text-yellow-600 font-semibold mt-1"
                             >
-                                $ {{ product.sale_price }}
+                                $ {{ product.default_price }}
                             </div>
-                            <span  v-if="product.sale_price != product.price" class="text-red-400 line-through text-sm"
+                            <span
+                                v-if="product.default_price != product.price"
+                                class="text-red-400 line-through text-sm"
                                 >$ {{ product.price }}</span
                             >
                         </div>
@@ -278,7 +280,7 @@ export default {
                                 </span>
                             </div>
                             <p class="text-yellow-800">
-                                ${{ product.sale_price }}
+                                ${{ product.default_price }}
                             </p>
                         </div>
                     </div>
