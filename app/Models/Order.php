@@ -22,12 +22,12 @@ class Order extends Model
 
     public function scopePendingPurchase($query)
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'pending_purchase']]);
+        return $query->where([['buyer_id', Auth::id()], ['status', 'pending']]);
     }
 
     public function scopePurchased($query)
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'purchased']]);
+        return $query->where([['buyer_id', Auth::id()], ['status', 'completed']]);
     }
 
     public function items()

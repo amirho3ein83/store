@@ -153,11 +153,11 @@ export default {
                             >
                                 $ {{ product.default_price }}
                             </div>
-                            <span
+                            <!-- <span
                                 v-if="product.default_price != product.price"
                                 class="text-red-400 line-through text-sm"
                                 >$ {{ product.price }}</span
-                            >
+                            > -->
                         </div>
                     </div>
 

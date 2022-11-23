@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('criticisms', function (Blueprint $table) {
-            $table->id()->from(100);
-            $table->string('critic_name')->nullable();
-            $table->string('critic_email')->nullable();
-            $table->string('critic_mobile');
-            $table->text('desc');
-            $table->timestamp('date_reported')->useCurrent();
+        Schema::create('customer_addresses', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('criticisms');
+        Schema::dropIfExists('customer_addresses');
     }
 };

@@ -97,7 +97,7 @@ class PurchaseProcessTest extends TestCase
                 'recipient_name' => "",
                 'address' => "",
                 'mobile' => "",
-                'postal_code' => "",
+                'zipcode' => "",
                 'save_address_as_default' => false,
                 'use_default_address' => true,
                 'card_number' => null,

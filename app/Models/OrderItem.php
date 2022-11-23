@@ -32,7 +32,7 @@ class OrderItem extends Model
 
     public function scopePendingPurchase($query)
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'pending_purchase']]);
+        return $query->where([['buyer_id', Auth::id()], ['status', 'pending']]);
     }
 
     public function buyer()

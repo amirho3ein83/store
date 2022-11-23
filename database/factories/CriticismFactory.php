@@ -21,7 +21,6 @@ class CriticismFactory extends Factory
             'critic_mobile' => $this->faker->numerify('09#########'),
             'critic_email' => $this->faker->unique()->safeEmail(),
             'critic_name' => $this->faker->name(),
-            'date_reported' => $this->faker->time('H:i:s', 'yesterday')
         ];
     }
 }

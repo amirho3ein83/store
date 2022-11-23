@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.7",
         "matanyadaev/laravel-eloquent-spatial": "^2.7",
         "sentry/sentry-laravel": "^3.1",
+        "shopid/zarinpal": "^1.0",
         "spatie/laravel-medialibrary": "^10.0.0",
         "spatie/laravel-permission": "^5.5",
         "tightenco/ziggy": "^1.0",

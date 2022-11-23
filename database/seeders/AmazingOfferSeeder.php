@@ -21,11 +21,11 @@ class AmazingOfferSeeder extends Seeder
 
         foreach ($featured_products as $key => $product) {
 
-            $discount_percent = (int)($product->default_price  / $product->price * 10);
+            // $discount_percent = (int)($product->default_price  / $product->price * 10);
 
             AmazingOffer::create([
                 'product_id' => $product->id,
-                'discount_percent' => $discount_percent,
+                'discount_percent' => 10,
                 'expiry_date' => Carbon::parse(Carbon::yesterday())->addHour(rand(6, 26))
             ]);
         }

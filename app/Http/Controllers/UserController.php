@@ -110,11 +110,19 @@ class UserController extends Controller
         //     $query->where('orders.buyer_id', Auth::id());
         // })->get();
 
-        $orders = Order::purchased()->with('product')->latest()->get();
+        $orders = Order::purchased()->with('items')->latest()->get();
 
         $orders->map(function ($order) {
-            $image_url = $order->product->getFirstMedia()->getUrl();
-            $order->product->image_url = $image_url;
+
+
+            $order->items->map(function ($item) {
+                $image_url = $item->product->getFirstMedia()->getUrl();
+                $item->product->image_url = $image_url;
+            });
+
+
+            // $image_url = $order->item->product->getFirstMedia()->getUrl();
+            // $order->item->product->image_url = $image_url;
         });
 
         return Inertia::render(

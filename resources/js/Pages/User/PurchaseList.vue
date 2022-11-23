@@ -28,6 +28,7 @@ export default {
         <section class="text-gray-600 body-font">
             <div class="container px-5 mx-auto">
                 <div>
+                    {{orders}}
                     <div
                         class="flex flex-wrap -m-4 justify-start"
                         v-if="Object.keys(orders).length != 0 && showItem"

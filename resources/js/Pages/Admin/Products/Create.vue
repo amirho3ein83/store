@@ -17,7 +17,7 @@ let props = defineProps({
     brands: Object,
 });
 
-let picked_color = ref([]);
+let pickedCategories = ref([]);
 
 const addColor = (color) => {};
 
@@ -27,7 +27,7 @@ const form = useForm({
     details: "",
     default_price: "",
     stock: null,
-    category_id: null,
+    category_ids: pickedCategories.value,
     image: null,
 });
 
@@ -74,7 +74,7 @@ export default {
 <template>
     <Head title="Create Product" />
 
-    <section class="bg-gray-200 min-h-screen">
+    <section class="bg-gray-600 min-h-screen">
         <div class="mx-auto max-w-screen-xl px-4 py-5 sm:px-6 lg:px-8">
             <div class="flex justify-around">
                 <!-- preview card -->
@@ -99,7 +99,7 @@ export default {
                     >
                         <div class="flex px-2 justify-between items-center">
                             <div
-                                class="py-2 text-center font-bold uppercase tracking-wide text-gray-800"
+                                class="py-2 text-center font-bold  text-gray-800"
                             >
                                 {{ form.title }}
                             </div>
@@ -119,7 +119,7 @@ export default {
                             </div>
                         </div>
 
-                        <span class="truncate text-xs h-24 text-slate-600 mx-2">
+                        <span class="truncate text-sm h-24 text-slate-600 mx-2">
                             {{ form.details }}
                         </span>
                         <div
@@ -148,7 +148,7 @@ export default {
                             <div class="flex flex-col">
                                 <div class="md:w-full px-3 mb-2 md:mb-0">
                                     <label
-                                        class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                                        class="block  text-grey-darker text-sm font-bold mb-2"
                                         for="title"
                                     >
                                         title
@@ -162,7 +162,7 @@ export default {
                                 </div>
                                 <div class="md:w-full px-3 mb-2 md:mb-0">
                                     <label
-                                        class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                                        class="block  text-grey-darker text-sm font-bold mb-2"
                                         for="default_price"
                                     >
                                         default_price
@@ -179,7 +179,10 @@ export default {
                                 >
                                     <Dropdown align="right" width="48">
                                         <template #trigger>
-                                            <span>brand</span>
+                                            <span v-if="form.brand_id">{{
+                                                brands[form.brand_id ].name
+                                            }}</span>
+                                            <span v-else>brand</span>
                                             <i
                                                 class="bi bi-chevron-down px-2"
                                             ></i>
@@ -233,7 +236,7 @@ export default {
                         <div class="-mx-3 md:flex mb-2">
                             <div class="md:w-full px-3">
                                 <label
-                                    class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                                    class="block  text-grey-darker text-sm font-bold mb-2"
                                 >
                                     details
                                 </label>
@@ -246,7 +249,7 @@ export default {
                         <div class="-mx-3 md:flex mb-2">
                             <div class="md:w-full px-3">
                                 <label
-                                    class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                                    class="block  text-grey-darker text-sm font-bold mb-2"
                                 >
                                     description
                                 </label>
@@ -272,7 +275,26 @@ export default {
                                 :message="form.errors.image"
                             />
                         </div>
+                        <div class="flex justify-end mt-4">
+                        <PrimaryButton
+                            class="ml-4 bg-stone-600"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            create
+                        </PrimaryButton>
+                    </div>
                     </form>
+                    <div
+                        v-for="error of form.errors"
+                        :key="error"
+                        class="shadow w-2/3 p-2 flex justify-center rounded-lg"
+                    >
+                        <div
+                            class="bg-red-500 animate-pulse inline-block rounded-lg p-1 mr-1"
+                        ></div>
+                        <p class="p-1">{{ error }}!</p>
+                    </div>
                 </div>
             </div>
         </div>

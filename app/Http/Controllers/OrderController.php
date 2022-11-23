@@ -71,7 +71,7 @@ class OrderController extends Controller
                 'picked_size' => $request->picked_size,
                 'qty' => 1,
                 'buyer_id' => Auth::id(),
-                'status' => 'pending_purchase'
+                'status' => 'pending'
             ]);
         }
 
@@ -119,7 +119,7 @@ class OrderController extends Controller
             'recipient_name' => 'required_if:use_default_address,false',
             'mobile' => 'required_if:use_default_address,false',
             'address' => 'required_if:use_default_address,false',
-            'postal_code' => 'required_if:use_default_address,false',
+            'zipcode' => 'required_if:use_default_address,false',
             'save_address_as_default ' => 'boolean',
             'use_default_address' => 'boolean',
             'useWallet' => 'boolean|required',
@@ -127,7 +127,7 @@ class OrderController extends Controller
             'recipient_name.required' => 'fill in name field please',
             'mobile.required' => 'fill in mobile field please',
             'address.required' => 'fill in address field please',
-            'postal_code.required' => 'fill in postal_code field please',
+            'zipcode.required' => 'fill in zipcode field please',
         ])->validate();
 
 
@@ -151,7 +151,7 @@ class OrderController extends Controller
                 $user = User::find(2);
                 $user_address = $user->addresses()->create([
                     'text' => $request->address,
-                    'postal_code' => $request->postal_code,
+                    'zipcode' => $request->zipcode,
                     'user_id' => $user->id,
                     'recipient_name' => $request->recipient_name,
                     'mobile' => $request->mobile,
@@ -161,7 +161,7 @@ class OrderController extends Controller
             //  else {
             //     $reforder->address()->create([
             //         'text' => $request->address,
-            //         'postal_code' => $request->postal_code,
+            //         'zipcode' => $request->zipcode,
             //         'user_id' => Auth::id(),
             //         'recipient_name' => $request->recipient_name,
             //         'mobile' => $request->mobile,
@@ -220,7 +220,7 @@ class OrderController extends Controller
             }
 
             $order = Order::create([
-                'status' => 'purchased',
+                'status' => 'completed',
                 'billing_subtotal' => $billing_subtotal,
                 'billing_tax' => $billing_tax,
                 'billing_total' => $billing_total,

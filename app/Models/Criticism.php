@@ -17,7 +17,7 @@ class Criticism extends Model
         'desc',
         'critic_mobile',
         'critic_email',
-        'critic_name'
+        'critic_name',
     ];
 
     protected $dates = ['date_reported'];

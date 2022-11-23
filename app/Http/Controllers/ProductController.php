@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -131,15 +132,30 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+        Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'description' => 'required',
+                'details' => 'required',
+                'default_price' => 'required|numeric',
+                'brand_id' => 'required|numeric',
+                'category_ids' => 'required|array',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+
+            ]
+        )->validate();
+        // dd('done');
+
         DB::transaction(function () use ($request) {
 
             $product = Product::create([
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
                 'description' => $request->description,
-                'price' => $request->attribute_groups[0]->price,
-                'default_price' => $request->attribute_groups[0]->default_price,
-                'stock' => $request->stock,
+                'details' => $request->details,
+                'brand_id' => $request->brand_id,
+                'default_price' => $request->default_price,
             ]);
 
             $product->categories()->attach($request->category_ids);

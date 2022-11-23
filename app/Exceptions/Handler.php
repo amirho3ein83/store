@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            // Integration::captureUnhandledException($e);o
+            // Integration::captureUnhandledException($e);
         });
     }
 }

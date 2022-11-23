@@ -24,10 +24,15 @@
                 <i class="bi bi-kanban"></i>
                 <span class="text-sm ml-2">Products</span>
             </Link>
+            <Link :href="'/admin/products-list'"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900">
+                <i class="bi bi-kanban"></i>
+                <span class="text-sm ml-2">Orders</span>
+            </Link>
             <Link :href="'/admin/users-list'"
                 class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900">
                 <i class="bi bi-person"></i>
-                <span class="text-sm ml-2">Users</span>
+                <span class="text-sm ml-2">Customers</span>
             </Link>
             <Link :href="'/admin/criticisms-list'"
                 class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900">

@@ -30,7 +30,7 @@ const form = useForm({
     recipient_name: "",
     address: "",
     mobile: "",
-    postal_code: "",
+    zipcode: "",
     save_address_as_default: false,
     use_default_address: true,
     card_number: null,
@@ -127,16 +127,16 @@ onMounted(() => {
                                 Delivey cost
                             </p>
                             <p
-                                v-if="!storeCart.subtotal >= 700"
+                                v-if="storeCart.subtotal <= 700"
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
                                 {{ deliveryCost }}$
                             </p>
                             <p
                                 v-else
-                                class="text-base leading-none text-gray-800 dark:text-white"
+                                class="text-base leading-none text-red-800 dark:text-white"
                             >
-                                0$
+                                free 0$
                             </p>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ onMounted(() => {
                         {{ userAddress.recipient_name }}
                     </p>
                     <p class="text-gray-500 text-sm">
-                        {{ userAddress.postal_code }}
+                        {{ userAddress.zipcode }}
                     </p>
                     <p class="text-gray-500 text-sm">
                         {{ userAddress.mobile }}
@@ -247,7 +247,7 @@ onMounted(() => {
                                 <div class="flex-grow">
                                     <input
                                         :disabled="form.use_default_address"
-                                        v-model="form.postal_code"
+                                        v-model="form.zipcode"
                                         type="number"
                                         placeholder="postal code"
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"

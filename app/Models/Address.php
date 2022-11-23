@@ -14,7 +14,7 @@ class Address extends Model
     protected $fillable = [
         'body',
         'recipient_name',
-        'postal_code',
+        'zipcode',
         'mobile',
         'is_default',
         'addressable_id',
