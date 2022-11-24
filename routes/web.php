@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
@@ -56,7 +57,7 @@ Route::middleware([
 
     Route::get('/user/address', [UserController::class, 'address'])->name('user.address');
     Route::get('/user/profile/wallet', [UserController::class, 'wallet'])->name('user.wallet');
-    Route::get('/user/purchases', [UserController::class, 'purchaseList'])->name('user.purchases');
+    Route::get('/user/orders-list', [UserController::class, 'ordersList'])->name('user.orders.list');
     Route::get('/user/profile/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
 
 
@@ -65,10 +66,15 @@ Route::middleware([
 
 
     Route::post('/register-order', [OrderController::class, 'registerOrder'])->name('register.order');
+    Route::post('/orders/{order}/details', [OrderController::class, 'orderDetails'])->name('order.details');
 
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');
+    
+    Route::get('/zarinpal-pay/{order}', [PaymentController::class, 'zarinpalPay'])->name('zarinpal.pay');
+    Route::get('/zarinpal-verify/{payment}', [PaymentController::class, 'zarinpalVerify'])->name('zarinpal.verify');
+
 
     Route::patch('/charge-wallet', [WalletController::class, 'increaseWalletBalance'])->name('charge.wallet');
 

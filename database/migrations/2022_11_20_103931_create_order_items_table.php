@@ -19,7 +19,7 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class)->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignIdFor(Order::class)->nullable()->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(Order::class)->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
             $table->integer('qty')->default(1);
             $table->string('picked_color');

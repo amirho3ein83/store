@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,12 @@ class Order extends Model
         'no_of_items',
     ];
 
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->toFormattedDateString();
+    }
+
     public function scopePendingPurchase($query)
     {
         return $query->where([['buyer_id', Auth::id()], ['status', 'pending']]);
@@ -33,5 +40,10 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function buyer()
+    {
+        return $this->hasOne(User::class, 'id', 'buyer_id');
     }
 }

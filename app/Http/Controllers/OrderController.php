@@ -8,10 +8,12 @@ use App\Models\Address;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\RefOrder;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Services\zarinPal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -47,11 +49,28 @@ class OrderController extends Controller
         ]);
     }
 
+    public function orderDetails(Order $order)
+    {
+        $order->load('items', 'items.product');
+
+        $order->map(function ($order) {
+            $order->items->map(function ($item) {
+                $image_url = $item->product->getFirstMedia()->getUrl();
+                $item->product->image_url = $image_url;
+            });
+        });
+
+        return Inertia::render('Store/OrderShow', [
+            'order' => $order
+        ]);
+    }
+
     public function addToCart(Request $request)
     {
-
-        // try {
-        // DB::beginTransaction();
+        $order = Order::firstOrCreate(
+            ['buyer_id' => Auth::id()],
+            ['status' => 'pending']
+        );
 
         $product = Product::find($request->product_id);
 
@@ -63,9 +82,10 @@ class OrderController extends Controller
             ->first();
 
         if (!empty($found_in_cart)) {
-            $cart =  OrderItem::where('id', $found_in_cart->id)->increment('qty');
+            OrderItem::where('id', $found_in_cart->id)->increment('qty');
         } else {
-            $cart = OrderItem::create([
+            OrderItem::create([
+                'order_id' => $order->id,
                 'product_id' => $product->id,
                 'picked_color' => $request->picked_color,
                 'picked_size' => $request->picked_size,
@@ -75,18 +95,9 @@ class OrderController extends Controller
             ]);
         }
 
-        //     DB::commit();
-        // } catch (\Exception $e) {
-        //     DB::rollback();
-        //     info($e);
-        //     return Response::json(['error' => $e], 422);
-        // }
-
-        // if ($cart) {
         return response()->json([
             'message' => 'Order registered',
         ]);
-        // }
     }
 
     public function switchToSaveForLater()
@@ -201,6 +212,9 @@ class OrderController extends Controller
                         ->withInput();
                 }
                 Wallet::where('user_id', Auth::id())->decrement('balance', $billing_total);
+            } else {
+
+                $this->zarinpalPay($order);
             }
 
             $subtotal = 0;
@@ -243,5 +257,38 @@ class OrderController extends Controller
         // return response()->json([
         //     'message' => 'success'
         // ], 200);
+    }
+
+
+    public function zarinpalPay(Order $order)
+    {
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'bank' => 'zarinpal',
+        ]);
+
+        $zarinpal = new zarinPal([
+            'merchantId' => '12369874156985214563258745632555'
+        ]);
+
+        try {
+            $request = $zarinpal->apiRequest([
+                'callbackurl' => 'http://localhost:8000/order/' . $order->id . '/details',
+                // if the currency is Rial strike 10   total *10
+                'amount' => 'paying for order by id :' . $order->id,
+                'description' => $order->billing_total,
+                'mobile' => $order->buyer()->mobile ?? null,
+                'email' => $order->buyer()->email ?? null,
+            ]);
+
+            $payment->request_info = $request;
+            $payment->save();
+
+            $decodedRequest = json_decode($request);
+
+            return redirect()->intended($decodedRequest->url);
+        } catch (\Throwable $th) {
+            var_dump(json_decode($th->getMessage()));
+        }
     }
 }

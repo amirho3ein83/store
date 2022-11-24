@@ -11,6 +11,7 @@ import LoadingModal from "@/Modals/LoadingModal.vue";
 import SuccessModal from "@/Modals/SuccessModal.vue";
 import Navbar from "@/Components/Navbar.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import axios from "axios";
 
 const storeCart = useCartStore();
 
@@ -42,7 +43,8 @@ const form = useForm({
 
 const pay = () => {
     show_loading_modal.value = true;
-    form.post(route("register.order"), {
+    axios.get(route("zarinpal.pay",{order:order}), {
+    // form.post(route("register.order"), {
         onSuccess: () => {
             show_loading_modal.value = false;
             show_success_modal.value = true;
@@ -180,7 +182,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="w-full xl:w-1/2 px-8 sm:py-4">
+            <div class="w-full xl:w-1/2 px-8 sm:py-10">
                 <div class="p-2 mb-3 border px-3">
                     <div class="flex">
                         <div class="flex items-center py-3 gap-2">

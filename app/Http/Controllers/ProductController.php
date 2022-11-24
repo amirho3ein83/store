@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductAttributeQty;
@@ -114,7 +115,7 @@ class ProductController extends Controller
             ->simplePaginate(15)
             ->withQueryString();
 
-        $in_cart_products = Order::with('product:id')->get()->pluck('product.id')->toArray();
+        $in_cart_products = OrderItem::with('product:id')->get()->pluck('product.id')->toArray();
 
         $products->map(function ($product) use ($in_cart_products) {
             $image_url = $product->getFirstMedia()->getUrl();

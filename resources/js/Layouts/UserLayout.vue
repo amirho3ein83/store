@@ -41,24 +41,16 @@ import Logout from '../Pages/Auth/Logout.vue'
                                             class="text-sm text-blueGray-400">Liked</span>
                                     </div>
                                     </Link>
-                                    <Link :href="'/user/purchases'" preserve-scroll>
+                                    <Link :href="'/user/orders-list'" preserve-scroll>
 
                                     <div class="mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
                                         <span
                                             class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"><i
                                                 class="bi bi-bag-fill"></i></span><span
-                                            class="text-sm text-blueGray-400">Purchases</span>
+                                            class="text-sm text-blueGray-400">my orders</span>
                                     </div>
                                     </Link>
-                                    <Link :href="'/cart'">
 
-                                    <div class="lg:mr-4 p-3 text-center hover:brightness-50 cursor-pointer">
-                                        <span
-                                            class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"><i
-                                                class="bi bi-cart3"></i></span><span
-                                            class="text-sm text-blueGray-400">Cart</span>
-                                    </div>
-                                    </Link>
 
                                     <Link :href="'/user/profile/wallet'" preserve-scroll>
 
