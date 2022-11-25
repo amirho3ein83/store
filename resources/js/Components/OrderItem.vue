@@ -8,26 +8,26 @@ const storeProduct = useProductStore();
 const storeCart = useCartStore();
 
 let props = defineProps({
-    order: Object,
+    orderItem: Object,
 });
 
-let qty = ref(props.order.qty);
+let qty = ref(props.orderItem.qty);
 
 let loaded = ref(false);
 
 const increaseOrder = () => {
     qty.value++;
     storeCart.increaseOrder(
-        props.order.product.id,
-        props.order.product.default_price
+        props.orderItem.product.id,
+        props.orderItem.product.default_price
     );
 };
 
 const decreaseOrder = () => {
     qty.value--;
     storeCart.decreaseOrder(
-        props.order.product.id,
-        props.order.product.default_price
+        props.orderItem.product.id,
+        props.orderItem.product.default_price
     );
 };
 
@@ -35,9 +35,9 @@ const deleteOrder = () => {
     loaded.value = false;
     storeCart.count_cart--;
     storeCart.deleteOrder(
-        props.order.product.id,
-        props.order.product.default_price,
-        props.order.qty
+        props.orderItem.product.id,
+        props.orderItem.product.default_price,
+        props.orderItem.qty
     );
 };
 
@@ -54,27 +54,27 @@ onMounted(() => {
         >
             <!-- <div class="w-30"> -->
             <img
-                @click="storeProduct.showProduct(order.product.slug)"
+                @click="storeProduct.showProduct(orderItem.product.slug)"
                 class="flex-shrink-0 rounded-lg w-24 h-24 object-cover object-center sm:mb-0"
-                :src="order.product.image_url"
+                :src="orderItem.product.image_url"
                 alt=""
             />
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow">
                 <span class="text-xs sm:text-sm">{{
-                    order.product.title
+                    orderItem.product.title
                 }}</span>
                 <span class="flex flex-col">
                     <span class="text-yellow-900 text-sm"
-                        >${{ order.product.default_price }}</span
+                        >${{ orderItem.product.default_price }}</span
                     >
                     <div class="flex gap-x-2">
                         <span
-                            :style="{ backgroundColor: order.picked_color }"
+                            :style="{ backgroundColor: orderItem.picked_color }"
                             class="block my-1 w-3 h-3 rounded-full"
                         ></span>
                         <p class="text-xs text-slate-900 my-1">
-                            {{ order.picked_size }}
+                            {{ orderItem.picked_size }}
                         </p>
                     </div>
                 </span>
@@ -118,7 +118,7 @@ onMounted(() => {
                     <span class="text-center font-semibold text-sm">Total</span>
                     <span
                         class="text-center font-semibold text-stone-800 text-sm"
-                        >${{ order.product.default_price * qty }}</span
+                        >${{ orderItem.product.default_price * qty }}</span
                     >
                 </div>
             </div>

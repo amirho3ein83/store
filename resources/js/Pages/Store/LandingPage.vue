@@ -29,7 +29,7 @@ export default {
             class="relative overflow-hidden bg-no-repeat bg-cover min-h-screen"
             style="
                 background-position: 50%;
-                background-image: url('https://cdn.searchenginejournal.com/wp-content/uploads/2022/07/shopify-store-examples-62d01563935c4-sej-1520x800.png');
+                background-image: url('https://image.cnbcfm.com/api/v1/image/104504407-GettyImages-475887220-fraud-website.jpg?v=1532563831&w=1600&h=900');
                 height: 500px;
             "
         >
@@ -64,7 +64,7 @@ export default {
             </div>
         </section>
 
-        <div class="relative overflow-hidden ">
+        <div class="relative overflow-hidden">
             <div class="pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
                 <div
                     class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8"
@@ -185,7 +185,7 @@ export default {
         </div>
 
         <div class="mx-auto flex items-center flex-wrap">
-            <div class="flex-col flex bg-gray-100 w-full">
+            <!-- <div class="flex-col flex bg-gray-100 w-full">
                 <p
                     class="text-2xl text-center w-full bold bg-gray-900 text-yellow-500 p-3"
                 >
@@ -194,32 +194,23 @@ export default {
                 <div
                     class="py-2 flex touch-pan-x bg-gray-900 overflow-x-scroll items-center justify-center"
                 >
-                    <!-- {{amazing_offers}} -->
+                    {{amazing_offers}}
                     <AmazingOffer
                         v-for="amazing_offer of amazing_offers"
                         :key="amazing_offer.id"
                         :amazing_offer="amazing_offer"
                     />
                 </div>
-            </div>
+            </div> -->
 
-            <section class="flex flex-wrap h-full p-2 my-4 justify-center">
-                <img
-                    class="sm:w-1/3 w-[300px] h-auto sm:p-7 hover:scale-105 duration-200 transition object-cover active:scale-100"
-                    src="https://i.pinimg.com/736x/a2/8a/2e/a28a2ec311907cea02fee60b3e26fc1c.jpg"
-                    alt="https://www.pngegg.com/en/png-nllal/download"
-                />
-                <img
-                    class="sm:w-1/3 w-[300px] h-auto sm:p-7 hover:scale-105 duration-200 transition object-cover active:scale-100"
-                    src="https://i.pinimg.com/originals/5c/cb/8c/5ccb8cf7968659ba21f827a945cf4b22.jpg"
-                    alt="https://www.pngegg.com/en/png-epwii/download"
-                />
-                <img
-                    class="sm:w-1/3 w-[300px] h-auto sm:p-7 hover:scale-105 duration-200 transition object-cover active:scale-100"
-                    src="https://9thwatchgroup.com/wp-content/uploads/2021/08/9th-Watch-Poster-01-01-scaled.jpg"
-                    alt="https://www.pngegg.com/en/png-zquqj/download"
-                />
-            </section>
+            <div
+                style="
+                    background-position: 50%;
+                    background-image: url('https://thumbs.dreamstime.com/b/black-friday-promotional-sale-black-low-poly-crystal-bg-black-friday-promotion-sale-banner-abstract-black-shatter-polygonal-165320770.jpg');
+                "
+                class="overflow-hidden w-full h-96 my-8"
+            >
+            </div>
 
             <section class="flex h-full p-1 mx-auto">
                 <section class="overflow-hidden text-gray-700">

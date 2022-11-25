@@ -27,12 +27,12 @@ class Order extends Model
         return $date->toFormattedDateString();
     }
 
-    public function scopePendingPurchase($query)
+    public function scopePending($query)
     {
         return $query->where([['buyer_id', Auth::id()], ['status', 'pending']]);
     }
 
-    public function scopePurchased($query)
+    public function scopeCompleted($query)
     {
         return $query->where([['buyer_id', Auth::id()], ['status', 'completed']]);
     }
@@ -45,5 +45,10 @@ class Order extends Model
     public function buyer()
     {
         return $this->hasOne(User::class, 'id', 'buyer_id');
+    }
+
+    public function address()
+    {
+        return $this->morphOne(Address::class, 'addressable');
     }
 }

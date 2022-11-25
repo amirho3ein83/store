@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('zipcode');
             $table->string('mobile');
             $table->foreignIdFor(User::class)->cascadeOnDelete();
-            $table->boolean('is_default')->default(true);
         });
     }
 

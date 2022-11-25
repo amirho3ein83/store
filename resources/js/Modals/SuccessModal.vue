@@ -12,7 +12,7 @@
         </h3>
         <h3 class="text-dark pb-2 text-lg font-bold sm:text-md my-5">
           see your order in your
-          <Link class="underline text-blue-700" :href="`/user/purchases`">purchase list</Link>
+          <Link class="underline text-blue-700" :href="`/user/orders-list`">purchase list</Link>
         </h3>
 
         <div class="w-1/2 px-3 mx-auto">

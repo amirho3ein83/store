@@ -16,7 +16,7 @@ import axios from "axios";
 const storeCart = useCartStore();
 
 let props = defineProps({
-    orderItems: Object,
+    order: Object,
     subtotal: Number,
     userAddress: Object,
     wallet: Object,
@@ -43,8 +43,8 @@ const form = useForm({
 
 const pay = () => {
     show_loading_modal.value = true;
-    axios.get(route("zarinpal.pay",{order:order}), {
-    // form.post(route("register.order"), {
+    // axios.get(route("zarinpal.pay", { order: 1 }), {
+    form.post(route("register.order", { order: props.order.id }), {
         onSuccess: () => {
             show_loading_modal.value = false;
             show_success_modal.value = true;
@@ -73,22 +73,23 @@ onMounted(() => {
     <Head title="Cart" />
 
     <Navbar />
-
     <div class="xl:container mx-auto lg:px-28">
         <div
-            v-if="Object.keys(orderItems).length != 0"
+            v-if="order"
             class="flex flex-col md:flex-row shadow-transparent"
         >
             <div
                 id="summary"
-                class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50"
+                class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50 border-t-2"
             >
                 <OrderItem
-                    v-for="order of orderItems"
-                    :order="order"
-                    :key="order.id"
+                    v-for="orderItem of order.items"
+                    :orderItem="orderItem"
+                    :key="orderItem.id"
                 />
-                <div>
+                <hr />
+
+                <div class="">
                     <p
                         class="lg:text-2xl text-xl py-3 font-black leading-9 text-gray-800 dark:text-white"
                     >
@@ -183,7 +184,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="w-full xl:w-1/2 px-8 sm:py-10">
-                <div class="p-2 mb-3 border px-3">
+                <div class="p-2 mb-3 border-l px-3">
                     <div class="flex">
                         <div class="flex items-center py-3 gap-2">
                             <input
@@ -276,14 +277,28 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div class="flex justify-center">
+                    <div class="flex justify-between px-5">
+                        <div class="flex justify-between">
+                            <div class="flex items-center pt-3">
+                                <input
+                                    v-model="form.useWallet"
+                                    type="checkbox"
+                                    class="w-6 h-6 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent"
+                                /><label
+                                    for="safeAdress"
+                                    class="block ml-2 text-md text-gray-900"
+                                    >Use my wallet</label
+                                >
+                            </div>
+                        </div>
                         <PrimaryButton
-                            class="text-base self-center leading-none w-2/3 content-center justify-center py-5 bg-gray-800 border-gray-800 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white dark:hover:bg-gray-700"
+                            class="text-base self-center leading-none w-1/2 content-center justify-center py-5 bg-[#bf8334] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white dark:hover:bg-gray-700"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
                             Checkout
                         </PrimaryButton>
+                        <a :href="'/zarinpal-pay/'+order.id">zarinpalp</a>
                     </div>
                 </form>
                 <div
@@ -298,7 +313,7 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <EmptyCart v-if="Object.keys(orderItems).length == 0" />
+        <EmptyCart v-if="!order" />
 
         <LoadingModal v-if="show_loading_modal" />
         <SuccessModal v-if="show_success_modal" />

@@ -28,7 +28,7 @@ class UserObserver
             'balance' => 0,
         ]);
 
-        $user->addresses()->create([
+        $user->address()->create([
             'text' => 'S2r 1234 NW Bobcat Lane, St. Robert, MO ghgt',
             'zipcode' => '1789654-5224',
             'user_id' => 2,

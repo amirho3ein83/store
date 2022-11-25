@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Order::class)->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
             $table->integer('qty')->default(1);
+            $table->integer('billing_total')->nullable();
             $table->string('picked_color');
             $table->string('picked_size');
             $table->string('status');

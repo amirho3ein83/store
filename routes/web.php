@@ -65,13 +65,13 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
 
 
-    Route::post('/register-order', [OrderController::class, 'registerOrder'])->name('register.order');
+    Route::post('/finalize-order/{order}', [OrderController::class, 'finalizeOrder'])->name('register.order');
     Route::post('/orders/{order}/details', [OrderController::class, 'orderDetails'])->name('order.details');
 
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');
-    
+
     Route::get('/zarinpal-pay/{order}', [PaymentController::class, 'zarinpalPay'])->name('zarinpal.pay');
     Route::get('/zarinpal-verify/{payment}', [PaymentController::class, 'zarinpalVerify'])->name('zarinpal.verify');
 

@@ -16,13 +16,8 @@ class Address extends Model
         'recipient_name',
         'zipcode',
         'mobile',
-        'is_default',
         'addressable_id',
         'addressable_type',
-    ];
-
-    protected $casts = [
-        'is_default'  =>  'boolean',
     ];
 
     public function addressable()

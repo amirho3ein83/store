@@ -62,9 +62,9 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(Wallet::class);
     }
 
-    public function addresses()
+    public function address()
     {
-        return $this->morphMany(Address::class, 'addressable');
+        return $this->morphOne(Address::class, 'addressable');
     }
 
     public function likedProducts()
