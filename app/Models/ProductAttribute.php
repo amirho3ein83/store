@@ -27,11 +27,11 @@ class ProductAttribute extends Model
 
     public function size()
     {
-        return $this->hasOne(Size::class);
+        return $this->belongsTo(Size::class);
     }
 
     public function color()
     {
-        return $this->hasOne(Color::class);
+        return $this->belongsTo(Color::class);
     }
 }

@@ -17,7 +17,7 @@ let props = defineProps({
     comments: Object,
 });
 
-let picked_color = ref(props.product.attributes[0].color);
+let picked_color = ref(props.product.attributes[0].color.fa_name);
 
 let is_liked = ref(props.product.is_liked);
 
@@ -25,7 +25,7 @@ const chooseColor = (color) => {
     picked_color.value = color;
 };
 
-let picked_size = ref(props.product.attributes[0].size);
+let picked_size = ref(props.product.attributes[0].size.name);
 
 const chooseSize = (size) => {
     picked_size.value = size;
@@ -76,7 +76,7 @@ export default {
                                 @click="unlikeProduct(product.id)"
                                 class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center pt-1.5"
                             >
-                                <i class="bi bi-heart-fill text-red-600 "></i>
+                                <i class="bi bi-heart-fill text-red-600"></i>
                             </button>
 
                             <button
@@ -197,22 +197,24 @@ export default {
                                     <button
                                         v-for="attribute of product.attributes"
                                         :key="attribute.color"
-                                        @click="chooseColor(attribute.color)"
+                                        @click="
+                                            chooseColor(attribute.color.fa_name)
+                                        "
                                     >
                                         <span
                                             :class="{
                                                 'border-blue-600':
                                                     picked_color ==
-                                                    attribute.color,
+                                                    attribute.color.en_name,
                                             }"
                                             class="block p-1 border-2 hover:border-blue-600 rounded-full transition ease-in duration-300"
                                         >
                                             <a
                                                 :style="{
                                                     backgroundColor:
-                                                        attribute.color,
+                                                        attribute.color.en_name,
                                                 }"
-                                                class="block w-3 h-3 rounded-full"
+                                                class="block w-4 h-4 rounded-full"
                                             ></a>
                                         </span>
                                     </button>
@@ -228,10 +230,10 @@ export default {
                             <div class="-m-0.5 flex flex-wrap pt-3 justify-end">
                                 <SizeRadio
                                     v-for="attribute of product.attributes"
-                                    :key="attribute.size"
-                                    :size="attribute.size"
-                                    :chosen="picked_size == attribute.size"
-                                    @selected="chooseSize(attribute.size)"
+                                    :key="attribute.size.id"
+                                    :size="attribute.size.id"
+                                    :chosen="picked_size == attribute.size.id"
+                                    @selected="choose.id(attribute.size.id)"
                                 />
                             </div>
                         </div>

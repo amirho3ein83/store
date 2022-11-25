@@ -240,7 +240,7 @@ class ProductController extends Controller
     {
 
         $product = Product::where('slug', $slug)
-            ->with('brand', 'attributes', 'attributes.qty')
+            ->with('brand', 'attributes', 'attributes.qty', 'attributes.size', 'attributes.color')
             ->firstOrFail();
 
         $product->increment('reviews');
