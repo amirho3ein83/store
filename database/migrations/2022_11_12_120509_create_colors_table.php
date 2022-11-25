@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('colors', function (Blueprint $table) {
-            $table->string('name');
             $table->id();
+            $table->string('fa_name');
+            $table->string('en_name');
         });
     }
 

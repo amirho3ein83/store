@@ -213,7 +213,8 @@ class OrderController extends Controller
                 Wallet::where('user_id', Auth::id())->decrement('balance', $billing_total);
             } else {
 
-                $this->zarinpalPay($order);
+               $result = $this->zarinpalPay($order);
+                info($result);
             }
 
             $subtotal = 0;
@@ -248,35 +249,35 @@ class OrderController extends Controller
     }
 
 
-    public function zarinpalPay(Order $order)
-    {
-        $payment = Payment::create([
-            'order_id' => $order->id,
-            'bank' => 'zarinpal',
-        ]);
+    // public function zarinpalPay(Order $order)
+    // {
+    //     $payment = Payment::create([
+    //         'order_id' => $order->id,
+    //         'bank' => 'zarinpal',
+    //     ]);
 
-        $zarinpal = new zarinPal([
-            'merchantId' => '12369874156985214563258745632555'
-        ]);
+    //     $zarinpal = new zarinPal([
+    //         'merchantId' => '5e682ada-3b69-11e8-aaf3-005056a205be'
+    //     ]);
 
-        try {
-            $request = $zarinpal->apiRequest([
-                'callbackurl' => 'http://localhost:8000/order/' . $order->id . '/details',
-                // if the currency is Rial strike 10   total *10
-                'amount' => 'paying for order by id :' . $order->id,
-                'description' => $order->billing_total,
-                'mobile' => $order->buyer()->mobile ?? null,
-                'email' => $order->buyer()->email ?? null,
-            ]);
+    //     try {
+    //         $request = $zarinpal->apiRequest([
+    //             'callbackurl' => 'http://localhost:8000/order/' . $order->id . '/details',
+    //             // if the currency is Rial strike 10   total *10
+    //             'amount' => 'paying for order by id :' . $order->id,
+    //             'description' => $order->billing_total,
+    //             'mobile' => $order->buyer()->mobile ?? null,
+    //             'email' => $order->buyer()->email ?? null,
+    //         ]);
 
-            $payment->request_info = $request;
-            $payment->save();
+    //         $payment->request_info = $request;
+    //         $payment->save();
 
-            $decodedRequest = json_decode($request);
+    //         $decodedRequest = json_decode($request);
 
-            return redirect()->intended($decodedRequest->url);
-        } catch (\Throwable $th) {
-            var_dump(json_decode($th->getMessage()));
-        }
-    }
+    //         return redirect()->intended($decodedRequest->url);
+    //     } catch (\Throwable $th) {
+    //         var_dump(json_decode($th->getMessage()));
+    //     }
+    // }
 }

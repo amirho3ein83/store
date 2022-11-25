@@ -27,14 +27,6 @@ class UserObserver
         $user->wallet()->create([
             'balance' => 0,
         ]);
-
-        $user->address()->create([
-            'text' => 'S2r 1234 NW Bobcat Lane, St. Robert, MO ghgt',
-            'zipcode' => '1789654-5224',
-            'user_id' => 2,
-            'recipient_name' => 'Robert Robertson',
-            'mobile' => '555-1234'
-        ]);
     }
 
     /**

@@ -52,20 +52,20 @@ const chargeWallet = () => {
                                     stroke-linejoin="round"></path>
                             </svg>
 
-                            <div class="font-semibold text-white">wallet</div>
+                            <div class="font-semibold text-white"> کیف پول</div>
                         </div>
                     </div>
 
                     <div class="">
-                        <div class="text-sm font-semibold tracking-tight">
-                            balance
+                        <div class="text-xl font-semibold tracking-tight">
+                            موجودی
                         </div>
 
                         <div class="text-2xl font-semibold">${{ props.balance }}</div>
                     </div>
                     <div class="mt-8 py-2 flex border-t border-gray-400 justify-between align-baseline">
                         <div>
-                            charge amount
+                            میزان افزایش
                             <JetInput v-model="increaseAmount" type="number" class="mt-1 block w-full text-gray-800"
                                 required />
                         </div>

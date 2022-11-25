@@ -52,12 +52,19 @@ class Product extends Model implements HasMedia
         );
     }
 
-    protected function price(): Attribute
+    protected function defaultPrice(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value + 0,
+            get: fn ($value) => number_format($value),
         );
     }
+
+    // protected function reviews(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => number_format($value),
+    //     );
+    // }
 
     public static function last()
     {

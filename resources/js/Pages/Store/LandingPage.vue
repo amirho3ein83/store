@@ -42,9 +42,9 @@ export default {
                         <h1
                             class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight mb-12 text-cyan-400"
                         >
-                            your best shopping experience <br /><span
+                            بهترین تجربه خریدت <br /><span
                                 class="text-pink-600"
-                                >starts here</span
+                                >از اینجا شروع می شه</span
                             >
                         </h1>
                     </div>
@@ -73,12 +73,12 @@ export default {
                         <h1
                             class="font text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl"
                         >
-                            Summer styles are finally here
+                            سبک های تابستانی بالاخره آمدند
                         </h1>
                         <p class="mt-4 text-xl text-gray-500">
-                            This year, our new summer collection will shelter
-                            you from the harsh elements of a world that doesn't
-                            care if you live or die.
+                            امسال، مجموعه تابستانی جدید ما شما را در برابر عناصر
+                            خشن دنیایی که برای زنده ماندن یا مردن شما اهمیتی
+                            ندارد، پناه خواهد داد.
                         </p>
                     </div>
                     <div>
@@ -176,8 +176,8 @@ export default {
                             <a
                                 href="#"
                                 class="inline-block rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-center font-medium text-white hover:bg-indigo-700"
-                                >Shop Collection</a
-                            >
+                                >مجموعه
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -206,11 +206,10 @@ export default {
             <div
                 style="
                     background-position: 50%;
-                    background-image: url('https://thumbs.dreamstime.com/b/black-friday-promotional-sale-black-low-poly-crystal-bg-black-friday-promotion-sale-banner-abstract-black-shatter-polygonal-165320770.jpg');
+                    background-image: url('https://marketinja.com/wp-content/uploads/2021/08/BLACK_FRIDAY_2-800x450.jpg');
                 "
                 class="overflow-hidden w-full h-96 my-8"
-            >
-            </div>
+            ></div>
 
             <section class="flex h-full p-1 mx-auto">
                 <section class="overflow-hidden text-gray-700">
@@ -267,6 +266,64 @@ export default {
                 </section>
             </section>
         </div>
+
+        <section class="bg-white dark:bg-gray-900">
+            <div
+                class="container flex flex-col px-6 py-4 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center"
+            >
+                <div
+                    class="flex flex-col items-center w-full lg:flex-row lg:w-1/2"
+                >
+                    <div
+                        class="flex justify-center order-2 mt-6 lg:mt-0 lg:space-y-3 lg:flex-col"
+                    >
+                        <button
+                            class="w-3 h-3 mx-2 bg-blue-500 rounded-full lg:mx-0 focus:outline-none"
+                        ></button>
+                        <button
+                            class="w-3 h-3 mx-2 bg-gray-300 rounded-full lg:mx-0 focus:outline-none hover:bg-blue-500"
+                        ></button>
+                        <button
+                            class="w-3 h-3 mx-2 bg-gray-300 rounded-full lg:mx-0 focus:outline-none hover:bg-blue-500"
+                        ></button>
+                        <button
+                            class="w-3 h-3 mx-2 bg-gray-300 rounded-full lg:mx-0 focus:outline-none hover:bg-blue-500"
+                        ></button>
+                    </div>
+
+                    <div class="max-w-lg lg:mx-12 lg:order-2">
+                        <h1
+                            class="text-3xl font-medium tracking-wide text-gray-800 dark:text-white lg:text-4xl"
+                        >
+                            The best Apple Watch apps
+                        </h1>
+                        <p class="mt-4 text-gray-600 dark:text-gray-300">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing
+                            elit. Aut quia asperiores alias vero magnam
+                            recusandae adipisci ad vitae laudantium quod rem
+                            voluptatem eos accusantium cumque.
+                        </p>
+                        <div class="mt-6">
+                            <a
+                                href="#"
+                                class="block px-3 py-2 font-semibold text-center text-white transition-colors duration-300 transform bg-blue-500 rounded-md lg:inline hover:bg-blue-400"
+                                >Download from App Store</a
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex items-center justify-center w-full h-96 lg:w-1/2"
+                >
+                    <img
+                        class="object-cover w-full h-full max-w-2xl rounded-md"
+                        src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+                        alt="apple watch photo"
+                    />
+                </div>
+            </div>
+        </section>
 
         <section
             class="relative w-5/6 mx-auto overflow-hidden rounded-lg p-10 my-7 80 shadow-2xl lg:pb-0"

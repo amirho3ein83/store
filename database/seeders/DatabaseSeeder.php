@@ -44,7 +44,15 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
             'email' => 'demo@demo.com',
             'password' => Hash::make('111111'),
-            'name' => 'Demo',
+            'name' => 'Alexander',
+        ]);
+
+        $user->address()->create([
+            'text' => 'تهران مهران خیابان فرچام کوچه ۳۲',
+            'zipcode' => '1789654-5224',
+            'user_id' => $user->id,
+            'recipient_name' => $user->name,
+            'mobile' => '09125698433'
         ]);
 
         $wanna_like = Product::inRandomOrder()->limit(2)->get();

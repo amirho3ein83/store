@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
         File::deleteDirectory(public_path('storage/images'));
 
 
-        for ($i = 1; $i < 80; $i++) {
+        for ($i = 1; $i < 40; $i++) {
 
             $product =  Product::factory()->create();
 
@@ -54,14 +54,14 @@ class ProductSeeder extends Seeder
                     ->take(1)
                     ->first();
 
-                $items = [$product->price, $product->default_price, $product->default_price + 100];
+                $items = [$product->getRawOriginal('default_price'), $product->getRawOriginal('default_price') + 100];
                 $randomPrice = $items[array_rand($items)];
 
 
                 $productAttribute = ProductAttribute::create([
                     'product_id' => $product->id,
-                    'size' => $size->name,
-                    'color' => $color->name,
+                    'size_id' => $size->id,
+                    'color_id' => $color->id,
                     'price' => $randomPrice
 
                 ]);

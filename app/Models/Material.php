@@ -12,6 +12,7 @@ class Material extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'fa_name',
+        'en_name',
     ];
 }

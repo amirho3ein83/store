@@ -45,9 +45,9 @@ onMounted(() => {
                     </h1>
                     <button
                         @click="unlikeProduct(product.id)"
-                        class="text-red-600"
+                        class="text-red-500"
                     >
-                        remove
+                        حذف
                     </button>
                 </div>
             </div>

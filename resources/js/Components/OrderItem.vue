@@ -61,12 +61,12 @@ onMounted(() => {
             />
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow">
-                <span class="text-xs sm:text-sm">{{
+                <span class="text-xs sm:text-sm text-left">{{
                     orderItem.product.title
                 }}</span>
                 <span class="flex flex-col">
-                    <span class="text-yellow-900 text-sm"
-                        >${{ orderItem.product.default_price }}</span
+                    <span class="text-yellow-900 text-sm text-left"
+                        >{{ orderItem.product.default_price }} تومان</span
                     >
                     <div class="flex gap-x-2">
                         <span
@@ -74,7 +74,7 @@ onMounted(() => {
                             class="block my-1 w-3 h-3 rounded-full"
                         ></span>
                         <p class="text-xs text-slate-900 my-1">
-                            {{ orderItem.picked_size }}
+                            {{ orderItem.picked_size }} سایز
                         </p>
                     </div>
                 </span>
@@ -82,7 +82,7 @@ onMounted(() => {
                     @click="deleteOrder()"
                     class="text-start w-1/2 pt-2 font-semibold hover:text-red-500 text-gray-500 text-xs"
                 >
-                    Remove
+                    حذف
                 </button>
             </div>
 
@@ -115,10 +115,9 @@ onMounted(() => {
                     </button>
                 </div>
                 <div class="flex-col flex px-8">
-                    <span class="text-center font-semibold text-sm">Total</span>
                     <span
-                        class="text-center font-semibold text-stone-800 text-sm"
-                        >${{ orderItem.product.default_price * qty }}</span
+                        class="text-center text-stone-800 text-sm"
+                        >{{ orderItem.product.default_price * qty }} تومان</span
                     >
                 </div>
             </div>

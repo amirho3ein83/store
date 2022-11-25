@@ -13,7 +13,7 @@ class ProductAttribute extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['product_id', 'price', 'color', 'size'];
+    protected $fillable = ['product_id', 'price', 'color_id', 'size_id'];
 
     public function product()
     {
@@ -23,5 +23,15 @@ class ProductAttribute extends Model
     public function qty()
     {
         return $this->hasOne(ProductAttributeQty::class);
+    }
+
+    public function size()
+    {
+        return $this->hasOne(Size::class);
+    }
+
+    public function color()
+    {
+        return $this->hasOne(Color::class);
     }
 }

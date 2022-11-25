@@ -16,8 +16,7 @@ const sendReport = () => {
             form.reset();
             // show thanks for ur criticism
         },
-        onError: (error) => {
-        },
+        onError: (error) => {},
     });
 };
 </script>
@@ -34,20 +33,91 @@ export default {
 <template>
     <section class="bg-gray-800 w-full px-2 sm:px-20 py-10">
         <div class="-mx-4 flex flex-wrap lg:justify-between">
+            <div class="w-full px-4 lg:w-1/2 xl:w-5/12">
+                <div
+                    class="relative rounded-lg bg-gray-500 p-8 shadow-lg sm:p-8"
+                >
+                    <form @submit.prevent="sendReport">
+                        <div>
+                            <TextInput
+                                id="name"
+                                v-model="form.name"
+                                type="text"
+                                placeholder="name"
+                                class="mt-4 block w-full"
+                                required
+                            />
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.name"
+                            />
+                        </div>
+                        <div>
+                            <TextInput
+                                id="mobile"
+                                v-model="form.mobile"
+                                type="text"
+                                placeholder="mobile"
+                                class="mt-4 block w-full"
+                                required
+                            />
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.mobile"
+                            />
+                        </div>
+                        <div class="mb-5">
+                            <TextInput
+                                id="email"
+                                v-model="form.email"
+                                type="text"
+                                placeholder="email"
+                                class="mt-4 block w-full"
+                                required
+                            />
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.email"
+                            />
+                        </div>
+
+                        <div class="mb-6">
+                            <textarea
+                                v-model="form.desc"
+                                rows="6"
+                                placeholder="Your Message"
+                                class="text-body-color border-[f0f0f0] focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
+                            ></textarea>
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <PrimaryButton
+                                class="ml-4"
+                                :class="{ 'opacity-25': form.processing }"
+                                :disabled="form.processing"
+                            >
+                                post comment
+                            </PrimaryButton>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="w-full px-4 lg:w-1/2 xl:w-6/12">
                 <div class="mb-12 max-w-[570px] lg:mb-0">
                     <h2
                         class="text-gray-100 mb-6 text-[32px] font-bold uppercase sm:text-[40px] lg:text-[36px] xl:text-[40px]"
                     >
-                        Contact Us
+                        ارتباط با ما
                     </h2>
                     <p
                         class="text-gray-100 text-body-color mb-9 text-base leading-relaxed"
                     >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eius tempor incididunt ut labore et dolore magna
-                        aliqua. Ut enim adiqua minim veniam quis nostrud
-                        exercitation ullamco
+                        برای جلب رضایت مشترکین خود برای آن ها طرح های تشویقی نیز
+                        ارائه کرده است . مشترکین با فعال سازی این طرح ها می
+                        توانند ، خدمات “ایرانسل” را با قیمتی مقرون به صرفه
+                        استفاده کنند . البته در صورت فعال ‌سازی هر یک از طرح‌
+                        های تخفیفی ایرانسل اعم از پیشنهاد های تشویقی ، طرح‌ های
+                        همکاری می کند و برنامه های کاربردی را در اختیار مشترکین
+                        خود ارائه کرده است .
                     </p>
                     <div class="mb-8 flex w-full max-w-[370px]">
                         <div
@@ -129,74 +199,7 @@ export default {
                     </div>
                 </div>
             </div>
-            <div class="w-full px-4 lg:w-1/2 xl:w-5/12">
-                <div
-                    class="relative rounded-lg bg-gray-500 p-8 shadow-lg sm:p-8"
-                >
-                    <form @submit.prevent="sendReport">
-                        <div>
-                            <TextInput
-                                id="name"
-                                v-model="form.name"
-                                type="text"
-                                placeholder="name"
-                                class="mt-4 block w-full"
-                                required
-                            />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.name"
-                            />
-                        </div>
-                        <div>
-                            <TextInput
-                                id="mobile"
-                                v-model="form.mobile"
-                                type="text"
-                                placeholder="mobile"
-                                class="mt-4 block w-full"
-                                required
-                            />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.mobile"
-                            />
-                        </div>
-                        <div class="mb-5">
-                            <TextInput
-                                id="email"
-                                v-model="form.email"
-                                type="text"
-                                placeholder="email"
-                                class="mt-4 block w-full"
-                                required
-                            />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.email"
-                            />
-                        </div>
 
-                        <div class="mb-6">
-                            <textarea
-                                v-model="form.desc"
-                                rows="6"
-                                placeholder="Your Message"
-                                class="text-body-color border-[f0f0f0] focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
-                            ></textarea>
-                        </div>
-                        <div class="flex justify-end mt-4">
-                            <PrimaryButton
-                                class="ml-4"
-                                :class="{ 'opacity-25': form.processing }"
-                                :disabled="form.processing"
-                            >
-                                post comment
-                            </PrimaryButton>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </section>
 </template>

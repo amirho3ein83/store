@@ -74,18 +74,41 @@ export default {
                             <button
                                 v-if="is_liked"
                                 @click="unlikeProduct(product.id)"
-                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1"
+                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center pt-1.5"
                             >
-                                <i class="bi bi-heart-fill text-red-600"></i>
+                                <i class="bi bi-heart-fill text-red-600 "></i>
                             </button>
 
                             <button
                                 v-else
                                 @click="likeProduct(product.id)"
-                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center p-1"
+                                class="transition ease-in duration-75 active:scale-100 hover:scale-105 bg-gray-800 hover:text-purple-500 shadow hover:shadow-md text-gray-500 rounded-full w-9 h-9 text-center pt-1.5"
                             >
                                 <i class="bi bi-heart text-red-600"></i>
                             </button>
+                        </div>
+                        <div
+                            v-if="$page.props.auth"
+                            class="absolute flex flex-col bottom-0 right-0 p-3"
+                        >
+                            <div class="mt-8 flex">
+                                <div
+                                    class="flex space-x-2 text-sm font-medium justify-start"
+                                >
+                                    <Link
+                                        href="/login"
+                                        v-if="!$page.props.auth"
+                                        class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600"
+                                    >
+                                        برای دسترسی به سبد خرید خود وارد شوید
+                                    </Link>
+                                    <AddToCartButton
+                                        v-else
+                                        :id="product.id"
+                                        @pressed="addToCart()"
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <img
                             :src="product.image_url"
@@ -98,23 +121,31 @@ export default {
                 <div class="sticky top-2 md:w-1/2 w-full">
                     <strong
                         v-if="product.featured"
-                        class="rounded-full border bg-gray-700 px-3 py-1 text-xs font-medium tracking-wide text-[#37fa51]"
+                        class="rounded-full bg-gray-700 px-3 py-1 text-md font-medium tracking-wide text-[#37fa51]"
                     >
-                        Featured Order
+                        ویژه
                     </strong>
 
                     <div class="mt-8 flex justify-between">
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                class="text-xl text-yellow-800 font-semibold mt-1"
+                            >
+                                {{ product.default_price }}
+                                <span class="text-stone-700">تومان</span>
+                            </div>
+                        </div>
                         <div class="max-w-[35ch]">
                             <h1 class="text-2xl font-bold pb-2">
                                 {{ product.title }}
                             </h1>
-                            <h1 class="text-sm font-thin">
-                                Brand:
+                            <h1 class="text-md font-thin">
                                 <span class="text-indigo-700">{{
                                     product.brand.name
                                 }}</span>
+                                برند
                             </h1>
-                            <h4 class="text-slate-600 font-extralight">
+                            <h4 class="text-slate-800 font-extralight">
                                 {{ product.details }}
                             </h4>
 
@@ -125,11 +156,11 @@ export default {
                                 class="text-sm font-medium text-slate-800 underline hover:no-underline dark:text-white"
                             >
                                 {{ product.reviews }}
-                                reviews
+                                بازدید
                             </p>
-                            <div class="mt-2 -ml-0.5 flex">
+                            <div class="mt-2 -ml-0.5 flex justify-end">
                                 <svg
-                                    class="h-5 w-5 text-yellow-400"
+                                    class="h-6 w-6 text-yellow-400"
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
@@ -140,28 +171,15 @@ export default {
                                 </svg>
 
                                 <p
-                                    class="text-sm font-bold text-cyan-700 dark:text-white"
+                                    class="text-md font-bold text-cyan-700 dark:text-white"
                                 >
                                     {{ product.rate }}
                                 </p>
                             </div>
                         </div>
-
-                        <div class="flex flex-col items-center gap-2">
-                            <div
-                                class="text-xl text-yellow-600 font-semibold mt-1"
-                            >
-                                $ {{ product.default_price }}
-                            </div>
-                            <!-- <span
-                                v-if="product.default_price != product.price"
-                                class="text-red-400 line-through text-sm"
-                                >$ {{ product.price }}</span
-                            > -->
-                        </div>
                     </div>
 
-                    <p class="my-4">
+                    <p class="my-4 text-slate-700">
                         {{ product.description }}
                     </p>
                     <!-- <p class="my-4">
@@ -169,10 +187,10 @@ export default {
                     </p> -->
 
                     <fieldset>
-                        <legend class="mt-3 text-sm font-medium">Color</legend>
+                        <legend class="mt-3 text-sm font-medium">رنگ</legend>
 
                         <div class="flow-root">
-                            <div class="-m-0.5 flex flex-wrap">
+                            <div class="-m-0.5 flex flex-wrap pt-3 justify-end">
                                 <ul
                                     class="flex flex-row justify-center items-center space-x-2"
                                 >
@@ -204,10 +222,10 @@ export default {
                     </fieldset>
 
                     <fieldset class="mt-4">
-                        <legend class="mb-1 text-sm font-medium">Size</legend>
+                        <legend class="mb-1 text-sm font-medium">سایز</legend>
 
                         <div class="flow-root">
-                            <div class="-m-0.5 flex flex-wrap">
+                            <div class="-m-0.5 flex flex-wrap pt-3 justify-end">
                                 <SizeRadio
                                     v-for="attribute of product.attributes"
                                     :key="attribute.size"
@@ -218,25 +236,6 @@ export default {
                             </div>
                         </div>
                     </fieldset>
-
-                    <div class="mt-8 flex">
-                        <div
-                            class="flex space-x-2 text-sm font-medium justify-start"
-                        >
-                            <Link
-                                href="/login"
-                                v-if="!$page.props.auth"
-                                class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600"
-                            >
-                                Log in to access your cart
-                            </Link>
-                            <AddToCartButton
-                                v-else
-                                :id="product.id"
-                                @pressed="addToCart()"
-                            />
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

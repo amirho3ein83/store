@@ -57,13 +57,6 @@ const pay = () => {
     });
 };
 
-// const calculateTotal = () => {
-//     return (
-//         parseFloat(storeCart.subtotal) +
-//         parseFloat(((9 / 100) * storeCart.subtotal).toFixed(2))
-//     );
-// };
-
 onMounted(() => {
     storeCart.subtotal = props.subtotal;
 });
@@ -73,11 +66,9 @@ onMounted(() => {
     <Head title="Cart" />
 
     <Navbar />
+
     <div class="xl:container mx-auto lg:px-28">
-        <div
-            v-if="order"
-            class="flex flex-col md:flex-row shadow-transparent"
-        >
+        <div v-if="order" class="flex flex-col md:flex-row shadow-transparent">
             <div
                 id="summary"
                 class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50 border-t-2"
@@ -93,7 +84,7 @@ onMounted(() => {
                     <p
                         class="lg:text-2xl text-xl py-3 font-black leading-9 text-gray-800 dark:text-white"
                     >
-                        Summary
+                        خلاصه سبد
                     </p>
 
                     <div class="my-4">
@@ -101,45 +92,44 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                Subtotal
+                                مجموع
                             </p>
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ storeCart.subtotal }}$
-                            </p>
-                        </div>
-                        <div class="flex items-center justify-between pt-5">
-                            <p
-                                class="text-base leading-none text-gray-800 dark:text-white"
-                            >
-                                Tax
-                            </p>
-                            <p
-                                class="text-base leading-none text-gray-800 dark:text-white"
-                            >
-                                {{
-                                    Math.trunc((9 / 100) * storeCart.subtotal)
-                                }}$
+                                {{ storeCart.subtotal }} تومان
                             </p>
                         </div>
                         <div class="flex items-center justify-between pt-5">
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                Delivey cost
+                                مالیات ٪۹
+                            </p>
+                            <p
+                                class="text-base leading-none text-gray-800 dark:text-white"
+                            >
+                                {{ Math.trunc((9 / 100) * storeCart.subtotal) }}
+                                تومان
+                            </p>
+                        </div>
+                        <div class="flex items-center justify-between pt-5">
+                            <p
+                                class="text-base leading-none text-gray-800 dark:text-white"
+                            >
+                                هزینه ارسال
                             </p>
                             <p
                                 v-if="storeCart.subtotal <= 700"
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ deliveryCost }}$
+                                {{ deliveryCost }} تومان
                             </p>
                             <p
                                 v-else
                                 class="text-base leading-none text-red-800 dark:text-white"
                             >
-                                free 0$
+                                رایگان
                             </p>
                         </div>
                     </div>
@@ -151,7 +141,7 @@ onMounted(() => {
                         <p
                             class="text-2xl font-bold leading-normal text-gray-800 dark:text-white"
                         >
-                            Total
+                            جمع کل
                         </p>
                         <p
                             class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white"
@@ -161,38 +151,42 @@ onMounted(() => {
                                     storeCart.subtotal +
                                         (9 / 100) * storeCart.subtotal
                                 ) + deliveryCost
-                            }}$
+                            }}
+                            تومان
                         </p>
                     </div>
-                    <div class="flex w-full shadow-sm rounded-lg">
-                        <div
-                            class="bg-yellow-600 py-1 px-3 rounded-lg flex items-center"
-                        >
-                            <i class="bi bi-truck"></i>
-                        </div>
+
+                    <div
+                        class="flex w-full shadow-sm rounded-lg border-t-2 py-2"
+                    >
                         <div
                             class="px-1 py-2 flex justify-between items-center w-full"
                         >
                             <div>
-                                Free delivery
+                                ارسال رایگان
                                 <span class="text-stone-700 text-sm"
-                                    >for purchase over 700$</span
+                                    >برای خرید بالای ۵۰۰ هزار تومان</span
                                 >
                             </div>
+                        </div>
+                        <div
+                            class="bg-[#8bb9e8] py-1 px-3 rounded-lg flex items-center"
+                        >
+                            <i class="bi bi-truck"></i>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="w-full xl:w-1/2 px-8 sm:py-10">
-                <div class="p-2 mb-3 border-l px-3">
-                    <div class="flex">
+                <div class="p-2 mb-3 border-l px-5">
+                    <div class="flex justify-end">
                         <div class="flex items-center py-3 gap-2">
+                            <p>استفاده از آدرس پیش فرض</p>
                             <input
                                 v-model="form.use_default_address"
                                 type="checkbox"
                                 class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
                             />
-                            <p>use default address</p>
                         </div>
                     </div>
                     <p class="text-gray-500 text-sm">
@@ -212,13 +206,13 @@ onMounted(() => {
                 <form @submit.prevent="pay()" class="space-y-4">
                     <div class="mt-5 bg-stone-50 rounded-lg shadow">
                         <div class="flex">
-                            <div class="flex-1 py-1 pl-5 overflow-hidden">
-                                <i class="bi bi-geo-alt"></i>
+                            <div class="flex-1 py-1 px-5 overflow-hidden">
                                 <h1
                                     class="inline text-lg font-semibold leading-none"
                                 >
-                                    Address
+                                    آدرس
                                 </h1>
+                                <i class="bi bi-geo-alt"></i>
                             </div>
                         </div>
                         <div class="px-5 pb-5">
@@ -226,7 +220,7 @@ onMounted(() => {
                                 :disabled="form.use_default_address"
                                 v-model="form.recipient_name"
                                 type="text"
-                                placeholder="recipient name"
+                                placeholder="نام گیرنده"
                                 class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                             />
 
@@ -234,7 +228,7 @@ onMounted(() => {
                                 :disabled="form.use_default_address"
                                 v-model="form.address"
                                 type="text"
-                                placeholder="Address"
+                                placeholder="نشانی"
                                 class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                             />
                             <div class="flex">
@@ -243,7 +237,7 @@ onMounted(() => {
                                         :disabled="form.use_default_address"
                                         type="number"
                                         v-model="form.mobile"
-                                        placeholder="mobile"
+                                        placeholder="موبایل"
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                                     />
                                 </div>
@@ -251,8 +245,8 @@ onMounted(() => {
                                     <input
                                         :disabled="form.use_default_address"
                                         v-model="form.zipcode"
-                                        type="number"
-                                        placeholder="postal code"
+                                        type="number "
+                                        placeholder="کدپستی"
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                                     />
                                 </div>
@@ -270,7 +264,7 @@ onMounted(() => {
                                     /><label
                                         for="safeAdress"
                                         class="block ml-2 text-sm text-gray-900"
-                                        >Save as default address</label
+                                        >ذخیرش کن واس بد</label
                                     >
                                 </div>
                             </div>
@@ -287,18 +281,17 @@ onMounted(() => {
                                 /><label
                                     for="safeAdress"
                                     class="block ml-2 text-md text-gray-900"
-                                    >Use my wallet</label
+                                    >از کیف پول استفاده کن</label
                                 >
                             </div>
                         </div>
                         <PrimaryButton
-                            class="text-base self-center leading-none w-1/2 content-center justify-center py-5 bg-[#bf8334] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white dark:hover:bg-gray-700"
+                            class="text-base self-center leading-none w-1/2 content-center justify-center py-5 bg-[#bf8334] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-stone-900 dark:hover:bg-gray-700"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Checkout
+                            اتمام خرید
                         </PrimaryButton>
-                        <a :href="'/zarinpal-pay/'+order.id">zarinpalp</a>
                     </div>
                 </form>
                 <div

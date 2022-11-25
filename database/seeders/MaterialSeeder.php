@@ -15,20 +15,49 @@ class MaterialSeeder extends Seeder
      */
     public function run()
     {
+
+
         $materials = [
-            1 => 'glass',
-            2 => 'plastic',
-            3 => 'paper',
-            4 => 'leather',
-            5 => 'Chemical',
-            5 => 'wood',
-            5 => 'steel',
-            5 => 'metal',
+            1 => [
+                'fa_name' => ' شیشه',
+                'en_name' => 'glass',
+            ],
+            2 => [
+                'fa_name' => 'پلاستیک',
+                'en_name' => 'plastic',
+            ],
+            3 => [
+                'fa_name' => 'کاغذ',
+                'en_name' => 'paper',
+            ],
+            4 => [
+                'fa_name' => 'چرم',
+                'en_name' => 'leather',
+            ],
+            5 => [
+                'fa_name' => 'چوبی',
+                'en_name' => 'wood',
+            ],
+            6 => [
+                'fa_name' => 'فولاد',
+                'en_name' => 'steel',
+            ],
+            7 => [
+                'fa_name' => ' فلز',
+                'en_name' => 'metal',
+            ],
+            8 => [
+                'fa_name' => 'نانو',
+                'en_name' => 'nano',
+            ],
+
+
         ];
 
         foreach ($materials as $key => $material) {
             Material::create([
-                'name' => $material
+                'fa_name' => $material['fa_name'],
+                'en_name' => $material['en_name'],
             ]);
         }
     }

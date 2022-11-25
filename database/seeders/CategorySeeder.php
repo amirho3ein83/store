@@ -16,16 +16,16 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $categories = [
-            1 => 'Digital',
-            2 => 'Mobile',
-            3 => 'Tools',
-            4 => 'Health',
-            5 => 'Furniture',
-            6 => 'Sport',
-            7 => 'Clothes',
-            8 => 'Stationary',
-            9 => 'Accessory',
-            10 => 'Game Console',
+            1 => 'دیجیتال',
+            2 => 'موبایل',
+            3 => 'ابزار آلات',
+            4 => 'سلامتی',
+            5 => 'مبلمان',
+            6 => 'ورزشی',
+            7 => 'لباس',
+            8 => 'لوازم تحریر',
+            9 => 'اکسسوری',
+            10 => 'کنسول و بازی',
         ];
 
         foreach ($categories as $key => $category) {

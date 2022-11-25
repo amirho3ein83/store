@@ -10,7 +10,8 @@ class Color extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'fa_name',
+        'en_name',
     ];
 
     public $timestamps = false;

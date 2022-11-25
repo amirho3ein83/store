@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('fa_name');
+            $table->string('en_name');
         });
     }
 

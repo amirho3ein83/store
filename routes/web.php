@@ -74,6 +74,8 @@ Route::middleware([
 
     Route::get('/zarinpal-pay/{order}', [PaymentController::class, 'zarinpalPay'])->name('zarinpal.pay');
     Route::get('/zarinpal-verify/{payment}', [PaymentController::class, 'zarinpalVerify'])->name('zarinpal.verify');
+    Route::get('/pay', [PaymentController::class, 'payRequest']);
+    Route::get('/payment-callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
 
     Route::patch('/charge-wallet', [WalletController::class, 'increaseWalletBalance'])->name('charge.wallet');

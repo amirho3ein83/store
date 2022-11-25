@@ -11,15 +11,13 @@ let props = defineProps({
     address: Object,
     wallet: Object,
 });
-
-
 </script>
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 
 export default {
-    layout: AppLayout
-}
+    layout: AppLayout,
+};
 </script>
 <template>
     <UserLayout>
