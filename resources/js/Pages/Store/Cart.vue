@@ -66,9 +66,11 @@ onMounted(() => {
     <Head title="Cart" />
 
     <Navbar />
-
     <div class="xl:container mx-auto lg:px-28">
-        <div v-if="order" class="flex flex-col md:flex-row shadow-transparent">
+        <div
+            v-if="order.items.length != 0"
+            class="flex flex-col md:flex-row shadow-transparent"
+        >
             <div
                 id="summary"
                 class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50 border-t-2"
@@ -120,7 +122,7 @@ onMounted(() => {
                                 هزینه ارسال
                             </p>
                             <p
-                                v-if="storeCart.subtotal <= 700"
+                                v-if="storeCart.subtotal <= 500000"
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
                                 {{ deliveryCost }} تومان
@@ -306,8 +308,7 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <EmptyCart v-if="!order" />
-
+        <EmptyCart v-else />
         <LoadingModal v-if="show_loading_modal" />
         <SuccessModal v-if="show_success_modal" />
     </div>

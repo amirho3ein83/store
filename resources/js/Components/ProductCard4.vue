@@ -41,7 +41,7 @@ onMounted(() => {
                     class="flex items-center justify-between py-2 px-3 bg-gray-400"
                 >
                     <h1 class="text-gray-800 font-bold">
-                        $ {{ product.price }}
+                         {{ product.default_price }}
                     </h1>
                     <button
                         @click="unlikeProduct(product.id)"

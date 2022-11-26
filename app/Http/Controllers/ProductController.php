@@ -120,6 +120,7 @@ class ProductController extends Controller
         $products->map(function ($product) use ($in_cart_products) {
             $image_url = $product->getFirstMedia()->getUrl();
             $product->image_url = $image_url;
+            // $product->default_price = convertToPersianNumber($product->default_price);
         });
 
         return Inertia::render(

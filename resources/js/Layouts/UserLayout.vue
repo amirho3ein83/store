@@ -1,5 +1,5 @@
 <script setup>
-import Logout from "../Pages/Auth/Logout.vue";
+import Logout from "@/Modals/triggers/Logout.vue";
 </script>
 
 <template>

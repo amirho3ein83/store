@@ -78,7 +78,8 @@ Route::middleware([
     Route::get('/payment-callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
 
-    Route::patch('/charge-wallet', [WalletController::class, 'increaseWalletBalance'])->name('charge.wallet');
+    Route::get('/wallet-payment-request', [WalletController::class, 'walletPaymentRequest'])->name('wallet.payment.request');
+    Route::get('/wallet-payment-callback', [WalletController::class, 'walletPaymentCallback'])->name('wallet.payment.callback');
 
     Route::patch('/cart/products/{id}/increase-order', [OrderController::class, 'increaseOrder'])->name('cart.increase-order');
     Route::patch('/cart/products/{id}/decrease-order', [OrderController::class, 'decreaseOrder'])->name('cart.decrease-order');

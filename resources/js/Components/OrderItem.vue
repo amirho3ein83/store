@@ -19,7 +19,7 @@ const increaseOrder = () => {
     qty.value++;
     storeCart.increaseOrder(
         props.orderItem.product.id,
-        props.orderItem.product.default_price
+        props.orderItem.product.en_price
     );
 };
 
@@ -27,7 +27,7 @@ const decreaseOrder = () => {
     qty.value--;
     storeCart.decreaseOrder(
         props.orderItem.product.id,
-        props.orderItem.product.default_price
+        props.orderItem.product.en_price
     );
 };
 
@@ -36,7 +36,7 @@ const deleteOrder = () => {
     storeCart.count_cart--;
     storeCart.deleteOrder(
         props.orderItem.product.id,
-        props.orderItem.product.default_price,
+        props.orderItem.product.en_price,
         props.orderItem.qty
     );
 };
@@ -115,9 +115,8 @@ onMounted(() => {
                     </button>
                 </div>
                 <div class="flex-col flex px-8">
-                    <span
-                        class="text-center text-stone-800 text-sm"
-                        >{{ orderItem.product.default_price * qty }} تومان</span
+                    <span class="text-center text-stone-800 text-sm"
+                        >{{ orderItem.product.en_price * qty }} تومان</span
                     >
                 </div>
             </div>

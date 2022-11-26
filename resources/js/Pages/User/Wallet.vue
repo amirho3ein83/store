@@ -4,6 +4,8 @@ import WalletCard from "@/Components/WalletCard.vue";
 import UserSidebar from "@/Components/UserSidebar.vue";
 import { ref } from "vue";
 import { add } from "lodash";
+import Navbar from "@/Components/Navbar.vue";
+import ConfirmPaymentTrigger from "@/Modals/triggers/ConfirmPaymentTrigger.vue";
 
 // const previewImage = ref(null);
 let props = defineProps({
@@ -12,14 +14,10 @@ let props = defineProps({
     wallet: Object,
 });
 </script>
-<script>
-import AppLayout from "@/Layouts/AppLayout.vue";
 
-export default {
-    layout: AppLayout,
-};
-</script>
 <template>
+    <Navbar />
+
     <UserLayout>
         <WalletCard :balance="wallet.balance" />
     </UserLayout>

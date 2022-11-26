@@ -33,11 +33,12 @@ class OrderController extends Controller
             $orderItems->map(function ($item) {
                 $image_url = $item->product->getFirstMedia()->getUrl();
                 $item->product->image_url = $image_url;
+                $item->product->en_price = $item->product->getRawOriginal('default_price');
             });
 
             $subtotal = 0;
             foreach ($orderItems as $key => $item) {
-                $subtotal += $item->qty * $item->product->default_price;
+                $subtotal += $item->qty * $item->product->getRawOriginal('default_price');
             }
         }
 
@@ -213,7 +214,7 @@ class OrderController extends Controller
                 Wallet::where('user_id', Auth::id())->decrement('balance', $billing_total);
             } else {
 
-               $result = $this->zarinpalPay($order);
+                $result = $this->zarinpalPay($order);
                 info($result);
             }
 
