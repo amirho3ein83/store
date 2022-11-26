@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use Evryn\LaravelToman\CallbackRequest;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -10,51 +11,44 @@ use Evryn\LaravelToman\Facades\Toman;
 
 class WalletController extends Controller
 {
+
+
+    public function walletChargeRequest($amount)
+    {
+        $transaction = Transaction::updateOrCreate(
+            ['payer_id' => Auth::id(), 'for' => 'Wallet', 'status' => 'Pending'],
+            ['amount' => $amount],
+        );
+    }
+
     public function walletPaymentRequest()
     {
 
-        $request = Toman::amount(140000)
-            ->description('Subscribing to Plan A')
-            ->callback(route('payment.callback'))
-            ->mobile('09350000000')
-            ->email('amirreza@example.com')
+        $transaction = Transaction::where(
+            [
+                'payer_id' => Auth::id(), 'for' => 'Wallet', 'status' => 'Pending',
+            ],
+        )->first();
+
+        $request = Toman::amount($transaction->amount)
+            ->description('charging wallet for ' . Auth::user()->name)
+            ->callback(route('wallet.payment.callback'))
+            // ->mobile(Auth::user()->mobile)
+            // ->email(Auth::user()->email)
             ->request();
 
-
-        // $request = Toman::amount($amount)
-        //     ->description('درگاه یرداخن برای شارژ کیف بول')
-        //     ->callback(route('payment.callback'))
-        //     ->mobile('09350000000')
-        //     ->email('amirreza@example.com')
-        //     ->request();
-
         if ($request->successful()) {
-            // Store created transaction details for verification
-            $transactionId = $request->transactionId();
+
+            $transaction->transaction_id = $request->transactionId();
+            $transaction->save();
 
             // Redirect to payment URL
             return $request->pay();
         }
 
         if ($request->failed()) {
-            // Handle transaction request failure.
+            $transaction->status = 'Failed';
         }
-
-
-
-
-        // $res =   Wallet::where('user_id', Auth::id())->increment('balance', $request->increaseAmount);
-        // $new_val = $request->increaseAmount;
-        // if (!$res) {
-        //     return response()->json([
-        //         'message' => 'failure',
-        //     ], 400);
-        // } else {
-        //     return response()->json([
-        //         'message' => 'success',
-        //         'new_val' => $new_val
-        //     ], 200);
-        // }
     }
 
 
@@ -68,19 +62,33 @@ class WalletController extends Controller
         // in your persistence database and get expected amount, which is required
         // for verification. Take care of Double Spending.
 
-        $payment = $request->amount(1000)->verify();
+        $transaction = Transaction::where(
+            [
+                'payer_id' => Auth::id(), 'for' => 'Wallet'
+            ],
+        )->latest()->first();
+
+        $payment = $request->amount($transaction->amount)->verify();
 
         if ($payment->successful()) {
             // Store the successful transaction details
-            $referenceId = $payment->referenceId();
+            $transaction->status = 'Successful';
+            $transaction->reference_id = $payment->referenceId();
+            $transaction->save();
+
+            Wallet::where('user_id', Auth::id())->increment('balance', $transaction->amount);
+
+            return redirect()->route('user.wallet')->with(['message' => 'successful', 'new_val' => $transaction->amount]);
         }
 
         if ($payment->alreadyVerified()) {
-            // ...
+            var_dump('alreadyVerified');
         }
 
         if ($payment->failed()) {
-            // ...
+            $transaction->status = 'Failed';
+            $transaction->save();
+            return redirect()->route('user.wallet');
         }
     }
 }

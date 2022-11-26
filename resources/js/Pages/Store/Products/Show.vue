@@ -17,7 +17,7 @@ let props = defineProps({
     comments: Object,
 });
 
-let picked_color = ref(props.product.attributes[0].color.fa_name);
+let picked_color = ref(props.product.attributes[0].color);
 
 let is_liked = ref(props.product.is_liked);
 
@@ -196,15 +196,15 @@ export default {
                                 >
                                     <button
                                         v-for="attribute of product.attributes"
-                                        :key="attribute.color"
+                                        :key="attribute.color.id"
                                         @click="
-                                            chooseColor(attribute.color.fa_name)
+                                            chooseColor(attribute.color)
                                         "
                                     >
                                         <span
                                             :class="{
                                                 'border-blue-600':
-                                                    picked_color ==
+                                                    picked_color.en_name ==
                                                     attribute.color.en_name,
                                             }"
                                             class="block p-1 border-2 hover:border-blue-600 rounded-full transition ease-in duration-300"
@@ -231,9 +231,9 @@ export default {
                                 <SizeRadio
                                     v-for="attribute of product.attributes"
                                     :key="attribute.size.id"
-                                    :size="attribute.size.id"
-                                    :chosen="picked_size == attribute.size.id"
-                                    @selected="choose.id(attribute.size.id)"
+                                    :size="attribute.size.name"
+                                    :chosen="picked_size == attribute.size.name"
+                                    @selected="chooseSize(attribute.size.name)"
                                 />
                             </div>
                         </div>

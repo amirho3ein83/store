@@ -14,20 +14,7 @@ let balance = ref(props.balance);
 let amount = ref(50000);
 let showNotif = ref(false);
 
-const chargeWallet = () => {
-    if (amount.value != null) {
-        axios
-            .get(route("wallet.payment.request"))
-            .then((res) => {
-                if (res.status == 200) {
-                    props.balance += amount.value;
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-};
+
 </script>
 
 <template>
@@ -88,16 +75,17 @@ const chargeWallet = () => {
                         class="mt-4 py-2 flex border-t border-gray-400 justify-between align-baseline"
                     >
                         <div>
-                            <JetInput
+                            <input
                                 v-model="amount"
                                 type="number"
                                 class="mt-1 block w-full text-gray-800"
                                 required
+                                min="1000"
                                 placeholder="   میزان افزایش"
                             />
                         </div>
 
-                        <ConfirmPaymentTrigger :price="amount" :disabled="amount == 0"/>
+                        <ConfirmPaymentTrigger :amount="amount" :disabled="amount == 0"/>
                     </div>
                 </div>
             </div>
