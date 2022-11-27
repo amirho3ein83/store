@@ -25,6 +25,7 @@
     "dependencies": {
         "bootstrap-icons": "^1.9.1",
         "epic-spinners": "^2.0.0",
+        "mosha-vue-toastify": "^1.0.23",
         "pinia": "^2.0.23",
         "vue-horizontal-scroll": "^0.2.4"
     }

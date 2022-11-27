@@ -65,7 +65,7 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
 
 
-    Route::post('/finalize-order/{order}', [OrderController::class, 'finalizeOrder'])->name('register.order');
+    Route::post('/finalize-order/using-wallet/{order}', [OrderController::class, 'finalizeOrderUsingWallet'])->name('order.payment.wallet');
     Route::post('/orders/{order}/details', [OrderController::class, 'orderDetails'])->name('order.details');
 
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
@@ -78,9 +78,13 @@ Route::middleware([
     Route::get('/payment-callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
 
-    Route::get('/wallet-payment-request', [WalletController::class, 'walletPaymentRequest'])->name('wallet.payment.request');
-    Route::get('/wallet-payment-callback', [WalletController::class, 'walletPaymentCallback'])->name('wallet.payment.callback');
+    Route::post('/order-payment-request', [orderController::class, 'orderPaymentRequest'])->name('order.payment.request');
+    Route::get('/order/payment-gateway', [orderController::class, 'transferToPaymentGateway'])->name('order.payment.gateway');
+    Route::get('/order-payment-callback', [orderController::class, 'confirmOrderPayment'])->name('order.payment.callback');
+
     Route::get('/wallet-charge-request/{amount}', [WalletController::class, 'walletChargeRequest'])->name('wallet.charge.request');
+    Route::get('/wallet-payment-request', [WalletController::class, 'transferToPaymentGateway'])->name('wallet.payment.gateway');
+    Route::get('/wallet-payment-callback', [WalletController::class, 'confirmWalletChargePayment'])->name('wallet.payment.callback');
 
     Route::patch('/cart/products/{id}/increase-order', [OrderController::class, 'increaseOrder'])->name('cart.increase-order');
     Route::patch('/cart/products/{id}/decrease-order', [OrderController::class, 'decreaseOrder'])->name('cart.decrease-order');

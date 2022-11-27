@@ -11,8 +11,9 @@ import LoadingModal from "@/Modals/LoadingModal.vue";
 import SuccessModal from "@/Modals/SuccessModal.vue";
 import Navbar from "@/Components/Navbar.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import axios from "axios";
-
+import ConfirmPaymentTrigger from "@/Modals/triggers/ConfirmPaymentTrigger.vue";
+import { createToast } from "mosha-vue-toastify";
+import "mosha-vue-toastify/dist/style.css";
 const storeCart = useCartStore();
 
 let props = defineProps({
@@ -24,6 +25,7 @@ let props = defineProps({
 
 let show_loading_modal = ref(false);
 let show_success_modal = ref(false);
+let useWallet = ref(false);
 
 const deliveryCost = 18;
 
@@ -34,17 +36,14 @@ const form = useForm({
     zipcode: "",
     save_address_as_default: false,
     use_default_address: true,
-    card_number: null,
-    expirationYear: null,
-    expirationMonth: null,
-    cvc: null,
-    useWallet: false,
 });
 
 const pay = () => {
     show_loading_modal.value = true;
-    // axios.get(route("zarinpal.pay", { order: 1 }), {
-    form.post(route("register.order", { order: props.order.id }), {
+    setTimeout(() => {
+        show_loading_modal.value = false;
+    }, 8000);
+    form.post(route("order.payment.wallet", { order: props.order.id }), {
         onSuccess: () => {
             show_loading_modal.value = false;
             show_success_modal.value = true;
@@ -55,6 +54,18 @@ const pay = () => {
             console.log(e);
         },
     });
+};
+
+const showError = (error) => {
+    createToast(error, {
+        position: "bottom-right",
+        transition: "zoom",
+        type: "danger",
+        toastBackgroundColor: "#fc4242",
+        timeout: 2900,
+        hideProgressBar: "true",
+    });
+    form.errors = null;
 };
 
 onMounted(() => {
@@ -68,12 +79,12 @@ onMounted(() => {
     <Navbar />
     <div class="xl:container mx-auto lg:px-28">
         <div
-            v-if="order.items.length != 0"
-            class="flex flex-col md:flex-row shadow-transparent"
+            v-if="order"
+            class="flex flex-col md:flex-row md:gap-x-8 shadow-transparent"
         >
             <div
                 id="summary"
-                class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50 border-t-2"
+                class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50"
             >
                 <OrderItem
                     v-for="orderItem of order.items"
@@ -158,9 +169,7 @@ onMounted(() => {
                         </p>
                     </div>
 
-                    <div
-                        class="flex w-full shadow-sm rounded-lg border-t-2 py-2"
-                    >
+                    <div class="flex w-full shadow-sm rounded-lg py-4">
                         <div
                             class="px-1 py-2 flex justify-between items-center w-full"
                         >
@@ -179,34 +188,9 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="w-full xl:w-1/2 px-8 sm:py-10">
-                <div class="p-2 mb-3 border-l px-5">
-                    <div class="flex justify-end">
-                        <div class="flex items-center py-3 gap-2">
-                            <p>استفاده از آدرس پیش فرض</p>
-                            <input
-                                v-model="form.use_default_address"
-                                type="checkbox"
-                                class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
-                            />
-                        </div>
-                    </div>
-                    <p class="text-gray-500 text-sm">
-                        {{ userAddress.text }}
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        {{ userAddress.recipient_name }}
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        {{ userAddress.zipcode }}
-                    </p>
-                    <p class="text-gray-500 text-sm">
-                        {{ userAddress.mobile }}
-                    </p>
-                </div>
-
+            <div class="w-full xl:w-1/2 sm:py-10">
                 <form @submit.prevent="pay()" class="space-y-4">
-                    <div class="mt-5 bg-stone-50 rounded-lg shadow">
+                    <div class="mt-5 bg-stone-50 rounded-lg">
                         <div class="flex">
                             <div class="flex-1 py-1 px-5 overflow-hidden">
                                 <h1
@@ -247,7 +231,7 @@ onMounted(() => {
                                     <input
                                         :disabled="form.use_default_address"
                                         v-model="form.zipcode"
-                                        type="number "
+                                        type="number"
                                         placeholder="کدپستی"
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                                     />
@@ -266,18 +250,42 @@ onMounted(() => {
                                     /><label
                                         for="safeAdress"
                                         class="block ml-2 text-sm text-gray-900"
-                                        >ذخیرش کن واس بد</label
+                                        >ذخیره به عنوان آدرس پیش فرض</label
                                     >
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex justify-between px-5">
+                    <div class="p-2 mb-3 px-5">
+                        <div class="flex justify-end">
+                            <div class="flex items-center py-3 gap-2">
+                                <p>استفاده از آدرس پیش فرض</p>
+                                <input
+                                    v-model="form.use_default_address"
+                                    type="checkbox"
+                                    class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
+                                />
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm">
+                            {{ userAddress.text }}
+                        </p>
+                        <p class="text-gray-500 text-sm">
+                            {{ userAddress.recipient_name }}
+                        </p>
+                        <p class="text-gray-500 text-sm">
+                            {{ userAddress.zipcode }}
+                        </p>
+                        <p class="text-gray-500 text-sm">
+                            {{ userAddress.mobile }}
+                        </p>
+                    </div>
+                    <div class="flex justify-between px-5 sm:pb-2 pb-20">
                         <div class="flex justify-between">
                             <div class="flex items-center pt-3">
                                 <input
-                                    v-model="form.useWallet"
+                                    v-model="useWallet"
                                     type="checkbox"
                                     class="w-6 h-6 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent"
                                 /><label
@@ -287,24 +295,34 @@ onMounted(() => {
                                 >
                             </div>
                         </div>
-                        <PrimaryButton
-                            class="text-base self-center leading-none w-1/2 content-center justify-center py-5 bg-[#bf8334] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-stone-900 dark:hover:bg-gray-700"
-                            :class="{ 'opacity-25': form.processing }"
+                        <button
+                            v-if="useWallet"
+                            type="submit"
                             :disabled="form.processing"
+                            class="w-1/4 self-end rounded bg-[#e3d4a1] px-1 py-3 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
                         >
-                            اتمام خرید
-                        </PrimaryButton>
+                            پرداخت
+                        </button>
+                        <ConfirmPaymentTrigger
+                            v-else
+                            :amount="
+                                Math.trunc(
+                                    storeCart.subtotal +
+                                        (9 / 100) * storeCart.subtotal
+                                ) + deliveryCost
+                            "
+                            :disabled="false"
+                            :for="`Order`"
+                            :requestPath="`order.payment.request`"
+                            :gatewayPath="`order.payment.gateway`"
+                        />
                     </div>
                 </form>
-                <div
-                    v-for="error of form.errors"
-                    :key="error"
-                    class="shadow w-2/3 p-2 flex justify-center rounded-lg"
-                >
-                    <div
-                        class="bg-red-500 animate-pulse inline-block rounded-lg p-1 mr-1"
-                    ></div>
-                    <p class="p-1">{{ error }}!</p>
+
+                <div v-if="form.errors">
+                    <div v-for="error of form.errors" :key="error">
+                        {{ showError(error) }}
+                    </div>
                 </div>
             </div>
         </div>

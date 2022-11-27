@@ -1,7 +1,8 @@
 <script setup>
-import UserLayout from "@/Layouts/UserLayout.vue";
 import { onMounted, ref } from "vue";
 import { useProductStore } from "@/store/Product.js";
+import OrderItem from "@/Components/OrderItem.vue";
+import Navbar from "@/Components/Navbar.vue";
 
 const storeProduct = useProductStore();
 let showItem = ref(false);
@@ -17,79 +18,16 @@ onMounted(() => {
 });
 </script>
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
+import UserLayout from "@/Layouts/UserLayout.vue";
 
 export default {
-    layout: AppLayout,
+    layout: UserLayout,
 };
 </script>
 <template>
-    <UserLayout>
-        <section class="text-gray-600 body-font">
+    <!-- <section class="text-gray-600 body-font">
             <div class="container px-5 mx-auto">
-                <!-- <div>
-                    <div
-                        class="flex flex-wrap -m-4 justify-start"
-                        v-if="Object.keys(orders).length != 0 && showItem"
-                    >
-                        <div
-                            v-for="order of orders"
-                            :key="order.id"
-                            class="flex text-justify items-center p-2 bg-slate-200 rounded-lg my-1 md:w-1/3 sm:w-1/2 w-full"
-                        >
-                            <img
-                                @click="
-                                    storeProduct.showProduct(order.product.slug)
-                                "
-                                class="flex-shrink-0 mr-2 rounded-lg w-36 h-36 object-cover object-center sm:mb-0"
-                                :src="order.product.image_url"
-                                alt=""
-                            />
-                            <div
-                                class="flex flex-col justify-between ml-4 flex-grow"
-                            >
-                                <span class="font-bold text-sm">{{
-                                    order.product.title
-                                }}</span>
-                                <span class="flex flex-col">
-                                    <span
-                                        class="text-yellow-800 text-sm sm:text-lg"
-                                        >${{
-                                            order.product.default_price
-                                        }}</span
-                                    >x {{ order.qty }}
-                                    <div class="flex gap-2">
-                                        <span
-                                            :style="{
-                                                backgroundColor:
-                                                    order.picked_color,
-                                            }"
-                                            class="block my-1 w-3 h-3 rounded-full"
-                                        ></span>
-                                        <p class="text-xs text-slate-900 my-1">
-                                            size: {{ order.picked_size }}
-                                        </p>
-                                    </div>
-                                    <p class="text-xs text-slate-900 my-1">
-                                        date purchased:
-                                    </p>
-
-                                    <span class="text-slate-800 text-sm">{{
-                                        order.product.created_at
-                                    }}</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex mx-auto justify-center" v-else>
-                        <img
-                            src="https://cdn.dribbble.com/users/760295/screenshots/4433975/media/03494b209a1511a61868ced337b97931.png?compress=1&resize=400x300"
-                            alt=""
-                        />
-                    </div>
-                </div> -->
-
-                <!-- component -->
+{{orders}}
                 <div class="container mx-auto min-h-screen p-8 antialiased">
                     <div>
                         <div
@@ -159,7 +97,7 @@ export default {
                                             v-else
                                             class="my-3 border-gray-200 border-2 bg-gray-300 p-1"
                                         >
-                                            {{ order.billing_total }}5555
+                                            {{ order.billing_total }} تومان
                                         </div>
                                     </div>
                                 </div>
@@ -190,6 +128,88 @@ export default {
                     </div>
                 </div>
             </div>
-        </section>
-    </UserLayout>
+        </section> -->
+    <div class="flex gap-x-6">
+        <div class="w-1/2 pl-4 h-full flex flex-col">
+            <div
+                class="w-full h-full overflow-auto shadow bg-white"
+                id="journal-scroll"
+            >
+                <table class="w-full">
+                    <tbody class="">
+                        <tr
+                            v-for="order of orders"
+                            :key="order.id"
+                            class="relative transform scale-100 text-sm py-1 border-b-2 border-blue-100 cursor-default"
+                        >
+                            <td class="pl-5 pr-3 whitespace-no-wrap">
+                                <div class="text-gray-400">
+                                    {{ order.created_at }}
+                                </div>
+                            </td>
+
+                            <td class="px-2 py-2">
+                                <div class="leading-5 text-gray-500">
+                                    {{ order.billing_total }} تومان
+                                </div>
+                                <div class="leading-5 text-gray-800">
+                                    10 : تعداد اقلام
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="w-1/2">
+            <!-- <OrderItem
+                    v-for="orderItem of orders[0].items"
+                    :orderItem="orderItem"
+                    :key="orderItem.id"
+                /> -->
+            <div
+                v-for="orderItem of orders[0].items"
+                :orderItem="orderItem"
+                :key="orderItem.id"
+                class="flex items-center p-2 bg-stone-50 rounded-lg my-1"
+            >
+                <img
+                    @click="storeProduct.showProduct(orderItem.product.slug)"
+                    class="flex-shrink-0 cursor-pointer rounded-lg w-20 h-20 object-cover object-center sm:mb-0"
+                    :src="orderItem.product.image_url"
+                    alt=""
+                />
+                <div class="flex flex-col justify-between ml-4 flex-grow">
+                    <span class="text-sm sm:text-lg text-left">{{
+                        orderItem.product.title
+                    }}</span>
+                    <span class="flex flex-col">
+                        <div class="flex gap-x-2">
+                            <span
+                                :style="{
+                                    backgroundColor: orderItem.picked_color,
+                                }"
+                                class="block my-1 w-3 h-3 rounded-full"
+                            ></span>
+                            <p class="text-sm text-slate-900 my-1">
+                                {{ orderItem.picked_size }} سایز
+                            </p>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="flex flex-col-reverse flex-1 justify-center gap-5">
+                    <div class="flex-col flex px-8 text-right">
+                        <span class="text-yellow-900 text-md text-left"
+                            >قیمت ثابت
+                            {{ orderItem.product.default_price }} تومان</span
+                        >
+                        <span class="text-stone-900 text-md text-left"
+                            >{{ orderItem.qty }} تعداد
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>

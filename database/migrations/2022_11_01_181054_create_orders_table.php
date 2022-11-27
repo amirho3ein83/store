@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\RefOrder;
 use App\Models\User;
@@ -18,13 +19,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount_paid')->nullable();
             $table->integer('billing_subtotal')->nullable();
             $table->integer('billing_tax')->nullable();
             $table->integer('billing_total')->nullable();
             $table->integer('delivery_cost')->nullable();
-            $table->string('status');
-            $table->integer('no_of_items')->nullable();
+            $table->enum('payment_status', [Order::PAYMENT_STATUS_PAID, Order::PAYMENT_STATUS_PENDING])
+                ->default(Order::PAYMENT_STATUS_PENDING);
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });

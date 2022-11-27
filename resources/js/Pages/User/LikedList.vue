@@ -1,5 +1,4 @@
 <script setup>
-import UserLayout from "@/Layouts/UserLayout.vue";
 import ProductCard4 from "@/Components/ProductCard4.vue";
 
 let props = defineProps({
@@ -7,14 +6,13 @@ let props = defineProps({
 });
 </script>
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
+import UserLayout from "@/Layouts/UserLayout.vue";
 
 export default {
-    layout: AppLayout,
+    layout: UserLayout,
 };
 </script>
 <template>
-    <UserLayout>
         <section class="text-gray-600 body-font">
             <div class="flex flex-wrap -m-4">
                 <template v-if="Object.keys(liked_products).length != 0">
@@ -32,5 +30,4 @@ export default {
                 </div>
             </div>
         </section>
-    </UserLayout>
 </template>

@@ -1,13 +1,17 @@
 <script setup>
 import Logout from "@/Modals/triggers/Logout.vue";
+import Navbar from "@/Components/Navbar.vue";
+
 </script>
 
 <template>
+    <Navbar />
+
     <main class="profile-page">
-        <section class="relative sm:py-6 bg-blueGray-200">
+        <section class="relative sm:py-6 bg-[#ebe9e8]  min-h-screen">
             <div class="container mx-auto px-4">
                 <div
-                    class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb-6 shadow-xl rounded-lg"
+                    class="relative flex flex-col min-w-0 min-h-[500px] h-full break-words bg-[#babbc2] w-full mb-6 shadow-xl rounded-lg"
                 >
                     <div class="px-6">
                         <div class="flex flex-wrap justify-center">

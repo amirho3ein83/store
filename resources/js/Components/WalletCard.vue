@@ -13,8 +13,6 @@ let props = defineProps({
 let balance = ref(props.balance);
 let amount = ref(50000);
 let showNotif = ref(false);
-
-
 </script>
 
 <template>
@@ -22,7 +20,7 @@ let showNotif = ref(false);
         <div class="flex flex-col space-y-8 w-full px-16 max-w-xl items-center">
             <!-- card -->
             <div
-                class="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-72 w-96 p-6 rounded-xl shadow-md"
+                class="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-72 w-full p-6 rounded-xl shadow-md"
             >
                 <div class="h-full flex flex-col justify-between">
                     <div class="flex items-start justify-between space-x-4">
@@ -85,7 +83,13 @@ let showNotif = ref(false);
                             />
                         </div>
 
-                        <ConfirmPaymentTrigger :amount="amount" :disabled="amount == 0"/>
+                        <ConfirmPaymentTrigger
+                            :requestPath="`wallet.charge.request`"
+                            :gatewayPath="`wallet.payment.gateway`"
+                            :amount="amount"
+                            :for="`Wallet`"
+                            :disabled="amount == 0"
+                        />
                     </div>
                 </div>
             </div>

@@ -3,8 +3,13 @@ import { useCartStore } from "@/store/Cart.js";
 import { Link } from "@inertiajs/inertia-vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import { OrbitSpinner } from "epic-spinners";
+import { onMounted } from "vue";
 
 const storeCart = useCartStore();
+
+onMounted(() => {
+    storeCart.countOrders();
+});
 </script>
 
 <template>
@@ -16,10 +21,10 @@ const storeCart = useCartStore();
                 <div class="flex items-center gap-x-1">
                     <OrbitSpinner
                         :animation-duration="3000"
-                        :size="48"
-                        color="#d6d02b"
+                        :size="40"
+                        color="#feffd4"
                     />
-                    <h3 class="lg:text-3xl pl-2 text-xl font-bold font-heading">
+                    <h3 class="lg:text-4xl  pl-2 text-3xl font-bold font-heading">
                         ᎷᏗᎶᎧ
                     </h3>
                 </div>
@@ -53,12 +58,19 @@ const storeCart = useCartStore();
                     <Link class="relative flex" href="/cart" preserve-scroll>
                         <i class="bi bi-cart3 text-gray-50"></i>
 
-                        <span
+                        <div
                             v-if="storeCart.count_cart != 0"
-                            class="absolute -right-1 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center"
+                            class="flex h-5 w-5 absolute -right-2 -top-1 text-center items-center justify-center align-baseline"
                         >
-                            {{ storeCart.count_cart }}
-                        </span>
+                            <span
+                                class="animate-ping absolute flex justify-center h-full w-full rounded-full bg-[#11fa1d] opacity-75"
+                            ></span>
+                            <span
+                                class="relative inline-flex justify-center text-gray-900 text-center w-5 h-5 p-0 m-0 rounded-full bg-[#11fa1d]"
+                            >
+                                {{ storeCart.count_cart }}
+                            </span>
+                        </div>
                     </Link>
 
                     <Link
@@ -85,17 +97,24 @@ const storeCart = useCartStore();
                     <Link class="relative flex" href="/cart" preserve-scroll>
                         <i class="bi bi-cart3 text-gray-50"></i>
 
-                        <span
+                        <div
                             v-if="storeCart.count_cart != 0"
-                            class="absolute -right-1 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center"
+                            class="flex h-5 w-5 absolute -right-2 -top-1 text-center items-center justify-center align-baseline"
                         >
-                            {{ storeCart.count_cart }}
-                        </span>
+                            <span
+                                class="animate-ping absolute flex justify-center h-full w-full rounded-full bg-[#11fa1d] opacity-75"
+                            ></span>
+                            <span
+                                class="relative inline-flex justify-center text-gray-900 text-center w-5 h-5 p-0 m-0 rounded-full bg-[#11fa1d]"
+                            >
+                                {{ storeCart.count_cart }}
+                            </span>
+                        </div>
                     </Link>
 
                     <Dropdown align="right" width="48">
                         <template #trigger>
-                            <i class="bi bi-list text-lg sm:text-4xl"></i>
+                            <i class="bi bi-list text-3xl pl-2 sm:text-4xl"></i>
                             <!-- <i
                             class="mr-5 bi bi-burger  text-gray-200"
                         ></i> -->
@@ -168,6 +187,6 @@ const storeCart = useCartStore();
 </template>
 <style>
 i {
-    font-size: 24px;
+    font-size: 26px;
 }
 </style>

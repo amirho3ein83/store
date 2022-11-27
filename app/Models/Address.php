@@ -12,12 +12,13 @@ class Address extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'body',
+        'text',
         'recipient_name',
         'zipcode',
         'mobile',
         'addressable_id',
         'addressable_type',
+        'user_id',
     ];
 
     public function addressable()

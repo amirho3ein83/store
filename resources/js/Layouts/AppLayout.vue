@@ -21,9 +21,7 @@ let props = defineProps({
 watch(props.errors, (val) => {
     alert(val)
 })
-// onMounted(() => {
-//     storeCart.countOrders();
-// });
+
 </script>
 
 <template>

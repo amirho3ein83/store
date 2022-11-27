@@ -18,8 +18,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Order::class)->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignIdFor(User::class,'buyer_id')->nullable();
-            $table->string('status')->default('not_paid');
+            $table->foreignIdFor(User::class, 'buyer_id')->nullable();
+            $table->string('payment_status')->default('not_paid');
             $table->string('request_info')->nullable();
             $table->string('verify_info')->nullable();
             $table->string('bank');

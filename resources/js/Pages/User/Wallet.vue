@@ -16,7 +16,6 @@ let props = defineProps({
 </script>
 
 <template>
-    <Navbar />
 
     <UserLayout>
         <WalletCard :balance="wallet.balance" />

@@ -44,7 +44,7 @@ const unlikeProduct = (id) => {
 const addToCart = () => {
     storeCart.addToCart(
         props.product.id,
-        picked_color.value,
+        picked_color.value.en_name,
         picked_size.value
     );
 };
@@ -88,7 +88,6 @@ export default {
                             </button>
                         </div>
                         <div
-                            v-if="$page.props.auth"
                             class="absolute flex flex-col bottom-0 right-0 p-3"
                         >
                             <div class="mt-8 flex">
@@ -98,9 +97,9 @@ export default {
                                     <Link
                                         href="/login"
                                         v-if="!$page.props.auth"
-                                        class="transition ease-in duration-300 inbuttonne-flex items-center text-sm font-medium mb-2 md:mb-0 bg-cyan-500 px-5 py-2 hover:shadow-lg tracking-wider text-gray-900 rounded-full hover:bg-cyan-600"
+                                        class="transition ease-linear duration-100 items-center text-sm mb-2 md:mb-0 bg-[#a37c1c] px-5 py-2 text-gray-100 rounded-full hover:scale-105"
                                     >
-                                        برای دسترسی به سبد خرید خود وارد شوید
+                                        باید لاگین کنی
                                     </Link>
                                     <AddToCartButton
                                         v-else
@@ -197,9 +196,7 @@ export default {
                                     <button
                                         v-for="attribute of product.attributes"
                                         :key="attribute.color.id"
-                                        @click="
-                                            chooseColor(attribute.color)
-                                        "
+                                        @click="chooseColor(attribute.color)"
                                     >
                                         <span
                                             :class="{

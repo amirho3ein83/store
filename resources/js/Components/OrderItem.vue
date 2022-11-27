@@ -55,17 +55,17 @@ onMounted(() => {
             <!-- <div class="w-30"> -->
             <img
                 @click="storeProduct.showProduct(orderItem.product.slug)"
-                class="flex-shrink-0 rounded-lg w-24 h-24 object-cover object-center sm:mb-0"
+                class="flex-shrink-0 rounded-lg w-28 h-28 object-cover object-center sm:mb-0"
                 :src="orderItem.product.image_url"
                 alt=""
             />
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow">
-                <span class="text-xs sm:text-sm text-left">{{
+                <span class="text-sm sm:text-lg text-left">{{
                     orderItem.product.title
                 }}</span>
                 <span class="flex flex-col">
-                    <span class="text-yellow-900 text-sm text-left"
+                    <span class="text-yellow-900 text-md text-left"
                         >{{ orderItem.product.default_price }} تومان</span
                     >
                     <div class="flex gap-x-2">
@@ -73,14 +73,14 @@ onMounted(() => {
                             :style="{ backgroundColor: orderItem.picked_color }"
                             class="block my-1 w-3 h-3 rounded-full"
                         ></span>
-                        <p class="text-xs text-slate-900 my-1">
+                        <p class="text-sm text-slate-900 my-1">
                             {{ orderItem.picked_size }} سایز
                         </p>
                     </div>
                 </span>
                 <button
                     @click="deleteOrder()"
-                    class="text-start w-1/2 pt-2 font-semibold hover:text-red-500 text-gray-500 text-xs"
+                    class="text-start w-1/2 pt-2 font-semibold hover:text-red-500 text-gray-500 text-sm"
                 >
                     حذف
                 </button>

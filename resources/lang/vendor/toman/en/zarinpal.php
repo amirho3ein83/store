@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'status' => [
+    'payment_status' => [
         'not_paid' => 'Transaction is failed or cancelled by the user.',
         'unexpected' => 'An unexpected payment error exception is occurred.',
 

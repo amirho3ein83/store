@@ -106,15 +106,14 @@ class UserController extends Controller
 
     public function ordersList()
     {
-        $orders = Order::get();
+        $orders = Order::where('buyer_id', Auth::id())->paid()->with('items')->get();
 
-        // $orders->map(function ($order) {
-
-        //     $order->items->map(function ($item) {
-        //         $image_url = $item->product->getFirstMedia()->getUrl();
-        //         $item->product->image_url = $image_url;
-        //     });
-        // });
+        $orders->map(function ($order) {
+            $order->items->map(function ($item) {
+                $image_url = $item->product->getFirstMedia()->getUrl();
+                $item->product->image_url = $image_url;
+            });
+        });
 
         return Inertia::render(
             'User/OrdersList',

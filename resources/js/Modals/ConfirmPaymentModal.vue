@@ -4,6 +4,7 @@ import { onMounted, ref } from "vue";
 import { FingerprintSpinner } from "epic-spinners";
 defineProps({
     amount: Number,
+    gatewayPath: String,
 });
 let modalOpen = ref(false);
 let loadingModal = ref(false);
@@ -28,9 +29,7 @@ onMounted(() => {
                 class="w-full max-w-[500px] rounded-md bg-white text-center md:py-[30px] md:px-[50px]"
             >
                 <template v-if="modalOpen && !loadingModal">
-                    <h3
-                        class="pb-2 text-xl text-gray-800 font-bold sm:text-2xl"
-                    >
+                    <h3 class="text-xl text-gray-800 font-bold sm:text-2xl">
                         مبلغ قابل پرداخت
                     </h3>
                     <span
@@ -53,7 +52,7 @@ onMounted(() => {
                         <div class="w-1/2 px-3">
                             <button @click="showLoadingModal()">
                                 <a
-                                    :href="route(`wallet.payment.request`)"
+                                    :href="route(gatewayPath)"
                                     class="block w-full cursor-pointer hover:scale-105 rounded-lg border bg-[#74eb34] border-[#E9EDF9] p-3 text-center text-base font-medium transition text-gray-700"
                                 >
                                     انتقال به درگاه پرداخت
@@ -61,6 +60,10 @@ onMounted(() => {
                             </button>
                         </div>
                     </div>
+                    <span class="text-red-300 font-semibold mt-4 animate-pulse">
+                        <i class="bi bi-exclamation-triangle text-red-500"></i>
+                        یادت نره فیلتر شکن رو خاموش کنی</span
+                    >
                 </template>
 
                 <div

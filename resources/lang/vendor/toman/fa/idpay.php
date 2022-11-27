@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'status' => [
+    'payment_status' => [
         'payment_is_not_done' => 'پرداخت انجام نشده است',
         'unsuccessful_payment' => 'پرداخت ناموفق بوده است',
         'unexpected_error' => 'خطا رخ داده است',

@@ -55,6 +55,10 @@ class DatabaseSeeder extends Seeder
             'mobile' => '09125698433'
         ]);
 
+        $user->wallet()->update([
+            'balance' => 4000000
+        ]);
+
         $wanna_like = Product::inRandomOrder()->limit(2)->get();
 
         foreach ($wanna_like as $key => $product) {

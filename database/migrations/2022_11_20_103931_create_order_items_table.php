@@ -25,7 +25,8 @@ return new class extends Migration
             $table->integer('billing_total')->nullable();
             $table->string('picked_color');
             $table->string('picked_size');
-            $table->string('status');
+            $table->enum('payment_status', [Order::PAYMENT_STATUS_PAID, Order::PAYMENT_STATUS_PENDING])
+                ->default(Order::PAYMENT_STATUS_PENDING);
             $table->timestamps();
         });
     }

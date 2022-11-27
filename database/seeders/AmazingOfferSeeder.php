@@ -21,7 +21,7 @@ class AmazingOfferSeeder extends Seeder
 
         foreach ($featured_products as $key => $product) {
 
-            // $discount_percent = (int)($product->default_price  / $product->price * 10);
+            // $discount_percent = (int)($product->getRawOriginal('default_price')  / $product->price * 10);
 
             AmazingOffer::create([
                 'product_id' => $product->id,

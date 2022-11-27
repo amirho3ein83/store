@@ -13,7 +13,6 @@ export const useCartStore = defineStore("cart", {
                     picked_size: picked_size,
                 })
                 .then((res) => {
-                    console.log(res)
                     this.countOrders(id)
                 })
                 .catch((error) => {

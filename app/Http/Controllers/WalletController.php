@@ -16,17 +16,17 @@ class WalletController extends Controller
     public function walletChargeRequest($amount)
     {
         $transaction = Transaction::updateOrCreate(
-            ['payer_id' => Auth::id(), 'for' => 'Wallet', 'status' => 'Pending'],
+            ['payer_id' => Auth::id(), 'transactionـfor' => 'Wallet', 'payment_status' => 'Pending'],
             ['amount' => $amount],
         );
     }
 
-    public function walletPaymentRequest()
+    public function transferToPaymentGateway()
     {
 
         $transaction = Transaction::where(
             [
-                'payer_id' => Auth::id(), 'for' => 'Wallet', 'status' => 'Pending',
+                'payer_id' => Auth::id(), 'transactionـfor' => 'Wallet', 'payment_status' => 'Pending',
             ],
         )->first();
 
@@ -51,12 +51,7 @@ class WalletController extends Controller
         }
     }
 
-
-
-    /**
-     * Handle payment callback
-     */
-    public function walletPaymentCallback(CallbackRequest $request)
+    public function confirmWalletChargePayment(CallbackRequest $request)
     {
         // Use $request->transactionId() to match the payment record stored
         // in your persistence database and get expected amount, which is required
@@ -64,7 +59,7 @@ class WalletController extends Controller
 
         $transaction = Transaction::where(
             [
-                'payer_id' => Auth::id(), 'for' => 'Wallet'
+                'payer_id' => Auth::id(), 'transactionـfor' => 'Wallet'
             ],
         )->latest()->first();
 

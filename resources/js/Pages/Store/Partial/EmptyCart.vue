@@ -14,14 +14,14 @@
                 <h1
                     class="title-font sm:text-4xl text-3xl mb-4 font-medium text-purple-900"
                 >
-                    سبد خرید شما خالی است!
+              !خالیه عزیزم
                 </h1>
                 <div
                     class="flex w-full md:justify-start justify-center items-end"
                 >
                     <Link
                         :href="'/category'"
-                        class="inline-flex text-white bg-[#8b41e0] border-0 py-2 px-6 focus:outline-none hover:bg-[#8620fa] rounded text-lg"
+                        class="inline-flex text-white bg-[#ff5297] border-0 py-2 px-6 focus:outline-none hover:bg-[#f5317f] rounded text-lg"
                         >بیا بریم خرید </Link
                     >
                 </div>

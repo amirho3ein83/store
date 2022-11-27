@@ -32,8 +32,8 @@ class Product extends Model implements HasMedia
 
     protected $casts = [
         'reviews'  =>  'integer',
-        'rate'  =>  'integer',
-        'status'    =>  'boolean',
+        'rate'  =>  'float',
+        'payment_status'    =>  'boolean',
         'created_at' => 'date:Y-m-d',
         'featured'  =>  'boolean'
     ];

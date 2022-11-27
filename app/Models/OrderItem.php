@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderItem extends Model
 {
+
+    const PAYMENT_STATUS_PAID = 'paid';
+    const PAYMENT_STATUS_PENDING = 'pending';
+
     use HasFactory;
 
     protected $fillable = [
@@ -17,7 +21,7 @@ class OrderItem extends Model
         'picked_color',
         'picked_size',
         'billing_total',
-        'status',
+        'payment_status',
         'qty',
     ];
 
@@ -30,11 +34,16 @@ class OrderItem extends Model
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
-    public function scopePendingPurchase($query)
+    public function scopePendingPayment($query)
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'pending']]);
+        return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PENDING]]);
     }
 
+    public function scopePaid($query)
+    {
+        return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PAID]]);
+    }
+    
     public function buyer()
     {
         return $this->hasOne(User::class, 'id', 'buyer_id');

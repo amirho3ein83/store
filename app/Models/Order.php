@@ -3,12 +3,20 @@
 namespace App\Models;
 
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
+
+    const PAYMENT_STATUS_PAID = 'paid';
+    const PAYMENT_STATUS_PENDING = 'pending';
+
+
+
+
     use HasFactory;
 
     protected $fillable = [
@@ -17,8 +25,7 @@ class Order extends Model
         'billing_tax',
         'billing_total',
         'delivery_cost',
-        'status',
-        'no_of_items',
+        'payment_status',
     ];
 
 
@@ -27,14 +34,21 @@ class Order extends Model
         return $date->toFormattedDateString();
     }
 
-    public function scopePending($query)
+    protected function billingTotal(): Attribute
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'pending']]);
+        return Attribute::make(
+            get: fn ($value) =>  convertToPersianNumber(number_format($value)),
+        );
     }
 
-    public function scopeCompleted($query)
+    public function scopePendingPayment($query)
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'completed']]);
+        return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PENDING]]);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PAID]]);
     }
 
     public function items()
