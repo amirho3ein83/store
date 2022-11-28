@@ -97,7 +97,7 @@ export default {
             <button
                 class="items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md"
             >
-                Add product
+                اضافه کردن محصول
             </button>
         </Link>
         <div
@@ -135,18 +135,20 @@ export default {
             <div
                 class="flex py-3 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer"
             >
-                <Dropdown align="right" width="44">
+                <Dropdown align="right" width="48">
                     <template #trigger>
-                        <span>All categorie</span>
+                        <span>همه</span>
                         <i class="bi bi-chevron-down px-2"></i>
                     </template>
 
                     <template #content>
-                        <div >
-                            <button @click="filter_category = null"
-                                class="block cursor-pointer text-gray-50 hover:bg-gray-600 w-full rounded-xl p-2 "
-                                >All</button
+                        <div>
+                            <button
+                                @click="filter_category = null"
+                                class="block cursor-pointer text-gray-50 hover:bg-gray-600 w-full rounded-xl p-2"
                             >
+                                همه
+                            </button>
                         </div>
                         <div v-for="category of categories" :key="category.id">
                             <input
@@ -169,7 +171,7 @@ export default {
             <div
                 class="flex py-3 px-4 rounded-lg text-gray-100 font-semibold cursor-pointer"
             >
-                <Dropdown align="right" width="44">
+                <Dropdown align="right" width="48">
                     <template #trigger>
                         <i class="bi bi-border-width text-gray-700"></i>
 
@@ -191,7 +193,7 @@ export default {
                             <label
                                 for="143"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >rate</label
+                                >امتیاز</label
                             >
                         </div>
                         <div>
@@ -206,7 +208,7 @@ export default {
                             <label
                                 for="144"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >most visited</label
+                                >بیشترین بازدید</label
                             >
                         </div>
 
@@ -222,7 +224,7 @@ export default {
                             <label
                                 for="145"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >newest</label
+                                >جدیدترین</label
                             >
                         </div>
 
@@ -238,7 +240,7 @@ export default {
                             <label
                                 for="146"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >bestselling</label
+                                >پرفروش ترین</label
                             >
                         </div>
                     </template>
@@ -249,11 +251,11 @@ export default {
         <table class="text-gray-400 w-2/3 text-sm">
             <thead class="bg-gray-800 my-1 text-gray-300">
                 <tr>
-                    <th class="p-3">name</th>
-                    <th class="p-3 text-left">Category</th>
-                    <th class="p-3 text-left">Price</th>
-                    <th class="p-3 text-left">Stock</th>
-                    <th class="p-3 text-left"></th>
+                    <th class="p-3 text-left">عنوان</th>
+                    <th class="p-3">دسته بندی</th>
+                    <th class="p-3">(تومان) قیمت</th>
+                    <th class="p-3">موجودی</th>
+                    <th class="p-3"></th>
                 </tr>
             </thead>
             <tbody>
@@ -280,7 +282,7 @@ export default {
                         {{ product.categories[0].name }}
                     </td>
                     <td class="p-3 font-bold text-yellow-600">
-                        {{ product.price }}$
+                        {{ product.default_price }}
                     </td>
                     <td class="p-3">
                         <span class="text-gray-500 rounded-md px-2">

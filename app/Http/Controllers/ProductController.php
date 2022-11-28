@@ -133,22 +133,19 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         Validator::make(
             $request->all(),
             [
-                'title' => 'required',
-                'description' => 'required',
-                'details' => 'required',
-                'default_price' => 'required|numeric',
+                'title' => 'required|max:255',
+                'description' => 'required|max:255',
+                'details' => 'required|max:255',
+                'default_price' => 'required|between:1000,200000000|numeric',
                 'brand_id' => 'required|numeric',
                 'category_ids' => 'required|array',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
             ]
         )->validate();
-        // dd('done');
-
         DB::transaction(function () use ($request) {
 
             $product = Product::create([
@@ -164,19 +161,19 @@ class ProductController extends Controller
 
             $productQty = 0;
 
-            foreach ($request->attribute_groups as $key => $attributeGroup) {
+            foreach ($request->product_attributes as $key => $attr) {
 
 
                 $productAttribute = ProductAttribute::create([
                     'product_id' => $product->id,
-                    'size' => $attributeGroup->size,
-                    'color' => $attributeGroup->color,
-                    'price' => $attributeGroup->price
+                    'size' => $attr->size,
+                    'color' => $attr->color,
+                    'price' => $attr->price
 
                 ]);
 
                 $productAttributeQty = ProductAttributeQty::create([
-                    'qty' => rand(5, 50),
+                    'qty' => $attr->stock,
                     'product_attribute_id' => $productAttribute->id
                 ]);
 

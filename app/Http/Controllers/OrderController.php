@@ -29,7 +29,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $order = Order::where('buyer_id', Auth::id())->pendingPayment()->with('items')->first();
+        $order = Order::where('buyer_id', Auth::id())->pendingPayment()->with('items', 'address')->first();
         $orderItems = $order->items ?? null;
         if ($orderItems) {
             $orderItems->map(function ($item) {
@@ -40,7 +40,7 @@ class OrderController extends Controller
 
             $subtotal = 0;
             foreach ($orderItems as $key => $item) {
-                $subtotal += $item->qty * $item->product->getRawOriginal('default_price');
+                $subtotal += $item->getRawOriginal('qty') * $item->product->getRawOriginal('default_price');
             }
         }
 
@@ -74,8 +74,8 @@ class OrderController extends Controller
     public function addToCart(Request $request)
     {
         $order = Order::firstOrCreate(
-            ['buyer_id' => Auth::id()],
-            ['payment_status' => Order::PAYMENT_STATUS_PENDING]
+            ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING],
+            []
         );
 
         $product = Product::find($request->product_id);
@@ -171,6 +171,9 @@ class OrderController extends Controller
                     [
                         'addressable_id' => $user->id,
                         'addressable_type' => 'App\Models\User',
+                    ],
+                    [
+
                         'text' => $request->address,
                         'zipcode' => $request->zipcode,
                         'user_id' => Auth::id(),

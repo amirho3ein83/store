@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,21 @@ class OrderItem extends Model
         'qty'  =>  'integer',
     ];
 
+
+    protected function billingTotal(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) =>  convertToPersianNumber(number_format($value)),
+        );
+    }
+
+    // protected function qty(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) =>  convertToPersianNumber(number_format($value)),
+    //     );
+    // }
+
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
@@ -43,7 +59,7 @@ class OrderItem extends Model
     {
         return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PAID]]);
     }
-    
+
     public function buyer()
     {
         return $this->hasOne(User::class, 'id', 'buyer_id');

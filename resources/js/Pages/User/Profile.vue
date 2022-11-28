@@ -1,5 +1,4 @@
 <script setup>
-import UserLayout from "@/Layouts/UserLayout.vue";
 import WalletCard from "@/Components/WalletCard.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
@@ -72,119 +71,117 @@ watch(previewImage, (previewImage) => {
 });
 </script>
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
+import UserLayout from "@/Layouts/UserLayout.vue";
 import { Inertia } from "@inertiajs/inertia";
 
 export default {
-    layout: AppLayout,
+    layout: UserLayout,
 };
 </script>
 <template>
-    <UserLayout>
-        <section
-            class="lg:w-4/6 md:w-2/3 w-full sm:flex justify-center mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
-        >
-            <div class="w-1/2 mx-auto">
-                <div class="mt-6 w-fit mx-auto">
-                    <img
-                        v-if="previewImage == null"
-                        src="https://as1.ftcdn.net/v2/jpg/02/10/49/86/1000_F_210498655_ywivjjUe6cgyt52n4BxktRgDCfFg8lKx.jpg"
-                        class="rounded-full w-36 h-36 object-cover"
-                        alt="profile picture"
-                        srcset=""
-                    />
-                    <img
-                        v-else-if="!imageUrl"
-                        :src="previewImage"
-                        class="rounded-full w-36 h-36 object-cover"
-                        alt="profile picture"
-                        srcset=""
-                    />
-                    <img
-                        v-else
-                        :src="imageUrl"
-                        class="rounded-full w-36 h-36 object-cover"
-                        alt="profile picture"
-                        srcset=""
-                    />
-                </div>
-                <div class="my-5">
-                    <h2 class="text-white font-bold text-2xl tracking-wide">
-                        {{ user.name }}
-                    </h2>
-                </div>
+    <section
+        class="lg:w-4/6 md:w-2/3 w-full sm:flex justify-center mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
+    >
+        <div class="w-1/2 mx-auto">
+            <div class="mt-6 w-fit mx-auto">
+                <img
+                    v-if="previewImage == null"
+                    src="https://as1.ftcdn.net/v2/jpg/02/10/49/86/1000_F_210498655_ywivjjUe6cgyt52n4BxktRgDCfFg8lKx.jpg"
+                    class="rounded-full w-36 h-36 object-cover"
+                    alt="profile picture"
+                    srcset=""
+                />
+                <img
+                    v-else-if="!imageUrl"
+                    :src="previewImage"
+                    class="rounded-full w-36 h-36 object-cover"
+                    alt="profile picture"
+                    srcset=""
+                />
+                <img
+                    v-else
+                    :src="imageUrl"
+                    class="rounded-full w-36 h-36 object-cover"
+                    alt="profile picture"
+                    srcset=""
+                />
             </div>
-            <div>
-                <form
-                    @submit.prevent="updateInfo()"
-                    class="space-y-4"
-                    enctype="multipart/form-data"
+            <div class="my-5">
+                <h2 class="text-white font-bold text-2xl tracking-wide">
+                    {{ user.name }}
+                </h2>
+            </div>
+        </div>
+        <div>
+            <form
+                @submit.prevent="updateInfo()"
+                class="space-y-4"
+                enctype="multipart/form-data"
+            >
+                <div class="px-5 pb-5">
+                    <TextInput
+                        @input="form.profile_photo = $event.target.files[0]"
+                        id="image"
+                        type="file"
+                        ref="photoInput"
+                        @change="pickFile"
+                        class="mt-1 block w-full"
+                        accept="image/png, image/jpeg, image/jpg"
+                    />
+                    <InputError class="mt-2" :message="form.errors.image" />
+
+                    <input
+                        v-model="form.name"
+                        type="text"
+                        placeholder="Name"
+                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
+                    />
+
+                    <input
+                        v-model="form.email"
+                        type="email"
+                        placeholder="Email"
+                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
+                    />
+                    <div class="flex">
+                        <div class="flex-grow w-1/2">
+                            <input
+                                type="text"
+                                v-model="form.mobile"
+                                autocomplete
+                                placeholder="Mobile"
+                                class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
+                            />
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <PrimaryButton
+                            class="ml-4 bg-stone-600"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            update
+                        </PrimaryButton>
+                    </div>
+                </div>
+                <progress
+                    v-if="form.progress"
+                    :value="form.progress.percentage"
+                    max="100"
                 >
-                    <div class="px-5 pb-5">
-                        <TextInput
-                            @input="form.profile_photo = $event.target.files[0]"
-                            id="image"
-                            type="file"
-                            ref="photoInput"
-                            @change="pickFile"
-                            class="mt-1 block w-full"
-                            accept="image/png, image/jpeg, image/jpg"
-                        />
-                        <InputError class="mt-2" :message="form.errors.image" />
-
-                        <input
-                            v-model="form.name"
-                            type="text"
-                            placeholder="Name"
-                            class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                        />
-
-                        <input
-                            v-model="form.email"
-                            type="email"
-                            placeholder="Email"
-                            class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                        />
-                        <div class="flex">
-                            <div class="flex-grow w-1/2">
-                                <input
-                                    type="text"
-                                    v-model="form.mobile"
-                                    autocomplete
-                                    placeholder="Mobile"
-                                    class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                                />
-                            </div>
-                        </div>
-                        <div class="flex justify-end mt-4">
-                            <PrimaryButton
-                                class="ml-4 bg-stone-600"
-                                :class="{ 'opacity-25': form.processing }"
-                                :disabled="form.processing"
-                            >
-                                update
-                            </PrimaryButton>
-                        </div>
-                    </div>
-                    <progress
-                        v-if="form.progress"
-                        :value="form.progress.percentage"
-                        max="100"
-                    >
-                        {{ form.progress.percentage }}%
-                    </progress>
+                    {{ form.progress.percentage }}%
+                </progress>
+                <div
+                    v-for="error of form.errors"
+                    :key="error"
+                    class="shadow w-2/3 p-2 flex justify-center rounded-lg"
+                >
                     <div
-                        v-for="error of form.errors"
-                        :key="error"
-                        class="shadow w-2/3 p-2 flex justify-center rounded-lg"
-                    >
-                        <div
-                            class="bg-red-500 animate-pulse inline-block rounded-lg p-1 mr-1"
-                        ></div>
-                        <p class="p-1 text-stone-50">{{ error }}!</p>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </UserLayout>
+                        class="bg-red-500 animate-pulse inline-block rounded-lg p-1 mr-1"
+                    ></div>
+                    <p class="p-1 text-stone-50">{{ error }}!</p>
+                </div>
+            </form>
+        </div>
+    </section>
 </template>
