@@ -27,6 +27,22 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
 
+    protected $_validation = [
+        'recipient_name' => 'required_if:use_default_address,false',
+        'mobile' => 'required_if:use_default_address,false',
+        'address' => 'required_if:use_default_address,false',
+        'zipcode' => 'required_if:use_default_address,false',
+        'save_address_as_default ' => 'boolean',
+        'use_default_address' => 'boolean',
+    ];
+
+    protected $_validationMessages = [
+        'recipient_name.required_if' => ' نام لازم است',
+        'mobile.required_if' => ' موبایل مورد نیاز است',
+        'address.required_if' => ' آدرس مورد نیاز است',
+        'zipcode.required_if' => ' کد پستی لازم است',
+    ];
+
     public function index()
     {
         $order = Order::where('buyer_id', Auth::id())->pendingPayment()->with('items', 'address')->first();
@@ -132,20 +148,8 @@ class OrderController extends Controller
 
     public function finalizeOrderUsingWallet(Request $request, Order $order)
     {
-        Validator::make($request->all(), [
-            'recipient_name' => 'required_if:use_default_address,false',
-            'mobile' => 'required_if:use_default_address,false',
-            'address' => 'required_if:use_default_address,false',
-            'zipcode' => 'required_if:use_default_address,false',
-            'save_address_as_default ' => 'boolean',
-            'use_default_address' => 'boolean',
-        ], [
-            'recipient_name.required_if' => ' نام لازم است',
-            'mobile.required_if' => ' موبایل مورد نیاز است',
-            'address.required_if' => ' آدرس مورد نیاز است',
-            'zipcode.required_if' => ' کد پستی لازم است',
-        ])->validate();
 
+        Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
 
         $order = Order::firstWhere(
             ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
@@ -153,107 +157,31 @@ class OrderController extends Controller
 
         try {
             DB::beginTransaction();
-            if ($request->use_default_address) {
 
-                $user = User::find(Auth::id());
+            $this->saveOrderAddress(
+                $order,
+                $request->address,
+                $request->zipcode,
+                $request->recipient_name,
+                $request->mobile,
+                $request->use_default_address = true,
+                $request->save_address_as_default = false
+            );
 
-                $orderAddress = $user->address->replicate()->fill([
-                    'addressable_id' => $order->id,
-                    'addressable_type' => 'App\Models\Order'
-                ]);
-
-                $orderAddress->save();
-            } else if ($request->save_address_as_default) {
-
-                $user = User::find(Auth::id());
-
-                $userAddress = $user->address;
-                if (!$userAddress) {
-                    $userAddress = Address::create(
-                        [
-                            'addressable_id' => $user->id,
-                            'addressable_type' => 'App\Models\User',
-                            'text' => $request->address,
-                            'zipcode' => $request->zipcode,
-                            'user_id' => Auth::id(),
-                            'recipient_name' => $request->recipient_name,
-                            'mobile' => $request->mobile,
-                        ]
-                    );
-                }
-
-                $orderAddress = $userAddress->replicate()->fill([
-                    'addressable_id' => $order->id,
-                    'addressable_type' => 'App\Models\Order'
-                ]);
-
-                $orderAddress->save();
-            } else {
-                $order->address()->create([
-                    'text' => $request->address,
-                    'zipcode' => $request->zipcode,
-                    'user_id' => Auth::id(),
-                    'recipient_name' => $request->recipient_name,
-                    'mobile' => $request->mobile,
-                    'addressable_id' => $order->id,
-                    'addressable_type' => 'App\Models\Order'
-                ]);
-            }
-
-            $order->load('items');
-
-            $billingSubtotal = 0;
-            foreach ($order->items as $key => $orderItem) {
-                $billingSubtotal += $orderItem->qty * $orderItem->product->getRawOriginal('default_price');
-            }
-
-            $billingTax = env('TAX_PERCENT', 9) / 100 * $billingSubtotal;
-            $billingTotal = $billingTax + $billingSubtotal;
-            $billingTotal = (int)$billingTotal;
-
-
-            if ($billingTotal >= env('MINIMUM_PURCHASE_FOR_FREE_SHOPPING', 500000)) {
-                $deliveryCost = 0;
-            } else {
-                $deliveryCost = env('DELIRVERY_COST', 18000);
-            }
-            $billingTotal += $deliveryCost;
-
+            $numbers = $this->getNumbers($order);
 
             $wallet = Wallet::firstWhere('user_id', Auth::id());
 
             $balance = $wallet->balance;
 
-            if ($balance < $billingTotal) {
+            if ($balance < $numbers['billingTotal']) {
                 return redirect()->back()
                     ->withErrors('insufficient inventory');
             }
-            Wallet::where('user_id', Auth::id())->decrement('balance', $billingTotal);
 
-            $order->update([
-                'payment_status' => Order::PAYMENT_STATUS_PAID,
-                'billing_subtotal' => $billingSubtotal,
-                'billing_tax' => $billingTax,
-                'billing_total' => $billingTotal,
-                'delivery_cost' => $deliveryCost,
-            ]);
+            Wallet::where('user_id', Auth::id())->decrement('balance', $numbers['billingTotal']);
 
-            // set total for each order item
-            foreach ($order->items as $key => $orderItem) {
-
-                $product = Product::FirstWhere('id', $orderItem->product_id);
-                $product->increment('sold_qty', $orderItem->qty);
-
-                $billingTotal = ($orderItem->qty * $product->getRawOriginal('default_price')) + (9 / 100 * ($orderItem->qty * $product->getRawOriginal('default_price')));
-
-                $orderItem->update([
-                    'billing_total' => $billingTotal,
-                    'payment_status' => OrderItem::PAYMENT_STATUS_PAID,
-                ]);
-            }
-
-
-            // SendUserInvoice::dispatch();
+            $this->setOrderPaid($order, $numbers);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -272,98 +200,57 @@ class OrderController extends Controller
 
 
 
+
+
+
     public function orderPaymentRequest(Request $request)
     {
 
-        switch ($request->input('action')) {
-            case 'save':
-                // Save model
-                break;
-    
-            case 'preview':
-                // Preview model
-                break;
-    
-            case 'advanced_edit':
-                // Redirect to advanced edit
-                break;
-        }
-        
-        Validator::make($request->all(), [
-            'recipient_name' => 'required_if:use_default_address,false',
-            'mobile' => 'required_if:use_default_address,false',
-            'address' => 'required_if:use_default_address,false',
-            'zipcode' => 'required_if:use_default_address,false',
-            'save_address_as_default ' => 'required|boolean',
-            'use_default_address' => 'required|boolean',
-        ], [
-            'recipient_name.required_if' => ' نام لازم است',
-            'mobile.required_if' => ' موبایل مورد نیاز است',
-            'address.required_if' => ' آدرس مورد نیاز است',
-            'zipcode.required_if' => ' کد پستی لازم است',
-        ])->validate();
+        Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
 
-        dd();
         $order = Order::firstWhere(
             ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
         );
 
-        if ($request->use_default_address) {
+        try {
+            DB::beginTransaction();
 
-            $user = User::find(Auth::id());
+            $this->saveOrderAddress(
+                $order,
+                $request->address,
+                $request->zipcode,
+                $request->recipient_name,
+                $request->mobile,
+                $request->use_default_address = true,
+                $request->save_address_as_default = false
+            );
 
-            $orderAddress = $user->address->replicate()->fill([
-                'addressable_id' => $order->id,
-                'addressable_type' => 'App\Models\Order'
-            ]);
+            $numbers = $this->getNumbers($order);
 
-            $orderAddress->save();
-        } else if ($request->save_address_as_default) {
+            $transaction = Transaction::updateOrCreate(
+                [
+                    'payer_id' => Auth::id(),
+                    'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                    'payment_status' => Transaction::PAYMENT_STATUS_PENDING
+                ],
+                ['amount' => $numbers['billingTotal']],
+            );
 
-            $user = User::find(Auth::id());
-
-            $userAddress = $user->address;
-            if (!$userAddress) {
-                $userAddress = Address::create(
-                    [
-                        'addressable_id' => $user->id,
-                        'addressable_type' => 'App\Models\User',
-                        'text' => $request->address,
-                        'zipcode' => $request->zipcode,
-                        'user_id' => Auth::id(),
-                        'recipient_name' => $request->recipient_name,
-                        'mobile' => $request->mobile,
-                    ]
-                );
-            }
-
-            $orderAddress = $userAddress->replicate()->fill([
-                'addressable_id' => $order->id,
-                'addressable_type' => 'App\Models\Order'
-            ]);
-
-            $orderAddress->save();
-        } else {
-            $order->address()->create([
-                'text' => $request->address,
-                'zipcode' => $request->zipcode,
-                'user_id' => Auth::id(),
-                'recipient_name' => $request->recipient_name,
-                'mobile' => $request->mobile,
-                'addressable_id' => $order->id,
-                'addressable_type' => 'App\Models\Order'
-            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            info($e);
+            return response()->json([
+                'error' => 'sth went wrong'
+            ], 422);
         }
 
-        Transaction::updateOrCreate(
-            [
-                'payer_id' => Auth::id(),
-                'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
-                'payment_status' => Transaction::PAYMENT_STATUS_PENDING
-            ],
-            ['amount' => $request->amount],
-        );
+
+        // return response()->json([
+        //     'message' => 'success'
+        // ], 200);
     }
+
 
     // Transfer to the payment gateway
     public function transferToPaymentGateway()
@@ -426,12 +313,12 @@ class OrderController extends Controller
             $transaction->reference_id = $payment->referenceId();
             $transaction->save();
 
-            $order = Order::where(
-                ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
-            )->update([
-                'payment_status' => Order::PAYMENT_STATUS_PAID
-            ]);
+            $order = Order::firstWhere(
+                ['buyer_id' => Auth::id(), 'payment_status' => 'pending']
+            );
+            $numbers = $this->getNumbers($order);
 
+            $this->setOrderPaid($order, $numbers);
 
             return redirect()->route('user.orders.list');
         }
@@ -444,6 +331,111 @@ class OrderController extends Controller
             $transaction->status = 'Failed';
             $transaction->save();
             return redirect()->route('user.orders.list');
+        }
+    }
+
+    public function getNumbers($order)
+    {
+        $order->load('items');
+
+        $billingSubtotal = 0;
+        foreach ($order->items as $key => $orderItem) {
+            $billingSubtotal += $orderItem->qty * $orderItem->product->getRawOriginal('default_price');
+        }
+
+        $billingTax = env('TAX_PERCENT', 9) / 100 * $billingSubtotal;
+        $billingTotal = $billingTax + $billingSubtotal;
+        $billingTotal = (int)$billingTotal;
+
+
+        if ($billingTotal >= env('MINIMUM_PURCHASE_FOR_FREE_SHOPPING', 500000)) {
+            $deliveryCost = 0;
+        } else {
+            $deliveryCost = env('DELIRVERY_COST', 18000);
+        }
+        $billingTotal += $deliveryCost;
+
+
+        $numbers['billingSubtotal'] = $billingSubtotal;
+        $numbers['billingTax'] = $billingTax;
+        $numbers['deliveryCost'] = $deliveryCost;
+        $numbers['billingTotal'] = $billingTotal;
+
+        return $numbers;
+    }
+
+    public function saveOrderAddress($order, $address, $zipcode, $recipient_name, $mobile, $use_default = true, $save_as_default = false)
+    {
+        if ($use_default) {
+
+            $user = User::find(Auth::id());
+
+            $orderAddress = $user->address->replicate()->fill([
+                'addressable_id' => $order->id,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+
+            $orderAddress->save();
+        } else if ($save_as_default) {
+
+            $user = User::find(Auth::id());
+
+            $userAddress = $user->address;
+            if (!$userAddress) {
+                $userAddress = Address::create(
+                    [
+                        'addressable_id' => $user->id,
+                        'addressable_type' => 'App\Models\User',
+                        'text' => $address,
+                        'zipcode' => $zipcode,
+                        'user_id' => Auth::id(),
+                        'recipient_name' => $recipient_name,
+                        'mobile' => $mobile,
+                    ]
+                );
+            }
+
+            $orderAddress = $userAddress->replicate()->fill([
+                'addressable_id' => $order,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+
+            $orderAddress->save();
+        } else {
+            $order->address()->create([
+                'text' => $address,
+                'zipcode' => $zipcode,
+                'user_id' => Auth::id(),
+                'recipient_name' => $recipient_name,
+                'mobile' => $mobile,
+                'addressable_id' => $order->id,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+        }
+    }
+
+    public function setOrderPaid($order, $numbers)
+    {
+        $order->update([
+            'payment_status' => Order::PAYMENT_STATUS_PAID,
+            'billing_subtotal' => $numbers['billingSubtotal'],
+            'billing_tax' => $numbers['billingTax'],
+            'billing_total' => $numbers['billingTotal'],
+            'delivery_cost' => $numbers['deliveryCost'],
+        ]);
+
+        // set total for each order item
+        foreach ($order->items as $key => $orderItem) {
+
+            $product = Product::FirstWhere('id', $orderItem->product_id);
+            $product->increment('sold_qty', $orderItem->qty);
+
+            $numbers['billingTotal'] = ($orderItem->qty * $product->getRawOriginal('default_price')) + (9 / 100 * ($orderItem->qty * $product->getRawOriginal('default_price')));
+
+            $orderItem->update([
+                'billing_total' => $numbers['billingTotal'],
+                'payment_status' => OrderItem::PAYMENT_STATUS_PAID,
+            ]);
         }
     }
 }

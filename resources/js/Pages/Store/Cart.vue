@@ -21,11 +21,13 @@ let props = defineProps({
     order: Object,
     subtotal: Number,
     userAddress: Object,
-    walletBalance: Object,
+    walletBalance: Number,
 });
 
 let show_loading_modal = ref(false);
 let show_success_modal = ref(false);
+let useWallet = ref(false);
+let showConfirmModal = ref(false);
 
 const deliveryCost = 18;
 
@@ -35,10 +37,10 @@ const form = useForm({
     mobile: "",
     zipcode: "",
     save_address_as_default: false,
-    use_default_address: false,
+    use_default_address: true,
 });
 
-const pay = () => {
+const payUsingWallet = () => {
     show_loading_modal.value = true;
     setTimeout(() => {
         show_loading_modal.value = false;
@@ -48,6 +50,23 @@ const pay = () => {
             show_loading_modal.value = false;
             show_success_modal.value = true;
             storeCart.count_cart = 0;
+        },
+        onError: (e) => {
+            show_loading_modal.value = false;
+            console.log(e);
+        },
+    });
+};
+
+const payWithZarinpal = () => {
+    show_loading_modal.value = true;
+    setTimeout(() => {
+        show_loading_modal.value = false;
+    }, 8000);
+    form.post(route("order.payment.request", { order: props.order.id }), {
+        onSuccess: () => {
+            show_loading_modal.value = false;
+            showConfirmModal.value = true;
         },
         onError: (e) => {
             show_loading_modal.value = false;
@@ -189,7 +208,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="w-full xl:w-1/2 sm:py-10">
-                <form @submit.prevent="pay()" class="space-y-4">
+                <form @submit.prevent="" class="space-y-4">
                     <div class="mt-5 bg-stone-50 rounded-lg">
                         <div class="flex">
                             <div class="flex-1 py-1 px-5 overflow-hidden">
@@ -289,31 +308,21 @@ onMounted(() => {
                         </p>
                     </div>
                     <div class="flex justify-between px-5 sm:pb-2 pb-20">
-                        <button
-                        name="action" value="zarinpal"
-                            class="w-1/4 self-end rounded bg-[#aeadc9] px-1 py-1.5 text-center text-md font-medium text-slate-800 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
-                        >
-                            <span
-                                class="mx-auto flex gap-1 justify-center items-center"
-                            >
-                                <i class="bi bi-credit-card-2-back"></i>
-                                <p>پرداخت</p></span
-                            >
-                        </button>
+                        <div class="flex justify-between">
+                            <div class="flex items-center pt-3">
+                                <input
+                                    v-model="useWallet"
+                                    type="checkbox"
+                                    class="w-6 h-6 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent"
+                                /><label
+                                    for="safeAdress"
+                                    class="block ml-2 text-md text-gray-900"
+                                    >از کیف پول استفاده کن</label
+                                >
+                            </div>
+                        </div>
 
-                        <button
-                        name="action" value="wallet"
-
-                            class="w-1/4 self-end rounded bg-[#e3d4a1] px-1 py-1.5 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
-                        >
-                            <span
-                                class="mx-auto flex gap-1 justify-center items-center"
-                            >
-                                <i class="bi bi-wallet2"></i>
-                                <p>پرداخت</p></span
-                            >
-                        </button>
-                        <!-- <template>
+                        <template v-if="useWallet">
                             <button
                                 v-if="
                                     walletBalance >=
@@ -324,6 +333,7 @@ onMounted(() => {
                                         deliveryCost
                                 "
                                 type="submit"
+                                @click="payUsingWallet()"
                                 :disabled="form.processing"
                                 class="w-1/4 self-end rounded bg-[#e3d4a1] px-1 py-1.5 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
                             >
@@ -335,39 +345,34 @@ onMounted(() => {
                                 </div>
                             </button>
                             <a
-                                :href="route('user.wallet')"
                                 v-else
+                                :href="route('user.wallet')"
                                 type="submit"
                                 class="w-1/2 self-end rounded bg-[#f5ba18] px-1 py-3 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
                             >
                                 موجودی نداری شارژ کن برگرد
                             </a>
-                        </template> -->
-                        <!-- <ConfirmPaymentTrigger
+                        </template>
+
+                        <button
                             v-else
-                            :amount="
-                                Math.trunc(
-                                    storeCart.subtotal +
-                                        (9 / 100) * storeCart.subtotal
-                                ) + deliveryCost
-                            "
-                            :disabled="false"
-                            :for="`Order`"
-                            :requestPath="`order.payment.request`"
-                            :gatewayPath="`order.payment.gateway`"
-                        /> -->
-                        <!-- <button
+                            @click="payWithZarinpal"
                             type="submit"
                             class="w-1/4 self-end rounded bg-green-600 px-1 py-3 text-center text-md font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
                         >
                             پرداخت
                         </button>
                         <ConfirmPaymentModal
-                            v-if="showModal"
-                            @close="showModal = false"
-                            :amount="amount"
-                            :gatewayPath="gatewayPath"
-                        /> -->
+                            v-if="showConfirmModal"
+                            @close="showConfirmModal = false"
+                            :amount="
+                                Math.trunc(
+                                    storeCart.subtotal +
+                                        (9 / 100) * storeCart.subtotal
+                                ) + deliveryCost
+                            "
+                            :gatewayPath="`order.payment.gateway`"
+                        />
                     </div>
                 </form>
 
