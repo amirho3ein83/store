@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('payment_status', [Order::PAYMENT_STATUS_PAID, Order::PAYMENT_STATUS_PENDING])
                 ->default(Order::PAYMENT_STATUS_PENDING);
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignIdFor(Transaction::class)->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(Transaction::class)->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });
     }

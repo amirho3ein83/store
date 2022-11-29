@@ -50,13 +50,12 @@ export default {
                             {{ order.billing_total }} تومان
                         </div>
                     </div>
-
                     <div class="flex flex-wrap">
                         <div
                             v-for="orderItem of order.items"
                             :orderItem="orderItem"
                             :key="orderItem.id"
-                            class="flex items-center border p-2 bg-stone-50 rounded-lg my-1 w-1/2"
+                            class="flex items-center justify-between border p-2 bg-stone-50 rounded-lg my-1 w-1/2"
                         >
                             <img
                                 @click="
@@ -68,9 +67,7 @@ export default {
                                 :src="orderItem.product.image_url"
                                 alt=""
                             />
-                            <div
-                                class="flex flex-col justify-between ml-4 flex-grow"
-                            >
+                            <div class="flex flex-col justify-center">
                                 <div class="flex gap-x-3 justify-between">
                                     <span class="text-sm sm:text-md"
                                         >{{ orderItem.product.title }}
@@ -78,7 +75,7 @@ export default {
                                 </div>
 
                                 <div
-                                    class="flex gap-x-3 justify-between align-baseline"
+                                    class="flex gap-x-3 justify-between items-center"
                                 >
                                     <span class="flex gap-x-2">
                                         <span
@@ -96,19 +93,17 @@ export default {
                                         {{ orderItem.picked_size }} سایز
                                     </span>
                                 </div>
-                                <div class="flex gap-x-3 justify-between">
-                                    <span class="text-sm sm:text-md"
-                                        >{{ orderItem.product.default_price }}
-                                        <span class="text-red-500">x</span>
-                                        {{ orderItem.qty }}
-                                    </span>
-                                </div>
-                                <div class="flex gap-x-3 justify-end py-1">
-                                    <span class="text-yellow-900 text-sm">
-                                        {{ orderItem.billing_total }}
-                                        تومان</span
-                                    >جمع کل
-                                </div>
+                            </div>
+                            <div class="flex flex-col justify-end">
+                                <span class="text-sm sm:text-md"
+                                    >{{ orderItem.product.default_price }}
+                                    <span class="text-red-500">x</span>
+                                    {{ orderItem.qty }}
+                                </span>
+                                <span class="text-yellow-900 text-sm">
+                                    {{ orderItem.billing_total }}
+                                    تومان</span
+                                >
                             </div>
                         </div>
                     </div>

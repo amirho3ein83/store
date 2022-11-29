@@ -14,7 +14,6 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ConfirmPaymentTrigger from "@/Modals/triggers/ConfirmPaymentTrigger.vue";
 import ConfirmPaymentModal from "@/Modals/ConfirmPaymentModal.vue";
 import { createToast } from "mosha-vue-toastify";
-import "mosha-vue-toastify/dist/style.css";
 const storeCart = useCartStore();
 
 let props = defineProps({

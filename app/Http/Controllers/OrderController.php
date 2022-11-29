@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendUserInvoice;
-use App\Mail\OrderPlaced;
 use App\Models\Address;
 use Evryn\LaravelToman\CallbackRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Payment;
 use App\Models\Product;
-use App\Models\RefOrder;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
-use App\Services\zarinPal;
 use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -103,9 +96,7 @@ class OrderController extends Controller
         )
             ->first();
 
-        if (!empty($found_in_cart)) {
-            OrderItem::where('id', $found_in_cart->id)->increment('qty');
-        } else {
+        if (empty($found_in_cart)) {
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
@@ -115,11 +106,9 @@ class OrderController extends Controller
                 'buyer_id' => Auth::id(),
                 'payment_status' => 'pending'
             ]);
+        } else {
+            OrderItem::where('id', $found_in_cart->id)->increment('qty');
         }
-
-        return response()->json([
-            'message' => 'Order registered',
-        ]);
     }
 
     public function switchToSaveForLater()
@@ -191,17 +180,7 @@ class OrderController extends Controller
                 'error' => 'sth went wrong'
             ], 422);
         }
-
-
-        // return response()->json([
-        //     'message' => 'success'
-        // ], 200);
     }
-
-
-
-
-
 
     public function orderPaymentRequest(Request $request)
     {
@@ -269,10 +248,10 @@ class OrderController extends Controller
         );
 
         $request = Toman::amount($transaction->amount)
-            ->description($order->id . ' :پرداخت سفارش با شناسه ')
+            ->description(' :پرداخت سفارش با شناسه ' . $order->id)
             ->callback(route('order.payment.callback'))
-            ->mobile(Auth::user()->mobile)
-            ->email(Auth::user()->email)
+            // ->email(Auth::user()->email)
+            // ->mobile(Auth::user()->mobile)
             ->request();
 
         if ($request->successful()) {
@@ -295,17 +274,15 @@ class OrderController extends Controller
         // in your persistence database and get expected amount, which is required
         // for verification. Take care of Double Spending.
 
-        $transaction = Transaction::where(
+        $transaction = Transaction::firstWhere(
             [
-                'payer_id' => Auth::id(), 'transactionـfor' => 'Wallet'
-            ],
-        )->latest()->first();
+                'payer_id' => Auth::id(),
+                'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                'payment_status' => Transaction::PAYMENT_STATUS_PENDING
+            ]
+        );
 
         $payment = $request->amount($transaction->amount)->verify();
-
-        if ($request->transactionId() != $transaction->transaction_id) {
-            abort(422, 'شناسه تراکنش نامعتبر');
-        }
 
         if ($payment->successful()) {
             // Store the successful transaction details
@@ -318,7 +295,7 @@ class OrderController extends Controller
             );
             $numbers = $this->getNumbers($order);
 
-            $this->setOrderPaid($order, $numbers);
+            $this->setOrderPaid($order, $numbers, $transaction->id);
 
             return redirect()->route('user.orders.list');
         }
@@ -328,7 +305,7 @@ class OrderController extends Controller
         }
 
         if ($payment->failed()) {
-            $transaction->status = 'Failed';
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_FAILED;
             $transaction->save();
             return redirect()->route('user.orders.list');
         }
@@ -414,8 +391,9 @@ class OrderController extends Controller
         }
     }
 
-    public function setOrderPaid($order, $numbers)
+    public function setOrderPaid($order, $numbers, $transactionId = null)
     {
+
         $order->update([
             'payment_status' => Order::PAYMENT_STATUS_PAID,
             'billing_subtotal' => $numbers['billingSubtotal'],
@@ -430,7 +408,7 @@ class OrderController extends Controller
             $product = Product::FirstWhere('id', $orderItem->product_id);
             $product->increment('sold_qty', $orderItem->qty);
 
-            $numbers['billingTotal'] = ($orderItem->qty * $product->getRawOriginal('default_price')) + (9 / 100 * ($orderItem->qty * $product->getRawOriginal('default_price')));
+            $numbers['billingTotal'] = ($orderItem->qty * $product->getRawOriginal('default_price'));
 
             $orderItem->update([
                 'billing_total' => $numbers['billingTotal'],

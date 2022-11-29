@@ -81,7 +81,7 @@ import Navbar from "@/Components/Navbar.vue";
                                                 ></i></span
                                             ><span
                                                 class="text-sm text-blueGray-400"
-                                                >سفارشات
+                                                >خرید ها
                                             </span>
                                         </div>
                                     </Link>

@@ -23,6 +23,14 @@ export const useProductStore = defineStore("products", {
                     this.comments = res.data
                 })
                 .catch((error) => {
+                    if (error.response.status == 500) {
+                        createToast("خطای سرور ", {
+                            position: "top-center",
+                            toastBackgroundColor: "#fc4242",
+                            timeout: 2100,
+                            transition: "slide",
+                        });
+                    }
                     console.log(error);
                 });
         },

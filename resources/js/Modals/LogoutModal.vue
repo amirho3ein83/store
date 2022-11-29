@@ -15,12 +15,15 @@ onMounted(() => {
 });
 </script>
 <template>
-    <Transition name="slide-fade">
-        <div
-            v-if="showModal"
-            class="bg-slate-900 z-50 w-full h-full overflow-auto bg-opacity-60 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0"
-        >
-            <div class="bg-white px-16 py-14 reletive rounded-md text-center">
+    <div
+        v-if="showModal"
+        class="bg-slate-900 z-50 w-full h-full overflow-auto bg-opacity-60 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0"
+    >
+        <Transition name="slide-fade">
+            <div
+                v-if="showModal"
+                class="bg-white px-16 py-14 reletive rounded-md text-center"
+            >
                 <h1 class="text-xl mb-4 font-bold text-slate-500">
                     میخای بری واقعا؟
                 </h1>
@@ -28,7 +31,7 @@ onMounted(() => {
                     @click="$emit('close')"
                     class="hover:bg-red-500 bg-red-400 px-4 py-2 rounded-md text-md text-white"
                 >
-                    نه بابا 
+                    نه بابا
                 </button>
                 <button
                     @click="logout"
@@ -37,8 +40,8 @@ onMounted(() => {
                     آره
                 </button>
             </div>
-        </div>
-    </Transition>
+        </Transition>
+    </div>
 </template>
 
 <style scoped>

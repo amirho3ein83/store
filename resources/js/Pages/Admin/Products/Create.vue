@@ -5,6 +5,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import { createToast } from "mosha-vue-toastify";
+import 'mosha-vue-toastify/dist/style.css'
 
 const previewImage = ref(null);
 const imageUrl = ref(null);

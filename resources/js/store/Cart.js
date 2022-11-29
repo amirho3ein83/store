@@ -1,8 +1,16 @@
 import { Inertia } from "@inertiajs/inertia";
 import { defineStore } from "pinia";
+import { createToast } from "mosha-vue-toastify";
+
 
 export const useCartStore = defineStore("cart", {
-    state: () => ({ subtotal: 0, count_cart: 0, form_step: 1, products: [], user_address: '' }),
+    state: () => ({
+        subtotal: 0,
+        count_cart: 0,
+        form_step: 1,
+        products: [],
+        user_address: "",
+    }),
 
     actions: {
         addToCart(id, picked_color, picked_size) {
@@ -13,11 +21,17 @@ export const useCartStore = defineStore("cart", {
                     picked_size: picked_size,
                 })
                 .then((res) => {
-                    this.countOrders(id)
+                    this.countOrders(id);
                 })
                 .catch((error) => {
-                    alert('sorry something went wrong')
-                    console.log(error);
+                    if (error.response.status == 500) {
+                        createToast("خطای سرور ", {
+                            position: "top-center",
+                            toastBackgroundColor: "#fc4242",
+                            timeout: 2100,
+                            transition: "slide",
+                        });
+                    }
                 });
         },
         countOrders(id) {
@@ -27,7 +41,14 @@ export const useCartStore = defineStore("cart", {
                     this.count_cart = res.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if (error.response.status == 500) {
+                        createToast("خطای سرور ", {
+                            position: "top-center",
+                            toastBackgroundColor: "#fc4242",
+                            timeout: 2100,
+                            transition: "slide",
+                        });
+                    }
                 });
         },
         getOrders(id) {
@@ -37,8 +58,14 @@ export const useCartStore = defineStore("cart", {
                     this.products = res.data;
                 })
                 .catch((error) => {
-                    alert('sorry something went wrong')
-                    console.log(error);
+                    if (error.response.status == 500) {
+                        createToast("خطای سرور ", {
+                            position: "top-center",
+                            toastBackgroundColor: "#fc4242",
+                            timeout: 2100,
+                            transition: "slide",
+                        });
+                    }
                 });
         },
         getUserAddress() {
@@ -48,23 +75,30 @@ export const useCartStore = defineStore("cart", {
                     this.user_address = res.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if (error.response.status == 500) {
+                        createToast("خطای سرور ", {
+                            position: "top-center",
+                            toastBackgroundColor: "#fc4242",
+                            timeout: 2100,
+                            transition: "slide",
+                        });
+                    }
                 });
         },
 
         increaseOrder(id, amount) {
-            this.subtotal += amount
+            this.subtotal += amount;
             axios.patch(route("cart.increase-order", { id: id }));
         },
 
         decreaseOrder(id, amount) {
-            this.subtotal -= amount
+            this.subtotal -= amount;
 
             axios.patch(route("cart.decrease-order", { id: id }));
         },
 
         deleteOrder(id, amount, qty) {
-            this.subtotal -= (amount * qty)
+            this.subtotal -= amount * qty;
 
             axios.delete(route("cart.delete-order", { id: id }));
         },

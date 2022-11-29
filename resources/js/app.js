@@ -1,6 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "mosha-vue-toastify/dist/style.css";
 
 import { createApp, h } from 'vue';
 import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';

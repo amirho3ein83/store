@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "matanyadaev/laravel-eloquent-spatial": "^2.7",
+        "morilog/jalali": "3.*",
         "sentry/sentry-laravel": "^3.1",
         "shopid/zarinpal": "^1.0",
         "spatie/laravel-medialibrary": "^10.0.0",

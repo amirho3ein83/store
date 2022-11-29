@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use DateTimeInterface;
+use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Morilog\Jalali\Jalalian;
 
 class Order extends Model
 {
@@ -30,15 +33,22 @@ class Order extends Model
     ];
 
 
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->toFormattedDateString();
-    }
+    // protected function serializeDate(DateTimeInterface $date)
+    // {
+    //     return $date->toFormattedDateString();
+    // }
+
 
     protected function billingTotal(): Attribute
     {
         return Attribute::make(
             get: fn ($value) =>  convertToPersianNumber(number_format($value)),
+        );
+    }
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => convertToPersianNumber(Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d H:i'))
         );
     }
 
