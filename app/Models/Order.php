@@ -26,6 +26,7 @@ class Order extends Model
         'billing_total',
         'delivery_cost',
         'payment_status',
+        'transaction_id',
     ];
 
 
@@ -59,6 +60,11 @@ class Order extends Model
     public function buyer()
     {
         return $this->hasOne(User::class, 'id', 'buyer_id');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 
     public function address()

@@ -67,7 +67,7 @@ class WalletController extends Controller
 
         if ($payment->successful()) {
             // Store the successful transaction details
-            $transaction->status = 'Successful';
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_PAID;
             $transaction->reference_id = $payment->referenceId();
             $transaction->save();
 

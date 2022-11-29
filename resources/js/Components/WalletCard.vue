@@ -60,7 +60,6 @@ let showNotif = ref(false);
                             </svg>
                         </div>
                     </div>
-
                     <div class="flex justify-around">
                         <div class="text-xl font-semibold">
                             {{ props.balance }} تومان

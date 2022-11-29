@@ -41,16 +41,13 @@ export default {
                     <h1>{{ orders[0].address }}</h1>
                     <div class="flex justify-end gap-x-2 p-3 bg-[#d5d6e3]">
                         <div class="pl-5 pr-3 whitespace-no-wrap">
-                            <div class="text-gray-400">
+                            <div class="text-gray-700">
                                 {{ order.created_at }}
                             </div>
                         </div>
 
-                        <div class="leading-5 text-gray-500">
-                            {{ order.billing_total }} تومان
-                        </div>
                         <div class="leading-5 text-gray-800">
-                            10 : تعداد اقلام
+                            {{ order.billing_total }} تومان
                         </div>
                     </div>
 

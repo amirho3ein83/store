@@ -15,8 +15,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('wallets', function (Blueprint $table) {
+            $table->id();
             $table->foreignIdFor(User::class)->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('balance')->default(0);
+            $table->unsignedInteger('balance')->default(0);
         });
     }
 

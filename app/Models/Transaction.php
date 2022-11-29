@@ -9,9 +9,9 @@ use App\Traits\Uuids;
 class Transaction extends Model
 {
 
-    const STATUS_PAID = 'paid';
-    const STATUS_PENDING = 'pending';
-    const STATUS_FAILED = 'failed';
+    const PAYMENT_STATUS_PAID = 'paid';
+    const PAYMENT_STATUS_PENDING = 'pending';
+    const PAYMENT_STATUS_FAILED = 'failed';
 
     const TRANSACTION_FOR_ORDER = 'order';
     const TRANSACTION_FOR_CHARGE_WALLET = 'wallet';

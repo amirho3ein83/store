@@ -12,6 +12,7 @@ import SuccessModal from "@/Modals/SuccessModal.vue";
 import Navbar from "@/Components/Navbar.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ConfirmPaymentTrigger from "@/Modals/triggers/ConfirmPaymentTrigger.vue";
+import ConfirmPaymentModal from "@/Modals/ConfirmPaymentModal.vue";
 import { createToast } from "mosha-vue-toastify";
 import "mosha-vue-toastify/dist/style.css";
 const storeCart = useCartStore();
@@ -20,12 +21,11 @@ let props = defineProps({
     order: Object,
     subtotal: Number,
     userAddress: Object,
-    wallet: Object,
+    walletBalance: Object,
 });
 
 let show_loading_modal = ref(false);
 let show_success_modal = ref(false);
-let useWallet = ref(false);
 
 const deliveryCost = 18;
 
@@ -35,7 +35,7 @@ const form = useForm({
     mobile: "",
     zipcode: "",
     save_address_as_default: false,
-    use_default_address: true,
+    use_default_address: false,
 });
 
 const pay = () => {
@@ -203,7 +203,7 @@ onMounted(() => {
                         </div>
                         <div class="px-5 pb-5">
                             <input
-                                :disabled="form.use_default_address"
+                                :disabled="form.use_default_address == true"
                                 v-model="form.recipient_name"
                                 type="text"
                                 placeholder="نام گیرنده"
@@ -211,7 +211,7 @@ onMounted(() => {
                             />
 
                             <input
-                                :disabled="form.use_default_address"
+                                :disabled="form.use_default_address == true"
                                 v-model="form.address"
                                 type="text"
                                 placeholder="نشانی"
@@ -220,7 +220,9 @@ onMounted(() => {
                             <div class="flex">
                                 <div class="flex-grow w-1/2 pr-2">
                                     <input
-                                        :disabled="form.use_default_address"
+                                        :disabled="
+                                            form.use_default_address == true
+                                        "
                                         type="number"
                                         v-model="form.mobile"
                                         placeholder="موبایل"
@@ -229,7 +231,9 @@ onMounted(() => {
                                 </div>
                                 <div class="flex-grow">
                                     <input
-                                        :disabled="form.use_default_address"
+                                        :disabled="
+                                            form.use_default_address == true
+                                        "
                                         v-model="form.zipcode"
                                         type="number"
                                         placeholder="کدپستی"
@@ -238,12 +242,14 @@ onMounted(() => {
                                 </div>
                             </div>
                             <div class="flex justify-between">
-                                <div
-                                    v-if="userAddress"
-                                    class="flex items-center pt-3"
-                                >
+                                <div class="flex items-center pt-3">
                                     <input
-                                        :disabled="form.use_default_address"
+                                        :disabled="
+                                            form.use_default_address == true
+                                        "
+                                        :checked="
+                                            form.use_default_address == false
+                                        "
                                         v-model="form.save_address_as_default"
                                         type="checkbox"
                                         class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent"
@@ -257,53 +263,87 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div class="p-2 mb-3 px-5">
+                    <div v-if="userAddress" class="p-2 mb-3 px-5">
                         <div class="flex justify-end">
                             <div class="flex items-center py-3 gap-2">
                                 <p>استفاده از آدرس پیش فرض</p>
                                 <input
                                     v-model="form.use_default_address"
                                     type="checkbox"
+                                    checked
                                     class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md"
                                 />
                             </div>
                         </div>
                         <p class="text-gray-500 text-sm">
-                            {{ userAddress.text }}
+                            {{ userAddress.text }} : نشانی
                         </p>
                         <p class="text-gray-500 text-sm">
-                            {{ userAddress.recipient_name }}
+                            {{ userAddress.recipient_name }} : نام گیرنده
                         </p>
                         <p class="text-gray-500 text-sm">
-                            {{ userAddress.zipcode }}
+                            {{ userAddress.zipcode }} : کدپستی
                         </p>
                         <p class="text-gray-500 text-sm">
-                            {{ userAddress.mobile }}
+                            {{ userAddress.mobile }} : موبایل
                         </p>
                     </div>
                     <div class="flex justify-between px-5 sm:pb-2 pb-20">
-                        <div class="flex justify-between">
-                            <div class="flex items-center pt-3">
-                                <input
-                                    v-model="useWallet"
-                                    type="checkbox"
-                                    class="w-6 h-6 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent"
-                                /><label
-                                    for="safeAdress"
-                                    class="block ml-2 text-md text-gray-900"
-                                    >از کیف پول استفاده کن</label
-                                >
-                            </div>
-                        </div>
                         <button
-                            v-if="useWallet"
-                            type="submit"
-                            :disabled="form.processing"
-                            class="w-1/4 self-end rounded bg-[#e3d4a1] px-1 py-3 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
+                        name="action" value="zarinpal"
+                            class="w-1/4 self-end rounded bg-[#aeadc9] px-1 py-1.5 text-center text-md font-medium text-slate-800 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
                         >
-                            پرداخت
+                            <span
+                                class="mx-auto flex gap-1 justify-center items-center"
+                            >
+                                <i class="bi bi-credit-card-2-back"></i>
+                                <p>پرداخت</p></span
+                            >
                         </button>
-                        <ConfirmPaymentTrigger
+
+                        <button
+                        name="action" value="wallet"
+
+                            class="w-1/4 self-end rounded bg-[#e3d4a1] px-1 py-1.5 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
+                        >
+                            <span
+                                class="mx-auto flex gap-1 justify-center items-center"
+                            >
+                                <i class="bi bi-wallet2"></i>
+                                <p>پرداخت</p></span
+                            >
+                        </button>
+                        <!-- <template>
+                            <button
+                                v-if="
+                                    walletBalance >=
+                                    Math.trunc(
+                                        storeCart.subtotal +
+                                            (9 / 100) * storeCart.subtotal
+                                    ) +
+                                        deliveryCost
+                                "
+                                type="submit"
+                                :disabled="form.processing"
+                                class="w-1/4 self-end rounded bg-[#e3d4a1] px-1 py-1.5 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
+                            >
+                                <div
+                                    class="flex justify-center items-center gap-x-2"
+                                >
+                                    <i class="bi bi-wallet2"></i>
+                                    <p>پرداخت</p>
+                                </div>
+                            </button>
+                            <a
+                                :href="route('user.wallet')"
+                                v-else
+                                type="submit"
+                                class="w-1/2 self-end rounded bg-[#f5ba18] px-1 py-3 text-center text-md font-medium text-slate-900 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
+                            >
+                                موجودی نداری شارژ کن برگرد
+                            </a>
+                        </template> -->
+                        <!-- <ConfirmPaymentTrigger
                             v-else
                             :amount="
                                 Math.trunc(
@@ -315,7 +355,19 @@ onMounted(() => {
                             :for="`Order`"
                             :requestPath="`order.payment.request`"
                             :gatewayPath="`order.payment.gateway`"
-                        />
+                        /> -->
+                        <!-- <button
+                            type="submit"
+                            class="w-1/4 self-end rounded bg-green-600 px-1 py-3 text-center text-md font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500"
+                        >
+                            پرداخت
+                        </button>
+                        <ConfirmPaymentModal
+                            v-if="showModal"
+                            @close="showModal = false"
+                            :amount="amount"
+                            :gatewayPath="gatewayPath"
+                        /> -->
                     </div>
                 </form>
 

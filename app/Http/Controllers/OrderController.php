@@ -44,14 +44,14 @@ class OrderController extends Controller
             }
         }
 
-        $userAddress = Auth::user()->address->first();
-        $wallet = Auth::user()->wallet;
+        $userAddress = Auth::user()->address;
+        $walletBalance = Auth::user()->wallet->getRawOriginal('balance');
 
         return Inertia::render('Store/Cart', [
             'order' => $order ?? null,
             'subtotal' => $subtotal ?? null,
             'userAddress' => $userAddress ?? null,
-            'wallet' => $wallet ?? null
+            'walletBalance' => $walletBalance ?? null
         ]);
     }
 
@@ -167,20 +167,20 @@ class OrderController extends Controller
 
                 $user = User::find(Auth::id());
 
-                $userAddress = $user->address->firstOrCreate(
-                    [
-                        'addressable_id' => $user->id,
-                        'addressable_type' => 'App\Models\User',
-                    ],
-                    [
-
-                        'text' => $request->address,
-                        'zipcode' => $request->zipcode,
-                        'user_id' => Auth::id(),
-                        'recipient_name' => $request->recipient_name,
-                        'mobile' => $request->mobile,
-                    ]
-                );
+                $userAddress = $user->address;
+                if (!$userAddress) {
+                    $userAddress = Address::create(
+                        [
+                            'addressable_id' => $user->id,
+                            'addressable_type' => 'App\Models\User',
+                            'text' => $request->address,
+                            'zipcode' => $request->zipcode,
+                            'user_id' => Auth::id(),
+                            'recipient_name' => $request->recipient_name,
+                            'mobile' => $request->mobile,
+                        ]
+                    );
+                }
 
                 $orderAddress = $userAddress->replicate()->fill([
                     'addressable_id' => $order->id,
@@ -215,17 +215,10 @@ class OrderController extends Controller
             if ($billingTotal >= env('MINIMUM_PURCHASE_FOR_FREE_SHOPPING', 500000)) {
                 $deliveryCost = 0;
             } else {
-                $deliveryCost = env('DELIRVERY_COST', 18);
+                $deliveryCost = env('DELIRVERY_COST', 18000);
             }
             $billingTotal += $deliveryCost;
 
-            $order->update([
-                'payment_status' => Order::PAYMENT_STATUS_PAID,
-                'billing_subtotal' => $billingSubtotal,
-                'billing_tax' => $billingTax,
-                'billing_total' => $billingTotal,
-                'delivery_cost' => $deliveryCost,
-            ]);
 
             $wallet = Wallet::firstWhere('user_id', Auth::id());
 
@@ -237,6 +230,13 @@ class OrderController extends Controller
             }
             Wallet::where('user_id', Auth::id())->decrement('balance', $billingTotal);
 
+            $order->update([
+                'payment_status' => Order::PAYMENT_STATUS_PAID,
+                'billing_subtotal' => $billingSubtotal,
+                'billing_tax' => $billingTax,
+                'billing_total' => $billingTotal,
+                'delivery_cost' => $deliveryCost,
+            ]);
 
             // set total for each order item
             foreach ($order->items as $key => $orderItem) {
@@ -274,8 +274,93 @@ class OrderController extends Controller
 
     public function orderPaymentRequest(Request $request)
     {
-        $transaction = Transaction::updateOrCreate(
-            ['payer_id' => Auth::id(), 'transactionـfor' => 'Order', 'payment_status' => 'Pending'],
+
+        switch ($request->input('action')) {
+            case 'save':
+                // Save model
+                break;
+    
+            case 'preview':
+                // Preview model
+                break;
+    
+            case 'advanced_edit':
+                // Redirect to advanced edit
+                break;
+        }
+        
+        Validator::make($request->all(), [
+            'recipient_name' => 'required_if:use_default_address,false',
+            'mobile' => 'required_if:use_default_address,false',
+            'address' => 'required_if:use_default_address,false',
+            'zipcode' => 'required_if:use_default_address,false',
+            'save_address_as_default ' => 'required|boolean',
+            'use_default_address' => 'required|boolean',
+        ], [
+            'recipient_name.required_if' => ' نام لازم است',
+            'mobile.required_if' => ' موبایل مورد نیاز است',
+            'address.required_if' => ' آدرس مورد نیاز است',
+            'zipcode.required_if' => ' کد پستی لازم است',
+        ])->validate();
+
+        dd();
+        $order = Order::firstWhere(
+            ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
+        );
+
+        if ($request->use_default_address) {
+
+            $user = User::find(Auth::id());
+
+            $orderAddress = $user->address->replicate()->fill([
+                'addressable_id' => $order->id,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+
+            $orderAddress->save();
+        } else if ($request->save_address_as_default) {
+
+            $user = User::find(Auth::id());
+
+            $userAddress = $user->address;
+            if (!$userAddress) {
+                $userAddress = Address::create(
+                    [
+                        'addressable_id' => $user->id,
+                        'addressable_type' => 'App\Models\User',
+                        'text' => $request->address,
+                        'zipcode' => $request->zipcode,
+                        'user_id' => Auth::id(),
+                        'recipient_name' => $request->recipient_name,
+                        'mobile' => $request->mobile,
+                    ]
+                );
+            }
+
+            $orderAddress = $userAddress->replicate()->fill([
+                'addressable_id' => $order->id,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+
+            $orderAddress->save();
+        } else {
+            $order->address()->create([
+                'text' => $request->address,
+                'zipcode' => $request->zipcode,
+                'user_id' => Auth::id(),
+                'recipient_name' => $request->recipient_name,
+                'mobile' => $request->mobile,
+                'addressable_id' => $order->id,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+        }
+
+        Transaction::updateOrCreate(
+            [
+                'payer_id' => Auth::id(),
+                'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                'payment_status' => Transaction::PAYMENT_STATUS_PENDING
+            ],
             ['amount' => $request->amount],
         );
     }
@@ -286,7 +371,9 @@ class OrderController extends Controller
 
         $transaction = Transaction::where(
             [
-                'payer_id' => Auth::id(), 'transactionـfor' => 'Order', 'payment_status' => 'Pending',
+                'payer_id' => Auth::id(),
+                'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                'payment_status' => Transaction::PAYMENT_STATUS_PENDING,
             ],
         )->first();
 
@@ -297,8 +384,8 @@ class OrderController extends Controller
         $request = Toman::amount($transaction->amount)
             ->description($order->id . ' :پرداخت سفارش با شناسه ')
             ->callback(route('order.payment.callback'))
-            // ->mobile(Auth::user()->mobile)
-            // ->email(Auth::user()->email)
+            ->mobile(Auth::user()->mobile)
+            ->email(Auth::user()->email)
             ->request();
 
         if ($request->successful()) {
@@ -329,15 +416,24 @@ class OrderController extends Controller
 
         $payment = $request->amount($transaction->amount)->verify();
 
+        if ($request->transactionId() != $transaction->transaction_id) {
+            abort(422, 'شناسه تراکنش نامعتبر');
+        }
+
         if ($payment->successful()) {
             // Store the successful transaction details
-            $transaction->status = 'Successful';
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_PAID;
             $transaction->reference_id = $payment->referenceId();
             $transaction->save();
 
-            Wallet::where('user_id', Auth::id())->increment('balance', $transaction->amount);
+            $order = Order::where(
+                ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
+            )->update([
+                'payment_status' => Order::PAYMENT_STATUS_PAID
+            ]);
 
-            return redirect()->route('user.wallet')->with(['message' => 'successful', 'new_val' => $transaction->amount]);
+
+            return redirect()->route('user.orders.list');
         }
 
         if ($payment->alreadyVerified()) {
@@ -347,7 +443,7 @@ class OrderController extends Controller
         if ($payment->failed()) {
             $transaction->status = 'Failed';
             $transaction->save();
-            return redirect()->route('user.wallet');
+            return redirect()->route('user.orders.list');
         }
     }
 }

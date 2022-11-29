@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\Order;
-use App\Models\Product;
-use App\Models\RefOrder;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -26,6 +25,7 @@ return new class extends Migration
             $table->enum('payment_status', [Order::PAYMENT_STATUS_PAID, Order::PAYMENT_STATUS_PENDING])
                 ->default(Order::PAYMENT_STATUS_PENDING);
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(Transaction::class)->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });
     }
