@@ -38,21 +38,25 @@ const form = useForm({
     picked_categories: [],
     product_attributes: [
         {
-            size_id: "",
-            color_id: "",
+            size: "",
+            color: "",
             price: "",
             stock: "",
         },
     ],
     image: null,
-    brand_id: "",
+    brand: "",
 });
 
 const addproduct = () => {
     form.post(route("product.store"), {
         onSuccess: (res) => {
-            // showError(res);
-            // form.reset();
+            createToast("محصول اضافه شد", {
+                type: "success",
+                hideProgressBar: "true",
+                timeout: 2000,
+                showIcon: "true",
+            }); // form.reset();
             // previewImage.value = null;
         },
         onError: (error) => {
@@ -101,7 +105,7 @@ export default {
 <template>
     <Head title="Create Product" />
 
-    <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+    <div class="min-h-screen p-6 bg-gray-100 flex justify-center">
         <div class="fixed z-40 top-1 right-1" v-if="form.errors">
             <div v-for="error of form.errors" :key="error">
                 {{ showError(error) }}
@@ -233,8 +237,8 @@ export default {
                                     >
                                         <Dropdown align="right" width="48">
                                             <template #trigger>
-                                                <span v-if="form.brand_id">{{
-                                                    brands[form.brand_id].name
+                                                <span v-if="form.brand">{{
+                                                    form.brand.name
                                                 }}</span>
                                                 <span v-else class="text-lg"
                                                     >برند</span
@@ -251,14 +255,14 @@ export default {
                                                 >
                                                     <input
                                                         type="radio"
-                                                        v-model="form.brand_id"
-                                                        name="option"
-                                                        :id="brand.id"
-                                                        :value="brand.id"
+                                                        v-model="form.brand"
+                                                        name="brand-option"
+                                                        :id="brand.name"
+                                                        :value="brand"
                                                         class="peer hidden"
                                                     />
                                                     <label
-                                                        :for="brand.id"
+                                                        :for="brand.name"
                                                         class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
                                                         >{{ brand.name }}</label
                                                     >
@@ -290,6 +294,7 @@ export default {
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="flex">
                                     <div class="md:w-full px-3">
                                         <label
@@ -314,96 +319,113 @@ export default {
                                         />
                                     </div>
                                 </div>
+
                                 <div
-                                    class="flex gap-1"
+                                    class="flex gap-1 items-center"
                                     v-for="(
-                                        row, index
+                                        attr, index
                                     ) of form.product_attributes"
                                     :key="index"
                                 >
-                                    <div class="md:w-full">
-                                        <input
-                                            type="text"
-                                            placeholder="سایز"
-                                            v-model="row.size"
-                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        />
-                                    </div>
-                                    <div class="md:w-full">
-                                        <!-- <input
-                                            type="text"
-                                            placeholder="رنگ"
-                                            v-model="row.color"
-                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        /> -->
-                                        <div
-                                            class="flex py-2 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer"
-                                        >
-                                            <Dropdown align="top" width="48">
-                                                <template #trigger>
-                                                    <span
-                                                        v-if="
-                                                            form
-                                                                .product_attributes
-                                                                .brand_id
-                                                        "
-                                                        >{{
-                                                            brands[
-                                                                form
-                                                                    .product_attributes
-                                                                    .brand_id
-                                                            ].name
-                                                        }}</span
-                                                    >
-                                                    <span v-else class="text-lg"
-                                                        >رنگ</span
-                                                    >
-                                                    <i
-                                                        class="bi bi-chevron-down px-2"
-                                                    ></i>
-                                                </template>
+                                    <!-- size combo box -->
+                                    <div class="md:w-full text-center">
+                                        <Dropdown align="right" width="48">
+                                            <template #trigger>
+                                                <span v-if="attr.size">{{
+                                                    attr.size.name
+                                                }}</span>
+                                                <span v-else class="text-lg"
+                                                    >سایز</span
+                                                >
+                                                <i
+                                                    class="bi bi-chevron-down px-2"
+                                                ></i>
+                                            </template>
 
-                                                <template #content>
-                                                    <div
-                                                        v-for="color of colors"
-                                                        :key="color.id"
+                                            <template #content>
+                                                <div
+                                                    v-for="size of sizes"
+                                                    :key="size.id"
+                                                >
+                                                    <input
+                                                        v-model="attr.size"
+                                                        type="radio"
+                                                        :name="
+                                                            `size-option` +
+                                                            index
+                                                        "
+                                                        :id="size.name"
+                                                        :value="size"
+                                                        class="peer hidden"
+                                                    />
+                                                    <label
+                                                        :for="size.name"
+                                                        class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                        >{{ size.name }}</label
                                                     >
-                                                        <input
-                                                            type="radio"
-                                                            v-model="form.prd"
-                                                            name="option"
-                                                            :id="color.id"
-                                                            :value="color.id"
-                                                            class="peer hidden"
-                                                        />
-                                                        <label
-                                                            :for="color.id"
-                                                            class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                                            >{{
-                                                                color.name
-                                                            }}</label
-                                                        >
-                                                    </div>
-                                                </template>
-                                            </Dropdown>
-                                        </div>
+                                                </div>
+                                            </template>
+                                        </Dropdown>
                                     </div>
+
+                                    <!-- color combo box -->
+                                    <div class="md:w-full text-center">
+                                        <Dropdown align="right" width="48">
+                                            <template #trigger>
+                                                <span v-if="attr.color">{{
+                                                    attr.color.fa_name
+                                                }}</span>
+                                                <span v-else class="text-lg"
+                                                    >رنگ</span
+                                                >
+                                                <i
+                                                    class="bi bi-chevron-down px-2"
+                                                ></i>
+                                            </template>
+
+                                            <template #content>
+                                                <div
+                                                    v-for="color of colors"
+                                                    :key="color.id"
+                                                >
+                                                    <input
+                                                        v-model="attr.color"
+                                                        type="radio"
+                                                        name="color-option"
+                                                        :id="color.en_name"
+                                                        :value="color"
+                                                        class="peer hidden"
+                                                    />
+                                                    <label
+                                                        :for="color.en_name"
+                                                        class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                        >{{
+                                                            color.fa_name
+                                                        }}</label
+                                                    >
+                                                </div>
+                                            </template>
+                                        </Dropdown>
+                                    </div>
+
                                     <div class="md:w-full">
                                         <input
                                             type="number"
                                             placeholder="قیمت"
-                                            v-model="row.price"
+                                            v-model="attr.price"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
                                         />
                                     </div>
+
                                     <div class="md:w-full">
                                         <input
                                             type="number"
-                                            placeholder="تعداد"
-                                            v-model="row.qty"
+                                            placeholder=" موجودی انبار"
+                                            v-model="attr.stock"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
                                         />
                                     </div>
+
                                     <div
                                         class="px-4 flex gap-x-1 h-1/2 self-center pb-3 w-1/12"
                                     >

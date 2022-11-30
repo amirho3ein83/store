@@ -42,8 +42,7 @@ export default {
                         <h1
                             class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight mb-12 text-cyan-400"
                         >
-                            بهترین تجربه خریدت <br /><span
-                                class="text-pink-600"
+                            بهترین تجربه خریدت <br /><span class="text-pink-600"
                                 >از اینجا شروع می شه</span
                             >
                         </h1>
@@ -185,23 +184,25 @@ export default {
         </div>
 
         <div class="mx-auto flex items-center flex-wrap">
-            <!-- <div class="flex-col flex bg-gray-100 w-full">
+            <div
+                v-if="Object.keys(amazing_offers).length != 0"
+                class="flex-col flex bg-gray-100 w-full"
+            >
                 <p
-                    class="text-2xl text-center w-full bold bg-gray-900 text-yellow-500 p-3"
+                    class="text-2xl text-center w-full bold bg-[#292726] text-yellow-500 p-3"
                 >
                     Amazing offers
                 </p>
                 <div
-                    class="py-2 flex touch-pan-x bg-gray-900 overflow-x-scroll items-center justify-center"
+                    class="py-2 flex touch-pan-x bg-[#423d3a] overflow-x-scroll items-center justify-center"
                 >
-                    {{amazing_offers}}
                     <AmazingOffer
                         v-for="amazing_offer of amazing_offers"
                         :key="amazing_offer.id"
                         :amazing_offer="amazing_offer"
                     />
                 </div>
-            </div> -->
+            </div>
 
             <div
                 style="

@@ -30,6 +30,7 @@ export default {
             class="w-full md:w-1/2 xl:w-2/3 pl-4 h-full flex flex-col mx-auto py-0"
         >
             <div
+                v-if="Object.keys(orders).length != 0"
                 class="w-full h-full overflow-auto bg-[#edeef0] py-0 rounded-xl"
                 id="journal-scroll"
             >
@@ -108,6 +109,17 @@ export default {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div
+                class="flex flex-col gap-3 items-center text-2xl shadow-sm text-[#8b30ff]"
+                v-else
+            >
+                <p>اولین خریدتو ع همینجا شروع کردن</p>
+                <Link
+                    :href="'/category'"
+                    class="inline-flex w-[150px] text-slate-100 bg-[#47365c] border-0 py-2 px-6 focus:outline-none hover:bg-[#6a4d8f] rounded text-lg"
+                    >برو واسه خرید
+                </Link>
             </div>
         </div>
     </div>

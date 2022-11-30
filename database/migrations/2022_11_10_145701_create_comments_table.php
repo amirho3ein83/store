@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->cascadeOnDelete();
-            $table->foreignIdFor(Product::class)->cascadeOnDelete();
+            $table->foreignIdFor(Product::class)->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('body');
             $table->timestamps();
         });

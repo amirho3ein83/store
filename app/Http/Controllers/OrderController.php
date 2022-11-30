@@ -153,8 +153,8 @@ class OrderController extends Controller
                 $request->zipcode,
                 $request->recipient_name,
                 $request->mobile,
-                $request->use_default_address = true,
-                $request->save_address_as_default = false
+                $request->use_default_address,
+                $request->save_address_as_default
             );
 
             $numbers = $this->getNumbers($order);
@@ -176,9 +176,9 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             info($e);
-            return response()->json([
-                'error' => 'sth went wrong'
-            ], 422);
+            return back()->with([
+                'error' => $e->getMessage()
+            ]);
         }
     }
 
@@ -200,8 +200,8 @@ class OrderController extends Controller
                 $request->zipcode,
                 $request->recipient_name,
                 $request->mobile,
-                $request->use_default_address = true,
-                $request->save_address_as_default = false
+                $request->use_default_address,
+                $request->save_address_as_default
             );
 
             $numbers = $this->getNumbers($order);
@@ -341,7 +341,7 @@ class OrderController extends Controller
         return $numbers;
     }
 
-    public function saveOrderAddress($order, $address, $zipcode, $recipient_name, $mobile, $use_default = true, $save_as_default = false)
+    public function saveOrderAddress($order, $address, $zipcode, $recipient_name, $mobile, $use_default = false, $save_as_default = false)
     {
         if ($use_default) {
 

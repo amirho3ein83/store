@@ -19,7 +19,7 @@ let product = ref(props.amazing_offer.product);
             class="p-2 flex justify-center items-center"
         >
             <div
-                class="flex flex-col justify-between w-56 sm:w-72 h-72 bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer"
+                class="flex flex-col justify-between w-56 sm:w-72 h-72 bg-center bg-cover text-gray-800 shadow-md overflow-hidden cursor-pointer"
                 v-bind:style="{
                     'background-image':
                         'url(' + amazing_offer.product.image_url + ')',
@@ -41,11 +41,8 @@ let product = ref(props.amazing_offer.product);
                         </h3>
 
                         <div class="flex align-baseline gap-x-1">
-                            <p class="text-red-200 line-through">
-                                {{ product.default_price }}
-                            </p>
                             <h3 class="text-xl font-bold pb-1 text-yellow-400">
-                                ${{ product.price }}
+                                ${{ product.default_price }}
                             </h3>
                         </div>
                     </div>

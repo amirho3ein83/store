@@ -28,7 +28,7 @@ let show_success_modal = ref(false);
 let useWallet = ref(false);
 let showConfirmModal = ref(false);
 
-const deliveryCost = 18;
+const deliveryCost = 18000;
 
 const form = useForm({
     recipient_name: "",
@@ -36,7 +36,7 @@ const form = useForm({
     mobile: "",
     zipcode: "",
     save_address_as_default: false,
-    use_default_address: true,
+    use_default_address: false,
 });
 
 const payUsingWallet = () => {

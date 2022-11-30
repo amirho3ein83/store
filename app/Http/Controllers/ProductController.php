@@ -33,7 +33,7 @@ class ProductController extends Controller
         'description' => 'required|max:255',
         'details' => 'required|max:255',
         'default_price' => 'required|between:1000,200000000|numeric',
-        'brand_id' => 'required|numeric',
+        'brand' => 'required',
         'picked_categories' => 'required',
         'product_attributes' => 'required',
         'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -44,7 +44,7 @@ class ProductController extends Controller
         'title.required' => ' نام لازم است',
         'description.required' => ' موبایل مورد نیاز است',
         'details.required' => ' آدرس مورد نیاز است',
-        'brand_id.required' => ' برند  لازم است',
+        'brand.required' => ' برند  لازم است',
         'default_price.required' => ' قیمت  لازم است',
         'default_price.between' => ' حداقل قیمت باید ۱۰۰۰ تومان باشد',
         'picked_categories.required' => ' دسته بندی  لازم است',
@@ -57,7 +57,7 @@ class ProductController extends Controller
 
     public function homePage(Request $request)
     {
-        $amazing_offers = AmazingOffer::where('expiry_date', '>', Carbon::now())->inRandomOrder()->with('product')->get();
+        $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
 
         $amazing_offers->map(function ($amazing_offer) {
             $image_url = $amazing_offer->product->getFirstMedia()->getUrl();
@@ -152,6 +152,9 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+
+        // info($request->product_attributes);
+        // dd();
         Validator::make(
             $request->all(),
             $this->_validation,
@@ -165,7 +168,7 @@ class ProductController extends Controller
                 'slug' => Str::slug($request->title),
                 'description' => $request->description,
                 'details' => $request->details,
-                'brand_id' => $request->brand_id,
+                'brand_id' => $request->brand['id'],
                 'default_price' => $request->default_price,
                 'stock' => 0
             ]);
@@ -177,8 +180,8 @@ class ProductController extends Controller
             foreach ($request->product_attributes as $key => $attr) {
                 $productAttribute = ProductAttribute::create([
                     'product_id' => $product->id,
-                    'size' => $attr['size'],
-                    'color' => $attr['color'],
+                    'size_id' => $attr['size']['id'],
+                    'color_id' => $attr['color']['id'],
                     'price' => $attr['price']
                 ]);
 
@@ -239,9 +242,15 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        dd();
         $categories = Category::all();
 
         return Inertia::render('Admin/Products/Edit', ['product' => $product, 'categories' => $categories]);
+    }
+
+    public function delete(Product $product)
+    {
+        $product->delete();
     }
 
     public function show($slug)

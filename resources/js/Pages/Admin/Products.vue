@@ -5,6 +5,7 @@ import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Dropdown from "@/Components/Dropdown.vue";
 import Pagination from "@/Components/Pagination.vue";
+import ProductRow from "@/Components/ProductRow.vue";
 import debounce from "lodash/debounce";
 
 let props = defineProps({
@@ -259,51 +260,11 @@ export default {
                 </tr>
             </thead>
             <tbody>
-                <tr
+                <ProductRow
                     v-for="product of products.data"
                     :key="product.id"
-                    class="bg-gray-200 mx-3 py-1"
-                >
-                    <td class="p-3">
-                        <div class="flex items-center">
-                            <img
-                                class="rounded-full h-12 w-12 object-cover"
-                                :src="product.image_url"
-                                alt="unsplash image"
-                            />
-                            <div class="ml-3">
-                                <div class="text-yellow-900">
-                                    {{ product.title }}
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="p-3 text-slate-900">
-                        {{ product.categories[0].name }}
-                    </td>
-                    <td class="p-3 font-bold text-yellow-600">
-                        {{ product.default_price }}
-                    </td>
-                    <td class="p-3">
-                        <span class="text-gray-500 rounded-md px-2">
-                            {{ product.stock }}</span
-                        >
-                    </td>
-                    <td class="p-3">
-                        <Link class="text-gray-400 hover:text-gray-100 mr-2">
-                            <i class="bi bi-trash3-fill"></i>
-                        </Link>
-                        <Link
-                            :href="`/products/` + product.id + `/edit`"
-                            class="text-gray-400 hover:text-gray-100 mx-2"
-                        >
-                            <i
-                                class="material-icons-outlined text-base text-yellow-500"
-                                ><i class="bi bi-pen-fill"></i
-                            ></i>
-                        </Link>
-                    </td>
-                </tr>
+                    :product="product"
+                />
             </tbody>
         </table>
     </div>

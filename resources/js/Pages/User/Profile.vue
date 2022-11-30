@@ -80,7 +80,7 @@ export default {
 </script>
 <template>
     <section
-        class="lg:w-4/6 md:w-2/3 w-full sm:flex justify-center mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
+        class="lg:w-4/6 md:w-2/3 w-full sm:flex justify-center mx-auto bg-[#5c5c69] rounded-2xl px-8 py-4 shadow-lg"
     >
         <div class="w-1/2 mx-auto">
             <div class="mt-6 w-fit mx-auto">

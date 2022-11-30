@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('product_category', function (Blueprint $table) {
             $table->foreignIdFor(Product::class)
-                ->onUpdate('cascade')
-                ->nullOnDelete();
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 
             $table->foreignIdFor(Category::class)
                 ->onUpdate('cascade')

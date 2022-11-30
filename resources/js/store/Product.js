@@ -11,16 +11,25 @@ export const useProductStore = defineStore("products", {
         likeProduct(id) {
             axios.patch(route("like-product", { id: id }));
         },
+        deleteProduct(id) {
+            axios.delete(route("product.delete", { product: id }));
+        },
         showProduct(slug) {
             Inertia.get("/products/" + slug);
         },
+        showProductEditPage(id) {
+            Inertia.get(route("product.edit", { product: id }));
+        },
         fetchComments(id) {
             axios
-                .get(route("product.comment", {
-                    id: id,
-                }), [])
+                .get(
+                    route("product.comment", {
+                        id: id,
+                    }),
+                    []
+                )
                 .then((res) => {
-                    this.comments = res.data
+                    this.comments = res.data;
                 })
                 .catch((error) => {
                     if (error.response.status == 500) {

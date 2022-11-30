@@ -39,19 +39,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // admin routes
-    // Route::controller(AdminController::class)->group(['middleware' => ['role:admin'], 'prefix' => 'admin', 'name' => 'admin.'], function () {
-    //     Route::get('/products-list', 'productsList')->name('products.list');
-    //     Route::get('/user/orders-list', 'ordersList')->name('admin.orders.list');
-    //     Route::get('/users-list', 'usersList')->name('users.list');
-    //     Route::get('/criticisms-list', 'criticismList')->name('criticisms.list');
-
-    //     Route::get('/admin-dashboard', function () {
-    //         return Inertia::render('Admin/Dashboard');
-    //     })->name('admin.dashboard');
-    // });
-
-
     Route::controller(AdminController::class)->middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/products-list', 'productsList')->name('products.list');
         Route::get('/user/orders-list', 'ordersList')->name('orders.list');
@@ -62,7 +49,6 @@ Route::middleware([
             return Inertia::render('Admin/Dashboard');
         })->name('dashboard');
     });
-
 
 
     Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
@@ -105,6 +91,8 @@ Route::middleware([
 
 
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::delete('/products/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
+
     Route::patch('/products/{id}/like', [ProductController::class, 'likeProduct'])->name('like-product');
     Route::patch('/products/{id}/unlike', [ProductController::class, 'unlikeProduct'])->name('unlike-product');
     Route::patch('/rate/product', [ProductController::class, 'rateProduct'])->name('rate-product');

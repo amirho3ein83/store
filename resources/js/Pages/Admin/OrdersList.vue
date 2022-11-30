@@ -14,9 +14,9 @@ export default {
 </script>
 <template>
     <div
-        class="container w-2/3 mx-auto bg-gray-50 min-h-screen p-8 antialiased"
+        class="container w-full 2xl:w-2/3 mx-auto bg-gray-50 min-h-screen p-8 antialiased"
     >
-        <div>
+        <div v-if="Object.keys(orders.data).length != 0">
             <div
                 v-for="order of orders.data"
                 :key="order.id"
@@ -127,6 +127,7 @@ export default {
                 </div>
             </div>
         </div>
+        <div class="text-center text-2xl text-red-700" v-else>سفارشی ثبت نشده</div>
     </div>
     <!-- pagination -->
     <div v-show="orders.data != undefined && orders.data != {}">

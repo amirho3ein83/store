@@ -25,7 +25,7 @@ class AmazingOfferSeeder extends Seeder
 
             AmazingOffer::create([
                 'product_id' => $product->id,
-                'discount_percent' => 10,
+                'discount_percent' => rand(5, 30),
                 'expiry_date' => Carbon::parse(Carbon::yesterday())->addHour(rand(6, 26))
             ]);
         }

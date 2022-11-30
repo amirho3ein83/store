@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
         File::deleteDirectory(public_path('storage/images'));
 
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 50; $i++) {
 
             $product =  Product::factory()->create();
 
