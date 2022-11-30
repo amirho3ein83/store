@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Criticism;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -68,15 +69,8 @@ class AdminController extends Controller
     }
     public function usersList(Request $request)
     {
-        $users = User::query()
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "{$search}%")
-                    ->orWhere('email', 'like', "{$search}%");
-            })
-            ->with('roles')
-            ->simplePaginate(10)
+        $users = User::simplePaginate(10)
             ->withQueryString();
-
 
         return Inertia::render(
             'Admin/Users',
@@ -103,6 +97,8 @@ class AdminController extends Controller
             'critic_email' => $request->email,
             'critic_name' => $request->name,
         ]);
+
+        return back()->with('messsage', 'success');
     }
 
     public function criticismList()
@@ -111,6 +107,18 @@ class AdminController extends Controller
             'Admin/Criticisms',
             [
                 'criticisms' => Criticism::simplePaginate(),
+            ]
+        );
+    }
+
+    public function ordersList()
+    {
+        $orders = Order::with('buyer', 'address', 'transaction')->simplePaginate(20);
+
+        return Inertia::render(
+            'Admin/OrdersList',
+            [
+                'orders' => $orders,
             ]
         );
     }

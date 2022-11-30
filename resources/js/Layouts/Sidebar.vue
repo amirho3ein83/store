@@ -6,42 +6,42 @@
         <ul class="mt-12">
             <Link
                 :href="'/'"
-                class="flex justify-start items-center cursor-pointer text-gray-300  focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
             >
                 <i class="bi bi-house"></i>
                 <span class="text-md ml-2">خانه</span>
             </Link>
             <Link
-                :href="'dashboard'"
-                class="flex justify-start items-center cursor-pointer text-gray-300  focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
+                :href="route('admin.dashboard')"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
             >
                 <i class="bi bi-kanban"></i>
                 <span class="text-md ml-2">داشبورد</span>
             </Link>
             <Link
-                :href="'/admin/products-list'"
-                class="flex justify-start items-center cursor-pointer text-gray-300  focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
+                :href="route('admin.products.list')"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
             >
                 <i class="bi bi-kanban"></i>
                 <span class="text-md ml-2">محصولات</span>
             </Link>
             <Link
-                :href="'/admin/products-list'"
-                class="flex justify-start items-center cursor-pointer text-gray-300  focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
+                :href="route('admin.orders.list')"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
             >
                 <i class="bi bi-kanban"></i>
                 <span class="text-md ml-2">سفارشات</span>
             </Link>
             <Link
-                :href="'/admin/users-list'"
-                class="flex justify-start items-center cursor-pointer text-gray-300  focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
+                :href="route('admin.clients.list')"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
             >
                 <i class="bi bi-person"></i>
                 <span class="text-md ml-2">مشتریان</span>
             </Link>
             <Link
-                :href="'/admin/criticisms-list'"
-                class="flex justify-start items-center cursor-pointer text-gray-300  focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
+                :href="route('admin.criticisms.list')"
+                class="flex justify-start items-center cursor-pointer text-gray-300 focus:outline-none focus:ring-2 py-2 px-3 mb-5 focus:bg-gray-900"
             >
                 <i class="bi bi-person"></i>
                 <span class="text-md ml-2">انتقادات</span>

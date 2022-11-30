@@ -2,6 +2,7 @@
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import { createToast } from "mosha-vue-toastify";
 
 const form = useForm({
     name: "",
@@ -10,13 +11,48 @@ const form = useForm({
     desc: "",
 });
 
+defineProps({
+    messsage: String,
+});
+
+const showError = (error) => {
+    createToast(error, {
+        position: "bottom-right",
+        transition: "zoom",
+        type: "danger",
+        toastBackgroundColor: "#fc4242",
+        timeout: 2900,
+        hideProgressBar: "true",
+    });
+    form.errors = null;
+};
 const sendReport = () => {
     form.post(route("contact.us.report"), {
         onSuccess: () => {
+            createToast("thanks for your survey", {
+                type: "info",
+                transition: "bounce",
+                position: "top-left",
+                timeout: 2100,
+                toastBackgroundColor: "#80bacf",
+                showCloseButton: "true",
+                hideProgressBar: "true",
+                swipeClose: "false",
+            });
             form.reset();
-            // show thanks for ur criticism
         },
-        onError: (error) => {},
+        onError: (error) => {
+            createToast(error, {
+                type: "info",
+                transition: "bounce",
+                position: "top-right",
+                timeout: 2100,
+                toastBackgroundColor: "#ed2715",
+                showCloseButton: "true",
+                hideProgressBar: "true",
+                swipeClose: "false",
+            });
+        },
     });
 };
 </script>
@@ -47,10 +83,6 @@ export default {
                                 class="mt-4 block w-full"
                                 required
                             />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.name"
-                            />
                         </div>
                         <div>
                             <TextInput
@@ -61,10 +93,6 @@ export default {
                                 class="mt-4 block w-full"
                                 required
                             />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.mobile"
-                            />
                         </div>
                         <div class="mb-5">
                             <TextInput
@@ -74,10 +102,6 @@ export default {
                                 placeholder="email"
                                 class="mt-4 block w-full"
                                 required
-                            />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.email"
                             />
                         </div>
 
@@ -99,6 +123,11 @@ export default {
                             </PrimaryButton>
                         </div>
                     </form>
+                </div>
+                <div v-if="form.errors">
+                    <div v-for="error of form.errors" :key="error">
+                        {{ showError(error) }}
+                    </div>
                 </div>
             </div>
             <div class="w-full px-4 lg:w-1/2 xl:w-6/12">
@@ -199,7 +228,6 @@ export default {
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 </template>

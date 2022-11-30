@@ -85,7 +85,8 @@ class OrderItem extends Model
         return $query->where([
             ['product_id', $product_id],
             ['picked_color', $picked_color],
-            ['picked_size', $picked_size]
+            ['picked_size', $picked_size],
+            ['payment_status', self::PAYMENT_STATUS_PENDING]
         ]);
     }
 }

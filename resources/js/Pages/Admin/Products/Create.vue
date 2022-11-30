@@ -5,7 +5,6 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import { createToast } from "mosha-vue-toastify";
-import 'mosha-vue-toastify/dist/style.css'
 
 const previewImage = ref(null);
 const imageUrl = ref(null);
@@ -17,19 +16,8 @@ let props = defineProps({
     brands: Object,
 });
 
-let pickedCategories = ref([]);
-
-let productAttributes = ref([
-    {
-        size: "",
-        color: "",
-        price: "",
-        stock: "",
-    },
-]);
-
 const addProductAttribute = (index) => {
-    productAttributes.value.push({
+    form.product_attributes.push({
         size: "",
         color: "",
         price: "",
@@ -38,7 +26,7 @@ const addProductAttribute = (index) => {
 };
 
 const removeProductAttribute = (index) => {
-    productAttributes.value.splice(index, 1);
+    form.product_attributes.splice(index, 1);
 };
 
 const form = useForm({
@@ -47,17 +35,25 @@ const form = useForm({
     details: "",
     default_price: "",
     stock: null,
-    category_ids: pickedCategories.value,
-    product_attributes: productAttributes.value,
+    picked_categories: [],
+    product_attributes: [
+        {
+            size_id: "",
+            color_id: "",
+            price: "",
+            stock: "",
+        },
+    ],
     image: null,
+    brand_id: "",
 });
 
 const addproduct = () => {
     form.post(route("product.store"), {
         onSuccess: (res) => {
             // showError(res);
-            form.reset();
-            previewImage.value = null;
+            // form.reset();
+            // previewImage.value = null;
         },
         onError: (error) => {
             // showError(error);
@@ -73,7 +69,7 @@ const showError = (error) => {
         toastBackgroundColor: "#fc4242",
         timeout: 2900,
     });
-    form.errors = null;
+    form.errors == null;
 };
 
 const pickFile = (event) => {
@@ -284,7 +280,9 @@ export default {
                                                 <input
                                                     type="checkbox"
                                                     :value="category.id"
-                                                    v-model="pickedCategories"
+                                                    v-model="
+                                                        form.picked_categories
+                                                    "
                                                     name=""
                                                     id=""
                                                 />
@@ -318,7 +316,9 @@ export default {
                                 </div>
                                 <div
                                     class="flex gap-1"
-                                    v-for="(row, index) of productAttributes"
+                                    v-for="(
+                                        row, index
+                                    ) of form.product_attributes"
                                     :key="index"
                                 >
                                     <div class="md:w-full">
@@ -330,12 +330,63 @@ export default {
                                         />
                                     </div>
                                     <div class="md:w-full">
-                                        <input
+                                        <!-- <input
                                             type="text"
                                             placeholder="رنگ"
                                             v-model="row.color"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        />
+                                        /> -->
+                                        <div
+                                            class="flex py-2 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer"
+                                        >
+                                            <Dropdown align="top" width="48">
+                                                <template #trigger>
+                                                    <span
+                                                        v-if="
+                                                            form
+                                                                .product_attributes
+                                                                .brand_id
+                                                        "
+                                                        >{{
+                                                            brands[
+                                                                form
+                                                                    .product_attributes
+                                                                    .brand_id
+                                                            ].name
+                                                        }}</span
+                                                    >
+                                                    <span v-else class="text-lg"
+                                                        >رنگ</span
+                                                    >
+                                                    <i
+                                                        class="bi bi-chevron-down px-2"
+                                                    ></i>
+                                                </template>
+
+                                                <template #content>
+                                                    <div
+                                                        v-for="color of colors"
+                                                        :key="color.id"
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            v-model="form.prd"
+                                                            name="option"
+                                                            :id="color.id"
+                                                            :value="color.id"
+                                                            class="peer hidden"
+                                                        />
+                                                        <label
+                                                            :for="color.id"
+                                                            class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                            >{{
+                                                                color.name
+                                                            }}</label
+                                                        >
+                                                    </div>
+                                                </template>
+                                            </Dropdown>
+                                        </div>
                                     </div>
                                     <div class="md:w-full">
                                         <input
@@ -358,8 +409,8 @@ export default {
                                     >
                                         <button
                                             v-if="
-                                                productAttributes.length ==
-                                                (index += 1)
+                                                form.product_attributes
+                                                    .length == (index += 1)
                                             "
                                             @click="addProductAttribute(index)"
                                             type="button"

@@ -45,6 +45,7 @@ class Order extends Model
             get: fn ($value) =>  convertToPersianNumber(number_format($value)),
         );
     }
+    
     protected function createdAt(): Attribute
     {
         return Attribute::make(

@@ -24,7 +24,9 @@ onMounted(() => {
                         :size="40"
                         color="#feffd4"
                     />
-                    <h3 class="lg:text-4xl  pl-2 text-3xl font-bold font-heading">
+                    <h3
+                        class="lg:text-4xl pl-2 text-3xl font-bold font-heading"
+                    >
                         ᎷᏗᎶᎧ
                     </h3>
                 </div>
@@ -82,7 +84,7 @@ onMounted(() => {
                     </Link>
                     <Link
                         class="relative flex"
-                        href="/admin/dashboard"
+                        :href="route('admin.dashboard')"
                         preserve-scroll
                     >
                         <div
