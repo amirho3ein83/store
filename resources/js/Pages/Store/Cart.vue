@@ -5,7 +5,7 @@ import OrderItem from "@/Components/OrderItem.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import { useStorage } from "@/store/useStorage";
 import EmptyCart from "../Store/Partial/EmptyCart.vue";
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useCartStore } from "@/store/Cart.js";
 import LoadingModal from "@/Modals/LoadingModal.vue";
 import SuccessModal from "@/Modals/SuccessModal.vue";
@@ -94,6 +94,21 @@ const onlyNumber = (event) => {
     }
 };
 
+const total = computed(() => {
+    return (
+        Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) +
+        deliveryCost
+    ).toLocaleString("ar-EG");
+});
+
+const tax = computed(() => {
+    return Math.trunc((9 / 100) * storeCart.subtotal).toLocaleString("ar-EG");
+});
+
+const subtotal = computed(() => {
+    return storeCart.subtotal.toLocaleString("ar-EG");
+});
+
 onMounted(() => {
     storeCart.subtotal = props.subtotal;
 });
@@ -136,7 +151,7 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ storeCart.subtotal.toLocaleString("ar-EG") }}
+                                {{ subtotal }}
                                 تومان
                             </p>
                         </div>
@@ -149,11 +164,7 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{
-                                    Math.trunc(
-                                        (9 / 100) * storeCart.subtotal
-                                    ).toLocaleString("ar-EG")
-                                }}
+                                {{ tax }}
                                 تومان
                             </p>
                         </div>
@@ -190,14 +201,7 @@ onMounted(() => {
                         <p
                             class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white"
                         >
-                            {{
-                                (
-                                    Math.trunc(
-                                        storeCart.subtotal +
-                                            (9 / 100) * storeCart.subtotal
-                                    ) + deliveryCost
-                                ).toLocaleString("ar-EG")
-                            }}
+                            {{ total }}
                             تومان
                         </p>
                     </div>
@@ -234,13 +238,18 @@ onMounted(() => {
                                 <i class="bi bi-geo-alt"></i>
                             </div>
                         </div>
-                        <div :class="{'blur-[1.5px]':form.use_default_address == true}" class="px-5 pb-5">
+                        <div
+                            :class="{
+                                'blur-[1.5px]':
+                                    form.use_default_address == true,
+                            }"
+                            class="px-5 pb-5"
+                        >
                             <input
                                 :disabled="form.use_default_address == true"
                                 v-model="form.recipient_name"
                                 type="text"
                                 placeholder="نام گیرنده"
-                                
                                 class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                             />
 
