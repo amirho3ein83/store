@@ -56,7 +56,7 @@ defineProps({
 
                                     <td class="p-2 whitespace-nowrap">
                                         <div class="text-lg text-center">
-                                            {{ user.created_at }}
+                                            {{ user.j_created_at }}
                                         </div>
                                     </td>
                                 </tr>

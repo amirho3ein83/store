@@ -38,7 +38,7 @@ onMounted(() => {
                     <p
                         class="text-body-color mb-10 text-stone-800 text-xl leading-relaxed"
                     >
-                        {{ amount }} تومان
+                        {{ amount.toLocaleString('ar-EG') }} تومان
                     </p>
                     <div class="-mx-3 flex flex-wrap">
                         <div class="w-1/2 px-3">

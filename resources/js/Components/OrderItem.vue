@@ -101,7 +101,7 @@ onMounted(() => {
                             class="inline-flex h-8 w-8 items-center justify-center"
                             min="1"
                         >
-                            {{ qty }}
+                            {{ qty.toLocaleString('ar-EG') }}
                         </div>
                     </div>
 
@@ -116,7 +116,7 @@ onMounted(() => {
                 </div>
                 <div class="flex-col flex px-8">
                     <span class="text-center text-stone-800 text-sm"
-                        >{{ orderItem.product.en_price * qty }} تومان</span
+                        >{{ (orderItem.product.en_price * qty).toLocaleString('ar-EG') }} تومان</span
                     >
                 </div>
             </div>

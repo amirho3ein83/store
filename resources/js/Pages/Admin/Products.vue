@@ -175,10 +175,6 @@ export default {
                 <Dropdown align="right" width="48">
                     <template #trigger>
                         <i class="bi bi-border-width text-gray-700"></i>
-
-                        <!-- <i
-                            class="mr-5 bi bi-burger  text-gray-200"
-                        ></i> -->
                     </template>
 
                     <template #content>
@@ -249,14 +245,14 @@ export default {
             </div>
         </div>
 
-        <table class="text-gray-400 w-2/3 text-sm">
+        <table class="text-gray-400 w-5/6 text-sm">
             <thead class="bg-gray-800 my-1 text-gray-300">
                 <tr>
                     <th class="p-3 text-left">عنوان</th>
+                    <th class="p-3"> تعداد فروش</th>
                     <th class="p-3">دسته بندی</th>
                     <th class="p-3">(تومان) قیمت</th>
                     <th class="p-3">موجودی</th>
-                    <th class="p-3"></th>
                 </tr>
             </thead>
             <tbody>

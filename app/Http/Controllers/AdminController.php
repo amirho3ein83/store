@@ -6,7 +6,9 @@ use App\Models\Category;
 use App\Models\Criticism;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +16,23 @@ use Inertia\Inertia;
 
 class AdminController extends Controller
 {
+
+    public function dashboard(Request $request)
+    {
+        $totalSalesToday = Transaction::where('created_at', '>=', Carbon::today())->sum('amount');
+        $countTodayOrders = Order::where('created_at', '>=', Carbon::today())->count();
+        $totalSalesToday = convertToPersianNumber(number_format($totalSalesToday));
+        $countTodayOrders = convertToPersianNumber(number_format($countTodayOrders));
+
+        return Inertia::render(
+            'Admin/Dashboard',
+            [
+                'totalSalesToday' => $totalSalesToday,
+                'countTodayOrders' => $countTodayOrders,
+            ]
+        );
+    }
+
     public function productsList(Request $request)
     {
 
@@ -79,6 +98,7 @@ class AdminController extends Controller
             ]
         );
     }
+
 
     public function report(Request $request)
     {

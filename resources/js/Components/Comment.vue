@@ -14,7 +14,7 @@ defineProps({
           <span class="font-semibold text-sm leading-relaxed">{{comment.author}}</span>
         </div>
         <div class="text-normal leading-snug md:leading-normal">{{ comment.body }}</div>
-        <div class="text-sm ml-4 mt-0.5 text-gray-700 dark:text-gray-400">{{ comment.created_at }}</div>
+        <div class="text-sm ml-4 mt-0.5 text-gray-700 dark:text-gray-400">{{ comment.j_created_at }}</div>
       </div>
     </div>
   </div>

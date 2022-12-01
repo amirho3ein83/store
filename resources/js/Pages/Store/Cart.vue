@@ -14,6 +14,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ConfirmPaymentTrigger from "@/Modals/triggers/ConfirmPaymentTrigger.vue";
 import ConfirmPaymentModal from "@/Modals/ConfirmPaymentModal.vue";
 import { createToast } from "mosha-vue-toastify";
+import { forEach } from "lodash";
 const storeCart = useCartStore();
 
 let props = defineProps({
@@ -81,9 +82,16 @@ const showError = (error) => {
         type: "danger",
         toastBackgroundColor: "#fc4242",
         timeout: 2900,
-        hideProgressBar: "true",
+        hideProgressBar: true,
     });
-    form.errors = null;
+    form.errors = {};
+};
+
+const onlyNumber = (event) => {
+    let keyCode = event.keyCode ? event.keyCode : event.which;
+    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        event.preventDefault();
+    }
 };
 
 onMounted(() => {
@@ -128,7 +136,8 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ storeCart.subtotal }} تومان
+                                {{ storeCart.subtotal.toLocaleString("ar-EG") }}
+                                تومان
                             </p>
                         </div>
                         <div class="flex items-center justify-between pt-5">
@@ -140,7 +149,11 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ Math.trunc((9 / 100) * storeCart.subtotal) }}
+                                {{
+                                    Math.trunc(
+                                        (9 / 100) * storeCart.subtotal
+                                    ).toLocaleString("ar-EG")
+                                }}
                                 تومان
                             </p>
                         </div>
@@ -154,7 +167,7 @@ onMounted(() => {
                                 v-if="storeCart.subtotal <= 500000"
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ deliveryCost }} تومان
+                                {{ deliveryCost.toLocaleString("ar-EG") }} تومان
                             </p>
                             <p
                                 v-else
@@ -178,10 +191,12 @@ onMounted(() => {
                             class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white"
                         >
                             {{
-                                Math.trunc(
-                                    storeCart.subtotal +
-                                        (9 / 100) * storeCart.subtotal
-                                ) + deliveryCost
+                                (
+                                    Math.trunc(
+                                        storeCart.subtotal +
+                                            (9 / 100) * storeCart.subtotal
+                                    ) + deliveryCost
+                                ).toLocaleString("ar-EG")
                             }}
                             تومان
                         </p>
@@ -219,12 +234,13 @@ onMounted(() => {
                                 <i class="bi bi-geo-alt"></i>
                             </div>
                         </div>
-                        <div class="px-5 pb-5">
+                        <div :class="{'blur-[1.5px]':form.use_default_address == true}" class="px-5 pb-5">
                             <input
                                 :disabled="form.use_default_address == true"
                                 v-model="form.recipient_name"
                                 type="text"
                                 placeholder="نام گیرنده"
+                                
                                 class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                             />
 
@@ -241,7 +257,8 @@ onMounted(() => {
                                         :disabled="
                                             form.use_default_address == true
                                         "
-                                        type="number"
+                                        type="text"
+                                        @keypress="onlyNumber"
                                         v-model="form.mobile"
                                         placeholder="موبایل"
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
@@ -253,7 +270,8 @@ onMounted(() => {
                                             form.use_default_address == true
                                         "
                                         v-model="form.zipcode"
-                                        type="number"
+                                        type="text"
+                                        @keypress="onlyNumber"
                                         placeholder="کدپستی"
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
                                     />

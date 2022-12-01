@@ -21,19 +21,18 @@ class OrderController extends Controller
 {
 
     protected $_validation = [
-        'recipient_name' => 'required_if:use_default_address,false',
-        'mobile' => 'required_if:use_default_address,false',
-        'address' => 'required_if:use_default_address,false',
-        'zipcode' => 'required_if:use_default_address,false',
-        'save_address_as_default ' => 'boolean',
-        'use_default_address' => 'boolean',
+        'recipient_name' => 'required',
+        'mobile' => 'required|regex:/(09)[0-9]{9}/',
+        'address' => 'required|max:255',
+        'zipcode' => 'required|max:255',
     ];
 
     protected $_validationMessages = [
-        'recipient_name.required_if' => ' نام لازم است',
-        'mobile.required_if' => ' موبایل مورد نیاز است',
-        'address.required_if' => ' آدرس مورد نیاز است',
-        'zipcode.required_if' => ' کد پستی لازم است',
+        'recipient_name.required' => ' نام لازم است',
+        'mobile.required' => ' موبایل مورد نیاز است',
+        'mobile.regex' => 'فرمت موبایل نادرست است',
+        'address.required' => ' آدرس مورد نیاز است',
+        'zipcode.required' => ' کد پستی لازم است',
     ];
 
     public function index()
@@ -138,7 +137,9 @@ class OrderController extends Controller
     public function finalizeOrderUsingWallet(Request $request, Order $order)
     {
 
-        Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
+        if ($request->use_default_address == false) {
+            Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
+        }
 
         $order = Order::firstWhere(
             ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
@@ -148,7 +149,7 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             $this->saveOrderAddress(
-                $order,
+                $order->id,
                 $request->address,
                 $request->zipcode,
                 $request->recipient_name,
@@ -185,7 +186,9 @@ class OrderController extends Controller
     public function orderPaymentRequest(Request $request)
     {
 
-        Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
+        if ($request->use_default_address == false) {
+            Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
+        }
 
         $order = Order::firstWhere(
             ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
@@ -195,7 +198,7 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             $this->saveOrderAddress(
-                $order,
+                $order->id,
                 $request->address,
                 $request->zipcode,
                 $request->recipient_name,
@@ -341,14 +344,14 @@ class OrderController extends Controller
         return $numbers;
     }
 
-    public function saveOrderAddress($order, $address, $zipcode, $recipient_name, $mobile, $use_default = false, $save_as_default = false)
+    public function saveOrderAddress($orderId, $address, $zipcode, $recipient_name, $mobile, $use_default = false, $save_as_default = false)
     {
         if ($use_default) {
 
             $user = User::find(Auth::id());
 
             $orderAddress = $user->address->replicate()->fill([
-                'addressable_id' => $order->id,
+                'addressable_id' => $orderId,
                 'addressable_type' => 'App\Models\Order'
             ]);
 
@@ -373,19 +376,19 @@ class OrderController extends Controller
             }
 
             $orderAddress = $userAddress->replicate()->fill([
-                'addressable_id' => $order,
+                'addressable_id' => $orderId,
                 'addressable_type' => 'App\Models\Order'
             ]);
 
             $orderAddress->save();
         } else {
-            $order->address()->create([
+            Address::create([
                 'text' => $address,
                 'zipcode' => $zipcode,
                 'user_id' => Auth::id(),
                 'recipient_name' => $recipient_name,
                 'mobile' => $mobile,
-                'addressable_id' => $order->id,
+                'addressable_id' => $orderId,
                 'addressable_type' => 'App\Models\Order'
             ]);
         }

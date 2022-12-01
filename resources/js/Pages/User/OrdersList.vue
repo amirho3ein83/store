@@ -43,7 +43,7 @@ export default {
                     <div class="flex justify-end gap-x-2 p-3 bg-[#d5d6e3]">
                         <div class="pl-5 pr-3 whitespace-no-wrap">
                             <div class="text-gray-700">
-                                {{ order.created_at }}
+                                {{ order.j_created_at }}
                             </div>
                         </div>
 

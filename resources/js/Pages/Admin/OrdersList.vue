@@ -40,7 +40,7 @@ export default {
                             >
                         </div>
                         <div class="text-sm leading-5 font-semibold">
-                            {{ order.created_at }}
+                            {{ order.j_created_at }}
                         </div>
                         <div class="text-sm leading-5 font-semibold">
                             تومان

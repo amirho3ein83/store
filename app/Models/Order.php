@@ -8,11 +8,16 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Morilog\Jalali\Jalalian;
+use Morilog\Jalali\CalendarUtils;
 
 class Order extends Model
 {
+
+    use SoftDeletes;
+    use HasFactory;
 
     const PAYMENT_STATUS_PAID = 'paid';
     const PAYMENT_STATUS_PENDING = 'pending';
@@ -20,7 +25,6 @@ class Order extends Model
 
 
 
-    use HasFactory;
 
     protected $fillable = [
         'buyer_id',
@@ -32,24 +36,44 @@ class Order extends Model
         'transaction_id',
     ];
 
+    protected $dates = ['created_at', 'updated_at'];
 
     // protected function serializeDate(DateTimeInterface $date)
     // {
     //     return $date->toFormattedDateString();
     // }
 
+    protected $appends = [
+        'j_created_at',
+        'j_updated_at',
+        // 'j_deleted_at',
+    ];
+
+    public function getJCreatedAtAttribute()
+    {
+        return \is_null(Carbon::parse($this->created_at)) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon(Carbon::parse($this->created_at))->format('Y/m/d H:i')
+        );
+    }
+
+    public function getJUpdatedAtAttribute()
+    {
+        return \is_null(Carbon::parse($this->updated_at)) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon(Carbon::parse($this->updated_at))->format('Y/m/d H:i')
+        );
+    }
+
+    // public function getJDeletedAtAttribute()
+    // {
+    //     return \is_null(Carbon::parse($this->deleted_at)) ? null : CalendarUtils::convertNumbers(
+    //         Jalalian::fromCarbon(Carbon::parse($this->deleted_at))->format('Y/m/d H:i')
+    //     );
+    // }
 
     protected function billingTotal(): Attribute
     {
         return Attribute::make(
             get: fn ($value) =>  convertToPersianNumber(number_format($value)),
-        );
-    }
-    
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => convertToPersianNumber(Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d H:i'))
         );
     }
 

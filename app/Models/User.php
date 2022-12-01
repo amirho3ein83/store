@@ -7,11 +7,13 @@ use DateTimeInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -26,6 +28,7 @@ class User extends Authenticatable implements HasMedia
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +40,12 @@ class User extends Authenticatable implements HasMedia
         'email',
         'mobile',
         'password',
+    ];
+
+    protected $appends = [
+        'j_created_at',
+        'j_updated_at',
+        'j_deleted_at',
     ];
 
     /**
@@ -60,10 +69,24 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
     ];
 
-    protected function createdAt(): Attribute
+    public function getJCreatedAtAttribute()
     {
-        return Attribute::make(
-            get: fn ($value) => convertToPersianNumber(Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d'))
+        return \is_null($this->created_at) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon($this->created_at)->format('Y/m/d H:i')
+        );
+    }
+
+    public function getJUpdatedAtAttribute()
+    {
+        return \is_null($this->updated_at) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon($this->updated_at)->format('Y/m/d H:i')
+        );
+    }
+
+    public function getJDeletedAtAttribute()
+    {
+        return \is_null($this->deleted_at) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon($this->deleted_at)->format('Y/m/d H:i')
         );
     }
 
@@ -80,11 +103,6 @@ class User extends Authenticatable implements HasMedia
     public function likedProducts()
     {
         return $this->belongsToMany(Product::class, 'liked_products', 'liked_by', 'product_id');
-    }
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format('Y-m-d');
     }
 
     public function orders()

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(Transaction::class)->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

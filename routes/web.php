@@ -40,14 +40,13 @@ Route::middleware([
 ])->group(function () {
 
     Route::controller(AdminController::class)->middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/products-list', 'productsList')->name('products.list');
         Route::get('/user/orders-list', 'ordersList')->name('orders.list');
         Route::get('/clients-list', 'usersList')->name('clients.list');
         Route::get('/criticisms-list', 'criticismList')->name('criticisms.list');
 
-        Route::get('/admin-dashboard', function () {
-            return Inertia::render('Admin/Dashboard');
-        })->name('dashboard');
     });
 
 

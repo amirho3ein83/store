@@ -180,7 +180,7 @@ class ProductController extends Controller
             foreach ($request->product_attributes as $key => $attr) {
                 $productAttribute = ProductAttribute::create([
                     'product_id' => $product->id,
-                    'size_id' => $attr['size']['id'],
+                    'size_id' => $attr['size']['id'] ?? null,
                     'color_id' => $attr['color']['id'],
                     'price' => $attr['price']
                 ]);

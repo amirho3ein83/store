@@ -343,6 +343,21 @@ export default {
                                             </template>
 
                                             <template #content>
+                                                <input
+                                                    v-model="attr.size"
+                                                    type="radio"
+                                                    :name="
+                                                        `size-option` + index
+                                                    "
+                                                    id="size-null"
+                                                    value=""
+                                                    class="peer hidden"
+                                                />
+                                                <label
+                                                    for="size-null"
+                                                    class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                    >-</label
+                                                >
                                                 <div
                                                     v-for="size of sizes"
                                                     :key="size.id"

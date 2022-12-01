@@ -32,15 +32,34 @@ onMounted(() => {
                         :src="product.image_url"
                         alt="unsplash image"
                     />
-                    <div class="ml-3">
+                    <div class="ml-3 flex gap-2">
                         <div class="text-yellow-900">
                             {{ product.title }}
                         </div>
+                        <span
+                            class="ml-2 text-sm font-bold text-yellow-700 dark:text-white"
+                        >
+                            {{ product.rate
+                            }}<span
+                                class="bi bi-star-fill text-yellow-500"
+                            ></span>
+                        </span>
                     </div>
                 </div>
             </td>
+            <td class="p-3">
+                <div class="text-yellow-900">
+                    {{ product.sold_qty }}
+                </div>
+            </td>
             <td class="p-3 text-slate-900">
-                {{ product.categories[0].name }}
+                <span
+                    class="inline-flex px-1"
+                    v-for="category of product.categories"
+                    :key="category.id"
+                    v-text="category.name"
+                >
+                </span>
             </td>
             <td class="p-3 font-bold text-yellow-600">
                 {{ product.default_price }}
@@ -53,7 +72,7 @@ onMounted(() => {
             <td class="p-3">
                 <span
                     @click="deleteProduct(product.id)"
-                    class="text-gray-400 hover:text-gray-100 mr-2"
+                    class="text-red-400 hover:text-red-600 mr-2"
                 >
                     <i class="bi bi-trash3-fill"></i>
                 </span>
@@ -82,5 +101,9 @@ onMounted(() => {
 .fade-leave-to {
     transform: translateX(20px);
     opacity: 0;
+}
+
+i {
+    font-size: 20px;
 }
 </style>
