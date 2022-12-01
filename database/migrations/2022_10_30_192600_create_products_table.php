@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -21,12 +20,9 @@ return new class extends Migration
             $table->string('slug');
             $table->integer('default_price')->nullable();
             $table->integer('sold_qty')->default(0);
-            $table->foreignIdFor(Brand::class)
-                ->index()->nullable()->cascadeOnUpdate()->nullOnDelete();
             $table->integer('stock');
             $table->integer('reviews')->default(0);
             $table->float('rate')->default(0);
-            $table->boolean('featured')->default(0);
             $table->mediumText('details');
             $table->text('description');
             $table->timestamps();

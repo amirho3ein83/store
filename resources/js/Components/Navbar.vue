@@ -1,14 +1,16 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, usePage } from "@inertiajs/inertia-vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import { OrbitSpinner } from "epic-spinners";
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 
 const storeCart = useCartStore();
 
 onMounted(() => {
-    storeCart.countOrders();
+    if (usePage().props.value.auth) {
+        storeCart.countOrders();
+    }
 });
 </script>
 

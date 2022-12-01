@@ -56,7 +56,7 @@ onMounted(() => {
                         >
                         </span>
                     </div>
-                    <p class="text-yellow-800">${{ product.default_price }}</p>
+                    <p class="text-yellow-800">${{ product.default_price.toLocaleString("ar-EG") }}</p>
                 </div>
             </div>
         </div>

@@ -3,17 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmazingOffer;
-use App\Models\Brand;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductAttribute;
-use App\Models\ProductAttributeQty;
 use App\Models\Rating;
 use App\Models\RecentVisit;
-use App\Models\Size;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -72,17 +69,13 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         $categories = Category::all();
-        $sizes = Size::all();
         $colors = Color::all();
-        $brands = Brand::all();
 
         return Inertia::render(
             'Admin/Products/Create',
             [
                 'categories' => $categories,
-                'sizes' => $sizes,
                 'colors' => $colors,
-                'brands' => $brands,
             ]
         );
     }
@@ -129,7 +122,6 @@ class ProductController extends Controller
                         break;
                 }
             })
-            ->with('brand', 'attributes', 'attributes.qty')
             ->simplePaginate(15)
             ->withQueryString();
 
@@ -138,7 +130,6 @@ class ProductController extends Controller
         $products->map(function ($product) use ($in_cart_products) {
             $image_url = $product->getFirstMedia()->getUrl();
             $product->image_url = $image_url;
-            // $product->getRawOriginal('default_price') = convertToPersianNumber($product->getRawOriginal('default_price'));
         });
 
         return Inertia::render(
@@ -184,13 +175,6 @@ class ProductController extends Controller
                     'color_id' => $attr['color']['id'],
                     'price' => $attr['price']
                 ]);
-
-                $productAttributeQty = ProductAttributeQty::create([
-                    'qty' => $attr['stock'],
-                    'product_attribute_id' => $productAttribute->id
-                ]);
-
-                $productQty += $productAttributeQty->qty;
             }
 
             $product->update([
@@ -257,7 +241,14 @@ class ProductController extends Controller
     {
 
         $product = Product::where('slug', $slug)
-            ->with('brand', 'attributes', 'attributes.qty', 'attributes.size', 'attributes.color')
+            ->with([
+                'brand',
+                'attributes',
+                'attributes.quantity',
+                'attributes.size:name,id',
+                'attributes.color:en_name,id,fa_name'
+            ])
+
             ->firstOrFail();
 
         $product->increment('reviews');
@@ -278,7 +269,6 @@ class ProductController extends Controller
         $product->image_url = $image_url;
 
 
-        // $product->load('brand', 'availableColors', 'availableSizes');
         $product->load('brand');
 
         // $similar_products = Product::where('category_id', $product->category_id)->inRandomOrder()->take(4)->get();

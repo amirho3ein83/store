@@ -26,7 +26,6 @@ class Product extends Model implements HasMedia
         'reviews',
         'brand_id',
         'rate',
-        'featured',
 
     ];
 
@@ -35,7 +34,6 @@ class Product extends Model implements HasMedia
         'rate'  =>  'float',
         'payment_status'    =>  'boolean',
         'created_at' => 'date:Y-m-d',
-        'featured'  =>  'boolean'
     ];
 
     protected $appends = ['available'];
@@ -49,13 +47,6 @@ class Product extends Model implements HasMedia
     {
         return Attribute::make(
             get: fn ($value) => $value + 0,
-        );
-    }
-
-    protected function defaultPrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) =>  convertToPersianNumber(number_format($value)),
         );
     }
 
@@ -76,10 +67,6 @@ class Product extends Model implements HasMedia
         return $this->stock != 0 ? true : false;
     }
 
-    public function scopeFeatured($query)
-    {
-        return $query->where('featured', 1);
-    }
 
     public function likedBy()
     {
@@ -96,23 +83,13 @@ class Product extends Model implements HasMedia
         return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
     }
 
-    // public function availableSizes()
-    // {
-    //     return $this->belongsToMany(Size::class);
-    // }
-
-    // public function availableColors()
-    // {
-    //     return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id');
-    // }
-
-    public function brand()
+    public function availableColors()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id')->withPivot('price','stock');
     }
 
     public function attributes()
     {
-        return $this->hasMany(ProductAttribute::class);
+        return $this->belongsToMany(Attribute::class)->using(ProductAttribute::class);
     }
 }

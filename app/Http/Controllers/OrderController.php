@@ -43,12 +43,12 @@ class OrderController extends Controller
             $orderItems->map(function ($item) {
                 $image_url = $item->product->getFirstMedia()->getUrl();
                 $item->product->image_url = $image_url;
-                $item->product->en_price = $item->product->getRawOriginal('default_price');
+                $item->product->en_price = $item->product->default_price;
             });
 
             $subtotal = 0;
             foreach ($orderItems as $key => $item) {
-                $subtotal += $item->getRawOriginal('qty') * $item->product->getRawOriginal('default_price');
+                $subtotal += $item->getRawOriginal('qty') * $item->product->default_price;
             }
         }
 
@@ -60,22 +60,6 @@ class OrderController extends Controller
             'subtotal' => $subtotal ?? null,
             'userAddress' => $userAddress ?? null,
             'walletBalance' => $walletBalance ?? null
-        ]);
-    }
-
-    public function orderDetails(Order $order)
-    {
-        $order->load('items', 'items.product');
-
-        $order->map(function ($order) {
-            $order->items->map(function ($item) {
-                $image_url = $item->product->getFirstMedia()->getUrl();
-                $item->product->image_url = $image_url;
-            });
-        });
-
-        return Inertia::render('Store/OrderShow', [
-            'order' => $order
         ]);
     }
 
@@ -320,7 +304,7 @@ class OrderController extends Controller
 
         $billingSubtotal = 0;
         foreach ($order->items as $key => $orderItem) {
-            $billingSubtotal += $orderItem->qty * $orderItem->product->getRawOriginal('default_price');
+            $billingSubtotal += $orderItem->qty * $orderItem->product->default_price;
         }
 
         $billingTax = env('TAX_PERCENT', 9) / 100 * $billingSubtotal;
@@ -411,7 +395,7 @@ class OrderController extends Controller
             $product = Product::FirstWhere('id', $orderItem->product_id);
             $product->increment('sold_qty', $orderItem->qty);
 
-            $numbers['billingTotal'] = ($orderItem->qty * $product->getRawOriginal('default_price'));
+            $numbers['billingTotal'] = ($orderItem->qty * $product->default_price);
 
             $orderItem->update([
                 'billing_total' => $numbers['billingTotal'],

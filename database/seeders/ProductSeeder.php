@@ -7,10 +7,6 @@ use App\Models\Color;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\ProductAttribute;
-use App\Models\ProductAttributeQty;
-use App\Models\Size;
-use Carbon\Carbon;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
@@ -28,6 +24,60 @@ class ProductSeeder extends Seeder
 
         File::deleteDirectory(public_path('storage/images'));
 
+        $materials = [
+            1 => 'شیشه',
+            2 => 'پلاستیک',
+            3 => 'کاغذ',
+            4 => 'چرم',
+            5 => 'چوب',
+            6 => 'فلز',
+            7 => 'نانو',
+            8 => 'نخ',
+            9 => 'پارچه',
+        ];
+
+        $brands = [
+            1 => 'Apple',
+            2 => 'Samsung',
+            3 => 'LG',
+            4 => 'Rolex',
+            5 => 'Snowa',
+            6 => 'Sinia',
+            7 => 'CIA',
+            8 => 'Mac donald',
+        ];
+
+        $sizes = [
+            1 => 'XS',
+            2 => 'S',
+            3 => 'M',
+            4 => 'L',
+            5 => 'XL',
+            6 => 'XXL',
+            7 => '4',
+            7 => '4.5',
+            7 => '5',
+            7 => '5.5',
+            7 => '6',
+            7 => '6.5',
+            7 => '7',
+            7 => '7.5',
+            7 => '8',
+            7 => '8.5',
+            7 => '9',
+            7 => '9.5',
+            7 => '10',
+            7 => '10.5',
+            7 => '11',
+            7 => '11.5',
+            7 => '12',
+            7 => '12.5',
+            7 => '13',
+            7 => '13.5',
+            7 => '14.5',
+            7 => '14',
+            7 => '15',
+        ];
 
         for ($i = 1; $i < 5; $i++) {
 
@@ -42,45 +92,40 @@ class ProductSeeder extends Seeder
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
                 ->toMediaCollection();
 
-            $productQty = 0;
-            for ($h = 0; $h < rand(1, 5); $h++) {
+            $color = Color::inRandomOrder()
+                ->take(1)
+                ->first();
 
+            $randomStock = rand(2, 14);
+            $product->availableColors()->attach($color->id, ['price' => rand(50000, 2000000), 'stock' => $randomStock]);
 
-                $color = Color::inRandomOrder()
-                    ->take(1)
-                    ->first();
+            $randomSize = $sizes[array_rand($sizes)];
+            $randomMaterial = $materials[array_rand($materials)];
+            $randomBrand = $brands[array_rand($brands)];
 
-                $size = Size::inRandomOrder()
-                    ->take(1)
-                    ->first();
-
-                $items = [$product->getRawOriginal('default_price'), $product->getRawOriginal('default_price') + 100];
-                $randomPrice = $items[array_rand($items)];
-
-
-                $productAttribute = ProductAttribute::create([
-                    'product_id' => $product->id,
-                    'size_id' => $size->id,
-                    'color_id' => $color->id,
-                    'price' => $randomPrice
-
-                ]);
-
-                $productAttributeQty = ProductAttributeQty::create([
-                    'qty' => rand(5, 50),
-                    'product_attribute_id' => $productAttribute->id
-                ]);
-
-                $productQty += $productAttributeQty->qty;
-            }
-
-            $product->update([
-                'stock' => $productQty
+            ProductAttribute::create([
+                'product_id' => $product->id,
+                'title' => 'سایز',
+                'value' => $randomSize
             ]);
-
-            Comment::factory()->create([
-                'product_id' => $i
+            ProductAttribute::create([
+                'product_id' => $product->id,
+                'title' => 'برند',
+                'value' => $randomBrand
+            ]);
+            ProductAttribute::create([
+                'product_id' => $product->id,
+                'title' => 'جنس',
+                'value' => $randomMaterial
             ]);
         }
+
+        $product->update([
+            'stock' => $randomStock
+        ]);
+
+        Comment::factory()->create([
+            'product_id' => $i
+        ]);
     }
 }

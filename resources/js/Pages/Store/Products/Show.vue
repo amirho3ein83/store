@@ -2,9 +2,8 @@
 import AddToCartButton from "@/Components/AddToCartButton.vue";
 import InCartButton from "@/Components/InCartButton.vue";
 import CommentForm from "@/Pages/Store/Partial/CommentForm.vue";
-import SizeRadio from "@/Components/SizeRadio.vue";
 import Comment from "@/Components/Comment.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useProductStore } from "@/store/Product.js";
 import { useCartStore } from "@/store/Cart.js";
 
@@ -18,24 +17,16 @@ let props = defineProps({
 });
 
 let picked_color = ref(props.product.attributes[0].color);
-
 let is_liked = ref(props.product.is_liked);
-
 const chooseColor = (color) => {
     picked_color.value = color;
 };
 
-let picked_size = ref(props.product.attributes[0].size.name);
-
-const chooseSize = (size) => {
-    picked_size.value = size;
-};
 
 const likeProduct = (id) => {
     is_liked.value = true;
     storeProduct.likeProduct(id);
 };
-
 const unlikeProduct = (id) => {
     is_liked.value = false;
     storeProduct.unlikeProduct(id);
@@ -64,6 +55,7 @@ export default {
         <div
             class="px-8 relative mx-auto max-w-screen-xl xl:px-24 sm:container py-8 bg-gray-100"
         >
+            <p>{{props.product.attributes[0]}}</p>
             <div class="flex flex-col items-start gap-8 sm:flex-row">
                 <div class="md:w-1/2 mx-md:auto w-full">
                     <div class="relative h-62 w-full mb-3">
@@ -118,12 +110,12 @@ export default {
                 </div>
 
                 <div class="sticky top-2 md:w-1/2 w-full">
-                    <strong
+                    <!-- <strong
                         v-if="product.featured"
                         class="rounded-full bg-gray-700 px-3 py-1 text-md font-medium tracking-wide text-[#37fa51]"
                     >
                         ویژه
-                    </strong>
+                    </strong> -->
 
                     <div class="mt-8 flex justify-between">
                         <div class="flex flex-col items-center gap-2">
@@ -181,9 +173,6 @@ export default {
                     <p class="my-4 text-slate-700">
                         {{ product.description }}
                     </p>
-                    <!-- <p class="my-4">
-                        {{ product.attributes }}
-                    </p> -->
 
                     <fieldset>
                         <legend class="mt-3 text-sm font-medium">رنگ</legend>
@@ -220,21 +209,6 @@ export default {
                         </div>
                     </fieldset>
 
-                    <fieldset class="mt-4">
-                        <legend class="mb-1 text-sm font-medium">سایز</legend>
-
-                        <div class="flow-root">
-                            <div class="-m-0.5 flex flex-wrap pt-3 justify-end">
-                                <SizeRadio
-                                    v-for="attribute of product.attributes"
-                                    :key="attribute.size.id"
-                                    :size="attribute.size.name"
-                                    :chosen="picked_size == attribute.size.name"
-                                    @selected="chooseSize(attribute.size.name)"
-                                />
-                            </div>
-                        </div>
-                    </fieldset>
                 </div>
             </div>
         </div>

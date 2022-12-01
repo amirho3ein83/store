@@ -4,10 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Address;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,14 +20,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            SizeSeeder::class,
             ColorSeeder::class,
-            MaterialSeeder::class,
             CriticismSeeder::class,
             CategorySeeder::class,
-            BrandSeeder::class,
             ProductSeeder::class,
-            AmazingOfferSeeder::class,
+            // AmazingOfferSeeder::class,
             PermissionSeeder::class
         ]);
 

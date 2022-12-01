@@ -31,13 +31,13 @@ onMounted(() => {
             class="block px-4 lg:w-1/5 my-2 md:w-1/4 sm:w-1/3 w-1/2 group"
         >
             <div class="relative h-62 w-full mb-3">
-                <div v-if="product.featured" class="flex justify-center absolute z-10 flex-col -top-1 -right-1 p-3">
+                <!-- <div v-if="product.featured" class="flex justify-center absolute z-10 flex-col -top-1 -right-1 p-3">
                     <strong
                         class="relative h-6 bg-[#de1451] px-4 text-sm uppercase leading-6 text-white"
                     >
                         ویژه
                     </strong>
-                </div>
+                </div> -->
                 <img
                     alt="Trainer"
                     :src="product.image_url"
@@ -68,7 +68,7 @@ onMounted(() => {
             </div>
             <div class="mt-4 flex items-center justify-between font-medium">
                 <p class="text-yellow-800">
-                    {{ product.default_price }}
+                    {{ product.default_price.toLocaleString("ar-EG") }}
                     <span class="text-gray-800 text-xs">تومان</span>
                 </p>
 

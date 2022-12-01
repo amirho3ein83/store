@@ -34,11 +34,9 @@ class ProductFactory extends Factory
             'details' => $details,
             'default_price' => $price,
             'sold_qty' => rand(144, 254),
-            'brand_id' => rand(1, 8),
             'stock' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
-            'featured' => rand(1, 0)
         ];
     }
 }

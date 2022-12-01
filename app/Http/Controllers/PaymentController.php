@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\Payment;
-use Illuminate\Http\Request;
-use App\Services\zarinPal;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
 

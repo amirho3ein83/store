@@ -65,11 +65,6 @@ class OrderItem extends Model
         return $this->hasOne(User::class, 'id', 'buyer_id');
     }
 
-    public function size()
-    {
-        return $this->hasOne(Size::class);
-    }
-
     public function color()
     {
         return $this->hasOne(Color::class);

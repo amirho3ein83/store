@@ -64,7 +64,6 @@ Route::middleware([
 
 
     Route::post('/finalize-order/using-wallet/{order}', [OrderController::class, 'finalizeOrderUsingWallet'])->name('order.payment.wallet');
-    Route::post('/orders/{order}/details', [OrderController::class, 'orderDetails'])->name('order.details');
 
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
