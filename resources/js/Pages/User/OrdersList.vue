@@ -54,9 +54,8 @@ export default {
                     <div class="flex flex-wrap">
                         <div
                             v-for="orderItem of order.items"
-                            :orderItem="orderItem"
                             :key="orderItem.id"
-                            class="flex items-center justify-between border p-2 bg-stone-50 rounded-lg my-1 w-1/2"
+                            class="flex items-center justify-between border p-2 bg-stone-100 rounded-lg my-1 w-1/2"
                         >
                             <img
                                 @click="
@@ -78,26 +77,25 @@ export default {
                                 <div
                                     class="flex gap-x-3 justify-between items-center"
                                 >
-                                    <span class="flex gap-x-2">
+                                    <span class="flex gap-x-2 items-center">
                                         <span
                                             :style="{
                                                 backgroundColor:
-                                                    orderItem.picked_color,
+                                                    orderItem.color.en_name,
                                             }"
-                                            class="block my-1 w-3 h-3 rounded-full"
+                                            class="block border-2 my-1 w-5 h-5 rounded-full"
                                         ></span>
                                         رنگ
-                                    </span>
-                                    <span
-                                        class="text-sm text-slate-900 my-1 self-center"
-                                    >
-                                        {{ orderItem.picked_size }} سایز
                                     </span>
                                 </div>
                             </div>
                             <div class="flex flex-col justify-end">
                                 <span class="text-sm sm:text-md"
-                                    >{{ orderItem.product.default_price }}
+                                    >{{
+                                        orderItem.product_price.toLocaleString(
+                                            "ar-EG"
+                                        )
+                                    }}
                                     <span class="text-red-500">x</span>
                                     {{ orderItem.qty }}
                                 </span>

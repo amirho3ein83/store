@@ -56,7 +56,6 @@ class PurchaseProcessTest extends TestCase
             ->post('/cart', [
                 'product_id' => $product->id,
                 'picked_color' => 'red',
-                'picked_size' => 'XXL',
             ]);
 
 

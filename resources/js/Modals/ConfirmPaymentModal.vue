@@ -32,15 +32,13 @@ onMounted(() => {
                     <h3 class="text-xl text-gray-800 font-bold sm:text-2xl">
                         مبلغ قابل پرداخت
                     </h3>
-                    <span
-                        class="bg-primary mx-auto mb-6 inline-block h-1 w-[90px] rounded"
-                    ></span>
+
                     <p
-                        class="text-body-color mb-10 text-stone-800 text-xl leading-relaxed"
+                        class="text-body-color my-6 text-stone-800 text-xl leading-relaxed"
                     >
                         {{ amount.toLocaleString('ar-EG') }} تومان
                     </p>
-                    <div class="-mx-3 flex flex-wrap">
+                    <div class="-mx-3 flex flex-wrap pb-4">
                         <div class="w-1/2 px-3">
                             <button
                                 @click="$emit('close')"
@@ -60,7 +58,7 @@ onMounted(() => {
                             </button>
                         </div>
                     </div>
-                    <span class="text-red-300 font-semibold mt-4 animate-pulse">
+                    <span class="text-red-300 font-semibold mt-8 animate-pulse">
                         <i class="bi bi-exclamation-triangle text-red-500"></i>
                         یادت نره فیلتر شکن رو خاموش کنی</span
                     >

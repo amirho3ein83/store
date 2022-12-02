@@ -81,7 +81,7 @@ const showError = (error) => {
         transition: "zoom",
         type: "danger",
         toastBackgroundColor: "#fc4242",
-        timeout: 2900,
+        timeout: 2300,
         hideProgressBar: true,
     });
     form.errors = {};
@@ -95,18 +95,26 @@ const onlyNumber = (event) => {
 };
 
 const total = computed(() => {
-    return (
-        Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) +
-        deliveryCost
-    ).toLocaleString("ar-EG");
+    if (storeCart.count_cart != 0) {
+        return (
+            Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) +
+            deliveryCost
+        ).toLocaleString("ar-EG");
+    }
 });
 
 const tax = computed(() => {
-    return Math.trunc((9 / 100) * storeCart.subtotal).toLocaleString("ar-EG");
+    if (storeCart.count_cart != 0) {
+        return Math.trunc((9 / 100) * storeCart.subtotal).toLocaleString(
+            "ar-EG"
+        );
+    }
 });
 
 const subtotal = computed(() => {
-    return storeCart.subtotal.toLocaleString("ar-EG");
+    if (storeCart.count_cart != 0) {
+        return storeCart.subtotal;
+    }
 });
 
 onMounted(() => {
@@ -120,7 +128,7 @@ onMounted(() => {
     <Navbar />
     <div class="xl:container mx-auto lg:px-28">
         <div
-            v-if="order"
+            v-if="storeCart.count_cart != 0"
             class="flex flex-col md:flex-row md:gap-x-8 shadow-transparent"
         >
             <div
@@ -151,7 +159,7 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ subtotal }}
+                                {{ subtotal.toLocaleString("ar-EG") }}
                                 تومان
                             </p>
                         </div>
@@ -246,6 +254,7 @@ onMounted(() => {
                             class="px-5 pb-5"
                         >
                             <input
+                                autofocus
                                 :disabled="form.use_default_address == true"
                                 v-model="form.recipient_name"
                                 type="text"
@@ -321,7 +330,7 @@ onMounted(() => {
                             </div>
                         </div>
                         <p class="text-gray-500 text-sm">
-                            {{ userAddress.text }} : نشانی
+                            نشانی : {{ userAddress.text }}
                         </p>
                         <p class="text-gray-500 text-sm">
                             {{ userAddress.recipient_name }} : نام گیرنده

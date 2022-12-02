@@ -49,7 +49,7 @@ onMounted(() => {
                 <h3 class="mt-4 text-sm text-gray-700">
                     {{ product.title }}
                 </h3>
-                <div class="mt-2 -ml-0.5 flex justify-end">
+                <div v-if="product.rate != 0" class="mt-2 -ml-0.5 flex justify-end">
                     <svg
                         class="h-5 w-5 text-yellow-400"
                         xmlns="http://www.w3.org/2000/svg"

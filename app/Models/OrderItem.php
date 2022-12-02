@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderItem extends Model
 {
@@ -19,8 +20,8 @@ class OrderItem extends Model
         'order_id',
         'buyer_id',
         'product_id',
-        'picked_color',
-        'picked_size',
+        'product_price',
+        'color_id',
         'billing_total',
         'payment_status',
         'qty',
@@ -67,7 +68,7 @@ class OrderItem extends Model
 
     public function color()
     {
-        return $this->hasOne(Color::class);
+        return $this->belongsTo(Color::class);
     }
 
     public function order()
@@ -75,12 +76,11 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function scopeIsInCart($query, $product_id, $picked_color, $picked_size)
+    public function scopeIsInCart($query, $product_id, $picked_color)
     {
         return $query->where([
             ['product_id', $product_id],
-            ['picked_color', $picked_color],
-            ['picked_size', $picked_size],
+            ['color_id', $picked_color],
             ['payment_status', self::PAYMENT_STATUS_PENDING]
         ]);
     }

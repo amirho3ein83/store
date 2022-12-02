@@ -30,9 +30,9 @@ class ProductController extends Controller
         'description' => 'required|max:255',
         'details' => 'required|max:255',
         'default_price' => 'required|between:1000,200000000|numeric',
-        'brand' => 'required',
-        'picked_categories' => 'required',
-        'product_attributes' => 'required',
+        'picked_categories' => 'required|array',
+        'product_attributes' => 'required|array',
+        'price_groups' => 'required',
         'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
 
     ];
@@ -41,7 +41,6 @@ class ProductController extends Controller
         'title.required' => ' نام لازم است',
         'description.required' => ' موبایل مورد نیاز است',
         'details.required' => ' آدرس مورد نیاز است',
-        'brand.required' => ' برند  لازم است',
         'default_price.required' => ' قیمت  لازم است',
         'default_price.between' => ' حداقل قیمت باید ۱۰۰۰ تومان باشد',
         'picked_categories.required' => ' دسته بندی  لازم است',
@@ -65,6 +64,45 @@ class ProductController extends Controller
 
         return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
     }
+
+
+    public function show($slug)
+    {
+
+        $product = Product::where('slug', $slug)
+            ->with(['availableColors', 'attributes','comments'])
+            ->firstOrFail();
+
+        $product->increment('reviews');
+
+        // check if user already liked the product
+        $liked_by_user = DB::table('liked_products')->where([['liked_by', Auth::id()], ['product_id', $product->id]])->get();
+        if ($liked_by_user->isNotEmpty()) {
+            $product->is_liked = true;
+        }
+
+        // check if user already save product in cart
+        if (OrderItem::where([['buyer_id', Auth::id()], ['product_id', $product->id]])->exists()) {
+            $product->is_in_cart = true;
+        }
+
+        // load images
+        $image_url = $product->getFirstMedia()->getUrl();
+        $product->image_url = $image_url;
+
+        // $similar_products = Product::whereHas('categories', function ($query) use ($category_id) {
+        //     $query->where('categories.id', $category_id);
+        // })->inRandomOrder()->take(4)->get();
+        // $similar_products->map(function ($product) {
+        //     $image_url = $product->getFirstMedia()->getUrl();
+        //     $product->image_url = $image_url;
+        // });
+
+
+
+        return Inertia::render('Store/Products/Show', ['product' => $product]);
+    }
+
 
     public function create(Request $request)
     {
@@ -142,10 +180,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
-
-        // info($request->product_attributes);
-        // dd();
         Validator::make(
             $request->all(),
             $this->_validation,
@@ -159,27 +193,33 @@ class ProductController extends Controller
                 'slug' => Str::slug($request->title),
                 'description' => $request->description,
                 'details' => $request->details,
-                'brand_id' => $request->brand['id'],
                 'default_price' => $request->default_price,
                 'stock' => 0
             ]);
 
             $product->categories()->attach($request->picked_categories);
 
+            // set price groups depends on color
             $productQty = 0;
 
-            foreach ($request->product_attributes as $key => $attr) {
-                $productAttribute = ProductAttribute::create([
-                    'product_id' => $product->id,
-                    'size_id' => $attr['size']['id'] ?? null,
-                    'color_id' => $attr['color']['id'],
-                    'price' => $attr['price']
-                ]);
+            foreach ($request->price_groups as $key => $pr) {
+                $product->availableColors()->attach($pr['color']['id'], ['price' => $pr['price'], 'stock' => $pr['stock']]);
+                $productQty += $pr['stock'];
             }
-
+            // set total stock of product
             $product->update([
                 'stock' => $productQty
             ]);
+
+            // set attributes
+            foreach ($request->product_attributes as $key => $attr) {
+                $productAttribute = ProductAttribute::create([
+                    'product_id' => $product->id,
+                    'title' => $attr['title'],
+                    'value' => $attr['value'],
+                ]);
+            }
+
 
             $product->addMediaFromRequest('image')->toMediaCollection();
         });
@@ -235,50 +275,5 @@ class ProductController extends Controller
     public function delete(Product $product)
     {
         $product->delete();
-    }
-
-    public function show($slug)
-    {
-
-        $product = Product::where('slug', $slug)
-            ->with([
-                'brand',
-                'attributes',
-                'attributes.quantity',
-                'attributes.size:name,id',
-                'attributes.color:en_name,id,fa_name'
-            ])
-
-            ->firstOrFail();
-
-        $product->increment('reviews');
-
-        // check if user already liked the product
-        $liked_by_user = DB::table('liked_products')->where([['liked_by', Auth::id()], ['product_id', $product->id]])->get();
-        if ($liked_by_user->isNotEmpty()) {
-            $product->is_liked = true;
-        }
-
-        // check if user already save product in cart
-        // if (Order::where([['buyer_id', Auth::id()], ['product_id', $product->id]])->exists()) {
-        //     $product->is_in_cart = true;
-        // }
-
-        // load images
-        $image_url = $product->getFirstMedia()->getUrl();
-        $product->image_url = $image_url;
-
-
-        $product->load('brand');
-
-        // $similar_products = Product::where('category_id', $product->category_id)->inRandomOrder()->take(4)->get();
-        // $similar_products->map(function ($product) {
-        //     $image_url = $product->getFirstMedia()->getUrl();
-        //     $product->image_url = $image_url;
-        // });
-
-
-
-        return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 }

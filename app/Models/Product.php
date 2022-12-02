@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -24,7 +23,6 @@ class Product extends Model implements HasMedia
         'description',
         'stock',
         'reviews',
-        'brand_id',
         'rate',
 
     ];
@@ -41,13 +39,6 @@ class Product extends Model implements HasMedia
     public  function slug()
     {
         return Str::slug($this->title);
-    }
-
-    protected function salePrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value + 0,
-        );
     }
 
     // protected function reviews(): Attribute
@@ -85,11 +76,11 @@ class Product extends Model implements HasMedia
 
     public function availableColors()
     {
-        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id')->withPivot('price','stock');
+        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id')->withPivot('price', 'stock');
     }
 
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class)->using(ProductAttribute::class);
+        return $this->hasMany(ProductAttribute::class);
     }
 }

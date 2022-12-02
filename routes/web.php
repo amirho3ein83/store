@@ -85,7 +85,7 @@ Route::middleware([
 
     Route::patch('/cart/products/{id}/increase-order', [OrderController::class, 'increaseOrder'])->name('cart.increase-order');
     Route::patch('/cart/products/{id}/decrease-order', [OrderController::class, 'decreaseOrder'])->name('cart.decrease-order');
-    Route::delete('/cart/products/{id}', [OrderController::class, 'deleteOrder'])->name('cart.delete-order');
+    Route::delete('/cart/order-items/{id}', [OrderController::class, 'deleteOrderItem'])->name('orderItem.delete');
 
 
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');

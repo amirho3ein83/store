@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
+use function PHPUnit\Framework\isEmpty;
+
 class OrderController extends Controller
 {
 
@@ -37,18 +39,22 @@ class OrderController extends Controller
 
     public function index()
     {
-        $order = Order::where('buyer_id', Auth::id())->pendingPayment()->with('items', 'address')->first();
+        $order = Order::where('buyer_id', Auth::id())->pendingPayment()
+            ->with('items', 'items.color', 'address')
+            ->first();
+
         $orderItems = $order->items ?? null;
+
         if ($orderItems) {
             $orderItems->map(function ($item) {
                 $image_url = $item->product->getFirstMedia()->getUrl();
                 $item->product->image_url = $image_url;
-                $item->product->en_price = $item->product->default_price;
+                $item->product->en_price = $item->product_price;
             });
 
             $subtotal = 0;
             foreach ($orderItems as $key => $item) {
-                $subtotal += $item->getRawOriginal('qty') * $item->product->default_price;
+                $subtotal += $item->getRawOriginal('qty') * $item->product_price;
             }
         }
 
@@ -59,7 +65,7 @@ class OrderController extends Controller
             'order' => $order ?? null,
             'subtotal' => $subtotal ?? null,
             'userAddress' => $userAddress ?? null,
-            'walletBalance' => $walletBalance ?? null
+            'walletBalance' => $walletBalance ?? null,
         ]);
     }
 
@@ -74,18 +80,22 @@ class OrderController extends Controller
 
         $found_in_cart = OrderItem::isInCart(
             $request->product_id,
-            $request->picked_color,
-            $request->picked_size,
-        )
-            ->first();
+            $request->picked_color_id,
+        )->first();
+
 
         if (empty($found_in_cart)) {
+
+            $productPrice = DB::table('color_product')
+                ->where('product_id', $request->product_id)
+                ->where('color_id', $request->picked_color_id)
+                ->pluck('price')->first();
+
             OrderItem::create([
                 'order_id' => $order->id,
+                'product_price' => $productPrice,
                 'product_id' => $product->id,
-                'picked_color' => $request->picked_color,
-                'picked_size' => $request->picked_size,
-                'qty' => 1,
+                'color_id' => $request->picked_color_id,
                 'buyer_id' => Auth::id(),
                 'payment_status' => 'pending'
             ]);
@@ -107,9 +117,9 @@ class OrderController extends Controller
         OrderItem::where('product_id', $id)->pendingPayment()->decrement('qty');
     }
 
-    public function deleteOrder($id)
+    public function deleteOrderItem($id)
     {
-        OrderItem::where('product_id', $id)->pendingPayment()->delete();
+        OrderItem::whereId($id)->delete();
     }
 
     public function countOrders(Product $product)
@@ -304,7 +314,7 @@ class OrderController extends Controller
 
         $billingSubtotal = 0;
         foreach ($order->items as $key => $orderItem) {
-            $billingSubtotal += $orderItem->qty * $orderItem->product->default_price;
+            $billingSubtotal += $orderItem->qty * $orderItem->product_price;
         }
 
         $billingTax = env('TAX_PERCENT', 9) / 100 * $billingSubtotal;
@@ -395,7 +405,7 @@ class OrderController extends Controller
             $product = Product::FirstWhere('id', $orderItem->product_id);
             $product->increment('sold_qty', $orderItem->qty);
 
-            $numbers['billingTotal'] = ($orderItem->qty * $product->default_price);
+            $numbers['billingTotal'] = ($orderItem->qty * $orderItem->product_price);
 
             $orderItem->update([
                 'billing_total' => $numbers['billingTotal'],

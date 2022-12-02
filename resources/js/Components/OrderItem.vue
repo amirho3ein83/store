@@ -15,28 +15,28 @@ let qty = ref(props.orderItem.qty);
 
 let loaded = ref(false);
 
-const increaseOrder = () => {
+const increaseOrderItem = () => {
     qty.value++;
-    storeCart.increaseOrder(
+    storeCart.increaseOrderItem(
         props.orderItem.product.id,
-        props.orderItem.product.en_price
+        props.orderItem.product_price
     );
 };
 
-const decreaseOrder = () => {
+const decreaseOrderItem = () => {
     qty.value--;
-    storeCart.decreaseOrder(
+    storeCart.decreaseOrderItem(
         props.orderItem.product.id,
-        props.orderItem.product.en_price
+        props.orderItem.product_price
     );
 };
 
-const deleteOrder = () => {
+const deleteOrderItem = () => {
     loaded.value = false;
     storeCart.count_cart--;
-    storeCart.deleteOrder(
-        props.orderItem.product.id,
-        props.orderItem.product.en_price,
+    storeCart.deleteOrderItem(
+        props.orderItem.id,
+        props.orderItem.product_price,
         props.orderItem.qty
     );
 };
@@ -66,21 +66,23 @@ onMounted(() => {
                 }}</span>
                 <span class="flex flex-col">
                     <span class="text-yellow-900 text-md text-left"
-                        >{{ orderItem.product.default_price }} تومان</span
+                        >{{
+                            orderItem.product_price.toLocaleString("ar-EG")
+                        }}
+                        تومان</span
                     >
-                    <div class="flex gap-x-2">
+                    <div class="flex gap-x-2 ">
                         <span
-                            :style="{ backgroundColor: orderItem.picked_color }"
-                            class="block my-1 w-3 h-3 rounded-full"
+                            :style="{
+                                backgroundColor: orderItem.color.en_name,
+                            }"
+                            class="block my-1 border-2 w-5 h-5 rounded-full"
                         ></span>
-                        <p class="text-sm text-slate-900 my-1">
-                            {{ orderItem.picked_size }} سایز
-                        </p>
                     </div>
                 </span>
                 <button
-                    @click="deleteOrder()"
-                    class="text-start w-1/2 pt-2 font-semibold hover:text-red-500 text-gray-500 text-sm"
+                    @click="deleteOrderItem()"
+                    class="text-start pt-2 w-1/4 font-semibold hover:text-red-500 text-gray-500 text-sm"
                 >
                     حذف
                 </button>
@@ -90,7 +92,7 @@ onMounted(() => {
                 <div class="inline-flex justify-center gap-1">
                     <button
                         :disabled="qty == 10"
-                        @click="increaseOrder()"
+                        @click="increaseOrderItem()"
                         class="inline-flex h-8 w-8 items-center justify-center text-green-700"
                     >
                         <i class="bi bi-plus" v-if="qty != 10"></i>
@@ -101,22 +103,26 @@ onMounted(() => {
                             class="inline-flex h-8 w-8 items-center justify-center"
                             min="1"
                         >
-                            {{ qty.toLocaleString('ar-EG') }}
+                            {{ qty.toLocaleString("ar-EG") }}
                         </div>
                     </div>
 
                     <button
                         :disabled="qty == 1"
-                        @click="decreaseOrder()"
+                        @click="decreaseOrderItem()"
                         class="inline-flex h-8 w-8 items-center justify-center text-red-600"
                     >
                         <i class="bi bi-dash" v-if="qty != 1"></i>
-                        <!-- <i class="bi bi-trash3-fill"></i> -->
                     </button>
                 </div>
                 <div class="flex-col flex px-8">
                     <span class="text-center text-stone-800 text-sm"
-                        >{{ (orderItem.product.en_price * qty).toLocaleString('ar-EG') }} تومان</span
+                        >{{
+                            (orderItem.product_price * qty).toLocaleString(
+                                "ar-EG"
+                            )
+                        }}
+                        تومان</span
                     >
                 </div>
             </div>

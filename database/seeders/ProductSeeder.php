@@ -22,7 +22,9 @@ class ProductSeeder extends Seeder
     public function run()
     {
 
-        File::deleteDirectory(public_path('storage/images'));
+        if (!Product::exists()) {
+            File::deleteDirectory(public_path('storage/images'));
+        }
 
         $materials = [
             1 => 'شیشه',
@@ -79,7 +81,7 @@ class ProductSeeder extends Seeder
             7 => '15',
         ];
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 23; $i++) {
 
             $product =  Product::factory()->create();
 
@@ -92,12 +94,16 @@ class ProductSeeder extends Seeder
             $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
                 ->toMediaCollection();
 
-            $color = Color::inRandomOrder()
-                ->take(1)
-                ->first();
+            $colorIds = Color::inRandomOrder()
+                ->take(3)
+                ->pluck('id')->toArray();
 
-            $randomStock = rand(2, 14);
-            $product->availableColors()->attach($color->id, ['price' => rand(50000, 2000000), 'stock' => $randomStock]);
+            foreach ($colorIds as $key => $id) {
+                $randomStock = rand(2, 14);
+                $randomPrice = mt_rand(5, 1200);
+                $randomPrice *= 1000;
+                $product->availableColors()->attach($id, ['price' => $randomPrice, 'stock' => $randomStock]);
+            }
 
             $randomSize = $sizes[array_rand($sizes)];
             $randomMaterial = $materials[array_rand($materials)];
@@ -118,14 +124,14 @@ class ProductSeeder extends Seeder
                 'title' => 'جنس',
                 'value' => $randomMaterial
             ]);
+
+            Comment::factory(2)->create([
+                'product_id' => $i
+            ]);
         }
 
         $product->update([
             'stock' => $randomStock
-        ]);
-
-        Comment::factory()->create([
-            'product_id' => $i
         ]);
     }
 }

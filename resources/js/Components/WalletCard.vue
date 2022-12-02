@@ -62,7 +62,7 @@ let showNotif = ref(false);
                     </div>
                     <div class="flex justify-around">
                         <div class="text-xl font-semibold">
-                            {{ props.balance }} تومان
+                            {{ props.balance.toLocaleString("ar-EG") }} تومان
                         </div>
                         <div class="text-xl font-semibold tracking-tight">
                             موجودی

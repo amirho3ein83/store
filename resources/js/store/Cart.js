@@ -13,12 +13,11 @@ export const useCartStore = defineStore("cart", {
     }),
 
     actions: {
-        addToCart(id, picked_color, picked_size) {
+        addToCart(id, picked_color) {
             axios
                 .post(route("addToCart"), {
                     product_id: id,
-                    picked_color: picked_color,
-                    picked_size: picked_size,
+                    picked_color_id: picked_color,
                 })
                 .then((res) => {
                     this.countOrders(id);
@@ -86,21 +85,21 @@ export const useCartStore = defineStore("cart", {
                 });
         },
 
-        increaseOrder(id, amount) {
+        increaseOrderItem(id, amount) {
             this.subtotal += amount;
             axios.patch(route("cart.increase-order", { id: id }));
         },
 
-        decreaseOrder(id, amount) {
+        decreaseOrderItem(id, amount) {
             this.subtotal -= amount;
 
             axios.patch(route("cart.decrease-order", { id: id }));
         },
 
-        deleteOrder(id, amount, qty) {
-            this.subtotal -= amount * qty;
+        deleteOrderItem(id, amount, qty) {
+            this.subtotal -= (amount * qty);
 
-            axios.delete(route("cart.delete-order", { id: id }));
+            axios.delete(route("orderItem.delete", { id: id }));
         },
     },
 });

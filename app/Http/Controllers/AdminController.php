@@ -67,7 +67,7 @@ class AdminController extends Controller
                         break;
                 }
             })
-            ->with('brand', 'categories')
+            ->with( 'categories')
             ->simplePaginate(10)
             ->withQueryString();
 

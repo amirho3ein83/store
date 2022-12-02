@@ -106,7 +106,7 @@ class UserController extends Controller
 
     public function ordersList()
     {
-        $orders = Order::where('buyer_id', Auth::id())->paid()->with('items')->get();
+        $orders = Order::where('buyer_id', Auth::id())->paid()->with('items', 'items.color')->get();
 
         $orders->map(function ($order) {
             $order->items->map(function ($item) {

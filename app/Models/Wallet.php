@@ -24,11 +24,4 @@ class Wallet extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-
-    protected function balance(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) =>  convertToPersianNumber(number_format($value)),
-        );
-    }
 }

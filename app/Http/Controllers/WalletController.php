@@ -31,7 +31,7 @@ class WalletController extends Controller
         )->first();
 
         $request = Toman::amount($transaction->amount)
-            ->description('charging wallet for ' . Auth::user()->name)
+            ->description('افزایش اعتبار کیف پول ' . Auth::user()->name)
             ->callback(route('wallet.payment.callback'))
             // ->mobile(Auth::user()->mobile)
             // ->email(Auth::user()->email)

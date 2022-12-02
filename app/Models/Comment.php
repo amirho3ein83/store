@@ -12,10 +12,14 @@ class Comment extends Model
 {
     use HasFactory;
 
+    const SUGGESTION_YES = 'yes';
+    const SUGGESTION_NO = 'no';
+    const SUGGESTION_NOT_SURE = 'not_sure';
+
     protected $fillable = [
         'product_id',
-        'author_id',
         'body',
+        'suggestion',
     ];
 
     protected $appends = [
@@ -47,11 +51,4 @@ class Comment extends Model
             Jalalian::fromCarbon($this->deleted_at)->format('Y/m/d H:i')
         );
     }
-
-
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'author_id');
-    }
-
 }

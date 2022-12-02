@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import { ref, watch } from "vue";
+import { computed, reactive, ref, toRef, watch } from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Dropdown from "@/Components/Dropdown.vue";
@@ -12,21 +12,49 @@ const imageUrl = ref(null);
 let props = defineProps({
     categories: Object,
     colors: Object,
-    sizes: Object,
-    brands: Object,
 });
 
-const addProductAttribute = (index) => {
-    form.product_attributes.push({
-        size: "",
+const state = reactive({
+    priceGroups: [
+        {
+            color: "",
+            price: "",
+            stock: "",
+        },
+    ],
+    productAttributes: [
+        {
+            title: "",
+            value: "",
+        },
+    ],
+});
+
+const addPriceGroup = (index) => {
+    state.priceGroups.push({
         color: "",
         price: "",
         stock: "",
     });
 };
 
+const removePriceGroup = (index) => {
+    state.priceGroups.splice(index, 1);
+};
+
+const addProductAttribute = (index) => {
+    state.productAttributes.push({
+        title: "",
+        value: "",
+    });
+};
+
 const removeProductAttribute = (index) => {
-    form.product_attributes.splice(index, 1);
+    state.productAttributes.splice(index, 1);
+};
+
+const chooseColor = (index, color) => {
+    state.priceGroups[index - 1].color = color;
 };
 
 const form = useForm({
@@ -36,16 +64,9 @@ const form = useForm({
     default_price: "",
     stock: null,
     picked_categories: [],
-    product_attributes: [
-        {
-            size: "",
-            color: "",
-            price: "",
-            stock: "",
-        },
-    ],
+    price_groups: state.priceGroups,
+    product_attributes: state.productAttributes,
     image: null,
-    brand: "",
 });
 
 const addproduct = () => {
@@ -232,44 +253,7 @@ export default {
                                             />
                                         </div>
                                     </div>
-                                    <div
-                                        class="flex py-2 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer"
-                                    >
-                                        <Dropdown align="right" width="48">
-                                            <template #trigger>
-                                                <span v-if="form.brand">{{
-                                                    form.brand.name
-                                                }}</span>
-                                                <span v-else class="text-lg"
-                                                    >برند</span
-                                                >
-                                                <i
-                                                    class="bi bi-chevron-down px-2"
-                                                ></i>
-                                            </template>
 
-                                            <template #content>
-                                                <div
-                                                    v-for="brand of brands"
-                                                    :key="brand.id"
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        v-model="form.brand"
-                                                        name="brand-option"
-                                                        :id="brand.name"
-                                                        :value="brand"
-                                                        class="peer hidden"
-                                                    />
-                                                    <label
-                                                        :for="brand.name"
-                                                        class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                                        >{{ brand.name }}</label
-                                                    >
-                                                </div>
-                                            </template>
-                                        </Dropdown>
-                                    </div>
                                     <div class="relative">
                                         دسته بندی
                                         <div
@@ -319,83 +303,46 @@ export default {
                                         />
                                     </div>
                                 </div>
-
+                                <hr />
                                 <div
-                                    class="flex gap-1 items-center"
+                                    class="flex gap-1 border-b-6 items-center w-2/3"
                                     v-for="(
-                                        attr, index
-                                    ) of form.product_attributes"
+                                        priceGroup, index
+                                    ) of state.priceGroups"
                                     :key="index"
                                 >
-                                    <!-- size combo box -->
-                                    <div class="md:w-full text-center">
-                                        <Dropdown align="right" width="48">
-                                            <template #trigger>
-                                                <span v-if="attr.size">{{
-                                                    attr.size.name
-                                                }}</span>
-                                                <span v-else class="text-lg"
-                                                    >سایز</span
-                                                >
-                                                <i
-                                                    class="bi bi-chevron-down px-2"
-                                                ></i>
-                                            </template>
-
-                                            <template #content>
-                                                <input
-                                                    v-model="attr.size"
-                                                    type="radio"
-                                                    :name="
-                                                        `size-option` + index
-                                                    "
-                                                    id="size-null"
-                                                    value=""
-                                                    class="peer hidden"
-                                                />
-                                                <label
-                                                    for="size-null"
-                                                    class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                                    >-</label
-                                                >
-                                                <div
-                                                    v-for="size of sizes"
-                                                    :key="size.id"
-                                                >
-                                                    <input
-                                                        v-model="attr.size"
-                                                        type="radio"
-                                                        :name="
-                                                            `size-option` +
-                                                            index
-                                                        "
-                                                        :id="size.name"
-                                                        :value="size"
-                                                        class="peer hidden"
-                                                    />
-                                                    <label
-                                                        :for="size.name"
-                                                        class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                                        >{{ size.name }}</label
-                                                    >
-                                                </div>
-                                            </template>
-                                        </Dropdown>
-                                    </div>
-
                                     <!-- color combo box -->
                                     <div class="md:w-full text-center">
-                                        <Dropdown align="right" width="48">
+                                        <Dropdown align="right" width="44">
                                             <template #trigger>
-                                                <span v-if="attr.color">{{
-                                                    attr.color.fa_name
-                                                }}</span>
-                                                <span v-else class="text-lg"
-                                                    >رنگ</span
-                                                >
-                                                <i
-                                                    class="bi bi-chevron-down px-2"
-                                                ></i>
+                                                <div class="flex">
+                                                    <div
+                                                        v-if="priceGroup.color"
+                                                        class="flex gap-1"
+                                                    >
+                                                        <span
+                                                            :style="{
+                                                                backgroundColor:
+                                                                    priceGroup
+                                                                        .color
+                                                                        .en_name,
+                                                            }"
+                                                            class="block w-6 h-6 rounded-full border"
+                                                        ></span>
+                                                        <p
+                                                            v-text="
+                                                                priceGroup.color
+                                                                    .fa_name
+                                                            "
+                                                        ></p>
+                                                    </div>
+                                                    <span v-else class="text-lg"
+                                                        >رنگ</span
+                                                    >
+                                                    <i
+                                                        class="bi bi-chevron-down px-2"
+                                                    ></i>
+                                                </div>
                                             </template>
 
                                             <template #content>
@@ -403,21 +350,17 @@ export default {
                                                     v-for="color of colors"
                                                     :key="color.id"
                                                 >
-                                                    <input
-                                                        v-model="attr.color"
-                                                        type="radio"
-                                                        name="color-option"
-                                                        :id="color.en_name"
-                                                        :value="color"
-                                                        class="peer hidden"
-                                                    />
-                                                    <label
-                                                        :for="color.en_name"
+                                                    <div
+                                                        @click="
+                                                            chooseColor(
+                                                                index,
+                                                                color
+                                                            )
+                                                        "
                                                         class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                                        >{{
-                                                            color.fa_name
-                                                        }}</label
                                                     >
+                                                        {{ color.fa_name }}
+                                                    </div>
                                                 </div>
                                             </template>
                                         </Dropdown>
@@ -427,7 +370,7 @@ export default {
                                         <input
                                             type="number"
                                             placeholder="قیمت"
-                                            v-model="attr.price"
+                                            v-model="priceGroup.price"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
                                         />
                                     </div>
@@ -436,7 +379,7 @@ export default {
                                         <input
                                             type="number"
                                             placeholder=" موجودی انبار"
-                                            v-model="attr.stock"
+                                            v-model="priceGroup.stock"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
                                         />
                                     </div>
@@ -446,7 +389,57 @@ export default {
                                     >
                                         <button
                                             v-if="
-                                                form.product_attributes
+                                                state.priceGroups.length ==
+                                                (index += 1)
+                                            "
+                                            @click="addPriceGroup(index)"
+                                            type="button"
+                                            class="inline-flex text-lg items-center px-3 py-1 bg-green-600 hover:bg-gray-300 text-gray-800 font-medium rounded-md"
+                                        >
+                                            +
+                                        </button>
+                                        <button
+                                            v-if="index != 0"
+                                            @click="removePriceGroup(index)"
+                                            type="button"
+                                            class="inline-flex text-lg items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md"
+                                        >
+                                            x
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div
+                                    class="flex gap-1 border-b-6 items-center w-1/3"
+                                    v-for="(
+                                        attr, index
+                                    ) of state.productAttributes"
+                                    :key="index"
+                                >
+                                    <div class="md:w-full">
+                                        عنوان
+                                        <input
+                                            type="text"
+                                            v-model="attr.title"
+                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                        />
+                                    </div>
+
+                                    <div class="md:w-full">
+                                        مقدار
+                                        <input
+                                            type="text"
+                                            v-model="attr.value"
+                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                        />
+                                    </div>
+
+                                    <div
+                                        class="px-4 flex gap-x-1 h-1/2 self-center pb-3 w-1/12"
+                                    >
+                                        <button
+                                            v-if="
+                                                state.productAttributes
                                                     .length == (index += 1)
                                             "
                                             @click="addProductAttribute(index)"
@@ -467,7 +460,7 @@ export default {
                                         </button>
                                     </div>
                                 </div>
-
+                                <hr />
                                 <div class="flex justify-end mt-4">
                                     <PrimaryButton
                                         class="ml-4 bg-stone-600 text-lg px-10"

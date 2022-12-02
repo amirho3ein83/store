@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Color;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -18,13 +19,13 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Product::class)->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignIdFor(Order::class)->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(User::class, 'buyer_id')->cascadeOnUpdate()->nullOnDelete();
-            $table->integer('qty')->default(1);
-            $table->integer('billing_total')->nullable();
-            $table->string('picked_color');
-            $table->string('picked_size');
+            $table->foreignIdFor(Order::class)->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(Product::class)->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(Color::class)->cascadeOnUpdate()->nullOnDelete();
+            $table->unsignedInteger('qty')->default(1);
+            $table->unsignedInteger('billing_total')->nullable();
+            $table->unsignedInteger('product_price')->nullable();
             $table->enum('payment_status', [Order::PAYMENT_STATUS_PAID, Order::PAYMENT_STATUS_PENDING])
                 ->default(Order::PAYMENT_STATUS_PENDING);
             $table->timestamps();
