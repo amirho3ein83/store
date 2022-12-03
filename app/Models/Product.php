@@ -24,7 +24,7 @@ class Product extends Model implements HasMedia
         'stock',
         'reviews',
         'rate',
-
+        'sku',
     ];
 
     protected $casts = [
@@ -66,7 +66,7 @@ class Product extends Model implements HasMedia
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->with('author');
     }
 
     public function categories()

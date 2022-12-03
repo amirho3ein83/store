@@ -14,17 +14,19 @@ class CommentController extends Controller
     {
         Validator::make($request->all(), [
             'body' => ['required', 'string', 'max:255'],
+            'suggestion' => ['required', 'string', 'max:255'],
         ])->validate();
 
         Comment::create([
-            'user_id' => Auth::id(),
+            'author_id' => Auth::id(),
             'product_id' => $request->product_id,
             'body' => $request->body,
+            'suggestion' => $request->suggestion,
         ]);
     }
 
     public function getComments($id)
     {
-        return Comment::where('product_id', $id)->limit(30)->get();
+        return Comment::where('product_id', $id)->with('author')->limit(30)->get();
     }
 }

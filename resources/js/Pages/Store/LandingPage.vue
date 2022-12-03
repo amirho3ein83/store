@@ -2,7 +2,6 @@
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Hero2 from "@/Components/Hero2.vue";
 import AmazingOffer from "@/Components/AmazingOffer.vue";
-import Slider from "@/Components/Slider.vue";
 import "vue-horizontal-scroll/dist/vue-horizontal-scroll.css";
 import CategoryItem from "@/Components/CategoryItem.vue";
 

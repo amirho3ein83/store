@@ -40,6 +40,9 @@ onMounted(() => {
                 <Link href="/home" preserve-scroll>
                     <p class="hover:text-yellow-400 text-xl">خانه</p>
                 </Link>
+                <Link href="/category" preserve-scroll>
+                    <p class="hover:text-yellow-400 text-xl">دسته بندی</p>
+                </Link>
 
                 <Link href="/contact-us" preserve-scroll>
                     <p class="hover:text-yellow-400 text-xl">ارتباط با ما</p>

@@ -18,12 +18,12 @@ export const useProductStore = defineStore("products", {
             Inertia.get("/products/" + slug);
         },
         showProductEditPage(id) {
-            Inertia.get(route("product.edit", { product: id }));
+            Inertia.get(route("admin.product.edit", { id: id }));
         },
         fetchComments(id) {
             axios
                 .get(
-                    route("product.comment", {
+                    route("product.comments", {
                         id: id,
                     }),
                     []

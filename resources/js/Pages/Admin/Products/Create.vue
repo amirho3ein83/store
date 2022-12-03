@@ -17,7 +17,11 @@ let props = defineProps({
 const state = reactive({
     priceGroups: [
         {
-            color: "",
+            color: {
+                id: "",
+                fa_name: "",
+                en_name: "",
+            },
             price: "",
             stock: "",
         },
@@ -32,7 +36,11 @@ const state = reactive({
 
 const addPriceGroup = (index) => {
     state.priceGroups.push({
-        color: "",
+        color: {
+            id: "",
+            fa_name: "",
+            en_name: "",
+        },
         price: "",
         stock: "",
     });
@@ -54,7 +62,9 @@ const removeProductAttribute = (index) => {
 };
 
 const chooseColor = (index, color) => {
-    state.priceGroups[index - 1].color = color;
+    state.priceGroups[index].color.id = color.id;
+    state.priceGroups[index].color.en_name = color.en_name;
+    state.priceGroups[index].color.fa_name = color.fa_name;
 };
 
 const form = useForm({
@@ -64,7 +74,7 @@ const form = useForm({
     default_price: "",
     stock: null,
     picked_categories: [],
-    price_groups: state.priceGroups,
+    colors: state.priceGroups,
     product_attributes: state.productAttributes,
     image: null,
 });
@@ -202,7 +212,7 @@ export default {
                             </div>
                         </div>
 
-                        <div class="lg:col-span-2 flex-1">
+                        <div class="lg:col-span-2 w-2/3">
                             <form
                                 @submit.prevent="addproduct"
                                 class="space-y-4"
@@ -303,164 +313,161 @@ export default {
                                         />
                                     </div>
                                 </div>
-                                <hr />
-                                <div
-                                    class="flex gap-1 border-b-6 items-center w-2/3"
-                                    v-for="(
-                                        priceGroup, index
-                                    ) of state.priceGroups"
-                                    :key="index"
-                                >
-                                    <!-- color combo box -->
-                                    <div class="md:w-full text-center">
-                                        <Dropdown align="right" width="44">
-                                            <template #trigger>
-                                                <div class="flex">
-                                                    <div
-                                                        v-if="priceGroup.color"
-                                                        class="flex gap-1"
-                                                    >
-                                                        <span
-                                                            :style="{
-                                                                backgroundColor:
-                                                                    priceGroup
-                                                                        .color
-                                                                        .en_name,
-                                                            }"
-                                                            class="block w-6 h-6 rounded-full border"
-                                                        ></span>
-                                                        <p
-                                                            v-text="
-                                                                priceGroup.color
-                                                                    .fa_name
-                                                            "
-                                                        ></p>
-                                                    </div>
-                                                    <span v-else class="text-lg"
-                                                        >رنگ</span
-                                                    >
-                                                    <i
-                                                        class="bi bi-chevron-down px-2"
-                                                    ></i>
-                                                </div>
-                                            </template>
-
-                                            <template #content>
-                                                <div
-                                                    v-for="color of colors"
-                                                    :key="color.id"
+                                <!-- price groups by different colors -->
+                                <div class="flex py-6 border-y-4">
+                                    <div class="w-2/3">
+                                        <div
+                                            class="flex gap-1 border-b-6 items-center w-full"
+                                            v-for="(
+                                                priceGroup, index
+                                            ) of state.priceGroups"
+                                            :key="index"
+                                        >
+                                            <!-- color combo box -->
+                                            <div class="md:w-full text-center">
+                                                <Dropdown
+                                                    align="right"
+                                                    width="44"
                                                 >
-                                                    <div
-                                                        @click="
-                                                            chooseColor(
-                                                                index,
-                                                                color
-                                                            )
-                                                        "
-                                                        class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                                    >
-                                                        {{ color.fa_name }}
-                                                    </div>
-                                                </div>
-                                            </template>
-                                        </Dropdown>
-                                    </div>
+                                                    <template #trigger>
+                                                        <div class="flex">
+                                                            <div
+                                                                class="flex gap-1"
+                                                            >
+                                                                <span
+                                                                    :style="{
+                                                                        backgroundColor:
+                                                                            priceGroup
+                                                                                .color
+                                                                                .en_name,
+                                                                    }"
+                                                                    class="block w-6 h-6 rounded-full border"
+                                                                ></span>
+                                                                <p
+                                                                    v-text="
+                                                                        priceGroup
+                                                                            .color
+                                                                            .fa_name
+                                                                    "
+                                                                ></p>
+                                                            </div>
 
-                                    <div class="md:w-full">
-                                        <input
-                                            type="number"
-                                            placeholder="قیمت"
-                                            v-model="priceGroup.price"
-                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        />
-                                    </div>
+                                                            <i
+                                                                class="bi bi-chevron-down px-2"
+                                                            ></i>
+                                                        </div>
+                                                    </template>
 
-                                    <div class="md:w-full">
-                                        <input
-                                            type="number"
-                                            placeholder=" موجودی انبار"
-                                            v-model="priceGroup.stock"
-                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        />
-                                    </div>
+                                                    <template #content>
+                                                        <div
+                                                            v-for="color of colors"
+                                                            :key="color.id"
+                                                        >
+                                                            <div
+                                                                @click="
+                                                                    chooseColor(
+                                                                        index,
+                                                                        color
+                                                                    )
+                                                                "
+                                                                class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                            >
+                                                                {{
+                                                                    color.fa_name
+                                                                }}
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </Dropdown>
+                                            </div>
+                                            <div class="md:w-full">
+                                                <input
+                                                    type="number"
+                                                    v-model="priceGroup.price"
+                                                    class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                                />
+                                            </div>
 
-                                    <div
-                                        class="px-4 flex gap-x-1 h-1/2 self-center pb-3 w-1/12"
-                                    >
+                                            <div class="md:w-full">
+                                                <input
+                                                    type="number"
+                                                    v-model="priceGroup.stock"
+                                                    class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                                />
+                                            </div>
+
+                                            <button
+                                                v-if="index != 0"
+                                                @click="removePriceGroup(index)"
+                                                type="button"
+                                                class="inline-flex text-xl items-center px-3 py-1 duration-100 transition-all hover:scale-110 text-red-500 font-medium rounded-md"
+                                            >
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="w-1/3">
                                         <button
-                                            v-if="
-                                                state.priceGroups.length ==
-                                                (index += 1)
-                                            "
-                                            @click="addPriceGroup(index)"
+                                            @click="addPriceGroup()"
                                             type="button"
-                                            class="inline-flex text-lg items-center px-3 py-1 bg-green-600 hover:bg-gray-300 text-gray-800 font-medium rounded-md"
+                                            class="inline-flex text-lg items-center px-3 py-1 bg-green-600 hover:scale-105 active:scale-100 duration-150 transition-all text-gray-100 font-medium rounded-md"
                                         >
-                                            +
-                                        </button>
-                                        <button
-                                            v-if="index != 0"
-                                            @click="removePriceGroup(index)"
-                                            type="button"
-                                            class="inline-flex text-lg items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md"
-                                        >
-                                            x
-                                        </button>
-                                    </div>
-                                </div>
-                                <hr />
-                                <div
-                                    class="flex gap-1 border-b-6 items-center w-1/3"
-                                    v-for="(
-                                        attr, index
-                                    ) of state.productAttributes"
-                                    :key="index"
-                                >
-                                    <div class="md:w-full">
-                                        عنوان
-                                        <input
-                                            type="text"
-                                            v-model="attr.title"
-                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        />
-                                    </div>
-
-                                    <div class="md:w-full">
-                                        مقدار
-                                        <input
-                                            type="text"
-                                            v-model="attr.value"
-                                            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
-                                        />
-                                    </div>
-
-                                    <div
-                                        class="px-4 flex gap-x-1 h-1/2 self-center pb-3 w-1/12"
-                                    >
-                                        <button
-                                            v-if="
-                                                state.productAttributes
-                                                    .length == (index += 1)
-                                            "
-                                            @click="addProductAttribute(index)"
-                                            type="button"
-                                            class="inline-flex text-lg items-center px-3 py-1 bg-green-600 hover:bg-gray-300 text-gray-800 font-medium rounded-md"
-                                        >
-                                            +
-                                        </button>
-                                        <button
-                                            v-if="index != 0"
-                                            @click="
-                                                removeProductAttribute(index)
-                                            "
-                                            type="button"
-                                            class="inline-flex text-lg items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md"
-                                        >
-                                            x
+                                            + اضافه کردن
                                         </button>
                                     </div>
                                 </div>
-                                <hr />
+
+                                <div class="flex">
+                                    <div class="w-2/3">
+                                        <div
+                                            class="flex gap-1 border-b-6 items-center w-full"
+                                            v-for="(
+                                                attr, index
+                                            ) of state.productAttributes"
+                                            :key="index"
+                                        >
+                                            <div class="md:w-full">
+                                                عنوان
+                                                <input
+                                                    type="text"
+                                                    v-model="attr.title"
+                                                    class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                                />
+                                            </div>
+
+                                            <div class="md:w-full">
+                                                مقدار
+                                                <input
+                                                    type="text"
+                                                    v-model="attr.value"
+                                                    class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                                />
+                                            </div>
+
+                                            <button
+                                                v-if="index != 0"
+                                                @click="
+                                                    removeProductAttribute(
+                                                        index
+                                                    )
+                                                "
+                                                type="button"
+                                                class="inline-flex text-xl items-center px-3 py-1 duration-100 transition-all hover:scale-110 text-red-500 font-medium rounded-md"
+                                            >
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <button
+                                            @click="addProductAttribute()"
+                                            type="button"
+                                            class="inline-flex text-lg items-center px-3 py-1 bg-green-600 hover:scale-105 active:scale-100 duration-150 transition-all text-gray-100 font-medium rounded-md"
+                                        >
+                                            + اضافه کردن
+                                        </button>
+                                    </div>
+                                </div>
                                 <div class="flex justify-end mt-4">
                                     <PrimaryButton
                                         class="ml-4 bg-stone-600 text-lg px-10"

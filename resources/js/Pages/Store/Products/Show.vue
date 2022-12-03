@@ -84,7 +84,9 @@ export default {
                             class="object-contain h-full w-full sm:rounded-2xl"
                         />
                     </div>
-                    <div class="w-full flex justify-between items-center">
+                    <div
+                        class="w-full flex flex-col sm:flex-row justify-between items-center py-3"
+                    >
                         <div class="flex">
                             <div
                                 class="flex space-x-2 text-sm font-medium justify-start"
@@ -222,8 +224,24 @@ export default {
             </div>
         </div>
     </section>
-    <section v-if="Object.keys(product.comments).length != 0">
-            <Comment v-for="comment of product.comments" :key="comment.id" :comment="comment"/>
+
+    <section
+        class="py-16 flex flex-col justify-center items-center"
+        v-if="Object.keys(product.comments).length != 0"
+    >
+<CommentForm/>
+        <div class="sm:w-1/2 w-full px-4">
+            <h2
+                class="text-lg lg:text-2xl p-4 font-bold text-gray-900 dark:text-white"
+            >
+                ({{ Object.keys(product.comments).length }}) کامنت ها
+            </h2>
+            <Comment
+                v-for="comment of product.comments"
+                :key="comment.id"
+                :comment="comment"
+            />
+        </div>
     </section>
     <!-- <h3>similar</h3>
     <section class="text-gray-600 body-font">

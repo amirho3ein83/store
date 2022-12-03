@@ -32,7 +32,7 @@ class ProductController extends Controller
         'default_price' => 'required|between:1000,200000000|numeric',
         'picked_categories' => 'required|array',
         'product_attributes' => 'required|array',
-        'price_groups' => 'required',
+        'colors' => 'required',
         'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
 
     ];
@@ -51,7 +51,7 @@ class ProductController extends Controller
 
 
 
-    public function homePage(Request $request)
+    public function homePage()
     {
         $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
 
@@ -70,7 +70,7 @@ class ProductController extends Controller
     {
 
         $product = Product::where('slug', $slug)
-            ->with(['availableColors', 'attributes','comments'])
+            ->with(['availableColors', 'attributes', 'comments'])
             ->firstOrFail();
 
         $product->increment('reviews');
@@ -98,13 +98,21 @@ class ProductController extends Controller
         //     $product->image_url = $image_url;
         // });
 
+        $product->comments->map(function ($comment) {
+            if ($comment->author->hasMedia()) {
+                $image_url = $comment->author->getFirstMedia()->getUrl();
+                $comment->author->image_url = $image_url;
+            } else {
+                $comment->author->image_url = null;
+            }
+        });
 
 
         return Inertia::render('Store/Products/Show', ['product' => $product]);
     }
 
 
-    public function create(Request $request)
+    public function create()
     {
         $categories = Category::all();
         $colors = Color::all();
@@ -118,7 +126,7 @@ class ProductController extends Controller
         );
     }
 
-    public function category(Request $request)
+    public function category()
     {
         $categories = Category::all();
 
@@ -202,7 +210,7 @@ class ProductController extends Controller
             // set price groups depends on color
             $productQty = 0;
 
-            foreach ($request->price_groups as $key => $pr) {
+            foreach ($request->colors as $key => $pr) {
                 $product->availableColors()->attach($pr['color']['id'], ['price' => $pr['price'], 'stock' => $pr['stock']]);
                 $productQty += $pr['stock'];
             }
@@ -227,23 +235,63 @@ class ProductController extends Controller
 
     public function update(Product $product, Request $request)
     {
-        $request->validate([
-            'title' => 'bail|required|unique:products|max:255',
-            'description' => 'required|max:255',
-            'price' => 'required | integer',
-            'image' => 'required ',
-        ]);
 
 
-        $product->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-        ]);
 
-        // $product->removeMedia();
-        $product->addMediaFromRequest('image')->toMediaCollection();
+        // info($request->colors);
+        // dd();
+        $this->_validation['image'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
+        Validator::make(
+            $request->all(),
+            $this->_validation,
+            $this->_validationMessages,
+        )->validate();
+
+        DB::transaction(function () use ($request, $product) {
+
+            $product->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'description' => $request->description,
+                'details' => $request->details,
+                'default_price' => $request->default_price,
+                'stock' => 0
+            ]);
+
+            $product->categories()->detach();
+            $product->categories()->attach($request->picked_categories);
+
+            // set price groups depends on color
+            $productQty = 0;
+
+            $product->availableColors()->delete();
+            foreach ($request->colors as $key => $pr) {
+                $product->availableColors()->attach($pr['id'], ['price' => $pr['pivot']['price'], 'stock' => $pr['pivot']['stock']]);
+                $productQty += $pr['pivot']['stock'];
+            }
+            // set total stock of product
+            $product->update([
+                'stock' => $productQty
+            ]);
+
+            // set attributes
+            foreach ($request->product_attributes as $key => $attr) {
+                $productAttribute = ProductAttribute::updateOrCreate(
+                    [
+                        'product_id' => $product->id,
+                        'title' => $attr['title'],
+                    ],
+                    [
+                        'value' => $attr['value'],
+                    ]
+                );
+            }
+
+            $product->getFirstMedia()->delete();
+            $product->addMediaFromRequest('image')->toMediaCollection();
+        });
     }
+
 
     public function likeProduct($id)
     {
@@ -264,12 +312,23 @@ class ProductController extends Controller
     }
 
 
-    public function edit(Product $product)
+    public function edit($id)
     {
-        dd();
-        $categories = Category::all();
+        $product = Product::whereId($id)->with('categories', 'availableColors', 'attributes')->first();
 
-        return Inertia::render('Admin/Products/Edit', ['product' => $product, 'categories' => $categories]);
+        // load images
+        $image_url = $product->getFirstMedia()->getUrl();
+        $product->image_url = $image_url;
+
+
+        $categories = Category::all();
+        $colors = Color::all();
+
+        return Inertia::render('Admin/Products/Edit', [
+            'product' => $product,
+            'categories' => $categories,
+            'colors' => $colors,
+        ]);
     }
 
     public function delete(Product $product)

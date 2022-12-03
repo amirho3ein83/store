@@ -5,37 +5,57 @@ defineProps({
 </script>
 
 <template>
-    <!-- component -->
-    <div class="text-black dark:text-gray-200 py-1 antialiased flex w-[350px]">
-        <div>
-            <div
-                :class="{
-                    'border-green-600': comment.suggestion == `yes`,
-                    'border-red-600': comment.suggestion == `no`,
-                    'border-yellow-600': comment.suggestion == `not_sure`,
-                }"
-                class="rounded-lg border-r-2 px-4 pt-2 pb-2.5"
-            >
-                <div class="flex align-baseline">
+    <article
+        class="p-6 mb-6 w-full text-base bg-white rounded-lg dark:bg-gray-900"
+    >
+        <div class="flex justify-between items-center mb-2">
+            <div class="flex items-center">
+                <p
+                    class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"
+                >
                     <img
-                        class="rounded-full h-8 w-8 mr-2 mt-1"
-                        src="https://i.pravatar.cc/60?u="
+                        v-if="comment.author.image_url != null"
+                        class="mr-2 w-6 h-6 rounded-full"
+                        :src="comment.author.image_url"
+                        alt="Michael Gough"
                     />
-                </div>
-                <div
-                    class="text-sm ml-4 mt-0.5 text-gray-700 dark:text-gray-400"
-                >
-                    {{ comment.suggestion }}
-                </div>
-                <div class="text-normal leading-snug md:leading-normal">
-                    {{ comment.body }}
-                </div>
-                <div
-                    class="text-sm ml-4 mt-0.5 text-gray-700 dark:text-gray-400"
-                >
-                    {{ comment.j_created_at }}
-                </div>
+                    <img
+                        v-else
+                        class="mr-2 w-6 h-6 rounded-full"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRao_0xQcdcOVK9S6UuSGjkQGy4j2uPsZ0Uug&usqp=CAU"
+                        alt="Michael Gough"
+                    />{{ comment.author.name }}
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <span v-text="comment.j_created_at"></span>
+                </p>
             </div>
         </div>
-    </div>
+        <p v-text="comment.body" class="text-gray-500 dark:text-gray-400"></p>
+        <div
+            class="flex items-center mt-4 font-light text-xs text-red-500 space-x-4"
+            v-if="comment.suggestion == 'no'"
+        >
+            <i class="bi bi-hand-thumbs-down-fill px-2"></i>
+            این محصول رو پیشنهاد نمیکنم
+        </div>
+        <div
+            class="flex items-center mt-4 font-light text-xs text-green-600 space-x-4"
+            v-if="comment.suggestion == 'yes'"
+        >
+            <i class="bi bi-hand-thumbs-up-fill px-2"></i> این محصول رو پیشنهاد
+            میکنم
+        </div>
+        <div
+            v-if="comment.suggestion == 'not_sure'"
+            class="flex items-center mt-4 font-light text-xs text-yellow-600 space-x-4"
+        >
+            از خرید این محصول مطمئن نیستم
+        </div>
+    </article>
 </template>
+<style scoped>
+i {
+    font-size: 20px;
+}
+</style>

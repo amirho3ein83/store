@@ -46,7 +46,8 @@ Route::middleware([
         Route::get('/user/orders-list', 'ordersList')->name('orders.list');
         Route::get('/clients-list', 'usersList')->name('clients.list');
         Route::get('/criticisms-list', 'criticismList')->name('criticisms.list');
-
+        Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('/products/{product}/update', [ProductController::class, 'update'])->name('product.update');
     });
 
 
@@ -59,8 +60,8 @@ Route::middleware([
     Route::get('/user/profile/liked-products', [UserController::class, 'likedProducts'])->name('user.liked.products');
 
 
-    Route::post('/comment', [CommentController::class, 'storeComment'])->name('comment');
-    Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comment');
+    Route::post('/comment', [CommentController::class, 'storeComment'])->name('submit.comment');
+    Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comments');
 
 
     Route::post('/finalize-order/using-wallet/{order}', [OrderController::class, 'finalizeOrderUsingWallet'])->name('order.payment.wallet');
@@ -88,7 +89,6 @@ Route::middleware([
     Route::delete('/cart/order-items/{id}', [OrderController::class, 'deleteOrderItem'])->name('orderItem.delete');
 
 
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
     Route::delete('/products/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
 
     Route::patch('/products/{id}/like', [ProductController::class, 'likeProduct'])->name('like-product');

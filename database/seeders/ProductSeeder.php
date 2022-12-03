@@ -81,17 +81,17 @@ class ProductSeeder extends Seeder
             7 => '15',
         ];
 
-        for ($i = 1; $i < 23; $i++) {
+        for ($i = 1; $i < 100; $i++) {
 
             $product =  Product::factory()->create();
 
             $product->categories()->attach(rand(1, 10));
 
             //set image
-            $pic = rand(1, 11);
-            File::copy(public_path('/watches/' . $pic . '.webp'), public_path('/watches2/' . $pic . '.webp'));
+            $pic = rand(1, 17);
+            File::copy(public_path('/dumpics1/' . $pic . '.webp'), public_path('/dumpics2/' . $pic . '.webp'));
 
-            $product->addMedia(public_path('/watches2/' . $pic . '.webp'))
+            $product->addMedia(public_path('/dumpics2/' . $pic . '.webp'))
                 ->toMediaCollection();
 
             $colorIds = Color::inRandomOrder()

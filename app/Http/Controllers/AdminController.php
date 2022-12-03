@@ -43,7 +43,7 @@ class AdminController extends Controller
                 });
             })
             ->when($request->search, function ($query, $search) {
-                $query->where('slug', 'like', "%{$search}%");
+                $query->where('title', 'like', "%{$search}%");
             })
             ->when($request->order_by, function ($query, $order_by) {
                 switch ($order_by) {

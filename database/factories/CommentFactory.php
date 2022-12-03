@@ -24,6 +24,7 @@ class CommentFactory extends Factory
         ];
 
         return [
+            'author_id' => rand(1, 2),
             'product_id' => rand(1, 20),
             'body' => $this->faker->sentence(12),
             'suggestion' => $suggestions[array_rand($suggestions)]

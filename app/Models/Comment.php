@@ -17,6 +17,7 @@ class Comment extends Model
     const SUGGESTION_NOT_SURE = 'not_sure';
 
     protected $fillable = [
+        'author_id',
         'product_id',
         'body',
         'suggestion',
@@ -30,25 +31,29 @@ class Comment extends Model
 
     protected $dates = ['created_at'];
 
+    public function author()
+    {
+        return $this->hasOne(User::class, 'id', 'author_id');
+    }
 
     public function getJCreatedAtAttribute()
     {
         return \is_null($this->created_at) ? null : CalendarUtils::convertNumbers(
-            Jalalian::fromCarbon($this->created_at)->format('Y/m/d H:i')
+            Jalalian::fromCarbon($this->created_at)->format('Y/m/d')
         );
     }
 
     public function getJUpdatedAtAttribute()
     {
         return \is_null($this->updated_at) ? null : CalendarUtils::convertNumbers(
-            Jalalian::fromCarbon($this->updated_at)->format('Y/m/d H:i')
+            Jalalian::fromCarbon($this->updated_at)->format('Y/m/d')
         );
     }
 
     public function getJDeletedAtAttribute()
     {
         return \is_null($this->deleted_at) ? null : CalendarUtils::convertNumbers(
-            Jalalian::fromCarbon($this->deleted_at)->format('Y/m/d H:i')
+            Jalalian::fromCarbon($this->deleted_at)->format('Y/m/d')
         );
     }
 }

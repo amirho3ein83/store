@@ -138,7 +138,7 @@ export default {
             >
                 <Dropdown align="right" width="48">
                     <template #trigger>
-                        <span>همه</span>
+                        <span>دسته بندی</span>
                         <i class="bi bi-chevron-down px-2"></i>
                     </template>
 

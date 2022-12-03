@@ -17,26 +17,37 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+
+
+
+        $skus = [
+            1 => 'BD1249229',
+            2 => 'SD2534234',
+            3 => 'TN2345245',
+            4 => 'KJ5453454',
+            5 => 'PL2345345',
+            6 => 'RE2524523',
+            7 => 'ED4534442',
+        ];
+
+        $skus[array_rand($skus)];
+
+
         $title = Str::random(6) . '-کالا';
         $price = mt_rand(5, 120);
         $price *= 1000;
 
-        $desc = 'آیفون 14 پلاس نسخه پایه‌ای ایفون‌های جدید با نمایشگر بزرگ‌تر است. به نوعی سری ایفون‌ 14 چهار گوشی به نام‌های ایفون 14، ایفون 14 پرو، ایفون 14 مکس و آيفون 14 پرو مکس را شامل خواهد شد که دو مدل 14 پرو و 14 نمایشگرهای 14 پرو مکس به پنل‌های 6.7 اینچی مجهز می‌شوند.
-
-آیفون 14 و آیفون 14 پلاس به قابلیت‌های تازه‌ای مجهز شده‌اند و البته بعد از سال‌ها، اپل تصمیم گرفته از تراشه جدید برای آن‌‌ها استفاده نکند.';
-
-        $details = 'دو سیم‌ کارت ظرفیت 512 گیگابایت و رم 6';
-
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'description' => $desc,
-            'details' => $details,
+            'description' => $this->faker->sentence(40),
+            'details' => $this->faker->sentence(8),
             'default_price' => $price,
             'sold_qty' => rand(144, 254),
             'stock' => rand(10, 30),
             'rate' => mt_rand(10, 50) / 10,
             'reviews' => rand(10, 30),
+            'sku' => $skus[array_rand($skus)]
         ];
     }
 }
