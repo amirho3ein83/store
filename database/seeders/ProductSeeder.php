@@ -88,7 +88,7 @@ class ProductSeeder extends Seeder
             $product->categories()->attach(rand(1, 10));
 
             //set image
-            $pic = rand(1, 17);
+            $pic = rand(1, 15);
             File::copy(public_path('/dumpics1/' . $pic . '.webp'), public_path('/dumpics2/' . $pic . '.webp'));
 
             $product->addMedia(public_path('/dumpics2/' . $pic . '.webp'))

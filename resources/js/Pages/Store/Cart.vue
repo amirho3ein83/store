@@ -5,7 +5,14 @@ import OrderItem from "@/Components/OrderItem.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import { useStorage } from "@/store/useStorage";
 import EmptyCart from "../Store/Partial/EmptyCart.vue";
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+    computed,
+    onBeforeMount,
+    onMounted,
+    onUnmounted,
+    ref,
+    watch,
+} from "vue";
 import { useCartStore } from "@/store/Cart.js";
 import LoadingModal from "@/Modals/LoadingModal.vue";
 import SuccessModal from "@/Modals/SuccessModal.vue";
@@ -22,6 +29,7 @@ let props = defineProps({
     subtotal: Number,
     userAddress: Object,
     walletBalance: Number,
+    cartIsEmpty: Boolean,
 });
 
 let show_loading_modal = ref(false);
@@ -112,9 +120,7 @@ const tax = computed(() => {
 });
 
 const subtotal = computed(() => {
-    if (storeCart.count_cart != 0) {
-        return storeCart.subtotal;
-    }
+    return storeCart.subtotal ? storeCart.subtotal.toLocaleString("ar-EG") : "";
 });
 
 onMounted(() => {
@@ -128,7 +134,7 @@ onMounted(() => {
     <Navbar />
     <div class="xl:container mx-auto lg:px-28">
         <div
-            v-if="storeCart.count_cart != 0"
+            v-if="cartIsEmpty != true"
             class="flex flex-col md:flex-row md:gap-x-8 shadow-transparent"
         >
             <div
@@ -144,7 +150,7 @@ onMounted(() => {
 
                 <div class="">
                     <p
-                        class="lg:text-2xl text-xl py-3 font-black leading-9 text-gray-800 dark:text-white"
+                        class="lg:text-xl text-lg py-3 leading-9 text-gray-800 dark:text-white"
                     >
                         خلاصه سبد
                     </p>
@@ -159,7 +165,7 @@ onMounted(() => {
                             <p
                                 class="text-base leading-none text-gray-800 dark:text-white"
                             >
-                                {{ subtotal.toLocaleString("ar-EG") }}
+                                {{ subtotal }}
                                 تومان
                             </p>
                         </div>
@@ -202,12 +208,12 @@ onMounted(() => {
                         class="flex items-center pb-6 justify-between lg:pt-5 pt-2"
                     >
                         <p
-                            class="text-2xl font-bold leading-normal text-gray-800 dark:text-white"
+                            class="text-xl font-semibold leading-normal text-gray-800 dark:text-white"
                         >
                             جمع کل
                         </p>
                         <p
-                            class="text-2xl font-bold leading-normal text-right text-gray-800 dark:text-white"
+                            class="text-xl font-semibold leading-normal text-right text-gray-800 dark:text-white"
                         >
                             {{ total }}
                             تومان

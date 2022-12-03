@@ -1,6 +1,6 @@
 <script setup>
 import AddToCartButton from "@/Components/AddToCartButton.vue";
-import InCartButton from "@/Components/InCartButton.vue";
+import ProductCard5 from "@/Components/ProductCard5.vue";
 import CommentForm from "@/Pages/Store/Partial/CommentForm.vue";
 import Comment from "@/Components/Comment.vue";
 import { computed, ref } from "vue";
@@ -11,7 +11,7 @@ const storeCart = useCartStore();
 const storeProduct = useProductStore();
 
 let props = defineProps({
-    // similar_products: Object,
+    similar_products: Object,
     product: Object,
     comments: Object,
 });
@@ -229,8 +229,8 @@ export default {
         class="py-16 flex flex-col justify-center items-center"
         v-if="Object.keys(product.comments).length != 0"
     >
-<CommentForm/>
-        <div class="sm:w-1/2 w-full px-4">
+        <CommentForm :product_id="product.id" />
+        <div v-if="$page.props.auth" class="lg:w-1/2 w-full px-4">
             <h2
                 class="text-lg lg:text-2xl p-4 font-bold text-gray-900 dark:text-white"
             >
@@ -243,53 +243,18 @@ export default {
             />
         </div>
     </section>
-    <!-- <h3>similar</h3>
-    <section class="text-gray-600 body-font">
-        <div class="container px-5 py-12 mx-auto">
-            <div class="flex flex-wrap -m-4">
-                <div
+    <h3 class="text-2xl text-slate-800 p-5">محصولات مشابه</h3>
+    <section class="text-gray-600 body-font bg-stone-100">
+        <div class="container px-5 py-8 mx-auto">
+            <div class="flex flex-wrap -m-4 justify-center">
+                <ProductCard5
                     v-for="product of similar_products"
                     :key="product.id"
-                    @click="storeProduct.showProduct(product.slug)"
-                    class="xl:w-1/4 md:w-1/2 p-4"
-                >
-                    <img
-                        alt="image"
-                        :src="product.image_url"
-                        class="w-full object-cover"
-                    />
-                    <div class="mt-2 space-y-3">
-                        <div class="flex justify-between text-sm truncate">
-                            <h3>{{ product.title }}</h3>
-
-                            <p
-                                class="ml-2 text-sm font-bold text-yellow-700 dark:text-white"
-                            >
-                                {{ product.rate
-                                }}<i
-                                    class="bi bi-star-fill text-yellow-500"
-                                ></i>
-                            </p>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <div class="flex gap-1">
-                                <span
-                                    :style="{ backgroundColor: color.name }"
-                                    v-for="color of product.available_colors"
-                                    :key="color.id"
-                                    class="block h-3 w-3 shadow rounded-full"
-                                >
-                                </span>
-                            </div>
-                            <p class="text-yellow-800">
-                                ${{ product.default_price }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                    :product="product"
+                />
             </div>
         </div>
-    </section> -->
+    </section>
 </template>
 <style scoped>
 .picked-color {

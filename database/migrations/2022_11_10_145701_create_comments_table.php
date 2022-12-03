@@ -22,7 +22,6 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('body');
             $table->enum('suggestion', [
-                Comment::SUGGESTION_NOT_SURE,
                 Comment::SUGGESTION_NO, Comment::SUGGESTION_YES
             ])
                 ->default(Comment::SUGGESTION_YES);

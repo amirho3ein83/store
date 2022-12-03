@@ -14,7 +14,6 @@ class Comment extends Model
 
     const SUGGESTION_YES = 'yes';
     const SUGGESTION_NO = 'no';
-    const SUGGESTION_NOT_SURE = 'not_sure';
 
     protected $fillable = [
         'author_id',

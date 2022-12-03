@@ -39,23 +39,27 @@ class OrderController extends Controller
 
     public function index()
     {
-        $order = Order::where('buyer_id', Auth::id())->pendingPayment()
+        $order = Order::where('buyer_id', 33)->pendingPayment()
             ->with('items', 'items.color', 'address')
             ->first();
 
-        $orderItems = $order->items ?? null;
-
-        if ($orderItems) {
-            $orderItems->map(function ($item) {
+        info(!gettype($order));
+        info($order);
+        if ($order) {
+            $order->items->map(function ($item) {
                 $image_url = $item->product->getFirstMedia()->getUrl();
                 $item->product->image_url = $image_url;
                 $item->product->en_price = $item->product_price;
             });
 
             $subtotal = 0;
-            foreach ($orderItems as $key => $item) {
+            foreach ($order->items as $key => $item) {
                 $subtotal += $item->getRawOriginal('qty') * $item->product_price;
             }
+
+            $cartIsEmpty = false;
+        } else {
+            $cartIsEmpty = true;
         }
 
         $userAddress = Auth::user()->address;
@@ -66,6 +70,7 @@ class OrderController extends Controller
             'subtotal' => $subtotal ?? null,
             'userAddress' => $userAddress ?? null,
             'walletBalance' => $walletBalance ?? null,
+            'cartIsEmpty' => $cartIsEmpty,
         ]);
     }
 

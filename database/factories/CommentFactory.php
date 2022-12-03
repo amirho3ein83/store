@@ -20,11 +20,10 @@ class CommentFactory extends Factory
         $suggestions = [
             1 => 'yes',
             2 => 'no',
-            3 => 'not_sure'
         ];
 
         return [
-            'author_id' => rand(1, 2),
+            'author_id' => rand(2, 10),
             'product_id' => rand(1, 20),
             'body' => $this->faker->sentence(12),
             'suggestion' => $suggestions[array_rand($suggestions)]

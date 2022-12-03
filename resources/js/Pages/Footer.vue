@@ -8,7 +8,7 @@
   <div class="hidden lg:relative lg:col-span-2 lg:block">
     <img
       alt="Art"
-      src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/155056467/original/7308684850f39d09c392a1f96110fffae265b5b1/design-logo-for-ecommerce-website-online-shopify-store-shop-and-blog.jpg"
+      src="https://www.pixelstalk.net/wp-content/uploads/images6/Galaxy-Wallpaper-Desktop.jpg"
       class="absolute inset-0 h-full w-full object-cover"
     />
   </div>

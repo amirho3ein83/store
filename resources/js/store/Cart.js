@@ -97,9 +97,10 @@ export const useCartStore = defineStore("cart", {
         },
 
         deleteOrderItem(id, amount, qty) {
+            
+             axios.delete(route("orderItem.delete", { id: id }));
             this.subtotal -= (amount * qty);
 
-            axios.delete(route("orderItem.delete", { id: id }));
         },
     },
 });

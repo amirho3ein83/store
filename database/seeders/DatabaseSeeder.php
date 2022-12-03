@@ -59,5 +59,8 @@ class DatabaseSeeder extends Seeder
         foreach ($wanna_like as $key => $product) {
             $product->likedBy()->attach($user->id);
         }
+
+        User::factory(10)->create();
+
     }
 }

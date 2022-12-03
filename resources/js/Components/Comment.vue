@@ -46,12 +46,6 @@ defineProps({
             <i class="bi bi-hand-thumbs-up-fill px-2"></i> این محصول رو پیشنهاد
             میکنم
         </div>
-        <div
-            v-if="comment.suggestion == 'not_sure'"
-            class="flex items-center mt-4 font-light text-xs text-yellow-600 space-x-4"
-        >
-            از خرید این محصول مطمئن نیستم
-        </div>
     </article>
 </template>
 <style scoped>

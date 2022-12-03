@@ -90,13 +90,12 @@ class ProductController extends Controller
         $image_url = $product->getFirstMedia()->getUrl();
         $product->image_url = $image_url;
 
-        // $similar_products = Product::whereHas('categories', function ($query) use ($category_id) {
-        //     $query->where('categories.id', $category_id);
-        // })->inRandomOrder()->take(4)->get();
-        // $similar_products->map(function ($product) {
-        //     $image_url = $product->getFirstMedia()->getUrl();
-        //     $product->image_url = $image_url;
-        // });
+        $similar_products = Product::where('sku', $product->sku)->inRandomOrder()->take(5)->get();
+
+        $similar_products->map(function ($product) {
+            $image_url = $product->getFirstMedia()->getUrl();
+            $product->image_url = $image_url;
+        });
 
         $product->comments->map(function ($comment) {
             if ($comment->author->hasMedia()) {
@@ -108,7 +107,7 @@ class ProductController extends Controller
         });
 
 
-        return Inertia::render('Store/Products/Show', ['product' => $product]);
+        return Inertia::render('Store/Products/Show', ['product' => $product, 'similar_products' => $similar_products]);
     }
 
 
@@ -152,10 +151,10 @@ class ProductController extends Controller
                         $query->latest();
                         break;
                     case 'cheapest':
-                        $query->orderBy('price');
+                        $query->orderBy('default_price');
                         break;
                     case 'most_expensive':
-                        $query->orderBy('price', 'DESC');
+                        $query->orderBy('default_price', 'DESC');
                         break;
                     case 'bsetselling':
                         $query->orderBy('sold_qty', 'DESC');

@@ -28,16 +28,9 @@ onMounted(() => {
         <div
             v-if="showItem"
             @click="storeProduct.showProduct(product.slug)"
-            class="block px-4 lg:w-1/5 my-2 md:w-1/4 sm:w-1/3 w-1/2 group"
+            class="block px-4 lg:w-1/5 my-4 md:w-1/4 sm:w-1/3 w-1/2 group"
         >
-            <div class="relative h-62 w-full mb-3">
-                <!-- <div v-if="product.featured" class="flex justify-center absolute z-10 flex-col -top-1 -right-1 p-3">
-                    <strong
-                        class="relative h-6 bg-[#de1451] px-4 text-sm uppercase leading-6 text-white"
-                    >
-                        ویژه
-                    </strong>
-                </div> -->
+            <div class="relative h-62 w-full">
                 <img
                     alt="Trainer"
                     :src="product.image_url"
@@ -45,11 +38,14 @@ onMounted(() => {
                 />
             </div>
 
-            <div class="flex justify-between">
+            <div class="flex justify-between items-end">
                 <h3 class="mt-4 text-sm text-gray-700">
                     {{ product.title }}
                 </h3>
-                <div v-if="product.rate != 0" class="mt-2 -ml-0.5 flex justify-end">
+                <div
+                    v-if="product.rate != 0"
+                    class="mt-2 -ml-0.5 flex justify-end"
+                >
                     <svg
                         class="h-5 w-5 text-yellow-400"
                         xmlns="http://www.w3.org/2000/svg"
@@ -66,10 +62,10 @@ onMounted(() => {
                     </p>
                 </div>
             </div>
-            <div class="mt-4 flex items-center justify-between font-medium">
+            <div class="mt-2 flex items-center justify-between font-medium">
                 <p class="text-yellow-800">
                     {{ product.default_price.toLocaleString("ar-EG") }}
-                    <span class="text-gray-800 text-xs">تومان</span>
+                    <span class="text-gray-800 text-sm">تومان</span>
                 </p>
 
                 <div class="flex gap-1">
