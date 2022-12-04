@@ -19,7 +19,7 @@ const addToCart = () => {
 onMounted(() => {
     setTimeout(() => {
         showItem.value = true;
-    }, 10);
+    }, 1);
 });
 </script>
 
@@ -28,7 +28,7 @@ onMounted(() => {
         <div
             v-if="showItem"
             @click="storeProduct.showProduct(product.slug)"
-            class="px-4 lg:w-1/5 my-4 md:w-1/4 sm:w-1/3 w-1/2 group flex flex-col justify-between"
+            class="text-sm md:text-lg px-4 2xl:w-1/5 xl:w-1/4  my-4  sm:w-1/3 w-1/2 group flex flex-col justify-between"
         >
             <div class="relative h-2/3 w-full">
                 <img
@@ -39,7 +39,7 @@ onMounted(() => {
             </div>
 
             <div class="flex justify-between items-end h-1/3">
-                <h3 class="mt-4 text-sm text-gray-700">
+                <h3 class="mt-4 text-gray-700">
                     {{ product.title }}
                 </h3>
                 <div
@@ -57,7 +57,7 @@ onMounted(() => {
                         />
                     </svg>
 
-                    <p class="text-md font-bold text-cyan-700 dark:text-white">
+                    <p class=" font-bold text-cyan-700 dark:text-white">
                         {{ product.rate }}
                     </p>
                 </div>
@@ -69,7 +69,7 @@ onMounted(() => {
                             "ar-EG"
                         )
                     }}
-                    <span class="text-gray-800 text-sm">تومان</span>
+                    <span class="text-gray-800 ">تومان</span>
                 </p>
 
                 <div class="flex gap-1">
@@ -77,7 +77,7 @@ onMounted(() => {
                         :style="{ backgroundColor: color.en_name }"
                         v-for="color of product.available_colors"
                         :key="color.id"
-                        class="block h-3 w-3 shadow rounded-full"
+                        class="block sm:h-3 sm:w-3 w-2 h-2 shadow rounded-full"
                     >
                     </span>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -37,8 +38,11 @@ class ProductFactory extends Factory
         $price = mt_rand(5, 120);
         $price *= 1000;
 
+        $categoryIds = Category::whereNotNull('parent_id')->pluck('id')->toArray();
+
         return [
             'title' => $title,
+            'category_id' => $categoryIds[array_rand($categoryIds)],
             'slug' => Str::slug($title),
             'description' => $this->faker->sentence(40),
             'details' => $this->faker->sentence(8),

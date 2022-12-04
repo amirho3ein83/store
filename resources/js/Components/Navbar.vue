@@ -27,9 +27,9 @@ onMounted(() => {
                         color="#feffd4"
                     />
                     <h3
-                        class="lg:text-4xl pl-2 text-3xl font-bold font-heading"
+                        class="lg:text-4xl text-[#f3f5f0] pl-2 text-3xl font-bold font-heading"
                     >
-                        ᎷᏗᎶᎧ
+                    𝓢𝓪𝓹𝓬𝓮 𝓼𝓽𝓸𝓻𝓮
                     </h3>
                 </div>
             </Link>

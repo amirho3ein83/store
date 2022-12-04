@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
+            $table->foreignIdFor(Category::class)->cascadeOnUpdate()->nullOnDelete();
             $table->integer('default_price')->nullable();
             $table->integer('sold_qty')->default(0);
             $table->integer('stock');

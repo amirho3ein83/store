@@ -47,10 +47,14 @@ class AdminController extends Controller
     public function productsList(Request $request)
     {
 
+        $categoryId = $request->category_id;
+
         $products = Product::query()
-            ->when($request->category_id, function ($query, $category_id) {
-                $query->whereHas('categories', function ($query) use ($category_id) {
-                    $query->where('categories.id', $category_id);
+            ->whereHas('category', function ($query) use ($categoryId, $request) {
+                $query->when($request->sub_category, function ($query, $sub_category) {
+                    $query->where('slug', $sub_category);
+                }, function ($query) use ($categoryId) {
+                    return  $query->where('parent_id', $categoryId);
                 });
             })
             ->when($request->search, function ($query, $search) {
@@ -78,7 +82,6 @@ class AdminController extends Controller
                         break;
                 }
             })
-            ->with('categories')
             ->simplePaginate(10)
             ->withQueryString();
 
@@ -87,7 +90,7 @@ class AdminController extends Controller
             $product->image_url = $image_url;
         });
 
-        $categories = Category::all();
+        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
 
         return Inertia::render(
             'Admin/Products',

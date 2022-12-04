@@ -18,6 +18,7 @@ class Product extends Model implements HasMedia
         'title',
         'slug',
         'sold_qty',
+        'category_id',
         'default_price',
         'details',
         'description',
@@ -69,9 +70,14 @@ class Product extends Model implements HasMedia
         return $this->hasMany(Comment::class)->with('author');
     }
 
-    public function categories()
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
+    // }
+
+    public function category()
     {
-        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
     public function availableColors()

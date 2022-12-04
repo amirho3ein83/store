@@ -176,7 +176,7 @@ export default {
             <label
                 for="6"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >پرفروش ترین
+                  >پرفروش ترین
             </label>
         </div>
     </div>

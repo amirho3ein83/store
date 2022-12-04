@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AmazingOffer;
+use App\Models\Category;
 use App\Models\Color;
 use App\Models\Comment;
 use App\Models\Product;
@@ -81,11 +82,11 @@ class ProductSeeder extends Seeder
             7 => '15',
         ];
 
-        for ($i = 1; $i < 10; $i++) {
+
+
+        for ($i = 1; $i < 150; $i++) {
 
             $product =  Product::factory()->create();
-
-            $product->categories()->attach(rand(1, 10));
 
             //set image
             $pic = rand(1, 15);

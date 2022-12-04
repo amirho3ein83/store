@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -12,11 +13,22 @@ class Category extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'name',
+        'parent_id',
     ];
+
+    public  function slug()
+    {
+        return Str::slug($this->name);
+    }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_category', 'category_id', 'product_id');
+        return $this->hasMany(Product::class);
+    }
+
+    public function subCategories()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

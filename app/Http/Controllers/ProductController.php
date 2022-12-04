@@ -60,7 +60,7 @@ class ProductController extends Controller
             $amazing_offer->product->image_url = $image_url;
         });
 
-        $categories = Category::all();
+        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
 
         return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
     }
@@ -113,7 +113,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
         $colors = Color::all();
 
         return Inertia::render(
@@ -127,7 +127,7 @@ class ProductController extends Controller
 
     public function category()
     {
-        $categories = Category::all();
+        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
 
         return Inertia::render(
             'Store/Products/Category',
@@ -139,8 +139,12 @@ class ProductController extends Controller
     {
 
         $products = Product::query()
-            ->whereHas('categories', function ($query) use ($id) {
-                $query->where('categories.id', $id);
+            ->whereHas('category', function ($query) use ($id, $request) {
+                $query->when($request->sub_category, function ($query, $sub_category) {
+                    $query->where('slug', $sub_category);
+                }, function ($query) use ($id) {
+                    return  $query->where('parent_id', $id);
+                });
             })
             ->when($request->search, function ($query, $search) {
                 $query->where('slug', 'like', "%{$search}%");
@@ -165,10 +169,13 @@ class ProductController extends Controller
                     case 'most_visited':
                         $query->orderBy('reviews', 'DESC');
                         break;
+                    default:
+                        $query->orderBy('reviews', 'DESC');
+                        break;
                 }
             })
             ->with('availableColors')
-            ->simplePaginate(15)
+            ->simplePaginate(16)
             ->withQueryString();
 
         $in_cart_products = OrderItem::with('product:id')->get()->pluck('product.id')->toArray();
@@ -178,10 +185,13 @@ class ProductController extends Controller
             $product->image_url = $image_url;
         });
 
+        $parentCategory = Category::where('id', $id)->with('subCategories')->first();
+
         return Inertia::render(
-            'Store/Products/ProductList',
+            'Store/Products/ProductList2',
             [
                 'products' => $products,
+                'category' => $parentCategory,
             ]
         );
     }
@@ -235,11 +245,6 @@ class ProductController extends Controller
 
     public function update(Product $product, Request $request)
     {
-
-
-
-        // info($request->colors);
-        // dd();
         $this->_validation['image'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
         Validator::make(
             $request->all(),
@@ -321,7 +326,7 @@ class ProductController extends Controller
         $product->image_url = $image_url;
 
 
-        $categories = Category::all();
+        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
         $colors = Color::all();
 
         return Inertia::render('Admin/Products/Edit', [
