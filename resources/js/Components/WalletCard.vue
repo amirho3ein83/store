@@ -16,11 +16,11 @@ let showNotif = ref(false);
 </script>
 
 <template>
-    <div class="mx-auto container flex justify-center px-4">
-        <div class="flex flex-col space-y-8 w-full px-16 max-w-xl items-center">
+    <div class="mx-auto w-full flex justify-center ">
+        <div class="flex flex-col w-full   max-w-xl items-center">
             <!-- card -->
             <div
-                class="bg-gradient-to-tl from-gray-900 to-gray-800 text-white h-72 w-full p-6 rounded-xl shadow-md"
+                class="bg-gradient-to-tl w-full sm:w-3/4  from-gray-900 to-gray-800 text-white h-72  p-6 rounded-xl shadow-md"
             >
                 <div class="h-full flex flex-col justify-between">
                     <div class="flex items-start justify-between space-x-4">

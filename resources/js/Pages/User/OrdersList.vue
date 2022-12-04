@@ -27,17 +27,17 @@ export default {
 <template>
     <div class="mx-auto">
         <div
-            class="w-full md:w-1/2 xl:w-2/3 pl-4 h-full flex flex-col mx-auto py-0"
+            class="w-full lg:w-4/5 h-full flex flex-col mx-auto py-0"
         >
             <div
                 v-if="Object.keys(orders).length != 0"
-                class="w-full h-full overflow-auto bg-[#edeef0] py-0 rounded-xl"
+                class="w-full h-full overflow-auto bg-slate-100 py-0 rounded-xl"
                 id="journal-scroll"
             >
                 <div
                     v-for="order of orders"
                     :key="order.id"
-                    class="relative my-3 transform scale-100 text-sm py-1 cursor-default"
+                    class="relative my-12 rounded-md transform scale-100  text-sm cursor-default"
                 >
                     <h1>{{ orders[0].address }}</h1>
                     <div class="flex justify-end gap-x-2 p-3 bg-[#d5d6e3]">
@@ -55,7 +55,7 @@ export default {
                         <div
                             v-for="orderItem of order.items"
                             :key="orderItem.id"
-                            class="flex items-center justify-between border p-2 bg-stone-100 rounded-lg my-1 w-1/2"
+                            class="flex items-center justify-between border p-2 bg-slate-50   w-full md:w-1/2"
                         >
                             <img
                                 @click="

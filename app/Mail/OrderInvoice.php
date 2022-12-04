@@ -2,25 +2,36 @@
 
 namespace App\Mail;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
-class OrderPlaced extends Mailable
+class OrderInvoice extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
+     * The order instance.
+     *
+     * @var \App\Models\Order
+     */
+    public $order;
+
+    /**
      * Create a new message instance.
      *
+     * @param  \App\Models\Order  $order
      * @return void
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -31,7 +42,7 @@ class OrderPlaced extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Order Shipped',
+            subject: ' Sapce Store  فاکتور سفارش',
         );
     }
 
@@ -43,7 +54,10 @@ class OrderPlaced extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.orders.placed',
+            markdown: 'emails.orders.invoice',
+            with: [
+                'url' => url(route('user.orders.list'))
+            ],
         );
     }
 

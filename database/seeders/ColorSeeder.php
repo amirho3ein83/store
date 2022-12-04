@@ -21,12 +21,12 @@ class ColorSeeder extends Seeder
                 'en_name' => 'silver',
             ],
             2 => [
-                'fa_name' => 'خرمایی',
-                'en_name' => 'maroon',
+                'fa_name' => 'موکاسین',
+                'en_name' => 'moccasin',
             ],
             3 => [
-                'fa_name' => 'آبی',
-                'en_name' => 'blue',
+                'fa_name' => 'ارکیده',
+                'en_name' => 'orchid',
             ],
             4 => [
                 'fa_name' => 'سفید',
@@ -42,7 +42,7 @@ class ColorSeeder extends Seeder
             ],
             7 => [
                 'fa_name' => 'قهوه ای',
-                'en_name' => 'brown',
+                'en_name' => 'saddlebrown',
             ],
             8 => [
                 'fa_name' => 'زرد',
@@ -54,15 +54,15 @@ class ColorSeeder extends Seeder
             ],
             10 => [
                 'fa_name' => 'لیمویی',
-                'en_name' => 'lime',
+                'en_name' => 'greenyellow',
             ],
             11 => [
-                'fa_name' => 'چوبی',
-                'en_name' => 'burlywood',
+                'fa_name' => 'بنفش',
+                'en_name' => 'mediumslateblue',
             ],
             12 => [
-                'fa_name' => 'نارنجی',
-                'en_name' => 'darkorange',
+                'fa_name' => 'شنی',
+                'en_name' => 'sandybrown',
             ],
             13 => [
                 'fa_name' => 'طلایی',
@@ -81,6 +81,5 @@ class ColorSeeder extends Seeder
                 'en_name' => $value['en_name'],
             ]);
         }
-
     }
 }

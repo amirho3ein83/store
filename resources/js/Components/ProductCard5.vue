@@ -28,9 +28,9 @@ onMounted(() => {
         <div
             v-if="showItem"
             @click="storeProduct.showProduct(product.slug)"
-            class="block px-4 lg:w-1/5 my-4 md:w-1/4 sm:w-1/3 w-1/2 group"
+            class="px-4 lg:w-1/5 my-4 md:w-1/4 sm:w-1/3 w-1/2 group flex flex-col justify-between"
         >
-            <div class="relative h-62 w-full">
+            <div class="relative h-2/3 w-full">
                 <img
                     alt="Trainer"
                     :src="product.image_url"
@@ -38,7 +38,7 @@ onMounted(() => {
                 />
             </div>
 
-            <div class="flex justify-between items-end">
+            <div class="flex justify-between items-end h-1/3">
                 <h3 class="mt-4 text-sm text-gray-700">
                     {{ product.title }}
                 </h3>
@@ -64,13 +64,17 @@ onMounted(() => {
             </div>
             <div class="mt-2 flex items-center justify-between font-medium">
                 <p class="text-yellow-800">
-                    {{ product.default_price.toLocaleString("ar-EG") }}
+                    {{
+                        product.available_colors[0].pivot.price.toLocaleString(
+                            "ar-EG"
+                        )
+                    }}
                     <span class="text-gray-800 text-sm">تومان</span>
                 </p>
 
                 <div class="flex gap-1">
                     <span
-                        :style="{ backgroundColor: color.name }"
+                        :style="{ backgroundColor: color.en_name }"
                         v-for="color of product.available_colors"
                         :key="color.id"
                         class="block h-3 w-3 shadow rounded-full"

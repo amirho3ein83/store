@@ -6,6 +6,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { ref, watch } from "vue";
+import { createToast } from "mosha-vue-toastify";
 
 let props = defineProps({
     user: Object,
@@ -39,7 +40,16 @@ const updateInfo = () => {
             forceFormData: true,
 
             onSuccess: (res) => {
-                alert("success");
+                createToast("تغییرات اعمال شد", {
+                    type: "info",
+                    transition: "bounce",
+                    position: "top-left",
+                    timeout: 2100,
+                    toastBackgroundColor: "#80bacf",
+                    showCloseButton: "true",
+                    hideProgressBar: "true",
+                    swipeClose: "false",
+                });
             },
             onFinish: () => {
                 console.log("finish");

@@ -325,6 +325,32 @@ export default {
             </div>
         </section>
 
+        <section class="text-gray-600 body-font">
+            <div class="container px-5 py-24 mx-auto">
+                <div class="flex text-xl flex-wrap -m-4 text-center">
+                    <div class="p-4 sm:w-1/4 w-1/2">
+                        <img src="./service.jpg" alt="ssa" class="mb-2" />
+
+                        <p class="leading-relaxed">ضمانت اصل بودن کالا</p>
+                    </div>
+                    <div class="p-4 sm:w-1/4 w-1/2">
+                        <img src="./service.jpg" alt="ssa" class="mb-2" />
+
+                        <p class="leading-relaxed">ضمانت بازگشت کالا</p>
+                    </div>
+                    <div class="p-4 sm:w-1/4 w-1/2">
+                        <img src="./service.jpg" alt="ssa" class="mb-2" />
+                        <p class="leading-relaxed">پرداخت درب منزل</p>
+                    </div>
+                    <div class="p-4 sm:w-1/4 w-1/2">
+                        <img src="./service.jpg" alt="ssa" class="mb-2" />
+
+                        <p class="leading-relaxed">پشتیبانی ۲۵ ساعته</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section
             class="relative w-5/6 mx-auto overflow-hidden rounded-lg p-10 my-7 80 shadow-2xl lg:pb-0"
         >

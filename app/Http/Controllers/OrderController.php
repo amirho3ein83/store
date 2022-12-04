@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderInvoice;
 use App\Models\Address;
 use Evryn\LaravelToman\CallbackRequest;
 use App\Models\Order;
@@ -14,6 +15,7 @@ use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -39,13 +41,17 @@ class OrderController extends Controller
 
     public function index()
     {
-        $order = Order::where('buyer_id', 33)->pendingPayment()
-            ->with('items', 'items.color', 'address')
+
+        $order = Order::where('buyer_id', Auth::id())
+            ->pendingPayment()
+            ->withCount('items')
             ->first();
 
-        info(!gettype($order));
-        info($order);
-        if ($order) {
+        $orderItems = $order->items_count ?? null;
+
+        if ($orderItems != null) {
+
+            $order->load('address', 'items');
             $order->items->map(function ($item) {
                 $image_url = $item->product->getFirstMedia()->getUrl();
                 $item->product->image_url = $image_url;
@@ -396,12 +402,20 @@ class OrderController extends Controller
     public function setOrderPaid($order, $numbers, $transactionId = null)
     {
 
+        $email = Auth::user()->email ?? null;
+
+        if ($email) {
+            Mail::to(Auth::user())
+                ->queue(new OrderInvoice($order));
+        }
+
         $order->update([
             'payment_status' => Order::PAYMENT_STATUS_PAID,
             'billing_subtotal' => $numbers['billingSubtotal'],
             'billing_tax' => $numbers['billingTax'],
             'billing_total' => $numbers['billingTotal'],
             'delivery_cost' => $numbers['deliveryCost'],
+            'transaction_id' => $transactionId ?? null
         ]);
 
         // set total for each order item

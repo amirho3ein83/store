@@ -74,10 +74,10 @@ export default {
             class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg overflow-hidden"
         >
             <input
-                class="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+            class="bg-white text-right focus:ring-gray-800 h-full w-full px-5 pr-10 rounded-full text-sm focus:outline-none"
                 type="text"
                 v-model="search"
-                placeholder="Search something.."
+                placeholder="جستجو"
             />
         </div>
     </div>
@@ -97,7 +97,7 @@ export default {
             <label
                 for="1"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >most expensive</label
+                >گرانترین</label
             >
         </div>
 
@@ -113,7 +113,7 @@ export default {
             <label
                 for="2"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >cheapest</label
+                >ارزانترین</label
             >
         </div>
 
@@ -129,7 +129,7 @@ export default {
             <label
                 for="3"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >rate</label
+                >امتیاز</label
             >
         </div>
         <div>
@@ -144,7 +144,7 @@ export default {
             <label
                 for="4"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >most visited</label
+                >بیشترین بازدید</label
             >
         </div>
 
@@ -160,7 +160,7 @@ export default {
             <label
                 for="5"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >newest</label
+                >جدیدترین</label
             >
         </div>
 
@@ -176,8 +176,8 @@ export default {
             <label
                 for="6"
                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                >bestselling</label
-            >
+                >پرفروش ترین
+            </label>
         </div>
     </div>
     <section class="text-gray-600 body-font bg-stone-100">

@@ -134,7 +134,7 @@ onMounted(() => {
     <Navbar />
     <div class="xl:container mx-auto lg:px-28">
         <div
-            v-if="cartIsEmpty != true"
+            v-if="cartIsEmpty == false"
             class="flex flex-col md:flex-row md:gap-x-8 shadow-transparent"
         >
             <div

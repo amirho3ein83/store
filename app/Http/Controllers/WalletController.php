@@ -47,7 +47,7 @@ class WalletController extends Controller
         }
 
         if ($request->failed()) {
-            $transaction->status = 'Failed';
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_FAILED;
         }
     }
 
@@ -81,7 +81,7 @@ class WalletController extends Controller
         }
 
         if ($payment->failed()) {
-            $transaction->status = 'Failed';
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_FAILED;
             $transaction->save();
             return redirect()->route('user.wallet');
         }

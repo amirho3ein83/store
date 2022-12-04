@@ -167,6 +167,7 @@ class ProductController extends Controller
                         break;
                 }
             })
+            ->with('availableColors')
             ->simplePaginate(15)
             ->withQueryString();
 

@@ -13,7 +13,8 @@ class Wallet extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'balance'
+        'balance',
+        'user_id',
     ];
 
     protected $casts = [
@@ -22,6 +23,6 @@ class Wallet extends Model
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class);
     }
 }

@@ -41,7 +41,7 @@ class ProductSeeder extends Seeder
         $brands = [
             1 => 'Apple',
             2 => 'Samsung',
-            3 => 'LG',
+            3 => 'Black Afghan',
             4 => 'Rolex',
             5 => 'Snowa',
             6 => 'Sinia',
@@ -81,7 +81,7 @@ class ProductSeeder extends Seeder
             7 => '15',
         ];
 
-        for ($i = 1; $i < 100; $i++) {
+        for ($i = 1; $i < 10; $i++) {
 
             $product =  Product::factory()->create();
 
@@ -95,7 +95,7 @@ class ProductSeeder extends Seeder
                 ->toMediaCollection();
 
             $colorIds = Color::inRandomOrder()
-                ->take(3)
+                ->take(rand(1, 4))
                 ->pluck('id')->toArray();
 
             foreach ($colorIds as $key => $id) {
