@@ -28,19 +28,22 @@ export default {
             class="relative overflow-hidden bg-no-repeat bg-cover min-h-screen"
             style="
                 background-position: 50%;
-                background-image: url('https://image.cnbcfm.com/api/v1/image/104504407-GettyImages-475887220-fraud-website.jpg?v=1532563831&w=1600&h=900');
+                background-image: url('https://www.nationmaster.com/nm_app/pix/ecommerce/online-shopping-trends-2019.jpg');
                 height: 500px;
             "
         >
             <div
                 class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
-                style="background-color: rgba(0, 0, 0, 0.75)"
+                style="background-color: rgba(0, 0, 0, 0.69)"
             >
-                <div class="flex justify-center items-center h-full">
+                <div class="flex justify-start items-center h-full">
                     <div class="text-center text-white px-6 md:px-12">
                         <h1
                             class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight mb-12 text-cyan-400"
                         >
+                            <span class="block text-yellow-300">
+                                𝓢𝓪𝓹𝓬𝓮 𝓼𝓽𝓸𝓻𝓮</span
+                            >
                             بهترین تجربه خریدت <br /><span class="text-pink-600"
                                 >از اینجا شروع می شه</span
                             >
