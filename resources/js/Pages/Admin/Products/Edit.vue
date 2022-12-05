@@ -62,7 +62,6 @@ const form = useForm({
     description: props.product.description,
     details: props.product.details,
     default_price: props.product.default_price,
-    stock: props.product.stock,
     picked_categories: productCategoryIds,
     colors: state.productColors,
     product_attributes: state.productAttributes,

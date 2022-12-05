@@ -66,10 +66,10 @@ class AdminController extends Controller
                         $query->latest();
                         break;
                     case 'cheapest':
-                        $query->orderBy('price');
+                        $query->orderBy('default_price');
                         break;
                     case 'most_expensive':
-                        $query->orderBy('price', 'DESC');
+                        $query->orderBy('default_price', 'DESC');
                         break;
                     case 'bsetselling':
                         $query->orderBy('sold_qty', 'DESC');

@@ -12,6 +12,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class ProductSeeder extends Seeder
 {
@@ -82,11 +84,36 @@ class ProductSeeder extends Seeder
             7 => '15',
         ];
 
+        $skus = [
+            1 => 'BD1249229',
+            2 => 'SD2534234',
+            3 => 'TN2345245',
+            4 => 'KJ5453454',
+            5 => 'PL2345345',
+            6 => 'RE2524523',
+            7 => 'ED4534442',
+        ];
 
 
         for ($i = 1; $i < 150; $i++) {
 
-            $product =  Product::factory()->create();
+            $title = Str::random(6) . '-کالا';
+            $price = mt_rand(5, 120);
+            $price *= 1000;
+
+            $categoryIds = Category::whereNotNull('parent_id')->pluck('id')->toArray();
+
+            $product =  Product::create([
+                'title' => $title,
+                'category_id' => $categoryIds[array_rand($categoryIds)],
+                'description' => Str::random(250),
+                'details' => Str::random(70),
+                'default_price' => $price,
+                'sold_qty' => rand(144, 254),
+                'rate' => mt_rand(10, 50) / 10,
+                'reviews' => rand(10, 30),
+                'sku' => $skus[array_rand($skus)]
+            ]);
 
             //set image
             $pic = rand(1, 15);
@@ -129,10 +156,12 @@ class ProductSeeder extends Seeder
             Comment::factory(2)->create([
                 'product_id' => $i
             ]);
-        }
 
-        $product->update([
-            'stock' => $randomStock
-        ]);
+            $defaultPrice = $product->availableColors()->where('color_id', $colorIds[0])->first()->pivot->price;
+
+            $product->update([
+                'default_price' => $defaultPrice,
+            ]);
+        }
     }
 }

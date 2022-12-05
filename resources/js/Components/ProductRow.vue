@@ -66,7 +66,7 @@ onMounted(() => {
             </td>
             <td class="p-3">
                 <span class="text-gray-500 rounded-md px-2">
-                    {{ product.stock }}</span
+                    temporary none</span
                 >
             </td>
             <td class="p-3">

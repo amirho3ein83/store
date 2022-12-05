@@ -21,7 +21,15 @@ import {
     Squares2X2Icon,
 } from "@heroicons/vue/20/solid";
 
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import {
+    computed,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    toRef,
+    watch,
+} from "vue";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import ProductCard5 from "@/Components/ProductCard5.vue";
@@ -35,6 +43,27 @@ let props = defineProps({
 
 let search = useStorage("search");
 let order_by = useStorage("order_by");
+let sub_category = useStorage("sub_category");
+
+watch(
+    sub_category,
+    debounce(function (value) {
+        Inertia.get(
+            window.location.href,
+            { sub_category: value },
+            {
+                replace: true,
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (res) => {
+                    if (res.data) {
+                        props.products.value = res.data;
+                    }
+                },
+            }
+        );
+    }, 300)
+);
 
 watch(
     search,
@@ -83,7 +112,6 @@ const sortOptions = [
     { name: "گران ترین", value: "most_expensive" },
     { name: "پرفروش ترین", value: "bestselling" },
 ];
-const subCategories = props.category.sub_categories;
 
 const filters = [
     {
@@ -111,23 +139,29 @@ const filters = [
     },
     {
         id: "size",
-        name: "Size",
+        name: "سایز",
         options: [
-            { value: "2l", label: "2L", checked: false },
-            { value: "6l", label: "6L", checked: false },
-            { value: "12l", label: "12L", checked: false },
-            { value: "18l", label: "18L", checked: false },
-            { value: "20l", label: "20L", checked: false },
-            { value: "40l", label: "40L", checked: true },
+            { value: "S", label: "S", checked: false },
+            { value: "M", label: "M", checked: false },
+            { value: "L", label: "L", checked: false },
+            { value: "XL", label: "XL", checked: false },
+            { value: "XXL", label: "XXL", checked: false },
         ],
     },
 ];
+
+const flushFilters = () => {
+    search.value = null;
+    order_by.value = null;
+    sub_category.value = null;
+};
 
 const mobileFiltersOpen = ref(false);
 
 onUnmounted(() => {
     localStorage.removeItem("search");
     localStorage.removeItem("order_by");
+    localStorage.removeItem("sub_category");
 });
 </script>
 <script>
@@ -178,9 +212,9 @@ export default {
                                     class="flex items-center justify-between px-4"
                                 >
                                     <h2
-                                        class="text-lg font-medium text-gray-900"
+                                        class="text-lg font-medium text-slate-800"
                                     >
-                                        Filters
+                                        فیلتر ها
                                     </h2>
                                     <button
                                         type="button"
@@ -200,17 +234,28 @@ export default {
                                     <h3 class="sr-only">Categories</h3>
                                     <ul
                                         role="list"
-                                        class="px-2 py-3 font-medium text-gray-900"
+                                        class="px-2 py-3 sm:font-normal font-medium text-slate-800"
                                     >
                                         <li
-                                            v-for="category in subCategories"
+                                            v-for="category in category.sub_categories"
                                             :key="category.name"
                                         >
-                                            <a
-                                                :href="category.href"
-                                                class="block px-2 py-3"
-                                                >{{ category.name }}</a
-                                            >
+                                            <div>
+                                                <input
+                                                    type="radio"
+                                                    name="category-option"
+                                                    v-model="sub_category"
+                                                    :id="category.slug"
+                                                    :value="category.slug"
+                                                    class="peer hidden"
+                                                />
+                                                <label
+                                                    :for="category.slug"
+                                                    v-text="category.name"
+                                                    class="block cursor-pointer hover:bg-gray-600/20 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                >
+                                                </label>
+                                            </div>
                                         </li>
                                     </ul>
 
@@ -226,7 +271,7 @@ export default {
                                                 class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
                                             >
                                                 <span
-                                                    class="font-medium text-gray-900"
+                                                    class="font-medium text-slate-800"
                                                     >{{ section.name }}</span
                                                 >
                                                 <span
@@ -275,6 +320,13 @@ export default {
                                             </div>
                                         </DisclosurePanel>
                                     </Disclosure>
+
+                                    <button
+                                        class="text-md font-medium text-red-700 hover:text-red-600"
+                                        @click="flushFilters()"
+                                    >
+                                        حذف فیلتر ها
+                                    </button>
                                 </form>
                             </DialogPanel>
                         </TransitionChild>
@@ -286,68 +338,129 @@ export default {
                 <div
                     class="flex items-baseline justify-between border-b border-gray-200 pt-10 pb-6"
                 >
-                    <div class="flex items-center">
-                        <Menu as="div" class="relative inline-block text-left">
-                            <div>
-                                <MenuButton
-                                    class="group inline-flex justify-center text-md font-medium text-gray-700 hover:text-gray-900"
-                                >
-                                    ترتیب
-                                    <ChevronDownIcon
-                                        class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                    />
-                                </MenuButton>
-                            </div>
-
-                            <transition
-                                enter-active-class="transition ease-out duration-100"
-                                enter-from-class="transform opacity-0 scale-95"
-                                enter-to-class="transform opacity-100 scale-100"
-                                leave-active-class="transition ease-in duration-75"
-                                leave-from-class="transform opacity-100 scale-100"
-                                leave-to-class="transform opacity-0 scale-95"
+                    <div class="flex items-center gap-x-5">
+                        <div class="relative text-gray-600">
+                            <input
+                                type="search"
+                                name="serch"
+                                v-model="search"
+                                placeholder="Search"
+                                class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none"
+                            />
+                            <button
+                                type="submit"
+                                class="absolute right-0 top-0 mt-2 mr-4"
                             >
-                                <MenuItems
-                                    class="absolute left-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
                                 >
-                                    <div class="py-1">
-                                        <MenuItem
-                                            v-for="option in sortOptions"
-                                            :key="option.value"
-                                        >
-                                            <div>
-                                                <input
-                                                    type="radio"
-                                                    name="option"
-                                                    v-model="order_by"
-                                                    :id="option.value"
-                                                    :value="option.value"
-                                                    class="peer hidden"
-                                                />
-                                                <label
-                                                    :for="option.value"
-                                                    v-text="option.name"
-                                                    class="block cursor-pointer hover:bg-gray-600/20 select-none p-2 text-center peer-checked:bg-gray-500/75 peer-checked:font-bold peer-checked:text-white"
-                                                >
-                                                </label>
-                                            </div>
-                                        </MenuItem>
-                                    </div>
-                                </MenuItems>
-                            </transition>
-                        </Menu>
-                        <button
-                            type="button"
-                            class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-                            @click="mobileFiltersOpen = true"
-                        >
-                            <span class="sr-only">Filters</span>
-                            <FunnelIcon class="h-5 w-5" aria-hidden="true" />
-                        </button>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex items-center">
+                            <Menu
+                                as="div"
+                                class="relative inline-block text-left"
+                            >
+                                <div>
+                                    <MenuButton
+                                        class="group inline-flex justify-center text-md sm:text-lg py-1 font-medium text-gray-700 hover:text-slate-800"
+                                    >
+                                        <!-- <p
+                                            v-if="order_by"
+                                            v-text="order_by"
+                                        ></p>
+                                        <p v-else>ترتیب</p> -->
+                                        ترتیب
+                                        <ChevronDownIcon
+                                            class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                            aria-hidden="true"
+                                        />
+                                    </MenuButton>
+                                </div>
+
+                                <transition
+                                    enter-active-class="transition ease-out duration-100"
+                                    enter-from-class="transform opacity-0 scale-95"
+                                    enter-to-class="transform opacity-100 scale-100"
+                                    leave-active-class="transition ease-in duration-75"
+                                    leave-from-class="transform opacity-100 scale-100"
+                                    leave-to-class="transform opacity-0 scale-95"
+                                >
+                                    <MenuItems
+                                        class="absolute left-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                    >
+                                        <div class="py-1">
+                                            <MenuItem
+                                                v-for="option in sortOptions"
+                                                :key="option.value"
+                                            >
+                                                <div>
+                                                    <input
+                                                        type="radio"
+                                                        name="option"
+                                                        v-model="order_by"
+                                                        :id="option.value"
+                                                        :value="option.value"
+                                                        class="peer hidden"
+                                                    />
+                                                    <label
+                                                        :for="option.value"
+                                                        v-text="option.name"
+                                                        class="block cursor-pointer hover:bg-gray-600/20 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                                    >
+                                                    </label>
+                                                </div>
+                                            </MenuItem>
+                                        </div>
+                                    </MenuItems>
+                                </transition>
+                            </Menu>
+                            <button
+                                type="button"
+                                class="-m-2 ml-4 self-end px-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                                @click="mobileFiltersOpen = true"
+                            >
+                                <!-- <FunnelIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                /> -->
+                                <button
+                                    class="h-8 w-8 text-slate-800"
+                                    aria-hidden="true"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="{1.5}"
+                                        stroke="currentColor"
+                                        className="w-6 h-6"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                                        />
+                                    </svg>
+                                </button>
+                            </button>
+                        </div>
                     </div>
 
-                    <h1 class="text-xl font-bold tracking-tight text-gray-900">
+                    <h1
+                        class="text-xl hidden sm:block font-bold tracking-tight text-slate-800"
+                    >
                         <span
                             class="block text-yellow-900"
                             v-text="category.name"
@@ -358,7 +471,7 @@ export default {
                 <section aria-labelledby="products-heading" class="pt-6 pb-24">
                     <h2 id="products-heading" class="sr-only">Products</h2>
 
-                    <div class="flex w-full gap-10">
+                    <div class="flex w-full xl:gap-10">
                         <!-- Product grid -->
                         <div class="lg:col-span-3 lg:w-5/6 p-4">
                             <div class="flex flex-wrap -m-4">
@@ -386,18 +499,54 @@ export default {
 
                         <!-- Filters -->
                         <form class="hidden lg:block lg:w-1/6">
-                            <h3 class="sr-only">Categories</h3>
+                            <div
+                                class="flex justify-between items-center border-b-2"
+                            >
+                                <button
+                                    class="text-md m-2 p-2 font-medium text-red-700 hover:text-red-600"
+                                    @click="flushFilters()"
+                                >
+                                    حذف فیلتر ها
+                                </button>
+                                <h1
+                                    class="text-xl hidden sm:block font-semibold tracking-tight"
+                                >
+                                    <span class="block text-slate-800"
+                                        >فیلتر ها</span
+                                    >
+                                </h1>
+                            </div>
                             <ul
                                 role="list"
-                                class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
+                                class="space-y-2 border-b border-gray-200 py-6 text-sm font-medium text-slate-800"
                             >
-                                <li
-                                    v-for="category in subCategories"
-                                    :key="category.name"
+                                <h1
+                                    class="text-lg hidden sm:block tracking-tight text-slate-800"
                                 >
-                                    <a :href="category.href">{{
-                                        category.name
-                                    }}</a>
+                                    <span class="block text-slate-800"
+                                        > زیر مجموعه ها</span
+                                    >
+                                </h1>
+                                <li
+                                    v-for="category in category.sub_categories"
+                                    :key="category.slug"
+                                >
+                                    <div>
+                                        <input
+                                            type="radio"
+                                            name="category-option"
+                                            v-model="sub_category"
+                                            :id="category.slug"
+                                            :value="category.slug"
+                                            class="peer hidden"
+                                        />
+                                        <label
+                                            :for="category.slug"
+                                            v-text="category.name"
+                                            class="block cursor-pointer hover:bg-gray-600/20 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
+                                        >
+                                        </label>
+                                    </div>
                                 </li>
                             </ul>
 
@@ -405,7 +554,7 @@ export default {
                                 as="div"
                                 v-for="section in filters"
                                 :key="section.id"
-                                class="border-b border-gray-200 py-6"
+                                class="border-b border-gray-200 py-6 text-md"
                                 v-slot="{ open }"
                             >
                                 <h3 class="-my-3 flow-root">
@@ -425,7 +574,7 @@ export default {
                                             />
                                         </span>
                                         <span
-                                            class="font-medium text-gray-900"
+                                            class="font-medium text-slate-800 text-lg sm:text-xl"
                                             >{{ section.name }}</span
                                         >
                                     </DisclosureButton>
@@ -449,7 +598,7 @@ export default {
                                             />
                                             <label
                                                 :for="`filter-${section.id}-${optionIdx}`"
-                                                class="ml-3 text-sm text-gray-600"
+                                                class="ml-3 text text-gray-600"
                                                 >{{ option.label }}</label
                                             >
                                         </div>

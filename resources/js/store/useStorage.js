@@ -21,7 +21,6 @@ export function useStorage(key, dval = null) {
         if (dval.value === "" || dval.value === null) {
             localStorage.removeItem(key);
         } else {
-            console.log(key);
             localStorage.setItem(key, dval.value);
         }
     }

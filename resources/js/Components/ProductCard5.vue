@@ -28,7 +28,7 @@ onMounted(() => {
         <div
             v-if="showItem"
             @click="storeProduct.showProduct(product.slug)"
-            class="text-sm md:text-lg px-4 2xl:w-1/5 xl:w-1/4  my-4  sm:w-1/3 w-1/2 group flex flex-col justify-between"
+            class="text-sm md:text-lg px-4 2xl:w-1/5 xl:w-1/4 my-4 sm:w-1/3 w-1/2 group flex flex-col justify-between"
         >
             <div class="relative h-2/3 w-full">
                 <img
@@ -57,19 +57,15 @@ onMounted(() => {
                         />
                     </svg>
 
-                    <p class=" font-bold text-cyan-700 dark:text-white">
+                    <p class="font-bold text-cyan-700 dark:text-white">
                         {{ product.rate }}
                     </p>
                 </div>
             </div>
             <div class="mt-2 flex items-center justify-between font-medium">
                 <p class="text-yellow-800">
-                    {{
-                        product.available_colors[0].pivot.price.toLocaleString(
-                            "ar-EG"
-                        )
-                    }}
-                    <span class="text-gray-800 ">تومان</span>
+                    {{ product.default_price.toLocaleString("ar-EG") }}
+                    <span class="text-gray-800">تومان</span>
                 </p>
 
                 <div class="flex gap-1">

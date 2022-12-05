@@ -29,23 +29,23 @@ onMounted(() => {
                     <h3
                         class="lg:text-4xl text-[#f3f5f0] pl-2 text-3xl font-bold font-heading"
                     >
-                    𝓢𝓪𝓹𝓬𝓮 𝓼𝓽𝓸𝓻𝓮
+                        𝓢𝓪𝓹𝓬𝓮 𝓼𝓽𝓸𝓻𝓮
                     </h3>
                 </div>
             </Link>
             <!-- Nav Links -->
             <ul
-                class="hidden lg:flex px-4 mx-auto font-semibold font-heading space-x-12"
+                class="hidden lg:flex px-4 mx-auto text-lg font-heading space-x-12"
             >
                 <Link href="/home" preserve-scroll>
-                    <p class="hover:text-yellow-400 text-xl">خانه</p>
+                    <p class="hover:text-yellow-400">خانه</p>
                 </Link>
                 <Link href="/category" preserve-scroll>
-                    <p class="hover:text-yellow-400 text-xl">دسته بندی</p>
+                    <p class="hover:text-yellow-400">دسته بندی</p>
                 </Link>
 
                 <Link href="/contact-us" preserve-scroll>
-                    <p class="hover:text-yellow-400 text-xl">ارتباط با ما</p>
+                    <p class="hover:text-yellow-400">ارتباط با ما</p>
                 </Link>
             </ul>
             <template v-if="$page.props.auth">
@@ -178,13 +178,13 @@ onMounted(() => {
             <div class="flex" v-else>
                 <Link
                     :href="'/login'"
-                    class="underline text-cyan-400 px-2 hover:brightness-50"
+                    class=" text-gray-100 px-3 duration-100 hover:scale-110"
                 >
                     لاگین
                 </Link>
                 <Link
                     :href="'/register'"
-                    class="underline text-green-400 px-2 hover:brightness-50"
+                    class=" text-gray-100 px-3 duration-100 hover:scale-110"
                 >
                     ثبت نام
                 </Link>

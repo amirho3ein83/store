@@ -52,7 +52,7 @@ onMounted(() => {
                         <JetLabel
                             class="text-stone-800"
                             for="mobile"
-                            value="Email or Mobile"
+                            value=" ایمیل یا موبایل "
                         />
                         <JetInput
                             id="mobile"
@@ -72,7 +72,7 @@ onMounted(() => {
                             <JetLabel
                                 class="text-stone-800"
                                 for="password"
-                                value="Password"
+                                value="رمز عبور"
                             />
                             <JetInput
                                 id="password"
@@ -92,7 +92,7 @@ onMounted(() => {
                             <JetLabel
                                 class="text-stone-800"
                                 for="password_confirmation"
-                                value="Confirm Password"
+                                value="تایید رمز عبور "
                             />
                             <JetInput
                                 id="password_confirmation"

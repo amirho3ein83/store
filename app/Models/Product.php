@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Cviebrock\EloquentSluggable\Sluggable;
+
 
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
-
+    use Sluggable;
     use HasFactory;
+
 
     protected $fillable = [
         'title',
@@ -22,7 +25,6 @@ class Product extends Model implements HasMedia
         'default_price',
         'details',
         'description',
-        'stock',
         'reviews',
         'rate',
         'sku',
@@ -35,11 +37,36 @@ class Product extends Model implements HasMedia
         'created_at' => 'date:Y-m-d',
     ];
 
-    protected $appends = ['available'];
+    // protected $appends = ['available'];
 
-    public  function slug()
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
     {
-        return Str::slug($this->title);
+        return 'slug';
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+            // 'title-slug' => [
+            //     'source' => 'title'
+            // ],
+            // 'author-slug' => [
+            //     'source' => ['author.firstname', 'author.lastname']
+            // ],
+        ];
     }
 
     // protected function reviews(): Attribute
@@ -56,7 +83,7 @@ class Product extends Model implements HasMedia
 
     public function getAvailableAttribute()
     {
-        return $this->stock != 0 ? true : false;
+        // return $this->stock != 0 ? true : false;
     }
 
 
@@ -69,11 +96,6 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(Comment::class)->with('author');
     }
-
-    // public function categories()
-    // {
-    //     return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
-    // }
 
     public function category()
     {

@@ -90,7 +90,7 @@ class ProductController extends Controller
         $image_url = $product->getFirstMedia()->getUrl();
         $product->image_url = $image_url;
 
-        $similar_products = Product::where('sku', $product->sku)->inRandomOrder()->take(5)->get();
+        $similar_products = Product::where('sku', $product->sku)->inRandomOrder()->take(4)->get();
 
         $similar_products->map(function ($product) {
             $image_url = $product->getFirstMedia()->getUrl();
@@ -98,7 +98,8 @@ class ProductController extends Controller
         });
 
         $product->comments->map(function ($comment) {
-            if ($comment->author->hasMedia()) {
+
+            if ($comment->author->getFirstMedia()) {
                 $image_url = $comment->author->getFirstMedia()->getUrl();
                 $comment->author->image_url = $image_url;
             } else {
@@ -138,10 +139,18 @@ class ProductController extends Controller
     public function productList($id, Request $request)
     {
 
+
+        // $pppp = Product::whereHas('category', function ($query) use ($id, $request) {
+        //     $query->where('slug', $request->sub_category);
+        // })->get();
+        // info($pppp);
+
         $products = Product::query()
             ->whereHas('category', function ($query) use ($id, $request) {
                 $query->when($request->sub_category, function ($query, $sub_category) {
-                    $query->where('slug', $sub_category);
+                    info($sub_category);
+
+                        $query->where('slug', $sub_category);
                 }, function ($query) use ($id) {
                     return  $query->where('parent_id', $id);
                 });
@@ -212,22 +221,15 @@ class ProductController extends Controller
                 'description' => $request->description,
                 'details' => $request->details,
                 'default_price' => $request->default_price,
-                'stock' => 0
             ]);
 
             $product->categories()->attach($request->picked_categories);
 
             // set price groups depends on color
-            $productQty = 0;
 
             foreach ($request->colors as $key => $pr) {
                 $product->availableColors()->attach($pr['color']['id'], ['price' => $pr['price'], 'stock' => $pr['stock']]);
-                $productQty += $pr['stock'];
             }
-            // set total stock of product
-            $product->update([
-                'stock' => $productQty
-            ]);
 
             // set attributes
             foreach ($request->product_attributes as $key => $attr) {
@@ -260,24 +262,17 @@ class ProductController extends Controller
                 'description' => $request->description,
                 'details' => $request->details,
                 'default_price' => $request->default_price,
-                'stock' => 0
             ]);
 
             $product->categories()->detach();
             $product->categories()->attach($request->picked_categories);
 
             // set price groups depends on color
-            $productQty = 0;
 
             $product->availableColors()->delete();
             foreach ($request->colors as $key => $pr) {
                 $product->availableColors()->attach($pr['id'], ['price' => $pr['pivot']['price'], 'stock' => $pr['pivot']['stock']]);
-                $productQty += $pr['pivot']['stock'];
             }
-            // set total stock of product
-            $product->update([
-                'stock' => $productQty
-            ]);
 
             // set attributes
             foreach ($request->product_attributes as $key => $attr) {
