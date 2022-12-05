@@ -2,36 +2,21 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-use Cviebrock\EloquentSluggable\Sluggable;
 
-class Category extends Model
+class Attribute extends Model
 {
     use HasFactory;
     use Sluggable;
 
-
-
-    public $timestamps = false;
-
     protected $fillable = [
         'name',
-        'parent_id',
-        'slug',
-
+        'slug'
     ];
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    public $timestamps = false;
 
     /**
      * Return the sluggable configuration array for this model.
@@ -51,20 +36,5 @@ class Category extends Model
             //     'source' => ['author.firstname', 'author.lastname']
             // ],
         ];
-    }
-
-    public function products()
-    {
-        return $this->hasMany(Product::class);
-    }
-
-    public function subCategories()
-    {
-        return $this->hasMany(Category::class, 'parent_id');
-    }
-
-    public function attributes()
-    {
-        return $this->belongsToMany(User::class, 'category_attribute', 'category_id', 'attribute_id');
     }
 }

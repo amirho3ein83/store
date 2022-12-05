@@ -45,6 +45,8 @@ let search = useStorage("search");
 let order_by = useStorage("order_by");
 let sub_category = useStorage("sub_category");
 
+let filtered_color_ids = ref([]);
+
 watch(
     sub_category,
     debounce(function (value) {
@@ -135,17 +137,6 @@ const filters = [
             { value: "travel", label: "Travel", checked: true },
             { value: "organization", label: "Organization", checked: false },
             { value: "accessories", label: "Accessories", checked: false },
-        ],
-    },
-    {
-        id: "size",
-        name: "سایز",
-        options: [
-            { value: "S", label: "S", checked: false },
-            { value: "M", label: "M", checked: false },
-            { value: "L", label: "L", checked: false },
-            { value: "XL", label: "XL", checked: false },
-            { value: "XXL", label: "XXL", checked: false },
         ],
     },
 ];
@@ -299,7 +290,7 @@ export default {
                                                     :key="option.value"
                                                     class="flex items-center"
                                                 >
-                                                    <input
+                                                    <!-- <input
                                                         :id="`filter-mobile-${section.id}-${optionIdx}`"
                                                         :name="`${section.id}[]`"
                                                         :value="option.value"
@@ -315,7 +306,17 @@ export default {
                                                         >{{
                                                             option.label
                                                         }}</label
-                                                    >
+                                                    > -->
+
+                                                    <input
+                                                    type="checkbox"
+                                                    :value="category.id"
+                                                    v-model="
+                                                        form.picked_categories
+                                                    "
+                                                    name=""
+                                                    id=""
+                                                />
                                                 </div>
                                             </div>
                                         </DisclosurePanel>
@@ -523,8 +524,8 @@ export default {
                                 <h1
                                     class="text-lg hidden sm:block tracking-tight text-slate-800"
                                 >
-                                    <span class="block text-slate-800"
-                                        > زیر مجموعه ها</span
+                                    <span class="block text-slate-800">
+                                        زیر مجموعه ها</span
                                     >
                                 </h1>
                                 <li

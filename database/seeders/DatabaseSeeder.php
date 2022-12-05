@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ColorSeeder::class,
+            // AttributeSeeder::class,
             CriticismSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
@@ -61,6 +62,5 @@ class DatabaseSeeder extends Seeder
         }
 
         User::factory(10)->create();
-
     }
 }

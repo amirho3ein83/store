@@ -148,11 +148,14 @@ class ProductController extends Controller
         $products = Product::query()
             ->whereHas('category', function ($query) use ($id, $request) {
                 $query->when($request->sub_category, function ($query, $sub_category) {
-                    info($sub_category);
-
-                        $query->where('slug', $sub_category);
+                    $query->where('slug', $sub_category);
                 }, function ($query) use ($id) {
                     return  $query->where('parent_id', $id);
+                });
+            })
+            ->whereHas('availableColors', function ($query) use ($id, $request) {
+                $query->when($request->filtered_color_ids, function ($query, $filtered_color_ids) {
+                    $query->whereIn('color_id', $filtered_color_ids);
                 });
             })
             ->when($request->search, function ($query, $search) {

@@ -101,11 +101,11 @@ class ProductSeeder extends Seeder
             $price = mt_rand(5, 120);
             $price *= 1000;
 
-            $categoryIds = Category::whereNotNull('parent_id')->pluck('id')->toArray();
+            $categoryId = Category::whereNotNull('parent_id')->inRandomOrder()->first()->pluck('id');
 
             $product =  Product::create([
                 'title' => $title,
-                'category_id' => $categoryIds[array_rand($categoryIds)],
+                'category_id' => $categoryId,
                 'description' => Str::random(250),
                 'details' => Str::random(70),
                 'default_price' => $price,
