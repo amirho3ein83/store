@@ -95,17 +95,17 @@ class ProductSeeder extends Seeder
         ];
 
 
-        for ($i = 1; $i < 150; $i++) {
+        for ($i = 1; $i < 280; $i++) {
 
             $title = Str::random(6) . '-کالا';
             $price = mt_rand(5, 120);
             $price *= 1000;
 
-            $categoryId = Category::whereNotNull('parent_id')->inRandomOrder()->first()->pluck('id');
+            $categoryId = Category::whereNotNull('parent_id')->inRandomOrder()->take(1)->pluck('id');
 
             $product =  Product::create([
                 'title' => $title,
-                'category_id' => $categoryId,
+                'category_id' => $categoryId[0],
                 'description' => Str::random(250),
                 'details' => Str::random(70),
                 'default_price' => $price,

@@ -60,6 +60,7 @@ export default {
                         v-for="category of categories"
                         :key="category.id"
                         :category="category"
+                        :path="`subCategories.list`"
                     />
                 </div>
             </div>

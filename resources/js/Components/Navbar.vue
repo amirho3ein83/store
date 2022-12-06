@@ -40,7 +40,7 @@ onMounted(() => {
                 <Link href="/home" preserve-scroll>
                     <p class="hover:text-yellow-400">خانه</p>
                 </Link>
-                <Link href="/category" preserve-scroll>
+                <Link :href="route(`category.list`)" preserve-scroll>
                     <p class="hover:text-yellow-400">دسته بندی</p>
                 </Link>
 
@@ -155,7 +155,7 @@ onMounted(() => {
 
                             <Link
                                 class="relative flex px-4 align-baseline py-2 text-lg w-full justify-between"
-                                href="/category"
+                                :href="route(`category.list`)"
                                 preserve-scroll
                             >
                                 <p>دسته بندی</p>
@@ -178,13 +178,13 @@ onMounted(() => {
             <div class="flex" v-else>
                 <Link
                     :href="'/login'"
-                    class=" text-gray-100 px-3 duration-100 hover:scale-110"
+                    class="text-gray-100 px-3 duration-100 hover:scale-110"
                 >
                     لاگین
                 </Link>
                 <Link
                     :href="'/register'"
-                    class=" text-gray-100 px-3 duration-100 hover:scale-110"
+                    class="text-gray-100 px-3 duration-100 hover:scale-110"
                 >
                     ثبت نام
                 </Link>

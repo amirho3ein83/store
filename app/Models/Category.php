@@ -65,6 +65,6 @@ class Category extends Model
 
     public function attributes()
     {
-        return $this->belongsToMany(User::class, 'category_attribute', 'category_id', 'attribute_id');
+        return $this->belongsToMany(Attribute::class, 'category_attribute', 'category_id', 'attribute_id');
     }
 }

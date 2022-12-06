@@ -6,14 +6,15 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Attribute extends Model
+class AttributeOption extends Model
 {
     use HasFactory;
     use Sluggable;
 
     protected $fillable = [
         'name',
-        'slug'
+        'slug',
+        'attribute_id',
     ];
 
     public $timestamps = false;
@@ -36,10 +37,5 @@ class Attribute extends Model
             //     'source' => ['author.firstname', 'author.lastname']
             // ],
         ];
-    }
-
-    public function options()
-    {
-        return $this->hasMany(AttributeOption::class);
     }
 }

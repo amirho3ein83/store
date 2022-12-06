@@ -115,31 +115,35 @@ const sortOptions = [
     { name: "پرفروش ترین", value: "bestselling" },
 ];
 
-const filters = [
-    {
-        id: "color",
-        name: "رنگ",
-        options: [
-            { value: "white", label: "White", checked: false },
-            { value: "beige", label: "Beige", checked: false },
-            { value: "blue", label: "Blue", checked: true },
-            { value: "brown", label: "Brown", checked: false },
-            { value: "green", label: "Green", checked: false },
-            { value: "purple", label: "Purple", checked: false },
-        ],
-    },
-    {
-        id: "brand",
-        name: "برند",
-        options: [
-            { value: "new-arrivals", label: "New Arrivals", checked: false },
-            { value: "sale", label: "Sale", checked: false },
-            { value: "travel", label: "Travel", checked: true },
-            { value: "organization", label: "Organization", checked: false },
-            { value: "accessories", label: "Accessories", checked: false },
-        ],
-    },
-];
+// const filters = [
+//     {
+//         id: "color",
+//         name: "رنگ",
+//         options: [
+//             { value: "white", label: "White", checked: false },
+//             { value: "beige", label: "Beige", checked: false },
+//             { value: "blue", label: "Blue", checked: true },
+//             { value: "brown", label: "Brown", checked: false },
+//             { value: "green", label: "Green", checked: false },
+//             { value: "purple", label: "Purple", checked: false },
+//         ],
+//     },
+//     {
+//         id: "brand",
+//         name: "برند",
+//         options: [
+//             { value: "new-arrivals", label: "New Arrivals", checked: false },
+//             { value: "sale", label: "Sale", checked: false },
+//             { value: "travel", label: "Travel", checked: true },
+//             { value: "organization", label: "Organization", checked: false },
+//             { value: "accessories", label: "Accessories", checked: false },
+//         ],
+//     },
+// ];
+
+const filters = computed(() => {
+    return props.category.attributes;
+});
 
 const flushFilters = () => {
     search.value = null;
@@ -250,7 +254,7 @@ export default {
                                         </li>
                                     </ul>
 
-                                    <Disclosure
+                                    <!-- <Disclosure
                                         as="div"
                                         v-for="section in filters"
                                         :key="section.id"
@@ -290,7 +294,7 @@ export default {
                                                     :key="option.value"
                                                     class="flex items-center"
                                                 >
-                                                    <!-- <input
+                                                  <input
                                                         :id="`filter-mobile-${section.id}-${optionIdx}`"
                                                         :name="`${section.id}[]`"
                                                         :value="option.value"
@@ -306,21 +310,21 @@ export default {
                                                         >{{
                                                             option.label
                                                         }}</label
-                                                    > -->
+                                                    >
 
                                                     <input
-                                                    type="checkbox"
-                                                    :value="category.id"
-                                                    v-model="
-                                                        form.picked_categories
-                                                    "
-                                                    name=""
-                                                    id=""
-                                                />
+                                                        type="checkbox"
+                                                        :value="category.id"
+                                                        v-model="
+                                                            form.picked_categories
+                                                        "
+                                                        name=""
+                                                        id=""
+                                                    />
                                                 </div>
                                             </div>
                                         </DisclosurePanel>
-                                    </Disclosure>
+                                    </Disclosure> -->
 
                                     <button
                                         class="text-md font-medium text-red-700 hover:text-red-600"
@@ -474,8 +478,8 @@ export default {
 
                     <div class="flex w-full xl:gap-10">
                         <!-- Product grid -->
-                        <div class="lg:col-span-3 lg:w-5/6 p-4">
-                            <div class="flex flex-wrap -m-4">
+                        <div class="lg:col-span-3 lg:w-5/6 p-4 ">
+                            <div class="flex flex-wrap -m-4 py-20">
                                 <ProductCard5
                                     v-for="product of products.data"
                                     :key="product.id"
@@ -517,44 +521,11 @@ export default {
                                     >
                                 </h1>
                             </div>
-                            <ul
-                                role="list"
-                                class="space-y-2 border-b border-gray-200 py-6 text-sm font-medium text-slate-800"
-                            >
-                                <h1
-                                    class="text-lg hidden sm:block tracking-tight text-slate-800"
-                                >
-                                    <span class="block text-slate-800">
-                                        زیر مجموعه ها</span
-                                    >
-                                </h1>
-                                <li
-                                    v-for="category in category.sub_categories"
-                                    :key="category.slug"
-                                >
-                                    <div>
-                                        <input
-                                            type="radio"
-                                            name="category-option"
-                                            v-model="sub_category"
-                                            :id="category.slug"
-                                            :value="category.slug"
-                                            class="peer hidden"
-                                        />
-                                        <label
-                                            :for="category.slug"
-                                            v-text="category.name"
-                                            class="block cursor-pointer hover:bg-gray-600/20 select-none p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
-                                        >
-                                        </label>
-                                    </div>
-                                </li>
-                            </ul>
 
                             <Disclosure
                                 as="div"
                                 v-for="section in filters"
-                                :key="section.id"
+                                :key="`attr-${section.slug}`"
                                 class="border-b border-gray-200 py-6 text-md"
                                 v-slot="{ open }"
                             >
@@ -581,26 +552,25 @@ export default {
                                     </DisclosureButton>
                                 </h3>
                                 <DisclosurePanel class="pt-6">
+                                    <!-- :checked="option.checked" -->
+
                                     <div class="space-y-4">
                                         <div
-                                            v-for="(
-                                                option, optionIdx
-                                            ) in section.options"
-                                            :key="option.value"
+                                            v-for="option of section.options"
+                                            :key="option.slug"
                                             class="flex items-center"
                                         >
                                             <input
-                                                :id="`filter-${section.id}-${optionIdx}`"
+                                                :id="`filter-${section.id}-${option.id}`"
                                                 :name="`${section.id}[]`"
-                                                :value="option.value"
+                                                :value="option.slug"
                                                 type="checkbox"
-                                                :checked="option.checked"
                                                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                             />
                                             <label
-                                                :for="`filter-${section.id}-${optionIdx}`"
+                                                :for="`filter-${section.id}-${option.id}`"
                                                 class="ml-3 text text-gray-600"
-                                                >{{ option.label }}</label
+                                                >{{ option.name }}</label
                                             >
                                         </div>
                                     </div>

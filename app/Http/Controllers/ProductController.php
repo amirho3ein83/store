@@ -66,12 +66,10 @@ class ProductController extends Controller
     }
 
 
-    public function show($slug)
+    public function showPage(Product $product)
     {
 
-        $product = Product::where('slug', $slug)
-            ->with(['availableColors', 'attributes', 'comments'])
-            ->firstOrFail();
+        $product->load(['availableColors', 'attributes', 'comments']);
 
         $product->increment('reviews');
 
@@ -126,34 +124,33 @@ class ProductController extends Controller
         );
     }
 
-    public function category()
+    public function categoryList()
     {
-        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
+        $categories = Category::whereNull('parent_id')->get();
 
         return Inertia::render(
-            'Store/Products/Category',
+            'Store/Products/CategoryList',
             ['categories' => $categories]
         );
     }
 
-    public function productList($id, Request $request)
+    public function subCategoryList(Category $category)
     {
+        $category->load('subCategories');
 
+        return Inertia::render(
+            'Store/Products/SubCategoryList',
+            ['category' => $category]
+        );
+    }
 
-        // $pppp = Product::whereHas('category', function ($query) use ($id, $request) {
-        //     $query->where('slug', $request->sub_category);
-        // })->get();
-        // info($pppp);
-
+    public function productList(Category $category, Request $request)
+    {
         $products = Product::query()
-            ->whereHas('category', function ($query) use ($id, $request) {
-                $query->when($request->sub_category, function ($query, $sub_category) {
-                    $query->where('slug', $sub_category);
-                }, function ($query) use ($id) {
-                    return  $query->where('parent_id', $id);
-                });
+            ->whereHas('category', function ($query) use ($category) {
+                $query->where('slug', $category->slug);
             })
-            ->whereHas('availableColors', function ($query) use ($id, $request) {
+            ->whereHas('availableColors', function ($query) use ($request) {
                 $query->when($request->filtered_color_ids, function ($query, $filtered_color_ids) {
                     $query->whereIn('color_id', $filtered_color_ids);
                 });
@@ -187,23 +184,24 @@ class ProductController extends Controller
                 }
             })
             ->with('availableColors')
-            ->simplePaginate(16)
+            ->simplePaginate(env('PAGINATION_PER_PAGE', 16))
             ->withQueryString();
 
-        $in_cart_products = OrderItem::with('product:id')->get()->pluck('product.id')->toArray();
 
-        $products->map(function ($product) use ($in_cart_products) {
+        $products->map(function ($product) {
             $image_url = $product->getFirstMedia()->getUrl();
             $product->image_url = $image_url;
         });
 
-        $parentCategory = Category::where('id', $id)->with('subCategories')->first();
+        $category->load('attributes', 'attributes.options');
+
+        info($category->attributes);
 
         return Inertia::render(
             'Store/Products/ProductList2',
             [
                 'products' => $products,
-                'category' => $parentCategory,
+                'category' => $category,
             ]
         );
     }
