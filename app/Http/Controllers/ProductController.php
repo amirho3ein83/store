@@ -198,7 +198,7 @@ class ProductController extends Controller
         info($category->attributes);
 
         return Inertia::render(
-            'Store/Products/ProductList2',
+            'Store/Products/ProductList',
             [
                 'products' => $products,
                 'category' => $category,
