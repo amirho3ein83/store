@@ -28,10 +28,12 @@ onMounted(() => {
             v-if="showItem"
             class="flex lg:w-1/5 md:w-1/4 sm:w-1/3 w-1/2 px-1 flex-col justify-center items-center max-w-sm mx-auto my-2"
         >
-            <img @click="storeProduct.showProduct(product.slug)" :src="product.image_url" alt="" />
-            <div
-                class=" bg-white w-full shadow-lg rounded-lg overflow-hidden"
-            >
+            <img
+                @click="storeProduct.showProduct(product.slug)"
+                :src="product.image_url"
+                alt=""
+            />
+            <div class="bg-white w-full shadow-lg rounded-lg overflow-hidden">
                 <div
                     class="py-2 text-center font-bold uppercase tracking-wide text-gray-800"
                 >
@@ -41,7 +43,7 @@ onMounted(() => {
                     class="flex items-center justify-between py-2 px-3 bg-gray-400"
                 >
                     <h1 class="text-gray-800 font-bold">
-                         {{ product.default_price.toLocaleString("ar-EG") }}
+                        {{ product.default_price.toLocaleString("ar-EG") }}
                     </h1>
                     <button
                         @click="unlikeProduct(product.id)"

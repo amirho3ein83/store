@@ -26,9 +26,7 @@ export default {
 </script>
 <template>
     <div class="mx-auto">
-        <div
-            class="w-full lg:w-4/5 h-full flex flex-col mx-auto py-0"
-        >
+        <div class="w-full lg:w-4/5 h-full flex flex-col mx-auto py-0">
             <div
                 v-if="Object.keys(orders).length != 0"
                 class="w-full h-full overflow-auto bg-slate-100 py-0 rounded-xl"
@@ -37,7 +35,7 @@ export default {
                 <div
                     v-for="order of orders"
                     :key="order.id"
-                    class="relative my-12 rounded-md transform scale-100  text-sm cursor-default"
+                    class="relative my-12 rounded-md transform scale-100 text-sm cursor-default"
                 >
                     <h1>{{ orders[0].address }}</h1>
                     <div class="flex justify-end gap-x-2 p-3 bg-[#d5d6e3]">
@@ -55,7 +53,7 @@ export default {
                         <div
                             v-for="orderItem of order.items"
                             :key="orderItem.id"
-                            class="flex items-center justify-between border p-2 bg-slate-50   w-full md:w-1/2"
+                            class="flex items-center justify-between border p-2 bg-slate-50 w-full md:w-1/2"
                         >
                             <img
                                 @click="

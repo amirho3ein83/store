@@ -45,9 +45,21 @@ let search = useStorage("search");
 let order_by = useStorage("order_by");
 let filtered_color_ids = useStorage("filtered_color_ids");
 
-let Fattr = ref([{'لنز':'dvvvvvv'}]);
-let filtered_attributes = useStorage("filtered_attributes",Fattr.value);
+let Fattr = ref([]);
+let filtered_attributes = useStorage("filtered_attributes", Fattr.value);
+// const object = { foo: ref(1) }
+// const sets = ref([
+//   [1, 2, 3, 4, 5],
+//   [6, 7, 8, 9, 10]
+// ])
 
+// function even(numbers) {
+//   return numbers.filter((number) => number % 2 === 0)
+// }
+// template
+// <ul v-for="numbers in sets">
+//   <li v-for="n in even(numbers)">{{ n }}</li>
+// </ul>
 watch(
     search,
     debounce(function (value) {
@@ -96,11 +108,10 @@ const sortOptions = [
     { name: "پرفروش ترین", value: "bestselling" },
 ];
 
-const filters = computed(() => {
+const filterLabels = computed(() => {
     props.category.attributes.forEach((attr) => {
         // filtered_attributes.value.push({ [`${attr.slug}`]: [] });
         // filtered_attributes.value[[`${attr.slug}`]] = 's';filtered_attributes:Array
-
         // const index = arr.findIndex((object) => {
         //     return object.id === "b";
         // });
@@ -111,14 +122,18 @@ const filters = computed(() => {
 const flushFilters = () => {
     localStorage.removeItem("search");
     localStorage.removeItem("order_by");
+    // window.location.href.split("?")[0].split("#")[0];
 };
 
-const check = (e) => {
-    console.log(e);
+const filters = reactive([]);
+
+const fetchData = (section, option) => {
+    filters.push({ [`${section}`]: option });
+
+    // document.getElementById("filterForm").submit();
 };
 
 const mobileFiltersOpen = ref(false);
-
 
 onUnmounted(() => {
     flushFilters();
@@ -190,11 +205,11 @@ export default {
                                     </button>
                                 </div>
 
-                                <!-- Filters -->
-                                <form class="mt-4 border-t border-gray-200">
+                                <!-- mobile Filters -->
+                                <form @submit.prevent class="mt-4 border-t border-gray-200">
                                     <Disclosure
                                         as="div"
-                                        v-for="section in filters"
+                                        v-for="section in filterLabels"
                                         :key="section.id"
                                         class="border-t border-gray-200 px-4 py-6"
                                         v-slot="{ open }"
@@ -234,7 +249,7 @@ export default {
                                                 >
                                                     <input
                                                         :id="`filter-${section.id}-${option.id}`"
-                                                        :name="`${section.id}[]`"
+                                                        :name="`${section.slug}[]`"
                                                         :value="option.slug"
                                                         type="checkbox"
                                                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -420,8 +435,9 @@ export default {
                             </div>
                         </div>
 
-                        <!-- Filters -->
-                        <form class="hidden lg:block lg:w-1/6">
+                        <!--   Filters -->
+                        <!-- @submit.prevent="fetchData"  -->
+                        <form @submit.prevent id="filterForm" class="hidden lg:block lg:w-1/6">
                             <div
                                 class="flex justify-between items-center border-b-2"
                             >
@@ -442,7 +458,7 @@ export default {
 
                             <Disclosure
                                 as="div"
-                                v-for="section in filters"
+                                v-for="section in filterLabels"
                                 :key="`attr-${section.slug}`"
                                 class="border-b border-gray-200 py-6 text-md"
                                 v-slot="{ open }"
@@ -480,14 +496,16 @@ export default {
                                         >
                                             <input
                                                 :id="`filter-${section.slug}-${option.slug}`"
-                                                :name="
-                                                    filtered_attributes[
-                                                        section.slug
-                                                    ]
-                                                "
+                                                :name="`${section.slug}[]`"
                                                 :value="option.slug"
                                                 type="checkbox"
-                                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                @change="
+                                                    fetchData(
+                                                        $event.target.name,
+                                                        $event.target.value
+                                                    )
+                                                "
+                                                class="h-4 w-4 filterCheckbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                             />
                                             <label
                                                 :for="`filter-${section.slug}-${option.slug}`"
