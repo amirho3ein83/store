@@ -29,6 +29,7 @@ import {
     ref,
     toRef,
     watch,
+    watchEffect,
 } from "vue";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
@@ -45,8 +46,8 @@ let search = useStorage("search");
 let order_by = useStorage("order_by");
 let filtered_color_ids = useStorage("filtered_color_ids");
 
-let Fattr = ref([]);
-let filtered_attributes = useStorage("filtered_attributes", Fattr.value);
+// let Fattr = ref([]);
+// let filtered_attributes = useStorage("filtered_attributes", Fattr.value);
 // const object = { foo: ref(1) }
 // const sets = ref([
 //   [1, 2, 3, 4, 5],
@@ -206,7 +207,10 @@ export default {
                                 </div>
 
                                 <!-- mobile Filters -->
-                                <form @submit.prevent class="mt-4 border-t border-gray-200">
+                                <form
+                                    @submit.prevent
+                                    class="mt-4 border-t border-gray-200"
+                                >
                                     <Disclosure
                                         as="div"
                                         v-for="section in filterLabels"
@@ -437,7 +441,11 @@ export default {
 
                         <!--   Filters -->
                         <!-- @submit.prevent="fetchData"  -->
-                        <form @submit.prevent id="filterForm" class="hidden lg:block lg:w-1/6">
+                        <form
+                            @submit.prevent
+                            id="filterForm"
+                            class="hidden lg:block lg:w-1/6"
+                        >
                             <div
                                 class="flex justify-between items-center border-b-2"
                             >
@@ -488,6 +496,10 @@ export default {
                                 <DisclosurePanel class="pt-6">
                                     <!-- :checked="option.checked" -->
                                     <!-- @change='onChange($event.target.checked)' -->
+                                    <!-- fetchData(
+                                                        $event.target.name,
+                                                        $event.target.value
+                                                    ) -->
                                     <div class="space-y-4">
                                         <div
                                             v-for="option of section.options"
@@ -499,12 +511,7 @@ export default {
                                                 :name="`${section.slug}[]`"
                                                 :value="option.slug"
                                                 type="checkbox"
-                                                @change="
-                                                    fetchData(
-                                                        $event.target.name,
-                                                        $event.target.value
-                                                    )
-                                                "
+                                                @change="submit()"
                                                 class="h-4 w-4 filterCheckbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                             />
                                             <label

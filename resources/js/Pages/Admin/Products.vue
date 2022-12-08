@@ -1,6 +1,6 @@
 <script setup>
 import Table from "@/Components/Table.vue";
-import { onUnmounted, watch } from "vue";
+import { onBeforeUnmount, onUnmounted, watch } from "vue";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Dropdown from "@/Components/Dropdown.vue";
@@ -62,7 +62,7 @@ watch(
     debounce(function (value) {
         Inertia.get(
             window.location.href,
-            { category_id: value },
+            { category: value },
             {
                 replace: true,
                 preserveState: true,
@@ -77,7 +77,13 @@ watch(
     }, 300)
 );
 
-onUnmounted(() => {
+const flushFilters = () => {
+    search.value = null;
+    order_by.value = null;
+    filter_category.value = null;
+    window.location.href.split("?")[0].split("#")[0];
+};
+onBeforeUnmount(() => {
     localStorage.removeItem("search");
     localStorage.removeItem("order_by");
     localStorage.removeItem("filter_category");
@@ -94,7 +100,10 @@ export default {
     <div
         class="flex flex-col items-center justify-start min-h-screen bg-gray-100"
     >
-        <Link :href="'/product/create'" class="self-end z-10 px-7 py-2">
+        <Link
+            :href="route('admin.product.create')"
+            class="self-end z-10 px-7 py-2"
+        >
             <button
                 class="items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md"
             >
@@ -138,7 +147,9 @@ export default {
             >
                 <Dropdown align="right" width="48">
                     <template #trigger>
-                        <span>دسته بندی</span>
+                        <span v-if="filter_category" v-text="filter_category">
+                        </span>
+                        <span v-else> دسته بندی</span>
                         <i class="bi bi-chevron-down px-2"></i>
                     </template>
 
@@ -151,17 +162,20 @@ export default {
                                 همه
                             </button>
                         </div>
-                        <div v-for="category of categories" :key="category.id">
+                        <div
+                            v-for="category of categories"
+                            :key="category.slug"
+                        >
                             <input
                                 type="radio"
                                 v-model="filter_category"
                                 name="option"
-                                :id="category.id"
-                                :value="category.id"
+                                :id="category.slug"
+                                :value="category.slug"
                                 class="peer hidden"
                             />
                             <label
-                                :for="category.id"
+                                :for="category.slug"
                                 class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none rounded-xl p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
                                 >{{ category.name }}</label
                             >
@@ -243,16 +257,23 @@ export default {
                     </template>
                 </Dropdown>
             </div>
+            <button
+                class="text-md m-2 p-2 font-medium text-red-700 hover:text-red-600"
+                @click="flushFilters"
+            >
+                حذف فیلتر ها
+            </button>
         </div>
 
         <table class="text-gray-400 w-5/6 text-sm">
             <thead class="bg-gray-800 my-1 text-gray-300">
                 <tr>
                     <th class="p-3 text-left">عنوان</th>
-                    <th class="p-3"> تعداد فروش</th>
+                    <th class="p-3">تعداد فروش</th>
                     <th class="p-3">دسته بندی</th>
                     <th class="p-3">(تومان) قیمت</th>
                     <th class="p-3">موجودی</th>
+                    <th class="p-3"></th>
                 </tr>
             </thead>
             <tbody>

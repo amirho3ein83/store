@@ -25,98 +25,75 @@ export default {
 };
 </script>
 <template>
-    <div class="mx-auto">
-        <div class="w-full lg:w-4/5 h-full flex flex-col mx-auto py-0">
-            <div
-                v-if="Object.keys(orders).length != 0"
-                class="w-full h-full overflow-auto bg-slate-100 py-0 rounded-xl"
-                id="journal-scroll"
-            >
-                <div
-                    v-for="order of orders"
-                    :key="order.id"
-                    class="relative my-12 rounded-md transform scale-100 text-sm cursor-default"
-                >
-                    <h1>{{ orders[0].address }}</h1>
-                    <div class="flex justify-end gap-x-2 p-3 bg-[#d5d6e3]">
-                        <div class="pl-5 pr-3 whitespace-no-wrap">
-                            <div class="text-gray-700">
-                                {{ order.j_created_at }}
-                            </div>
-                        </div>
 
-                        <div class="leading-5 text-gray-800">
-                            {{ order.billing_total }} تومان
+    <section class="text-gray-600 body-font">
+        <div class="container mx-auto">
+            <div v-for="order of orders" :key="order.id" class="bg-gray-200">
+                <div class="flex justify-end gap-x-2 p-3 bg-[#dcdef7]">
+                    <div class="pl-5 pr-3 whitespace-no-wrap">
+                        <div class="text-gray-700">
+                            {{ order.j_created_at }}
                         </div>
                     </div>
-                    <div class="flex flex-wrap">
-                        <div
-                            v-for="orderItem of order.items"
-                            :key="orderItem.id"
-                            class="flex items-center justify-between border p-2 bg-slate-50 w-full md:w-1/2"
-                        >
-                            <img
-                                @click="
-                                    storeProduct.showProduct(
-                                        orderItem.product.slug
-                                    )
-                                "
-                                class="flex-shrink-0 cursor-pointer rounded-lg w-20 h-20 object-cover object-center sm:mb-0"
-                                :src="orderItem.product.image_url"
-                                alt=""
-                            />
-                            <div class="flex flex-col justify-center">
-                                <div class="flex gap-x-3 justify-between">
-                                    <span class="text-sm sm:text-md"
-                                        >{{ orderItem.product.title }}
-                                    </span>
-                                </div>
 
-                                <div
-                                    class="flex gap-x-3 justify-between items-center"
-                                >
-                                    <span class="flex gap-x-2 items-center">
-                                        <span
-                                            :style="{
-                                                backgroundColor:
-                                                    orderItem.color.en_name,
-                                            }"
-                                            class="block border-2 my-1 w-5 h-5 rounded-full"
-                                        ></span>
-                                        رنگ
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex flex-col justify-end">
+                    <div class="leading-5 text-gray-800">
+                        {{ order.billing_total }} تومان
+                    </div>
+                </div>
+                <div class="flex flex-wrap lg:w-4/5 sm:mx-auto sm:mb-2 -mx-2">
+                    <div
+                        v-for="orderItem of order.items"
+                        :key="orderItem.id"
+                        class="flex items-center justify-between rounded-md p-2 m-1 bg-slate-50 w-full md:w-5/12"
+                    >
+                        <img
+                            @click="
+                                storeProduct.showProduct(orderItem.product.slug)
+                            "
+                            class="flex-shrink-0 cursor-pointer rounded-lg w-20 h-20 object-cover object-center sm:mb-0"
+                            :src="orderItem.product.image_url"
+                            alt=""
+                        />
+                        <div class="flex flex-col justify-center">
+                            <div class="flex gap-x-3 justify-between">
                                 <span class="text-sm sm:text-md"
-                                    >{{
-                                        orderItem.product_price.toLocaleString(
-                                            "ar-EG"
-                                        )
-                                    }}
-                                    <span class="text-red-500">x</span>
-                                    {{ orderItem.qty }}
+                                    >{{ orderItem.product.title }}
                                 </span>
-                                <span class="text-yellow-900 text-sm">
-                                    {{ orderItem.billing_total }}
-                                    تومان</span
-                                >
                             </div>
+
+                            <div
+                                class="flex gap-x-3 justify-between items-center"
+                            >
+                                <span class="flex gap-x-2 items-center">
+                                    <span
+                                        :style="{
+                                            backgroundColor:
+                                                orderItem.color.en_name,
+                                        }"
+                                        class="block border-2 my-1 w-5 h-5 rounded-full"
+                                    ></span>
+                                    رنگ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-end">
+                            <span class="text-sm sm:text-md"
+                                >{{
+                                    orderItem.product_price.toLocaleString(
+                                        "ar-EG"
+                                    )
+                                }}
+                                <span class="text-red-500">x</span>
+                                {{ orderItem.qty }}
+                            </span>
+                            <span class="text-yellow-900 text-sm">
+                                {{ orderItem.billing_total }}
+                                تومان</span
+                            >
                         </div>
                     </div>
                 </div>
             </div>
-            <div
-                class="flex flex-col gap-3 items-center text-2xl shadow-sm text-[#8b30ff]"
-                v-else
-            >
-                <p>اولین خریدتو ع همینجا شروع کردن</p>
-                <Link
-                    :href="'/category'"
-                    class="inline-flex w-[150px] text-slate-100 bg-[#47365c] border-0 py-2 px-6 focus:outline-none hover:bg-[#6a4d8f] rounded text-lg"
-                    >برو واسه خرید
-                </Link>
-            </div>
         </div>
-    </div>
+    </section>
 </template>

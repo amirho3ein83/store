@@ -8,10 +8,10 @@ import Navbar from "@/Components/Navbar.vue";
     <Navbar />
 
     <main class="profile-page">
-        <section class="relative sm:py-6 bg-[#ebe9e8]  min-h-screen">
+        <section class="relative sm:py-6 bg-slate-100  min-h-screen">
             <div class="container mx-auto px-4 ">
                 <div
-                    class="relative  flex flex-col min-w-0 min-h-screen break-words bg-[#babbc2]/20 w-full mb-6 shadow-xl rounded-lg"
+                    class="relative  flex flex-col min-w-0 min-h-screen break-words bg-slate-200/20 w-full mb-6 shadow-xl rounded-lg"
                 >
                     <div class="sm:px-6">
                         <div class="flex flex-wrap justify-center">

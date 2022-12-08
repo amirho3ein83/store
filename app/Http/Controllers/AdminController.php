@@ -21,7 +21,7 @@ class AdminController extends Controller
 
     public function dashboard(Request $request)
     {
-        $statistics = Cache::remember('users', 60 * 60 * 5, function () {
+        $statistics = Cache::remember('statistics-report', 60 * 60 * 5, function () {
 
             $totalSalesToday = Transaction::where('created_at', '>=', Carbon::today())->sum('amount');
             $countTodayOrders = Order::where('created_at', '>=', Carbon::today())->count();
@@ -47,14 +47,10 @@ class AdminController extends Controller
     public function productsList(Request $request)
     {
 
-        $categoryId = $request->category_id;
-
         $products = Product::query()
-            ->whereHas('category', function ($query) use ($categoryId, $request) {
-                $query->when($request->sub_category, function ($query, $sub_category) {
-                    $query->where('slug', $sub_category);
-                }, function ($query) use ($categoryId) {
-                    return  $query->where('parent_id', $categoryId);
+            ->whereHas('categories', function ($query) use ($request) {
+                $query->when($request->category, function ($query, $categorySlug) {
+                    $query->where('slug', $categorySlug);
                 });
             })
             ->when($request->search, function ($query, $search) {
@@ -82,6 +78,7 @@ class AdminController extends Controller
                         break;
                 }
             })
+            ->with('categories')
             ->simplePaginate(10)
             ->withQueryString();
 
@@ -90,7 +87,7 @@ class AdminController extends Controller
             $product->image_url = $image_url;
         });
 
-        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
+        $categories = Category::sub()->get();
 
         return Inertia::render(
             'Admin/Products',

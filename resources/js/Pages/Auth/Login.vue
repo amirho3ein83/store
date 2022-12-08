@@ -46,7 +46,7 @@ onMounted(() => {
             <Transition name="slide-fade">
                 <div
                     v-if="showForm"
-                    class=" max-w-[390px] w-[360px] space-y-8 px-8 py-6 backdrop-blur-3xl bg-white/20 rounded-xl shadow-lg z-10"
+                    class="max-w-[390px] w-[360px] space-y-8 px-8 py-6 backdrop-blur-3xl bg-white/20 rounded-xl shadow-lg z-10"
                 >
                     <form @submit.prevent="submit">
                         <h1 class="text-xl font-bold mb-4 text-orange-300">

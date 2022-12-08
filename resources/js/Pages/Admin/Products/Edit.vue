@@ -5,6 +5,8 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import { createToast } from "mosha-vue-toastify";
+import JetInputError from "@/Components/InputError.vue";
+
 
 const defaultImage = ref(props.product.image_url);
 const newImage = ref(null);
@@ -61,7 +63,6 @@ const form = useForm({
     title: props.product.title,
     description: props.product.description,
     details: props.product.details,
-    default_price: props.product.default_price,
     picked_categories: productCategoryIds,
     colors: state.productColors,
     product_attributes: state.productAttributes,
@@ -69,7 +70,7 @@ const form = useForm({
 });
 
 const addproduct = () => {
-    form.post(route("admin.product.update", { product: props.product.id }), {
+    form.post(route("admin.product.update", { id: props.product.id }), {
         onSuccess: (res) => {
             createToast("تغییرات اعمال شد", {
                 type: "success",
@@ -79,7 +80,7 @@ const addproduct = () => {
             });
         },
         onError: (error) => {
-            showError(error);
+            // showError(error);
         },
     });
 };
@@ -125,12 +126,6 @@ export default {
     <Head title="Create Product" />
 
     <div class="min-h-screen p-6 bg-gray-100 flex justify-center">
-        <!-- error notifications -->
-        <div class="fixed z-40 top-1 right-1" v-if="form.errors">
-            <div v-for="error of form.errors" :key="error">
-                {{ showError(error) }}
-            </div>
-        </div>
         <div class="container max-w-screen-xl mx-auto">
             <div>
                 <div
@@ -188,16 +183,7 @@ export default {
                                     >
                                         {{ form.details }}
                                     </span>
-                                    <div
-                                        class="flex items-center justify-between py-2 px-3 bg-gray-400"
-                                    >
-                                        <h1 class="text-gray-800 font-bold">
-                                            <span class="text-yellow-800">
-                                                {{ form.default_price }}
-                                                تومان</span
-                                            >
-                                        </h1>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -225,23 +211,12 @@ export default {
                                                 id="title"
                                                 type="text"
                                             />
-                                        </div>
-                                        <div
-                                            class="md:w-full px-3 mb-2 md:mb-0"
-                                        >
-                                            <label
-                                                class="block text-grey-darker text-sm font-bold mb-2"
-                                                for="default_price"
-                                            >
-                                                قیمت پیش فرض
-                                            </label>
-                                            <input
-                                                v-model="form.default_price"
-                                                class="block w-full bg-grey-lighter text-grey-darker border border-red rounded py-2 px-4 mb-3"
-                                                id="default_price"
-                                                type="number"
+                                            <JetInputError
+                                                class="mt-2"
+                                                :message="form.errors.title"
                                             />
                                         </div>
+
                                         <div>
                                             عکس
                                             <TextInput
@@ -250,6 +225,10 @@ export default {
                                                 ref="fileInput"
                                                 @change="pickFile"
                                                 class="mt-1 block w-[100px]"
+                                            />
+                                            <JetInputError
+                                                class="mt-2"
+                                                :message="form.errors.image"
                                             />
                                         </div>
                                     </div>
@@ -276,6 +255,10 @@ export default {
                                                 />
                                             </div>
                                         </div>
+                                        <JetInputError
+                                            class="mt-2"
+                                            :message="form.errors.categories"
+                                        />
                                     </div>
                                 </div>
 
@@ -290,6 +273,10 @@ export default {
                                             v-model="form.details"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
                                         />
+                                        <JetInputError
+                                            class="mt-2"
+                                            :message="form.errors.details"
+                                        />
                                     </div>
                                     <div class="md:w-full px-3">
                                         <label
@@ -300,6 +287,10 @@ export default {
                                         <input
                                             v-model="form.description"
                                             class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-2 px-4 mb-3"
+                                        />
+                                        <JetInputError
+                                            class="mt-2"
+                                            :message="form.errors.description"
                                         />
                                     </div>
                                 </div>
@@ -375,6 +366,11 @@ export default {
                                                     </Dropdown>
                                                 </div>
                                                 <div class="md:w-full">
+                                                    <label
+                                                    class="block text-grey-darker text-sm font-bold mb-2"
+                                                >
+                                                    قیمت
+                                                </label>
                                                     <input
                                                         type="number"
                                                         v-model="
@@ -386,6 +382,11 @@ export default {
                                                 </div>
 
                                                 <div class="md:w-full">
+                                                    <label
+                                                    class="block text-grey-darker text-sm font-bold mb-2"
+                                                >
+                                                    موجودی
+                                                </label>
                                                     <input
                                                         type="number"
                                                         v-model="

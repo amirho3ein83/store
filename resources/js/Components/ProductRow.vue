@@ -5,14 +5,14 @@ import { useProductStore } from "@/store/Product.js";
 const storeProduct = useProductStore();
 
 defineProps({
-    product: Number,
+    product: Object,
 });
 
 let showItem = ref(false);
 
-const deleteProduct = (id) => {
+const deleteProduct = (slug) => {
     showItem.value = false;
-    storeProduct.deleteProduct(id);
+    storeProduct.deleteProduct(slug);
 };
 
 onMounted(() => {
@@ -65,13 +65,15 @@ onMounted(() => {
                 {{ product.default_price }}
             </td>
             <td class="p-3">
-                <span class="text-gray-500 rounded-md px-2">
-                    temporary none</span
+                <span
+                    class="text-gray-500 rounded-md px-2"
+                    v-text="product.stock"
                 >
+                </span>
             </td>
             <td class="p-3">
                 <span
-                    @click="deleteProduct(product.id)"
+                    @click="deleteProduct(product.slug)"
                     class="text-red-400 hover:text-red-600 mr-2"
                 >
                     <i class="bi bi-trash3-fill"></i>

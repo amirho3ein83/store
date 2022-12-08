@@ -11,14 +11,14 @@ export const useProductStore = defineStore("products", {
         likeProduct(id) {
             axios.patch(route("like-product", { id: id }));
         },
-        deleteProduct(id) {
-            axios.delete(route("product.delete", { product: id }));
+        deleteProduct(slug) {
+            axios.delete(route("admin.product.delete", { product: slug }));
         },
         showProduct(slug) {
             Inertia.get("/products/" + slug);
         },
         showProductEditPage(id) {
-            Inertia.get(route("admin.product.edit", { id: id }));
+            Inertia.get(route("admin.product.edit", { product: id }));
         },
         fetchComments(id) {
             axios

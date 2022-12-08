@@ -7,6 +7,24 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
+use Laravel\Fortify\Features;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
+use Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController;
+use Laravel\Fortify\Http\Controllers\ConfirmedTwoFactorAuthenticationController;
+use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
+use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Fortify\Http\Controllers\PasswordController;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
+use Laravel\Fortify\Http\Controllers\ProfileInformationController;
+use Laravel\Fortify\Http\Controllers\RecoveryCodeController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
+use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
+use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
+use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 use App\Mail\OrderInvoice;
 use App\Models\Order;
 use Illuminate\Foundation\Application;
@@ -53,8 +71,12 @@ Route::middleware([
         Route::get('/user/orders-list', 'ordersList')->name('orders.list');
         Route::get('/clients-list', 'usersList')->name('clients.list');
         Route::get('/criticisms-list', 'criticismList')->name('criticisms.list');
-        Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
-        Route::post('/products/{product}/update', [ProductController::class, 'update'])->name('product.update');
+        Route::get('/products/{product:id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('/products/{product:id}/update', [ProductController::class, 'update'])->name('product.update');
+
+        Route::delete('/products/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
+        Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/product', [ProductController::class, 'store'])->name('product.store');
     });
 
 
@@ -71,7 +93,7 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comments');
 
 
-    Route::post('/finalize-order/using-wallet/{order}', [OrderController::class, 'finalizeOrderUsingWallet'])->name('order.payment.wallet');
+    Route::post('/finalize-order/using-wallet', [OrderController::class, 'finalizeOrderUsingWallet'])->name('order.payment.wallet');
 
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
@@ -96,15 +118,10 @@ Route::middleware([
     Route::delete('/cart/order-items/{id}', [OrderController::class, 'deleteOrderItem'])->name('orderItem.delete');
 
 
-    Route::delete('/products/{product}/delete', [ProductController::class, 'delete'])->name('product.delete');
 
     Route::patch('/products/{id}/like', [ProductController::class, 'likeProduct'])->name('like-product');
     Route::patch('/products/{id}/unlike', [ProductController::class, 'unlikeProduct'])->name('unlike-product');
     Route::patch('/rate/product', [ProductController::class, 'rateProduct'])->name('rate-product');
-
-
-    Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
-    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 });
 
 

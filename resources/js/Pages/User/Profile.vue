@@ -166,11 +166,11 @@ export default {
                     </div>
                     <div class="flex justify-end mt-4">
                         <PrimaryButton
-                            class="ml-4 bg-stone-600"
+                            class="ml-4 bg-stone-800"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            update
+                            اعمال تغییرات
                         </PrimaryButton>
                     </div>
                 </div>

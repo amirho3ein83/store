@@ -21,13 +21,13 @@ class Product extends Model implements HasMedia
         'title',
         'slug',
         'sold_qty',
-        'category_id',
         'default_price',
         'details',
         'description',
         'reviews',
         'rate',
         'sku',
+        'stock',
     ];
 
     protected $casts = [
@@ -97,14 +97,14 @@ class Product extends Model implements HasMedia
         return $this->hasMany(Comment::class)->with('author');
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
     }
 
     public function availableColors()
     {
-        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id')->withPivot('price', 'stock');
+        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id')->withPivot('price', 'stock')->wherePivot('stock', '>=', 1);
     }
 
     public function attributes()

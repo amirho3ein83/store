@@ -162,7 +162,7 @@ export default {
                             <h1 class="text-2xl font-bold pb-2">
                                 {{ product.title }}
                             </h1>
-                            <h4 class="text-slate-800 font-extralight">
+                            <h4 class="text-slate-800 font-extralight break-words">
                                 {{ product.details }}
                             </h4>
 
@@ -216,7 +216,7 @@ export default {
                     </div>
                     <div class="my-4 text-slate-700">
                         <h2 class="text-xl p-2">توضیحات</h2>
-                        <p class="text-slate-600">
+                        <p class="text-slate-600  break-words">
                             {{ product.description }}
                         </p>
                     </div>

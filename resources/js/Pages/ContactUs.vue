@@ -3,6 +3,7 @@ import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { createToast } from "mosha-vue-toastify";
+import JetInputError from "@/Components/InputError.vue";
 
 const form = useForm({
     name: "",
@@ -41,18 +42,7 @@ const sendReport = () => {
             });
             form.reset();
         },
-        onError: (error) => {
-            createToast(error, {
-                type: "info",
-                transition: "bounce",
-                position: "top-right",
-                timeout: 2100,
-                toastBackgroundColor: "#ed2715",
-                showCloseButton: "true",
-                hideProgressBar: "true",
-                swipeClose: "false",
-            });
-        },
+        onError: (error) => {},
     });
 };
 </script>
@@ -71,49 +61,81 @@ export default {
         <div class="-mx-4 flex flex-wrap lg:justify-between">
             <div class="w-full px-4 lg:w-1/2 xl:w-5/12">
                 <div
-                    class="relative rounded-lg bg-gray-500 p-8 shadow-lg sm:p-8"
+                    class="relative rounded-lg bg-gray-500 p-8 shadow-lg sm:p-8 text-sm sm:text-lg"
                 >
                     <form @submit.prevent="sendReport">
                         <div>
+                            <label for="name" class="block text-grey-100 ">
+                                نام شما
+                            </label>
                             <TextInput
                                 id="name"
                                 v-model="form.name"
                                 type="text"
-                                placeholder="نام"
-                                class="mt-4 block w-full"
+                                class=" block w-full"
                                 required
+                            />
+                            <JetInputError
+                                class="mt-2"
+                                :message="form.errors.mobile"
                             />
                         </div>
                         <div>
+                            <label for="mobile" class="block text-grey-100 ">
+                                مویابل
+                            </label>
                             <TextInput
                                 id="mobile"
                                 v-model="form.mobile"
                                 type="text"
-                                placeholder="موبایل"
-                                class="mt-4 block w-full"
+                                class=" block w-full"
                                 required
+                            />
+                            <JetInputError
+                                class="mt-2"
+                                :message="form.errors.mobile"
                             />
                         </div>
                         <div class="mb-5">
+                            <label for="email" class="block text-grey-100 ">
+                                ایمیل
+                            </label>
                             <TextInput
                                 id="email"
                                 v-model="form.email"
                                 type="text"
-                                placeholder="ایمیل"
-                                class="mt-4 block w-full"
+                                class=" block w-full"
                                 required
+                            />
+                            <JetInputError
+                                class="mt-2"
+                                :message="form.errors.email"
                             />
                         </div>
 
                         <div class="mb-6">
-                            <textarea
-                                v-model="form.desc"
-                                rows="6"
-                                placeholder="انتقاد "
-                                class="text-body-color border-[f0f0f0] focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
-                            ></textarea>
+                            <label for="desc" class="block text-grey-100 ">
+                                توضیحات
+                            </label>
+                            <div
+                                class="py-2 text-right px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+                            >
+                                <textarea
+                                    oninvalid="this.setCustomValidity('این فیلد لازمه')"
+                                    oninput="setCustomValidity('')"
+                                    id="desc"
+                                    rows="6"
+                                    v-model="form.desc"
+                                    class="px-0 text-right w-full text-sm text-gray-800 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+                                    required
+                                ></textarea>
+                            </div>
+                            <JetInputError
+                                class="mt-2"
+                                :message="form.errors.desc"
+                            />
                         </div>
-                        <div class="flex text-lg justify-end mt-4">
+                        <div class="flex text-lg justify-end ">
                             <button
                                 class="ml-4 bg-gray-600 p-2 hover:bg-gray-400 rounded-lg"
                                 :class="{ 'opacity-25': form.processing }"
@@ -124,16 +146,11 @@ export default {
                         </div>
                     </form>
                 </div>
-                <div v-if="form.errors">
-                    <div v-for="error of form.errors" :key="error">
-                        {{ showError(error) }}
-                    </div>
-                </div>
             </div>
             <div class="w-full px-4 lg:w-1/2 xl:w-6/12">
                 <div class="mb-12 max-w-[570px] lg:mb-0">
                     <h2
-                        class="text-gray-100 mb-6 text-[32px] font-bold uppercase sm:text-[40px] lg:text-[36px] xl:text-[40px]"
+                        class="text-gray-100 mb-6 text-[32px] uppercase sm:text-[40px] lg:text-[36px] xl:text-[40px]"
                     >
                         ارتباط با ما
                     </h2>
@@ -151,7 +168,7 @@ export default {
                     <div class="mb-8 flex w-full">
                         <i class="bi bi-buildings-fill"></i>
                         <div class="w-full">
-                            <h4 class="text-gray-100 mb-1 text-xl font-bold">
+                            <h4 class="text-gray-100 mb-1 text-xl">
                                 موقعیت ما
                             </h4>
                             <p class="text-gray-100 text-body-color text-base">
@@ -163,7 +180,7 @@ export default {
                     <div class="mb-8 flex w-full">
                         <i class="bi bi-telephone-forward-fill"></i>
                         <div class="w-full">
-                            <h4 class="text-gray-100 mb-1 text-xl font-bold">
+                            <h4 class="text-gray-100 mb-1 text-xl">
                                 راه های ارتباط با ما
                             </h4>
                             <p

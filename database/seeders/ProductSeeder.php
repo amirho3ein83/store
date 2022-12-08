@@ -95,25 +95,27 @@ class ProductSeeder extends Seeder
         ];
 
 
-        for ($i = 1; $i < 280; $i++) {
+        for ($i = 1; $i < 20; $i++) {
 
             $title = Str::random(6) . '-کالا';
             $price = mt_rand(5, 120);
             $price *= 1000;
 
-            $categoryId = Category::whereNotNull('parent_id')->inRandomOrder()->take(1)->pluck('id');
+
+
 
             $product =  Product::create([
                 'title' => $title,
-                'category_id' => $categoryId[0],
                 'description' => Str::random(250),
                 'details' => Str::random(70),
-                'default_price' => $price,
                 'sold_qty' => rand(144, 254),
                 'rate' => mt_rand(10, 50) / 10,
                 'reviews' => rand(10, 30),
                 'sku' => $skus[array_rand($skus)]
             ]);
+
+            $categoryId = Category::sub()->inRandomOrder()->take(rand(1, 2))->pluck('id');
+            $product->categories()->attach($categoryId);
 
             //set image
             $pic = rand(1, 15);
@@ -126,11 +128,13 @@ class ProductSeeder extends Seeder
                 ->take(rand(1, 4))
                 ->pluck('id')->toArray();
 
+            $totalStock = 0;
             foreach ($colorIds as $key => $id) {
                 $randomStock = rand(2, 14);
                 $randomPrice = mt_rand(5, 1200);
                 $randomPrice *= 1000;
                 $product->availableColors()->attach($id, ['price' => $randomPrice, 'stock' => $randomStock]);
+                $totalStock += $randomStock;
             }
 
             $randomSize = $sizes[array_rand($sizes)];
@@ -161,6 +165,7 @@ class ProductSeeder extends Seeder
 
             $product->update([
                 'default_price' => $defaultPrice,
+                'stock' => $totalStock,
             ]);
         }
     }

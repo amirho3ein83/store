@@ -139,7 +139,7 @@ class OrderController extends Controller
     }
 
 
-    public function finalizeOrderUsingWallet(Request $request, Order $order)
+    public function finalizeOrderUsingWallet(Request $request)
     {
 
         if ($request->use_default_address == false) {
@@ -174,7 +174,7 @@ class OrderController extends Controller
                     ->withErrors('insufficient inventory');
             }
 
-            Wallet::where('user_id', Auth::id())->decrement('balance', $numbers['billingTotal']);
+            $wallet->toQuery()->decrement('balance', $numbers['billingTotal']);
 
             $this->setOrderPaid($order, $numbers);
 
@@ -315,7 +315,7 @@ class OrderController extends Controller
         if ($payment->failed()) {
             $transaction->payment_status = Transaction::PAYMENT_STATUS_FAILED;
             $transaction->save();
-            return redirect()->route('user.orders.list');
+            return redirect()->route('Cart');
         }
     }
 
@@ -421,7 +421,7 @@ class OrderController extends Controller
         // set total for each order item
         foreach ($order->items as $key => $orderItem) {
 
-            $product = Product::FirstWhere('id', $orderItem->product_id);
+            $product = Product::firstWhere('id', $orderItem->product_id);
             $product->increment('sold_qty', $orderItem->qty);
 
             $numbers['billingTotal'] = ($orderItem->qty * $orderItem->product_price);

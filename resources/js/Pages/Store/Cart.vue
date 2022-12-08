@@ -53,7 +53,7 @@ const payUsingWallet = () => {
     setTimeout(() => {
         show_loading_modal.value = false;
     }, 8000);
-    form.post(route("order.payment.wallet", { order: props.order.id }), {
+    form.post(route("order.payment.wallet"), {
         onSuccess: () => {
             show_loading_modal.value = false;
             show_success_modal.value = true;

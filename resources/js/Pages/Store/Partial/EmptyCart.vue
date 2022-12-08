@@ -20,7 +20,7 @@
                     class="flex w-full md:justify-start justify-center items-end"
                 >
                     <Link
-                        :href="'/category'"
+                        :href="route('category.list')"
                         class="inline-flex text-white bg-[#ff5297] border-0 py-2 px-6 focus:outline-none hover:bg-[#f5317f] rounded text-lg"
                         >برو واسه خرید </Link
                     >
