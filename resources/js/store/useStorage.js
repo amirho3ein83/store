@@ -4,12 +4,11 @@ export function useStorage(key, dval = null) {
     let storedVal = read();
 
     if (storedVal) {
-        dval = ref(storedVal)
+        dval = ref(storedVal);
     } else {
-        dval = ref(dval)
-        write()
+        dval = ref(dval);
+        write();
     }
-
 
     watch(dval, write);
 
@@ -21,7 +20,6 @@ export function useStorage(key, dval = null) {
         if (dval.value === "" || dval.value === null) {
             localStorage.removeItem(key);
         } else {
-            console.log(key);
             localStorage.setItem(key, dval.value);
         }
     }

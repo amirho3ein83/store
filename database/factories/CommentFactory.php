@@ -16,10 +16,17 @@ class CommentFactory extends Factory
      */
     public function definition()
     {
+
+        $suggestions = [
+            1 => 'yes',
+            2 => 'no',
+        ];
+
         return [
-            'product_id' => rand(1,20),
-            'user_id' => 2,
-            'body' => $this->faker->sentence(12)
+            'author_id' => rand(2, 10),
+            'product_id' => rand(1, 20),
+            'body' => $this->faker->sentence(12),
+            'suggestion' => $suggestions[array_rand($suggestions)]
         ];
     }
 }

@@ -17,16 +17,13 @@ class AmazingOfferSeeder extends Seeder
      */
     public function run()
     {
-        $featured_products = Product::take(5)->featured()->get();
+        $featuredProducts = Product::take(5)->get();
 
-        foreach ($featured_products as $key => $product) {
-
-            $discount_percent = (int)($product->sale_price  / $product->price * 10);
-
+        foreach ($featuredProducts as $key => $product) {
             AmazingOffer::create([
                 'product_id' => $product->id,
-                'discount_percent' => $discount_percent,
-                'expiry_date' => Carbon::parse(Carbon::now())->addHour(rand(6, 26))
+                'discount_percent' => rand(5, 30),
+                'expiry_date' => Carbon::parse(Carbon::yesterday())->addHour(rand(6, 26))
             ]);
         }
     }

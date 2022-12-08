@@ -60,7 +60,6 @@ class UserController extends Controller
                 $user->addMediaFromRequest('profile_photo')
                     ->toMediaCollection();
             }
-
         }
     }
 
@@ -105,21 +104,19 @@ class UserController extends Controller
         );
     }
 
-    public function purchaseList()
+    public function ordersList()
     {
-        // $invoices = Invoice::whereHas('orders', function ($query) {
-        //     $query->where('orders.buyer_id', Auth::id());
-        // })->get();
-
-        $orders = Order::purchased()->with('product')->latest()->get();
+        $orders = Order::where('buyer_id', Auth::id())->paid()->with('items', 'items.color')->get();
 
         $orders->map(function ($order) {
-            $image_url = $order->product->getFirstMedia()->getUrl();
-            $order->product->image_url = $image_url;
+            $order->items->map(function ($item) {
+                $image_url = $item->product->getFirstMedia()->getUrl();
+                $item->product->image_url = $image_url;
+            });
         });
 
         return Inertia::render(
-            'User/PurchaseList',
+            'User/OrdersList',
             [
                 'orders' => $orders
             ]

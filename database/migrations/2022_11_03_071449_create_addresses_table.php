@@ -18,10 +18,9 @@ return new class extends Migration
             $table->morphs('addressable');
             $table->mediumText('text');
             $table->string('recipient_name');
-            $table->string('postal_code');
+            $table->string('zipcode');
             $table->string('mobile');
             $table->foreignIdFor(User::class)->cascadeOnDelete();
-            $table->boolean('is_default')->default(true);
         });
     }
 

@@ -46,13 +46,13 @@ onMounted(() => {
                 class="w-[400px] p-4 absolute top-20 left-24 m-5 backdrop-blur-sm bg-white/20"
             >
                 <form @submit.prevent="submit">
-                    <h1 class="text-2xl font-bold mb-4">Register</h1>
+                    <h1 class="text-2xl font-bold mb-4">ٍثبت نام</h1>
 
                     <div class="mt-4">
                         <JetLabel
                             class="text-stone-800"
                             for="mobile"
-                            value="Email or Mobile"
+                            value=" ایمیل یا موبایل "
                         />
                         <JetInput
                             id="mobile"
@@ -67,12 +67,12 @@ onMounted(() => {
                         />
                     </div>
 
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 py-3">
                         <div class="mt-4">
                             <JetLabel
                                 class="text-stone-800"
                                 for="password"
-                                value="Password"
+                                value="رمز عبور"
                             />
                             <JetInput
                                 id="password"
@@ -92,7 +92,7 @@ onMounted(() => {
                             <JetLabel
                                 class="text-stone-800"
                                 for="password_confirmation"
-                                value="Confirm Password"
+                                value="تایید رمز عبور "
                             />
                             <JetInput
                                 id="password_confirmation"
@@ -117,13 +117,13 @@ onMounted(() => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Sign up
+                            ثبت نام
                         </JetButton>
                         <Link
                             :href="route('login')"
                             class="text-md animate-pulse align-middle text-gray-200 hover:text-gray-900"
                         >
-                            Already registered?
+                            قبلا ثبت نام کرده اید؟
                         </Link>
                     </div>
                 </form>

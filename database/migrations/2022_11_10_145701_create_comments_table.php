@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -17,9 +18,13 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->cascadeOnDelete();
-            $table->foreignIdFor(Product::class)->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'author_id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Product::class)->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('body');
+            $table->enum('suggestion', [
+                Comment::SUGGESTION_NO, Comment::SUGGESTION_YES
+            ])
+                ->default(Comment::SUGGESTION_YES);
             $table->timestamps();
         });
     }

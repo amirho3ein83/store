@@ -1,10 +1,11 @@
 <script setup>
 import Table from "@/Components/Table.vue";
-import { onUnmounted, watch } from "vue";
+import { onBeforeUnmount, onUnmounted, watch } from "vue";
 import { useStorage } from "@/store/useStorage";
 import { Inertia } from "@inertiajs/inertia";
 import Dropdown from "@/Components/Dropdown.vue";
 import Pagination from "@/Components/Pagination.vue";
+import ProductRow from "@/Components/ProductRow.vue";
 import debounce from "lodash/debounce";
 
 let props = defineProps({
@@ -61,7 +62,7 @@ watch(
     debounce(function (value) {
         Inertia.get(
             window.location.href,
-            { category_id: value },
+            { category: value },
             {
                 replace: true,
                 preserveState: true,
@@ -76,7 +77,13 @@ watch(
     }, 300)
 );
 
-onUnmounted(() => {
+const flushFilters = () => {
+    search.value = null;
+    order_by.value = null;
+    filter_category.value = null;
+    window.location.href.split("?")[0].split("#")[0];
+};
+onBeforeUnmount(() => {
     localStorage.removeItem("search");
     localStorage.removeItem("order_by");
     localStorage.removeItem("filter_category");
@@ -93,11 +100,14 @@ export default {
     <div
         class="flex flex-col items-center justify-start min-h-screen bg-gray-100"
     >
-        <Link :href="'/product/create'" class="self-end z-10 px-7 py-2">
+        <Link
+            :href="route('admin.product.create')"
+            class="self-end z-10 px-7 py-2"
+        >
             <button
                 class="items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md"
             >
-                Add product
+                اضافه کردن محصول
             </button>
         </Link>
         <div
@@ -135,30 +145,37 @@ export default {
             <div
                 class="flex py-3 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer"
             >
-                <Dropdown align="right" width="44">
+                <Dropdown align="right" width="48">
                     <template #trigger>
-                        <span>All categorie</span>
+                        <span v-if="filter_category" v-text="filter_category">
+                        </span>
+                        <span v-else> دسته بندی</span>
                         <i class="bi bi-chevron-down px-2"></i>
                     </template>
 
                     <template #content>
-                        <div >
-                            <button @click="filter_category = null"
-                                class="block cursor-pointer text-gray-50 hover:bg-gray-600 w-full rounded-xl p-2 "
-                                >All</button
+                        <div>
+                            <button
+                                @click="filter_category = null"
+                                class="block cursor-pointer text-gray-50 hover:bg-gray-600 w-full rounded-xl p-2"
                             >
+                                همه
+                            </button>
                         </div>
-                        <div v-for="category of categories" :key="category.id">
+                        <div
+                            v-for="category of categories"
+                            :key="category.slug"
+                        >
                             <input
                                 type="radio"
                                 v-model="filter_category"
                                 name="option"
-                                :id="category.id"
-                                :value="category.id"
+                                :id="category.slug"
+                                :value="category.slug"
                                 class="peer hidden"
                             />
                             <label
-                                :for="category.id"
+                                :for="category.slug"
                                 class="block cursor-pointer text-gray-50 hover:bg-gray-600 select-none rounded-xl p-2 text-center peer-checked:bg-gray-500 peer-checked:font-bold peer-checked:text-white"
                                 >{{ category.name }}</label
                             >
@@ -169,13 +186,9 @@ export default {
             <div
                 class="flex py-3 px-4 rounded-lg text-gray-100 font-semibold cursor-pointer"
             >
-                <Dropdown align="right" width="44">
+                <Dropdown align="right" width="48">
                     <template #trigger>
                         <i class="bi bi-border-width text-gray-700"></i>
-
-                        <!-- <i
-                            class="mr-5 bi bi-burger  text-gray-200"
-                        ></i> -->
                     </template>
 
                     <template #content>
@@ -191,7 +204,7 @@ export default {
                             <label
                                 for="143"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >rate</label
+                                >امتیاز</label
                             >
                         </div>
                         <div>
@@ -206,7 +219,7 @@ export default {
                             <label
                                 for="144"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >most visited</label
+                                >بیشترین بازدید</label
                             >
                         </div>
 
@@ -222,7 +235,7 @@ export default {
                             <label
                                 for="145"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >newest</label
+                                >جدیدترین</label
                             >
                         </div>
 
@@ -238,70 +251,37 @@ export default {
                             <label
                                 for="146"
                                 class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
-                                >bestselling</label
+                                >پرفروش ترین</label
                             >
                         </div>
                     </template>
                 </Dropdown>
             </div>
+            <button
+                class="text-md m-2 p-2 font-medium text-red-700 hover:text-red-600"
+                @click="flushFilters"
+            >
+                حذف فیلتر ها
+            </button>
         </div>
 
-        <table class="text-gray-400 w-2/3 text-sm">
+        <table class="text-gray-400 w-5/6 text-sm">
             <thead class="bg-gray-800 my-1 text-gray-300">
                 <tr>
-                    <th class="p-3">name</th>
-                    <th class="p-3 text-left">Category</th>
-                    <th class="p-3 text-left">Price</th>
-                    <th class="p-3 text-left">Stock</th>
-                    <th class="p-3 text-left"></th>
+                    <th class="p-3 text-left">عنوان</th>
+                    <th class="p-3">تعداد فروش</th>
+                    <th class="p-3">دسته بندی</th>
+                    <th class="p-3">(تومان) قیمت</th>
+                    <th class="p-3">موجودی</th>
+                    <th class="p-3"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr
+                <ProductRow
                     v-for="product of products.data"
                     :key="product.id"
-                    class="bg-gray-200 mx-3 py-1"
-                >
-                    <td class="p-3">
-                        <div class="flex items-center">
-                            <img
-                                class="rounded-full h-12 w-12 object-cover"
-                                :src="product.image_url"
-                                alt="unsplash image"
-                            />
-                            <div class="ml-3">
-                                <div class="text-yellow-900">
-                                    {{ product.title }}
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="p-3 text-slate-900">
-                        {{ product.category.name }}
-                    </td>
-                    <td class="p-3 font-bold text-yellow-600">
-                        {{ product.price }}$
-                    </td>
-                    <td class="p-3">
-                        <span class="text-gray-500 rounded-md px-2">
-                            {{ product.stock }}</span
-                        >
-                    </td>
-                    <td class="p-3">
-                        <Link class="text-gray-400 hover:text-gray-100 mr-2">
-                            <i class="bi bi-trash3-fill"></i>
-                        </Link>
-                        <Link
-                            :href="`/products/` + product.id + `/edit`"
-                            class="text-gray-400 hover:text-gray-100 mx-2"
-                        >
-                            <i
-                                class="material-icons-outlined text-base text-yellow-500"
-                                ><i class="bi bi-pen-fill"></i
-                            ></i>
-                        </Link>
-                    </td>
-                </tr>
+                    :product="product"
+                />
             </tbody>
         </table>
     </div>

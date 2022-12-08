@@ -2,89 +2,116 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendUserInvoice;
-use App\Mail\OrderPlaced;
+use App\Mail\OrderInvoice;
 use App\Models\Address;
-use App\Models\Invoice;
+use Evryn\LaravelToman\CallbackRequest;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
-use App\Models\RefOrder;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
+use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+
+use function PHPUnit\Framework\isEmpty;
 
 class OrderController extends Controller
 {
 
-    public function index(Product $product)
+    protected $_validation = [
+        'recipient_name' => 'required',
+        'mobile' => 'required|regex:/(09)[0-9]{9}/',
+        'address' => 'required|max:255',
+        'zipcode' => 'required|max:255',
+    ];
+
+    protected $_validationMessages = [
+        'recipient_name.required' => ' نام لازم است',
+        'mobile.required' => ' موبایل مورد نیاز است',
+        'mobile.regex' => 'فرمت موبایل نادرست است',
+        'address.required' => ' آدرس مورد نیاز است',
+        'zipcode.required' => ' کد پستی لازم است',
+    ];
+
+    public function index()
     {
-        $orders = Order::with('product')->pendingPurchase()->get();
 
-        $orders->map(function ($order) {
-            $image_url = $order->product->getFirstMedia()->getUrl();
-            $order->product->image_url = $image_url;
-        });
+        $order = Order::where('buyer_id', Auth::id())
+            ->pendingPayment()
+            ->withCount('items')
+            ->first();
 
-        $subtotal = 0;
-        foreach ($orders as $key => $order) {
-            $subtotal += $order->qty * $order->product->sale_price;
+        $orderItems = $order->items_count ?? null;
+
+        if ($orderItems != null) {
+
+            $order->load('address', 'items');
+            $order->items->map(function ($item) {
+                $image_url = $item->product->getFirstMedia()->getUrl();
+                $item->product->image_url = $image_url;
+                $item->product->en_price = $item->product_price;
+            });
+
+            $subtotal = 0;
+            foreach ($order->items as $key => $item) {
+                $subtotal += $item->getRawOriginal('qty') * $item->product_price;
+            }
+
+            $cartIsEmpty = false;
+        } else {
+            $cartIsEmpty = true;
         }
-        $user_address = Auth::user()->addresses->first();
-        $wallet = Auth::user()->wallet;
+
+        $userAddress = Auth::user()->address;
+        $walletBalance = Auth::user()->wallet->getRawOriginal('balance');
 
         return Inertia::render('Store/Cart', [
-            'orders' => $orders,
-            'subtotal' => $subtotal,
-            'user_address' => $user_address ?? null,
-            'wallet' => $wallet ?? null
+            'order' => $order ?? null,
+            'subtotal' => $subtotal ?? null,
+            'userAddress' => $userAddress ?? null,
+            'walletBalance' => $walletBalance ?? null,
+            'cartIsEmpty' => $cartIsEmpty,
         ]);
     }
 
     public function addToCart(Request $request)
     {
-        DB::beginTransaction();
+        $order = Order::firstOrCreate(
+            ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING],
+            []
+        );
 
-        try {
+        $product = Product::find($request->product_id);
 
-            $product = Product::find($request->product_id);
+        $found_in_cart = OrderItem::isInCart(
+            $request->product_id,
+            $request->picked_color_id,
+        )->first();
 
-            $found_in_cart = Order::isInCart(
-                $request->product_id,
-                $request->picked_color,
-                $request->picked_size,
-            )
-                ->first();
 
-            if (!empty($found_in_cart)) {
-                $cart =  Order::where('id', $found_in_cart->id)->increment('qty');
-            } else {
-                $cart = Order::create([
-                    'product_id' => $product->id,
-                    'picked_color' => $request->picked_color,
-                    'picked_size' => $request->picked_size,
-                    'qty' => 1,
-                    'buyer_id' => Auth::id(),
-                    'status' => 'pending_purchase'
-                ]);
-            }
+        if (empty($found_in_cart)) {
 
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            info($e);
-            return Response::json(['error' => $e], 422);
-        }
+            $productPrice = DB::table('color_product')
+                ->where('product_id', $request->product_id)
+                ->where('color_id', $request->picked_color_id)
+                ->pluck('price')->first();
 
-        if ($cart) {
-            return response()->json([
-                'message' => 'Order registered',
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_price' => $productPrice,
+                'product_id' => $product->id,
+                'color_id' => $request->picked_color_id,
+                'buyer_id' => Auth::id(),
+                'payment_status' => 'pending'
             ]);
+        } else {
+            OrderItem::where('id', $found_in_cart->id)->increment('qty');
         }
     }
 
@@ -93,152 +120,316 @@ class OrderController extends Controller
     }
     public function increaseOrder($id)
     {
-        Order::where('product_id', $id)->pendingPurchase()->increment('qty');
+        OrderItem::where('product_id', $id)->pendingPayment()->increment('qty');
     }
 
     public function decreaseOrder($id)
     {
-        Order::where('product_id', $id)->pendingPurchase()->decrement('qty');
+        OrderItem::where('product_id', $id)->pendingPayment()->decrement('qty');
     }
 
-    public function deleteOrder($id)
+    public function deleteOrderItem($id)
     {
-        Order::where('product_id', $id)->pendingPurchase()->delete();
+        OrderItem::whereId($id)->delete();
     }
 
     public function countOrders(Product $product)
     {
-        return  Order::pendingPurchase()->count();
+        return  OrderItem::pendingPayment()->count();
     }
 
 
-    public function registerOrder(Request $request)
+    public function finalizeOrderUsingWallet(Request $request)
     {
-        Validator::make($request->all(), [
-            'recipient_name' => 'required_if:use_default_address,false',
-            'mobile' => 'required_if:use_default_address,false',
-            'address' => 'required_if:use_default_address,false',
-            'postal_code' => 'required_if:use_default_address,false',
-            'save_address_as_default ' => 'boolean',
-            'use_default_address' => 'boolean',
-            'useWallet' => 'boolean|required',
-            'card_number' => 'required_if:useWallet,false',
-            'expirationYear' => 'required_if:useWallet,false',
-            'expirationMonth' => 'required_if:useWallet,false',
-            'cvc' => 'required_if:useWallet,false',
-        ], [
-            'recipient_name.required' => 'fill in name field please',
-            'mobile.required' => 'fill in mobile field please',
-            'address.required' => 'fill in address field please',
-            'postal_code.required' => 'fill in postal_code field please',
-            'card_number.required' => 'fill in card_number field please',
-            'expirationYear.required' => 'fill in expirationYear field please',
-            'expirationMonth.required' => 'fill in expirationMonth field please',
-            'cvc.required' => 'fill in cvc field please',
-        ])->validate();
 
+        if ($request->use_default_address == false) {
+            Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
+        }
 
-
-        DB::beginTransaction();
+        $order = Order::firstWhere(
+            ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
+        );
 
         try {
-            if ($request->use_default_address) {
+            DB::beginTransaction();
 
-                $user_default_address =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
-                    $query->where('is_default', true);
-                }])->first();
+            $this->saveOrderAddress(
+                $order->id,
+                $request->address,
+                $request->zipcode,
+                $request->recipient_name,
+                $request->mobile,
+                $request->use_default_address,
+                $request->save_address_as_default
+            );
 
-                $user_default_address = $user_default_address->addresses;
-            } else if ($request->save_address_as_default) {
+            $numbers = $this->getNumbers($order);
 
-                $user_default_address =  User::whereId(Auth::id())->with(['addresses' => function ($query) {
-                    $query->where('is_default', true)->update(['is_default' => false]);
-                }]);
+            $wallet = Wallet::firstWhere('user_id', Auth::id());
 
-                $user = User::find(2);
-                $user_address = $user->addresses()->create([
-                    'text' => $request->address,
-                    'postal_code' => $request->postal_code,
-                    'user_id' => $user->id,
-                    'recipient_name' => $request->recipient_name,
-                    'mobile' => $request->mobile,
-                    'is_default' => true,
-                ]);
-            }
-            //  else {
-            //     $reforder->address()->create([
-            //         'text' => $request->address,
-            //         'postal_code' => $request->postal_code,
-            //         'user_id' => Auth::id(),
-            //         'recipient_name' => $request->recipient_name,
-            //         'mobile' => $request->mobile,
-            //     ]);
-            // }
+            $balance = $wallet->balance;
 
-
-
-
-
-
-
-
-            $orders = Order::with('product')->pendingPurchase()->get();
-
-            $billing_subtotal = 0;
-            foreach ($orders as $key => $order) {
-                $billing_subtotal += $order->qty * $order->product->sale_price;
+            if ($balance < $numbers['billingTotal']) {
+                return redirect()->back()
+                    ->withErrors('insufficient inventory');
             }
 
-            $billing_tax = 9 / 100 * $billing_subtotal;
-            $billing_total = $billing_tax + $billing_subtotal;
+            $wallet->toQuery()->decrement('balance', $numbers['billingTotal']);
 
-
-            if ($request->useWallet) {
-                $wallet = Wallet::firstWhere('user_id', Auth::id());
-
-                $balance = $wallet->balance;
-
-                if ($balance <= $billing_total) {
-                    return redirect()->back()
-                        ->withErrors('insufficient inventory')
-                        ->withInput();
-                }
-                Wallet::where('user_id', Auth::id())->decrement('balance', $billing_total);
-            }
-
-            $subtotal = 0;
-            foreach ($orders as $key => $order) {
-
-                $product = Product::FirstWhere('id', $order->product_id);
-                $product->increment('sold_qty', $order->qty);
-
-                $billing_total = ($order->qty * $product->sale_price) + (9 / 100 * ($order->qty * $product->sale_price));
-
-                $subtotal += $billing_total;
-                $order->update([
-                    'status' => 'purchased',
-                    'billing_subtotal' => $billing_subtotal,
-                    'billing_tax' => $billing_tax,
-                    'billing_total' => $billing_total,
-                ]);
-            }
-
-            // SendUserInvoice::dispatch();
-
-
+            $this->setOrderPaid($order, $numbers);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             info($e);
-            return redirect()->back()
-                ->withErrors($e->getMessage())
-                ->withInput();
+            return back()->with([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function orderPaymentRequest(Request $request)
+    {
+
+        if ($request->use_default_address == false) {
+            Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
+        }
+
+        $order = Order::firstWhere(
+            ['buyer_id' => Auth::id(), 'payment_status' => Order::PAYMENT_STATUS_PENDING]
+        );
+
+        try {
+            DB::beginTransaction();
+
+            $this->saveOrderAddress(
+                $order->id,
+                $request->address,
+                $request->zipcode,
+                $request->recipient_name,
+                $request->mobile,
+                $request->use_default_address,
+                $request->save_address_as_default
+            );
+
+            $numbers = $this->getNumbers($order);
+
+            $transaction = Transaction::updateOrCreate(
+                [
+                    'payer_id' => Auth::id(),
+                    'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                    'payment_status' => Transaction::PAYMENT_STATUS_PENDING
+                ],
+                ['amount' => $numbers['billingTotal']],
+            );
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            info($e);
+            return response()->json([
+                'error' => 'sth went wrong'
+            ], 422);
         }
 
 
         // return response()->json([
         //     'message' => 'success'
         // ], 200);
+    }
+
+
+    // Transfer to the payment gateway
+    public function transferToPaymentGateway()
+    {
+
+        $transaction = Transaction::where(
+            [
+                'payer_id' => Auth::id(),
+                'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                'payment_status' => Transaction::PAYMENT_STATUS_PENDING,
+            ],
+        )->first();
+
+        $order = Order::firstWhere(
+            ['buyer_id' => Auth::id(), 'payment_status' => 'pending']
+        );
+
+        $request = Toman::amount($transaction->amount)
+            ->description(' :پرداخت سفارش با شناسه ' . $order->id)
+            ->callback(route('order.payment.callback'))
+            // ->email(Auth::user()->email)
+            // ->mobile(Auth::user()->mobile)
+            ->request();
+
+        if ($request->successful()) {
+
+            $transaction->transaction_id = $request->transactionId();
+            $transaction->save();
+
+            // Redirect to payment URL
+            return $request->pay();
+        }
+
+        if ($request->failed()) {
+            $transaction->status = 'Failed';
+        }
+    }
+
+    public function confirmOrderPayment(CallbackRequest $request)
+    {
+        // Use $request->transactionId() to match the payment record stored
+        // in your persistence database and get expected amount, which is required
+        // for verification. Take care of Double Spending.
+
+        $transaction = Transaction::firstWhere(
+            [
+                'payer_id' => Auth::id(),
+                'transactionـfor' => Transaction::TRANSACTION_FOR_ORDER,
+                'payment_status' => Transaction::PAYMENT_STATUS_PENDING
+            ]
+        );
+
+        $payment = $request->amount($transaction->amount)->verify();
+
+        if ($payment->successful()) {
+            // Store the successful transaction details
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_PAID;
+            $transaction->reference_id = $payment->referenceId();
+            $transaction->save();
+
+            $order = Order::firstWhere(
+                ['buyer_id' => Auth::id(), 'payment_status' => 'pending']
+            );
+            $numbers = $this->getNumbers($order);
+
+            $this->setOrderPaid($order, $numbers, $transaction->id);
+
+            return redirect()->route('user.orders.list');
+        }
+
+        if ($payment->alreadyVerified()) {
+            var_dump('alreadyVerified');
+        }
+
+        if ($payment->failed()) {
+            $transaction->payment_status = Transaction::PAYMENT_STATUS_FAILED;
+            $transaction->save();
+            return redirect()->route('Cart');
+        }
+    }
+
+    public function getNumbers($order)
+    {
+        $order->load('items');
+
+        $billingSubtotal = 0;
+        foreach ($order->items as $key => $orderItem) {
+            $billingSubtotal += $orderItem->qty * $orderItem->product_price;
+        }
+
+        $billingTax = env('TAX_PERCENT', 9) / 100 * $billingSubtotal;
+        $billingTotal = $billingTax + $billingSubtotal;
+        $billingTotal = (int)$billingTotal;
+
+
+        if ($billingTotal >= env('MINIMUM_PURCHASE_FOR_FREE_SHOPPING', 500000)) {
+            $deliveryCost = 0;
+        } else {
+            $deliveryCost = env('DELIRVERY_COST', 18000);
+        }
+        $billingTotal += $deliveryCost;
+
+
+        $numbers['billingSubtotal'] = $billingSubtotal;
+        $numbers['billingTax'] = $billingTax;
+        $numbers['deliveryCost'] = $deliveryCost;
+        $numbers['billingTotal'] = $billingTotal;
+
+        return $numbers;
+    }
+
+    public function saveOrderAddress($orderId, $address, $zipcode, $recipient_name, $mobile, $use_default = false, $save_as_default = false)
+    {
+        if ($use_default) {
+
+            $user = User::find(Auth::id());
+
+            $orderAddress = $user->address->replicate()->fill([
+                'addressable_id' => $orderId,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+
+            $orderAddress->save();
+        } else if ($save_as_default) {
+
+            $user = User::find(Auth::id());
+
+            $userAddress = $user->address;
+            if (!$userAddress) {
+                $userAddress = Address::create(
+                    [
+                        'addressable_id' => $user->id,
+                        'addressable_type' => 'App\Models\User',
+                        'text' => $address,
+                        'zipcode' => $zipcode,
+                        'user_id' => Auth::id(),
+                        'recipient_name' => $recipient_name,
+                        'mobile' => $mobile,
+                    ]
+                );
+            }
+
+            $orderAddress = $userAddress->replicate()->fill([
+                'addressable_id' => $orderId,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+
+            $orderAddress->save();
+        } else {
+            Address::create([
+                'text' => $address,
+                'zipcode' => $zipcode,
+                'user_id' => Auth::id(),
+                'recipient_name' => $recipient_name,
+                'mobile' => $mobile,
+                'addressable_id' => $orderId,
+                'addressable_type' => 'App\Models\Order'
+            ]);
+        }
+    }
+
+    public function setOrderPaid($order, $numbers, $transactionId = null)
+    {
+
+        $email = Auth::user()->email ?? null;
+
+        if ($email) {
+            Mail::to(Auth::user())
+                ->queue(new OrderInvoice($order));
+        }
+
+        $order->update([
+            'payment_status' => Order::PAYMENT_STATUS_PAID,
+            'billing_subtotal' => $numbers['billingSubtotal'],
+            'billing_tax' => $numbers['billingTax'],
+            'billing_total' => $numbers['billingTotal'],
+            'delivery_cost' => $numbers['deliveryCost'],
+            'transaction_id' => $transactionId ?? null
+        ]);
+
+        // set total for each order item
+        foreach ($order->items as $key => $orderItem) {
+
+            $product = Product::firstWhere('id', $orderItem->product_id);
+            $product->increment('sold_qty', $orderItem->qty);
+
+            $numbers['billingTotal'] = ($orderItem->qty * $orderItem->product_price);
+
+            $orderItem->update([
+                'billing_total' => $numbers['billingTotal'],
+                'payment_status' => OrderItem::PAYMENT_STATUS_PAID,
+            ]);
+        }
     }
 }

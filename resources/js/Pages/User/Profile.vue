@@ -1,5 +1,4 @@
 <script setup>
-import UserLayout from "@/Layouts/UserLayout.vue";
 import WalletCard from "@/Components/WalletCard.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
@@ -7,6 +6,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { ref, watch } from "vue";
+import { createToast } from "mosha-vue-toastify";
 
 let props = defineProps({
     user: Object,
@@ -26,52 +26,6 @@ const form = useForm({
 });
 
 const updateInfo = () => {
-    // const config = {
-    //     headers: {
-    //         "content-type": "multipart/form-data",
-    //     },
-    // };
-    // let data = new FormData();
-    // data.append("profile_photo", profile_photo.value);
-    // data.append("name", form.name);
-    // data.append("email", form.email);
-    // data.append("mobile", form.mobile);
-    // axios
-    //     .put(route("user.updateInfo"), data, config)
-    //     .then((res) => {
-    //         console.log(res);
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
-
-    // let data = new FormData();
-
-    // axios
-    //     .put(route("user.updateInfo"), data)
-    //     .then(() => {
-    //         alert("done");
-    //     })
-    //     .catch((error) => {
-    //         alert("shit");
-    //     });
-
-    // form.put(
-    //     route("user.updateInfo"),
-    //     {
-
-    //         onSuccess: () => {
-    //             alert("updated successfully");
-    //             // form.reset();
-    //             // previewImage.value = null
-    //         },
-    //         onError: (error) => {
-    //             console.log("failed:" + error);
-    //             // form.reset();
-    //         },
-    //     }
-    // );
-
     Inertia.post(
         route("user.updateInfo"),
         {
@@ -86,14 +40,23 @@ const updateInfo = () => {
             forceFormData: true,
 
             onSuccess: (res) => {
-                alert("success");
+                createToast("تغییرات اعمال شد", {
+                    type: "info",
+                    transition: "bounce",
+                    position: "top-left",
+                    timeout: 2100,
+                    toastBackgroundColor: "#80bacf",
+                    showCloseButton: "true",
+                    hideProgressBar: "true",
+                    swipeClose: "false",
+                });
             },
             onFinish: () => {
                 console.log("finish");
             },
-            onError:(err)=>{
-                alert(err)
-            }
+            onError: (err) => {
+                alert(err);
+            },
         }
     );
 };
@@ -118,18 +81,18 @@ watch(previewImage, (previewImage) => {
 });
 </script>
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
+import UserLayout from "@/Layouts/UserLayout.vue";
 import { Inertia } from "@inertiajs/inertia";
 
 export default {
-    layout: AppLayout,
+    layout: UserLayout,
 };
 </script>
 <template>
-    <UserLayout>
-        <section
-            class="lg:w-2/6 md:w-2/3 w-full mx-auto bg-[#20354b] rounded-2xl px-8 py-4 shadow-lg"
-        >
+    <section
+        class="lg:w-4/6 md:w-2/3 w-full sm:flex justify-center mx-auto bg-[#5c5c69] rounded-2xl px-8 py-4 shadow-lg"
+    >
+        <div class="w-1/2 mx-auto">
             <div class="mt-6 w-fit mx-auto">
                 <img
                     v-if="previewImage == null"
@@ -153,12 +116,13 @@ export default {
                     srcset=""
                 />
             </div>
-
             <div class="my-5">
                 <h2 class="text-white font-bold text-2xl tracking-wide">
                     {{ user.name }}
                 </h2>
             </div>
+        </div>
+        <div>
             <form
                 @submit.prevent="updateInfo()"
                 class="space-y-4"
@@ -202,11 +166,11 @@ export default {
                     </div>
                     <div class="flex justify-end mt-4">
                         <PrimaryButton
-                            class="ml-4 bg-stone-600"
+                            class="ml-4 bg-stone-800"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            update
+                            اعمال تغییرات
                         </PrimaryButton>
                     </div>
                 </div>
@@ -228,6 +192,6 @@ export default {
                     <p class="p-1 text-stone-50">{{ error }}!</p>
                 </div>
             </form>
-        </section>
-    </UserLayout>
+        </div>
+    </section>
 </template>

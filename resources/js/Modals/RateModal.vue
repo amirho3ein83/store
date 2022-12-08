@@ -25,7 +25,7 @@ onMounted(() => {
 
             <div
                 class="absolute max-w-sm p-4 overflow-x-auto bg-white rounded-lg shadow-lg"
-                @click.away="open = false"
+                @click="open = false"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="modal-headline"

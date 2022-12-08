@@ -10,13 +10,14 @@ class Color extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'fa_name',
+        'en_name',
     ];
 
     public $timestamps = false;
 
     public function availableProducts()
     {
-        return $this->belongsToMany(Product::class, 'color_product', 'color_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'color_product', 'color_id', 'product_id')->withPivot('price', 'stock');
     }
 }

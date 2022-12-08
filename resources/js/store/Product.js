@@ -11,18 +11,35 @@ export const useProductStore = defineStore("products", {
         likeProduct(id) {
             axios.patch(route("like-product", { id: id }));
         },
+        deleteProduct(slug) {
+            axios.delete(route("admin.product.delete", { product: slug }));
+        },
         showProduct(slug) {
             Inertia.get("/products/" + slug);
         },
+        showProductEditPage(id) {
+            Inertia.get(route("admin.product.edit", { product: id }));
+        },
         fetchComments(id) {
             axios
-                .get(route("product.comment", {
-                    id: id,
-                }), [])
+                .get(
+                    route("product.comments", {
+                        id: id,
+                    }),
+                    []
+                )
                 .then((res) => {
-                    this.comments = res.data
+                    this.comments = res.data;
                 })
                 .catch((error) => {
+                    if (error.response.status == 500) {
+                        createToast("خطای سرور ", {
+                            position: "top-center",
+                            toastBackgroundColor: "#fc4242",
+                            timeout: 2100,
+                            transition: "slide",
+                        });
+                    }
                     console.log(error);
                 });
         },

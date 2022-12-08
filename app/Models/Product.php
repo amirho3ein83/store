@@ -7,44 +7,74 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Cviebrock\EloquentSluggable\Sluggable;
+
 
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
-
+    use Sluggable;
     use HasFactory;
+
 
     protected $fillable = [
         'title',
         'slug',
-        'price',
         'sold_qty',
-        'sale_price',
+        'default_price',
         'details',
         'description',
-        'stock',
         'reviews',
-        'category_id',
-        'brand_id',
         'rate',
-        'featured',
-
+        'sku',
+        'stock',
     ];
 
     protected $casts = [
         'reviews'  =>  'integer',
-        'rate'  =>  'integer',
-        'status'    =>  'boolean',
+        'rate'  =>  'float',
+        'payment_status'    =>  'boolean',
         'created_at' => 'date:Y-m-d',
-        'featured'  =>  'boolean'
     ];
 
-    protected $appends = ['available'];
+    // protected $appends = ['available'];
 
-    public  function slug()
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
     {
-        return Str::slug($this->title);
+        return 'slug';
     }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+            // 'title-slug' => [
+            //     'source' => 'title'
+            // ],
+            // 'author-slug' => [
+            //     'source' => ['author.firstname', 'author.lastname']
+            // ],
+        ];
+    }
+
+    // protected function reviews(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => number_format($value),
+    //     );
+    // }
 
     public static function last()
     {
@@ -53,13 +83,9 @@ class Product extends Model implements HasMedia
 
     public function getAvailableAttribute()
     {
-        return $this->stock != 0 ? true : false;
+        // return $this->stock != 0 ? true : false;
     }
 
-    public function scopeFeatured($query)
-    {
-        return $query->where('featured', 1);
-    }
 
     public function likedBy()
     {
@@ -68,31 +94,21 @@ class Product extends Model implements HasMedia
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->with('author');
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function availableSizes()
-    {
-        return $this->belongsToMany(Size::class);
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
     }
 
     public function availableColors()
     {
-        return $this->belongsToMany(Color::class,'color_product','product_id','color_id');
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id')->withPivot('price', 'stock')->wherePivot('stock', '>=', 1);
     }
 
     public function attributes()
     {
-        return $this->hasMany(OrderAttribute::class);
+        return $this->hasMany(ProductAttribute::class);
     }
 }

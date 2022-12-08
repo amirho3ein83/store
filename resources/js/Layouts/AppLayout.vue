@@ -21,9 +21,7 @@ let props = defineProps({
 watch(props.errors, (val) => {
     alert(val)
 })
-// onMounted(() => {
-//     storeCart.countOrders();
-// });
+
 </script>
 
 <template>
@@ -43,7 +41,7 @@ i {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 3px;
 }
 
 /* Track */

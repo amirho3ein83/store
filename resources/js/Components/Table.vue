@@ -5,74 +5,66 @@ defineProps({
 </script>
 
 <template>
-    <table class="w-[450px]">
-        <thead>
-            <tr>
-                <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                    Name
-                </th>
-                <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                    Role
-                </th>
-                <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                    Date joined
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr v-for="user of users" :key="user.id">
-                <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
-                >
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 h-10 w-10">
-                            <img
-                                class="h-10 w-10 rounded-full"
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                alt=""
-                            />
-                        </div>
-
-                        <div class="ml-4">
-                            <div
-                                class="text-sm leading-5 font-medium text-gray-900"
+    <!-- Snippet -->
+    <section
+        class="flex flex-col pt-12 antialiased justify-start bg-gray-100 text-gray-600 min-h-screen p-4"
+    >
+        <div class="h-full">
+            <!-- Table -->
+            <div
+                class="w-1/3 mx-auto bg-white shadow-lg rounded-sm border border-gray-200"
+            >
+                <div class="p-3">
+                    <div class="overflow-x-auto">
+                        <table class="table-auto w-full">
+                            <thead
+                                class="text-sm font-semibold uppercase text-gray-400 bg-gray-50"
                             >
-                                {{ user.name }}
-                            </div>
-                            <div class="text-sm leading-5 text-gray-500">
-                                {{ user.email }}
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                                <tr>
+                                    <th class="p-2 whitespace-nowrap">
+                                        <div class="font-semibold text-left">
+                                            نام
+                                        </div>
+                                    </th>
+                                    <th class="p-2 whitespace-nowrap">
+                                        <div class="font-semibold text-left">
+                                            ایمیل / موبایل
+                                        </div>
+                                    </th>
+                                    <th class="p-2 whitespace-nowrap">
+                                        <div class="font-semibold text-center">
+                                            تاریخ پیوست
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <tr v-for="user of users" :key="user.id">
+                                    <td class="p-2 whitespace-nowrap">
+                                        <div class="text-left">
+                                            {{ user.name }}
+                                        </div>
+                                    </td>
+                                    <td class="p-2 whitespace-nowrap text-left">
+                                        <span class="">
+                                            {{ user.email }}
+                                        </span>
+                                        <span class="">
+                                            {{ user.mobile }}
+                                        </span>
+                                    </td>
 
-                <td
-                    v-if="Object.keys(user.roles).length != 0"
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
-                >
-                    <span v-for="role of user.roles" :key="role.id">{{
-                        role.name
-                    }}</span>
-                </td>
-                <td
-                    v-else
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
-                >
-                    <span>user</span>
-                </td>
-                <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
-                >
-                    <span>{{ user.created_at }}</span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                                    <td class="p-2 whitespace-nowrap">
+                                        <div class="text-lg text-center">
+                                            {{ user.j_created_at }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </template>

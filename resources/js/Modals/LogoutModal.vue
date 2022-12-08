@@ -22,19 +22,19 @@ onMounted(() => {
         >
             <div class="bg-white px-16 py-14 reletive rounded-md text-center">
                 <h1 class="text-xl mb-4 font-bold text-slate-500">
-                    Do you want logout?
+                    میخای بری واقعا؟
                 </h1>
                 <button
                     @click="$emit('close')"
                     class="hover:bg-red-500 bg-red-400 px-4 py-2 rounded-md text-md text-white"
                 >
-                    Cancle
+                    نه بابا
                 </button>
                 <button
                     @click="logout"
                     class="hover:bg-gray-600 bg-gray-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
                 >
-                    Yes
+                    آره
                 </button>
             </div>
         </div>
@@ -47,13 +47,12 @@ onMounted(() => {
 }
 
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(20px);
-  opacity: 0;
+    transform: translateX(20px);
+    opacity: 0;
 }
-
 </style>

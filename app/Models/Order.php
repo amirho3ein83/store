@@ -2,50 +2,94 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DateTimeInterface;
+use Hekmatinasser\Verta\Facades\Verta;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Morilog\Jalali\Jalalian;
+use Morilog\Jalali\CalendarUtils;
 
 class Order extends Model
 {
+
+    use SoftDeletes;
     use HasFactory;
 
+    const PAYMENT_STATUS_PAID = 'paid';
+    const PAYMENT_STATUS_PENDING = 'pending';
+
+
+
+
+
     protected $fillable = [
-        'product_id',
-        'reforder_id',
         'buyer_id',
-        'picked_color',
-        'picked_size',
+        'billing_subtotal',
+        'billing_tax',
         'billing_total',
-        'status',
+        'delivery_cost',
+        'payment_status',
+        'transaction_id',
     ];
 
-    protected $casts = [
-        'qty'  =>  'integer',
+    protected $dates = ['created_at', 'updated_at'];
+
+    // protected function serializeDate(DateTimeInterface $date)
+    // {
+    //     return $date->toFormattedDateString();
+    // }
+
+    protected $appends = [
+        'j_created_at',
+        'j_updated_at',
+        // 'j_deleted_at',
     ];
 
-    public function scopePendingPurchase($query)
+    public function getJCreatedAtAttribute()
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'pending_purchase']]);
+        return \is_null(Carbon::parse($this->created_at)) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon(Carbon::parse($this->created_at))->format('Y/m/d H:i')
+        );
     }
 
-    public function scopePurchased($query)
+    public function getJUpdatedAtAttribute()
     {
-        return $query->where([['buyer_id', Auth::id()], ['status', 'purchased']]);
+        return \is_null(Carbon::parse($this->updated_at)) ? null : CalendarUtils::convertNumbers(
+            Jalalian::fromCarbon(Carbon::parse($this->updated_at))->format('Y/m/d H:i')
+        );
     }
 
-    public function scopeIsInCart($query, $product_id, $picked_color, $picked_size)
+    // public function getJDeletedAtAttribute()
+    // {
+    //     return \is_null(Carbon::parse($this->deleted_at)) ? null : CalendarUtils::convertNumbers(
+    //         Jalalian::fromCarbon(Carbon::parse($this->deleted_at))->format('Y/m/d H:i')
+    //     );
+    // }
+
+    protected function billingTotal(): Attribute
     {
-        return $query->where([
-            ['product_id', $product_id],
-            ['picked_color', $picked_color],
-            ['picked_size', $picked_size]
-        ]);
+        return Attribute::make(
+            get: fn ($value) =>  convertToPersianNumber(number_format($value)),
+        );
     }
 
-    public function product()
+    public function scopePendingPayment($query)
     {
-        return $this->hasOne(Product::class, 'id', 'product_id');
+        return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PENDING]]);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where([['buyer_id', Auth::id()], ['payment_status', self::PAYMENT_STATUS_PAID]]);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class)->with('color');
     }
 
     public function buyer()
@@ -53,22 +97,13 @@ class Order extends Model
         return $this->hasOne(User::class, 'id', 'buyer_id');
     }
 
-    public function size()
+    public function transaction()
     {
-        return $this->hasOne(Size::class);
+        return $this->belongsTo(Transaction::class);
     }
 
-    public function color()
+    public function address()
     {
-        return $this->hasOne(Color::class);
+        return $this->morphOne(Address::class, 'addressable');
     }
-    
-    public function refOrder()
-    {
-        return $this->belongsTo(RefOrder::class,'reforder_id');
-    }
-
-
-
-
 }
