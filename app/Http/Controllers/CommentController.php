@@ -27,6 +27,6 @@ class CommentController extends Controller
 
     public function getComments($id)
     {
-        return Comment::where('product_id', $id)->with('author')->limit(30)->get();
+        return Comment::where('product_id', $id)->limit(30)->get();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -27,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Model::preventLazyLoading($this->app->environment('local'));
     }
 }

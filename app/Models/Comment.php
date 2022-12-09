@@ -30,6 +30,8 @@ class Comment extends Model
 
     protected $dates = ['created_at'];
 
+    protected $with = ['author'];
+    
     public function author()
     {
         return $this->hasOne(User::class, 'id', 'author_id');
