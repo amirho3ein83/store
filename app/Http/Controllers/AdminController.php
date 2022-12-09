@@ -48,7 +48,7 @@ class AdminController extends Controller
     {
 
         $products = Product::query()
-            ->whereHas('categories', function ($query) use ($request) {
+            ->withWhereHas('categories', function ($query) use ($request) {
                 $query->when($request->category, function ($query, $categorySlug) {
                     $query->where('slug', $categorySlug);
                 });
@@ -78,7 +78,6 @@ class AdminController extends Controller
                         break;
                 }
             })
-            ->with('categories')
             ->simplePaginate(10)
             ->withQueryString();
 
@@ -144,7 +143,7 @@ class AdminController extends Controller
 
     public function ordersList()
     {
-        $orders = Order::with('buyer', 'address', 'transaction')->simplePaginate(20);
+        $orders = Order::with('buyer:id,name,mobile,email', 'address', 'transaction:id,reference_id,transaction_id')->simplePaginate(20);
 
         return Inertia::render(
             'Admin/OrdersList',

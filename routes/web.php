@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
@@ -98,11 +97,6 @@ Route::middleware([
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');
-
-    Route::get('/zarinpal-pay/{order}', [PaymentController::class, 'zarinpalPay'])->name('zarinpal.pay');
-    Route::get('/zarinpal-verify/{payment}', [PaymentController::class, 'zarinpalVerify'])->name('zarinpal.verify');
-    Route::get('/pay', [PaymentController::class, 'payRequest']);
-    Route::get('/payment-callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
 
     Route::post('/order-payment-request', [orderController::class, 'orderPaymentRequest'])->name('order.payment.request');
