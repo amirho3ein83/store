@@ -69,13 +69,6 @@ class Product extends Model implements HasMedia
         ];
     }
 
-    // protected function reviews(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn ($value) => number_format($value),
-    //     );
-    // }
-
     public static function last()
     {
         return static::all()->last();
