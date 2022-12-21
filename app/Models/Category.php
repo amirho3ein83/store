@@ -55,12 +55,12 @@ class Category extends Model
 
     public function scopeMain($query)
     {
-        return $query->main();
+        return $query->whereNull('parent_id');
     }
 
     public function scopeSub($query)
     {
-        return $query->sub();
+        return $query->whereNotNull('parent_id');
     }
 
     public function products()
