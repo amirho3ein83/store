@@ -1,7 +1,7 @@
 <script setup>
 import {
     Dialog,
-    DialogPanel,
+    // DialogPanel,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
