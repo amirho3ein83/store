@@ -52,8 +52,13 @@ class OrderController extends Controller
         if ($orderItems != null) {
 
             $order->load('address', 'items');
+
             $order->items->map(function ($item) {
+
+                $item->load('product');
+
                 $image_url = $item->product->getFirstMedia()->getUrl();
+
                 $item->product->image_url = $image_url;
                 $item->product->en_price = $item->product_price;
             });
@@ -139,8 +144,9 @@ class OrderController extends Controller
     }
 
 
-    public function finalizeOrderUsingWallet(Request $request)
+    public function payOnlyWithWallet(Request $request)
     {
+        
 
         if ($request->use_default_address == false) {
             Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
@@ -212,7 +218,7 @@ class OrderController extends Controller
                 $request->save_address_as_default
             );
 
-            $numbers = $this->getNumbers($order);
+            $numbers = $this->getNumbers($order, $request->useWallet);
 
             $transaction = Transaction::updateOrCreate(
                 [
@@ -319,7 +325,7 @@ class OrderController extends Controller
         }
     }
 
-    public function getNumbers($order)
+    public function getNumbers($order, $useWallet = false)
     {
         $order->load('items');
 
@@ -340,11 +346,22 @@ class OrderController extends Controller
         }
         $billingTotal += $deliveryCost;
 
+        if ($useWallet) {
+
+            $wallet = Wallet::firstWhere('user_id', Auth::id());
+
+            $balance = $wallet->balance;
+
+            $billingTotal -= $balance;
+            $wallet->decrement('balance', 0);
+        }
 
         $numbers['billingSubtotal'] = $billingSubtotal;
         $numbers['billingTax'] = $billingTax;
         $numbers['deliveryCost'] = $deliveryCost;
         $numbers['billingTotal'] = $billingTotal;
+
+
 
         return $numbers;
     }
@@ -402,12 +419,12 @@ class OrderController extends Controller
     public function setOrderPaid($order, $numbers, $transactionId = null)
     {
 
-        $email = Auth::user()->email ?? null;
+        // $email = Auth::user()->email ?? null;
 
-        if ($email) {
-            Mail::to(Auth::user())
-                ->queue(new OrderInvoice($order));
-        }
+        // if ($email) {
+        //     Mail::to(Auth::user())
+        //         ->queue(new OrderInvoice($order));
+        // }
 
         $order->update([
             'payment_status' => Order::PAYMENT_STATUS_PAID,

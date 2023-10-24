@@ -39,6 +39,9 @@ const deleteOrderItem = () => {
         props.orderItem.product_price,
         props.orderItem.qty
     );
+    if (storeCart.count_cart == 0) {
+        location.reload()
+    }
 };
 
 onMounted(() => {
@@ -48,82 +51,58 @@ onMounted(() => {
 
 <template>
     <Transition name="fade">
-        <div
-            v-if="loaded"
-            class="flex items-center p-2 bg-stone-50 rounded-lg my-1"
-        >
+        <div v-if="loaded" class="flex items-center p-2 bg-stone-50 rounded-lg my-1">
             <!-- <div class="w-30"> -->
-            <img
-                @click="storeProduct.showProduct(orderItem.product.slug)"
+            <img @click="storeProduct.showProduct(orderItem.product.slug)"
                 class="flex-shrink-0 rounded-lg w-28 h-28 object-cover object-center sm:mb-0"
-                :src="orderItem.product.image_url"
-                alt=""
-            />
+                :src="orderItem.product.image_url" alt="" />
             <!-- </div> -->
             <div class="flex flex-col justify-between ml-4 flex-grow">
                 <span class="text-sm sm:text-lg text-left">{{
                     orderItem.product.title
                 }}</span>
                 <span class="flex flex-col">
-                    <span class="text-yellow-900 text-md text-left"
-                        >{{
-                            orderItem.product_price.toLocaleString("ar-EG")
-                        }}
-                        تومان</span
-                    >
+                    <span class="text-yellow-900 text-md text-left">{{
+                        orderItem.product_price.toLocaleString("ar-EG")
+                    }}
+                        تومان</span>
                     <div class="flex gap-x-2 ">
-                        <span
-                            :style="{
-                                backgroundColor: orderItem.color.en_name,
-                            }"
-                            class="block my-1 border-2 w-5 h-5 rounded-full"
-                        ></span>
+                        <span :style="{
+                                    backgroundColor: orderItem.color.en_name,
+                                }" class="block my-1 border-2 w-5 h-5 rounded-full"></span>
                     </div>
                 </span>
-                <button
-                    @click="deleteOrderItem()"
-                    class="text-start pt-2 w-1/4 font-semibold hover:text-red-500 text-gray-500 text-sm"
-                >
+                <button @click="deleteOrderItem()"
+                    class="text-start pt-2 w-1/4 font-semibold hover:text-red-500 text-gray-500 text-sm">
                     حذف
                 </button>
             </div>
 
             <div class="flex flex-col-reverse flex-1 justify-center gap-5">
                 <div class="inline-flex justify-center gap-1">
-                    <button
-                        :disabled="qty == 10"
-                        @click="increaseOrderItem()"
-                        class="inline-flex h-8 w-8 items-center justify-center text-green-700"
-                    >
+                    <button :disabled="qty == 10" @click="increaseOrderItem()"
+                        class="inline-flex h-8 w-8 items-center justify-center text-green-700">
                         <i class="bi bi-plus" v-if="qty != 10"></i>
                     </button>
 
                     <div>
-                        <div
-                            class="inline-flex h-8 w-8 items-center justify-center"
-                            min="1"
-                        >
+                        <div class="inline-flex h-8 w-8 items-center justify-center" min="1">
                             {{ qty.toLocaleString("ar-EG") }}
                         </div>
                     </div>
 
-                    <button
-                        :disabled="qty == 1"
-                        @click="decreaseOrderItem()"
-                        class="inline-flex h-8 w-8 items-center justify-center text-red-600"
-                    >
+                    <button :disabled="qty == 1" @click="decreaseOrderItem()"
+                        class="inline-flex h-8 w-8 items-center justify-center text-red-600">
                         <i class="bi bi-dash" v-if="qty != 1"></i>
                     </button>
                 </div>
                 <div class="flex-col flex px-8">
-                    <span class="text-center text-stone-800 text-sm"
-                        >{{
-                            (orderItem.product_price * qty).toLocaleString(
-                                "ar-EG"
-                            )
-                        }}
-                        تومان</span
-                    >
+                    <span class="text-center text-stone-800 text-sm">{{
+                        (orderItem.product_price * qty).toLocaleString(
+                            "ar-EG"
+                        )
+                    }}
+                        تومان</span>
                 </div>
             </div>
         </div>

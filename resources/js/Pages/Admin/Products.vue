@@ -81,7 +81,9 @@ const flushFilters = () => {
     search.value = null;
     order_by.value = null;
     filter_category.value = null;
-    window.location.href.split("?")[0].split("#")[0];
+    // window.location.href.split("?")[0].split("#")[0];
+    window.location = window.location.href.split("?")[0];
+
 };
 onBeforeUnmount(() => {
     localStorage.removeItem("search");
@@ -259,7 +261,7 @@ export default {
             </div>
             <button
                 class="text-md m-2 p-2 font-medium text-red-700 hover:text-red-600"
-                @click="flushFilters"
+                @click="flushFilters()"
             >
                 حذف فیلتر ها
             </button>

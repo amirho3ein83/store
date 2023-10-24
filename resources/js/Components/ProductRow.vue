@@ -83,7 +83,7 @@ onMounted(() => {
                     class="text-gray-400 hover:text-gray-100 mx-2"
                 >
                     <i class="material-icons-outlined text-base text-yellow-500"
-                        ><i class="bi bi-pen-fill"></i
+                        ><i class="bi bi-pencil-square"></i
                     ></i>
                 </span>
             </td>

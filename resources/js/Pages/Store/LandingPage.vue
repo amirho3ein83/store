@@ -28,7 +28,7 @@ export default {
             class="relative overflow-hidden bg-no-repeat bg-cover min-h-screen"
             style="
                 background-position: 50%;
-                background-image: url('https://www.nationmaster.com/nm_app/pix/ecommerce/online-shopping-trends-2019.jpg');
+                background-image: url('https://img.freepik.com/free-photo/people-coffee-shop_53876-47028.jpg?w=1380&t=st=1697887755~exp=1697888355~hmac=d1be586700b2c2f23d3142862453b01bb5a207ee2473615ca97dabcb96626036');
                 height: 500px;
             "
         >
@@ -36,15 +36,15 @@ export default {
                 class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
                 style="background-color: rgba(0, 0, 0, 0.69)"
             >
-                <div class="flex justify-start items-center h-full">
+                <div class="flex justify-center items-center h-full">
                     <div class="text-center text-white px-6 md:px-12">
                         <h1
-                            class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight mb-12 text-cyan-400"
+                            class="leading-loose text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight mb-12 text-cyan-400"
                         >
-                            <span class="block text-yellow-300">
-                                𝓢𝓪𝓹𝓬𝓮 𝓼𝓽𝓸𝓻𝓮</span
+                            <span class="block text-yellow-300 text-8xl">
+                                Space Store</span
                             >
-                            بهترین تجربه خریدت <br /><span class="text-pink-600"
+                            بهترین تجربه خریدت <br><span class="text-pink-600"
                                 >از اینجا شروع می شه</span
                             >
                         </h1>

@@ -23,10 +23,6 @@ class AttributeSeeder extends Seeder
             3 => 'نوع',
             4 => 'ظرفیت حافظه RAM',
             5 => 'سری پردازنده',
-            6 => 'طبقه‌بندی',
-            7 => 'نانو',
-            8 => 'نخ',
-            9 => 'پارچه',
         ];
 
         foreach ($attributes as $key => $attr) {

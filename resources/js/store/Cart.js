@@ -6,6 +6,7 @@ import { createToast } from "mosha-vue-toastify";
 export const useCartStore = defineStore("cart", {
     state: () => ({
         subtotal: 0,
+        finalAmount: 0,
         count_cart: 0,
         form_step: 1,
         products: [],
@@ -97,10 +98,16 @@ export const useCartStore = defineStore("cart", {
         },
 
         deleteOrderItem(id, amount, qty) {
-            
+
              axios.delete(route("orderItem.delete", { id: id }));
             this.subtotal -= (amount * qty);
 
+        },
+        decutFromWallet(walletBalance) {
+            this.subtotal -= walletBalance;
+        },
+        dontDecutFromWallet(walletBalance) {
+            this.subtotal += walletBalance;
         },
     },
 });

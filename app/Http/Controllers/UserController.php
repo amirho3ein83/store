@@ -110,6 +110,7 @@ class UserController extends Controller
 
         $orders->map(function ($order) {
             $order->items->map(function ($item) {
+                $item->load('product');
                 $image_url = $item->product->getFirstMedia()->getUrl();
                 $item->product->image_url = $image_url;
             });

@@ -1,6 +1,7 @@
 <script setup>
 import Logout from "@/Modals/triggers/Logout.vue";
 import Navbar from "@/Components/Navbar.vue";
+import { Avatar } from 'flowbite-vue'
 
 </script>
 
@@ -29,11 +30,13 @@ import Navbar from "@/Components/Navbar.vue";
                             <div
                                 class="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center"
                             >
-                            <div class="py-6 px-3 ">
-                                    <h1 class="text-2xl">
+                            <div class="py-6 px-3 flex justify-end text-center align-middle">
+                                    <h1 class="text-2xl self-end px-4">
                                         {{ $page.props.user.name }}
                                     </h1>
+                                    <Avatar status="online" rounded img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" />
                                 </div>
+
                             </div>
 
                             <div class="w-full lg:w-4/12 px-4 lg:order-1">
@@ -48,6 +51,7 @@ import Navbar from "@/Components/Navbar.vue";
                                         >
                                             <Logout />
                                         </span>
+                                        <span class="text-sm text-blueGray-400">خروج</span>
                                     </div>
                                     <Link
                                         :href="'/user/profile/liked-products'"

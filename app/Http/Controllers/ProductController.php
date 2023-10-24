@@ -336,6 +336,8 @@ class ProductController extends Controller
                 'stock' => $totalStock,
             ]);
             // set attributes
+            ProductAttribute::where('product_id', $product->id)->delete();
+
             foreach ($request->product_attributes as $key => $attr) {
 
                 if ($attr['title']  && $attr['value']) {

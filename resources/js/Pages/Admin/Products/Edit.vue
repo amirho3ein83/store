@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import { computed, reactive, ref, toRef, watch } from "vue";
+import {  reactive, ref, toRef, watch , onMounted } from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Dropdown from "@/Components/Dropdown.vue";
@@ -10,17 +10,13 @@ import JetInputError from "@/Components/InputError.vue";
 
 const defaultImage = ref(props.product.image_url);
 const newImage = ref(null);
+const productCategoryIds = ref([]);
+
 
 let props = defineProps({
     product: Object,
     categories: Object,
     colors: Object,
-});
-
-const productCategoryIds = computed(() => {
-    let categoryIds = [];
-    categoryIds.push(...props.product.categories.map((emp) => emp.id));
-    return categoryIds;
 });
 
 const state = reactive({
@@ -114,6 +110,11 @@ watch(defaultImage, (defaultImage) => {
         newImage.value = reader.result;
     });
 });
+
+onMounted(() => {
+    productCategoryIds.value.push(...props.product.categories.map((emp) => emp.id));
+});
+
 </script>
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";

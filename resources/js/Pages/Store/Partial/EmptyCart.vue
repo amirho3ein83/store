@@ -14,7 +14,7 @@
                 <h1
                     class="title-font sm:text-4xl text-3xl mb-4 font-medium text-purple-900"
                 >
-          !سبد خریدت خالیه  
+          !سبد خریدت خالیه
                 </h1>
                 <div
                     class="flex w-full md:justify-start justify-center items-end"

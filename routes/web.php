@@ -99,6 +99,7 @@ Route::middleware([
     Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');
 
 
+    Route::post('/pay-with-wallet', [orderController::class, 'payOnlyWithWallet'])->name('pay.with.wallet');
     Route::post('/order-payment-request', [orderController::class, 'orderPaymentRequest'])->name('order.payment.request');
     Route::get('/order/payment-gateway', [orderController::class, 'transferToPaymentGateway'])->name('order.payment.gateway');
     Route::get('/order-payment-callback', [orderController::class, 'confirmOrderPayment'])->name('order.payment.callback');
