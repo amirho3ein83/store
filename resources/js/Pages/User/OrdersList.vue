@@ -26,7 +26,7 @@ export default {
 </script>
 <template>
 
-    <section class="text-gray-600 body-font">
+    <section class="text-gray-600 body-font bg-white" bg-white>
         <div class="container mx-auto">
             <div v-for="order of orders" :key="order.id" class="bg-gray-200">
                 <div class="flex justify-end gap-x-2 p-3 bg-[#dcdef7]">

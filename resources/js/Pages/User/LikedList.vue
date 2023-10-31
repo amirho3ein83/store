@@ -13,7 +13,7 @@ export default {
 };
 </script>
 <template>
-        <section class="text-gray-600 body-font">
+        <section class="text-gray-600 body-font bg-white" bg-white>
             <div class="flex flex-wrap -m-4">
                 <template v-if="Object.keys(liked_products).length != 0">
                     <ProductCard4

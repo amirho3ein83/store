@@ -10,13 +10,19 @@ defineProps({
     category: Object,
 });
 </script>
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default {
+    layout: AppLayout,
+};
+</script>
 <template>
     <Head title="Category" />
 
-    <section class="text-gray-600 body-font min-h-screen">
+    <section class="text-gray-600 bg-white body-font min-h-screen">
         <div class="container px-5 py-24 mx-auto">
-            <Breadcrumb class="py-5"/>
+            <Breadcrumb class="p-5"/>
             <div class="flex flex-wrap -m-4">
                 <CategoryItem
                     v-for="subCategory of category.sub_categories"

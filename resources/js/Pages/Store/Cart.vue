@@ -181,7 +181,13 @@ onMounted(() => {
     storeCart.subtotal = props.subtotal;
 });
 </script>
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default {
+    layout: AppLayout,
+};
+</script>
 <template>
     <Head title="Cart" />
 

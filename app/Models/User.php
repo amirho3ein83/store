@@ -46,6 +46,7 @@ class User extends Authenticatable implements HasMedia
         'j_created_at',
         'j_updated_at',
         'j_deleted_at',
+        'avatar_url',
     ];
 
     /**
@@ -69,6 +70,9 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
     ];
 
+    protected $guarded = ['id'];
+
+
     public function getJCreatedAtAttribute()
     {
         return \is_null($this->created_at) ? null : CalendarUtils::convertNumbers(
@@ -88,6 +92,15 @@ class User extends Authenticatable implements HasMedia
         return \is_null($this->deleted_at) ? null : CalendarUtils::convertNumbers(
             Jalalian::fromCarbon($this->deleted_at)->format('Y/m/d H:i')
         );
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->hasMedia()) {
+            return $this->getFirstMedia()->getUrl();
+        } else {
+            return null;
+        }
     }
 
     public function wallet()

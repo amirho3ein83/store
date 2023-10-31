@@ -10,14 +10,39 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex bg-gray-300/25 justify-center items-center p-1 rounded-sm mx-auto w-[300px]">
-        <Link :href="previousPage" v-if="currentPage != 1" preserve-scroll> صفحه قبل
-        </Link>
-        <Transition mode="out-in">
-            <div class="w-12 rounded mx-5 p-1 text-center text-lg self-end text-gray-700 font-medium bg-gray-400"
+    <nav aria-label="Page navigation example">
+        <ul class="list-style-none flex">
+            <li>
+
+                <Link :href="previousPage" v-if="currentPage != 1" preserve-scroll> صفحه قبل
+                <span
+                    class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white">Previous</span>
+                </Link>
+            </li>
+            <!-- <li>
+                <a class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+                    href="#">1</a>
+            </li>
+            <li aria-current="page">
+                <a class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+                    href="#">2</a>
+            </li>
+            <li>
+                <a class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+                    href="#">3</a>
+            </li> -->
+            <Transition mode="out-in">
+            <div class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
                 v-text="currentPage"></div>
         </Transition>
-        <Link :href="nextPage" v-if="nextPage != null" preserve-scroll> صفحه بعد
-        </Link>
-    </div>
+            <li>
+
+                <Link :href="nextPage" v-if="nextPage != null" preserve-scroll> صفحه بعد
+                <span
+                    class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white">Next</span>
+
+                </Link>
+            </li>
+        </ul>
+    </nav>
 </template>

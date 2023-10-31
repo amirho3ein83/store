@@ -8,7 +8,7 @@ let step = ref(form_step)
 </script>
 
 <template>
-    <section class="text-gray-600 body-font">
+    <section class="text-gray-600 body-font bg-white" bg-white>
         <div class="container sm:px-5 py-12 mx-auto flex flex-wrap">
             <div class="flex flex-col w-full">
                 <div class=" flex  justify-center sm:gap-x-14">

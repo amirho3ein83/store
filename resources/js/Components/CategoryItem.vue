@@ -29,7 +29,7 @@ defineProps({
         <img src="https://cdn.tailkit.com/media/placeholders/photo-gUPiTDBdRe4-700x700.jpg" alt="Product Image" class="transform transition ease-out group-hover:scale-110">
         <div class="absolute inset-0 bg-black bg-opacity-25 transition ease-out group-hover:bg-opacity-0"></div>
         <div class="p-4 flex items-center justify-center absolute inset-0">
-          <div class="py-3 px-4 bg-white bg-opacity-95 rounded-3xl text-sm font-semibold uppercase tracking-wide transition ease-out group-hover:text-white group-hover:bg-blue-600 dark:bg-gray-900/90 dark:border-gray-800">
+          <div class="py-3 px-4 bg-white bg-opacity-95 rounded-3xl text-sm font-semibold uppercase tracking-wide transition ease-out group-hover:text-white group-hover:bg-stone-600 dark:bg-gray-900/90 dark:border-gray-800">
             {{ category.name }}
           </div>
         </div>

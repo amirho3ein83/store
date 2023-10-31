@@ -136,7 +136,13 @@ onUnmounted(() => {
 });
 </script>
 
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default {
+    layout: AppLayout,
+};
+</script>
 <template>
     <div class="bg-white">
         <div>
@@ -295,7 +301,7 @@ onUnmounted(() => {
                             </div>
 
                             <!-- pagination -->
-                            <div class="py-4 mt-4 border-t-2" v-show="products.data != undefined && products.data != {}">
+                            <div class="py-4 mt-4 " v-show="products.data != undefined && products.data != {}">
                                 <Pagination :nextPage="products.next_page_url" :previousPage="products.prev_page_url"
                                     :currentPage="products.current_page" />
                             </div>

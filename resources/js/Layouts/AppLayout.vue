@@ -25,8 +25,8 @@ watch(props.errors, (val) => {
 </script>
 
 <template>
-    <div class="bg-gray-100  work-sans leading-normal text-base tracking-normal">
-        <Navbar />
+    <div class="  work-sans leading-normal text-base tracking-normal">
+        <Navbar :dark="true" :snipperColor="`#445da2`"/>
 
         <slot />
 

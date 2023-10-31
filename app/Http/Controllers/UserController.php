@@ -74,13 +74,13 @@ class UserController extends Controller
             $image_url = null;
         }
 
-        try {
-            $user = User::find(Auth::id());
-            $image_url = $user->getFirstMedia()->getUrl();
-            $user->image_url = $image_url;
-        } catch (\Throwable $th) {
-            $user->image_url = null;
-        }
+        // try {
+        //     $user = User::find(Auth::id());
+        //     $image_url = $user->getFirstMedia()->getUrl();
+        //     $user->image_url = $image_url;
+        // } catch (\Throwable $th) {
+        //     $user->image_url = null;
+        // }
 
         $address = Auth::user()->address;
         return Inertia::render(

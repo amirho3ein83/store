@@ -1,12 +1,8 @@
 <script setup>
-import WalletCard from "@/Components/WalletCard.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
 import { ref, watch } from "vue";
 import { createToast } from "mosha-vue-toastify";
+import Logout from "@/Modals/triggers/Logout.vue";
 
 let props = defineProps({
     user: Object,
@@ -80,6 +76,7 @@ watch(previewImage, (previewImage) => {
     });
 });
 </script>
+
 <script>
 import UserLayout from "@/Layouts/UserLayout.vue";
 import { Inertia } from "@inertiajs/inertia";
@@ -89,109 +86,78 @@ export default {
 };
 </script>
 <template>
-    <section
-        class="lg:w-4/6 md:w-2/3 w-full sm:flex justify-center mx-auto bg-[#5c5c69] rounded-2xl px-8 py-4 shadow-lg"
-    >
-        <div class="w-1/2 mx-auto">
-            <div class="mt-6 w-fit mx-auto">
-                <img
-                    v-if="previewImage == null"
-                    src="https://as1.ftcdn.net/v2/jpg/02/10/49/86/1000_F_210498655_ywivjjUe6cgyt52n4BxktRgDCfFg8lKx.jpg"
-                    class="rounded-full w-36 h-36 object-cover"
-                    alt="profile picture"
-                    srcset=""
-                />
-                <img
-                    v-else-if="!imageUrl"
-                    :src="previewImage"
-                    class="rounded-full w-36 h-36 object-cover"
-                    alt="profile picture"
-                    srcset=""
-                />
-                <img
-                    v-else
-                    :src="imageUrl"
-                    class="rounded-full w-36 h-36 object-cover"
-                    alt="profile picture"
-                    srcset=""
-                />
-            </div>
-            <div class="my-5">
-                <h2 class="text-white font-bold text-2xl tracking-wide">
-                    {{ user.name }}
-                </h2>
-            </div>
-        </div>
-        <div>
-            <form
-                @submit.prevent="updateInfo()"
-                class="space-y-4"
-                enctype="multipart/form-data"
-            >
-                <div class="px-5 pb-5">
-                    <TextInput
-                        @input="form.profile_photo = $event.target.files[0]"
-                        id="image"
-                        type="file"
-                        ref="photoInput"
-                        @change="pickFile"
-                        class="mt-1 block w-full"
-                        accept="image/png, image/jpeg, image/jpg"
-                    />
-                    <InputError class="mt-2" :message="form.errors.image" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
 
-                    <input
-                        v-model="form.name"
-                        type="text"
-                        placeholder="Name"
-                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                    />
+    <div class="">
+        <div class="flex justify-between">
 
-                    <input
-                        v-model="form.email"
-                        type="email"
-                        placeholder="Email"
-                        class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                    />
-                    <div class="flex">
-                        <div class="flex-grow w-1/2">
+
+            <div class="px-2 hidden sm:block text-left">
+                <ul>
+                    <li
+
+                        class="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700">
+                        Favorites list</li>
+                    <li
+                        class="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700">
+                        Transition History</li>
+                    <li
+                        class="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700">
+                        Orders History</li>
+                    <li
+                        class="mt-5 cursor-pointer border-l-2 border-l-blue-700 px-2 py-2 font-semibold text-blue-700 transition hover:border-l-blue-700 hover:text-blue-700">
+                        Notifications</li>
+                    <li
+                        class="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:text-blue-700 ">
+                        <Logout class="text-start" />
+</li>
+                </ul>
+            </div>
+
+            <!-- component -->
+            <div class="container max-w-md mx-auto xl:max-w-3xl h-full flex  rounded-lg shadow overflow-hidden">
+                <div class="relative hidden xl:block xl:w-1/2 h-full">
+                    <img class="absolute h-auto w-full object-cover"
+                        src="https://images.unsplash.com/photo-1541233349642-6e425fe6190e" alt="my zomato" />
+                </div>
+                <div class="w-full xl:w-1/2 p-8">
+                    <form method="post" action="#" onSubmit="return false">
+
+                        <div class="mb-4 mt-6">
+                            <label class="block text-left text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
+                                Name
+                            </label>
                             <input
-                                type="text"
-                                v-model="form.mobile"
-                                autocomplete
-                                placeholder="Mobile"
-                                class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100"
-                            />
+                                class="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline h-10"
+                                id="name" type="text" placeholder="Your name " />
                         </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <PrimaryButton
-                            class="ml-4 bg-stone-800"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing"
-                        >
-                            اعمال تغییرات
-                        </PrimaryButton>
-                    </div>
+                        <div class="mb-4 mt-6">
+                            <label class="block text-left text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
+                                Email
+                            </label>
+                            <input
+                                class="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline h-10"
+                                id="email" type="text" placeholder="Your email address" />
+                        </div>
+                        <div class="mb-6 mt-6">
+                            <label class="block text-left text-gray-700 text-sm font-semibold mb-2" htmlFor="mobile">
+                                Mobile
+                            </label>
+                            <input
+                                class="text-sm bg-gray-200 appearance-none rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline h-10"
+                                id="mobile" type="text" placeholder="Your mobile" />
+                        </div>
+                        <div class="flex w-full mt-8">
+                            <button
+                                class="w-full bg-gray-800 hover:bg-grey-900 text-white text-sm py-2 px-4 font-semibold rounded focus:outline-none focus:shadow-outline h-10"
+                                type="button">
+                                apply changes
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <progress
-                    v-if="form.progress"
-                    :value="form.progress.percentage"
-                    max="100"
-                >
-                    {{ form.progress.percentage }}%
-                </progress>
-                <div
-                    v-for="error of form.errors"
-                    :key="error"
-                    class="shadow w-2/3 p-2 flex justify-center rounded-lg"
-                >
-                    <div
-                        class="bg-red-500 animate-pulse inline-block rounded-lg p-1 mr-1"
-                    ></div>
-                    <p class="p-1 text-stone-50">{{ error }}!</p>
-                </div>
-            </form>
+            </div>
         </div>
-    </section>
+    </div>
 </template>

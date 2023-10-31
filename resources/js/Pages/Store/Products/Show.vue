@@ -40,14 +40,19 @@ const addToCart = () => {
     storeCart.addToCart(props.product.id, picked_color.value.id);
 };
 </script>
+<script>
+import AppLayout from "@/Layouts/AppLayout.vue";
 
+export default {
+    layout: AppLayout,
+};
+</script>
 
 
 <template>
-        <Navbar :dark="true" :snipperColor="`#445da2`"/>
 
     <!-- component -->
-    <section class="text-gray-700 body-font overflow-hidden ">
+    <section class="text-gray-700 body-font overflow-hidden bg-white ">
         <div class="lg:container px-5 py-24 mx-auto">
             <div class="lg:w-4/5 mx-auto flex flex-wrap">
 
@@ -177,7 +182,7 @@ const addToCart = () => {
         </div>
     </section>
 
-    <section class="lg:py-16 flex flex-col justify-center items-center" v-if="Object.keys(product.comments).length != 0">
+    <section class="lg:py-16 flex flex-col justify-center items-center bg-white" v-if="Object.keys(product.comments).length != 0">
         <CommentForm :product_id="product.id" />
         <div v-if="$page.props.auth" class="lg:w-1/2 w-full px-4 lg:py-6">
             <div class="flex justify-between items-center space-x-2">
@@ -193,9 +198,9 @@ const addToCart = () => {
             <Comment v-for="comment of product.comments" :key="comment.id" :comment="comment" />
         </div>
     </section>
-    <h3 class="text-2xl text-slate-800 p-5">محصولات مشابه</h3>
-    <section class="text-gray-600 body-font bg-stone-100">
+    <!-- <section class="text-gray-600 body-font bg-white">
         <div class="container px-5 py-8 mx-auto">
+            <h3 class="text-2xl text-slate-800 py-8 bg-white">محصولات مشابه</h3>
             <div class="flex flex-wrap -m-4 justify-center">
                 <ProductCard5
                     v-for="product of similar_products"
@@ -204,7 +209,37 @@ const addToCart = () => {
                 />
             </div>
         </div>
-    </section>
+    </section> -->
+    <!--
+  This example requires some changes to your config:
+
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/aspect-ratio'),
+    ],
+  }
+  ```
+-->
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class="text-2xl font-bold tracking-tight py-6 text-gray-800 ">محصولات مشابه  </h2>
+
+    <div class="flex flex-wrap  justify-center">
+        <ProductCard5
+                    v-for="product of similar_products"
+                    :key="product.id"
+                    :product="product"
+                />
+
+      <!-- More products... -->
+    </div>
+  </div>
+</div>
+
 </template>
 <style scoped>
 
