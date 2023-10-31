@@ -28,10 +28,15 @@ class Comment extends Model
         'j_deleted_at',
     ];
 
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->toFormattedDateString();
+    }
+
     protected $dates = ['created_at'];
 
     protected $with = ['author'];
-    
+
     public function author()
     {
         return $this->hasOne(User::class, 'id', 'author_id');

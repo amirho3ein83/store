@@ -1,15 +1,10 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import JetAuthenticationCard from "@/Components/AuthenticationCard.vue";
-import JetAuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
-import JetButton from "@/Components/Button.vue";
-import JetInput from "@/Components/Input.vue";
-import JetInputError from "@/Components/InputError.vue";
-import JetCheckbox from "@/Components/Checkbox.vue";
-import JetLabel from "@/Components/Label.vue";
-import { ref, onMounted } from "vue";
+import SignUpBtn from "@/Components/SignUpBtn.vue";
+import ErrorAlert from "@/Components/ErrorAlert.vue";
 
-let showForm = ref(false);
+import { OrbitSpinner } from "epic-spinners";
+
 
 const form = useForm({
     mobile: "",
@@ -21,113 +16,104 @@ const form = useForm({
 const submit = () => {
     form.post(route("register"), {
         onFinish: () => form.reset("password", "password_confirmation"),
+        onError:(e)=>{
+            console.log(e)
+        }
     });
 };
 
-onMounted(() => {
-    setTimeout(() => {
-        showForm.value = true;
-    }, 50);
-});
+
 </script>
 
 <template>
     <Head title="Register" />
 
-    <div class="flex">
-        <img
-            class="object-cover w-full h-screen"
-            src="./pics/astronat.jpg"
-            alt=""
-        />
-        <Transition name="slide-fade">
+    <div id="page-container"
+        class="flex flex-col  mx-auto w-full min-h-screen min-w-[320px] bg-gray-100 dark:text-gray-100 dark:bg-gray-900">
+        <main id="page-content" class="flex flex-auto flex-col max-w-full">
             <div
-                v-if="showForm"
-                class="w-[400px] p-4 absolute top-20 left-24 m-5 backdrop-blur-sm bg-white/20"
-            >
-                <form @submit.prevent="submit">
-                    <h1 class="text-2xl font-bold mb-4">ٍثبت نام</h1>
+                class="min-h-screen flex items-center justify-center relative overflow-hidden max-w-10xl mx-auto p-4 lg:p-8 w-full">
+                <section class="py-6 w-full max-w-xl">
+                    <header class="mb-10 text-center">
+                        <h1 class="text-2xl font-bold inline-flex items-center mb-2 space-x-2">
+                            <OrbitSpinner :animation-duration="3000" :size="40" color="#2c2e3b" />
+                            <span>Register</span>
+                        </h1>
 
-                    <div class="mt-4">
-                        <JetLabel
-                            class="text-stone-800"
-                            for="mobile"
-                            value=" ایمیل یا موبایل "
-                        />
-                        <JetInput
-                            id="mobile"
-                            v-model="form.mobile"
-                            type="text"
-                            class="mt-1 block w-full"
-                            required
-                        />
-                        <JetInputError
-                            class="mt-2"
-                            :message="form.errors.mobile"
-                        />
-                    </div>
-
-                    <div class="flex gap-2 py-3">
-                        <div class="mt-4">
-                            <JetLabel
-                                class="text-stone-800"
-                                for="password"
-                                value="رمز عبور"
-                            />
-                            <JetInput
-                                id="password"
-                                v-model="form.password"
-                                type="password"
-                                class="mt-1 block w-full"
-                                required
-                                autocomplete="new-password"
-                            />
-                            <JetInputError
-                                class="mt-2"
-                                :message="form.errors.password"
-                            />
-                        </div>
-
-                        <div class="mt-4">
-                            <JetLabel
-                                class="text-stone-800"
-                                for="password_confirmation"
-                                value="تایید رمز عبور "
-                            />
-                            <JetInput
-                                id="password_confirmation"
-                                v-model="form.password_confirmation"
-                                type="password"
-                                class="mt-1 block w-full"
-                                required
-                                autocomplete="new-password"
-                            />
-                            <JetInputError
-                                class="mt-2"
-                                :message="form.errors.password_confirmation"
-                            />
-                        </div>
-                    </div>
+                    </header>
 
                     <div
-                        class="flex w-full mt-8 justify-between items-baseline"
-                    >
-                        <JetButton
-                            class="m-4 w-1/2 bg-stone-400 hover:bg-yellow-500 hover:text-stone-800"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing"
-                        >
-                            ثبت نام
-                        </JetButton>
-                        <Link
-                            :href="route('login')"
-                            class="text-md animate-pulse align-middle text-gray-200 hover:text-gray-900"
-                        >
-                            قبلا ثبت نام کرده اید؟
-                        </Link>
+                        class="flex flex-col rounded-lg shadow-sm bg-white overflow-hidden dark:text-gray-100 dark:bg-gray-800">
+                        <div class="p-5 text-left md:px-16 md:py-12 grow">
+                            <form @submit.prevent="submit">
+
+                                <div class="space-y-1 py-2">
+                                    <label for="mobile" class="text-sm  font-medium">Email or Mobile</label>
+                                    <input v-model="form.mobile" type="text" id="mobile" name="mobile"
+                                        placeholder="Enter your email or Mobile"
+                                        class="w-full block border placeholder-gray-500 px-5 py-3 leading-6 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:focus:border-blue-500 dark:placeholder-gray-400">
+                                </div>
+
+                                <ErrorAlert v-if="form.errors.mobile" :message="`Email or Mobile is not valid`"/>
+
+                                <div class="space-y-1 py-2">
+                                    <label for="password" class="text-sm font-medium">Password</label>
+                                    <input v-model="form.password" type="password" id="password" name="password"  autocomplete="on"
+                                        placeholder="Enter your password"
+                                        class="w-full block border placeholder-gray-500 px-5 py-3 leading-6 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:focus:border-blue-500 dark:placeholder-gray-400">
+                                </div>
+
+                                <ErrorAlert v-if="form.errors.password" :message="`password is not valid`"/>
+
+                                <div class="space-y-1 py-2">
+                                    <label for="password_confirmation" class="text-sm font-medium">Confirm Password</label>
+                                    <input v-model="form.password_confirmation" type="password" id="password_confirmation"
+                                        name="password_confirmation" autocomplete="on" placeholder="confirm your password"
+                                        class="w-full block border placeholder-gray-500 px-5 py-3 leading-6 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:focus:border-blue-500 dark:placeholder-gray-400">
+                                </div>
+
+                                <ErrorAlert v-if="form.errors.password == `validation.confirmed`" :message="`Confirm Password is not valid`"/>
+
+                                <div class="pt-4">
+
+                                    <SignUpBtn :title="`Sign up`" :class="{ 'opacity-25': form.processing }"
+                                        :disabled="form.processing" />
+
+                                    <div class="flex items-center my-5">
+                                        <span aria-hidden="true"
+                                            class="grow bg-gray-100 rounded h-0.5 dark:bg-gray-700/75"></span>
+                                        <span
+                                            class="text-sm font-medium text-gray-800 bg-gray-100 rounded-full px-3 py-1 dark:bg-gray-700 dark:text-gray-200">or
+                                            sign up with</span>
+                                        <span aria-hidden="true"
+                                            class="grow bg-gray-100 rounded h-0.5 dark:bg-gray-700/75"></span>
+                                    </div>
+
+                                    <div class=" flex justify-center ">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-1/2 items-center space-x-2 border font-semibold rounded-lg px-3 py-2 leading-5 text-sm border-gray-200 bg-white text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-sm focus:ring focus:ring-gray-300 focus:ring-opacity-25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600 dark:focus:ring-opacity-40 dark:active:border-gray-700">
+                                            <img src="/icons8-google.svg" class="w-8 h-8" alt="">
+
+                                            <span>Google</span>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="p-3 md:px-16 grow text-sm text-center bg-gray-50 dark:bg-gray-700/50">
+                            Already have an account?
+
+
+                            <Link href="/login" class="text-gray-100 px-3 duration-100 hover:scale-110">
+                            <span
+                                class="font-medium text-blue-600 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300">Sign
+                                in</span>
+                            </Link>
+                        </div>
                     </div>
-                </form>
+
+                </section>
             </div>
-        </Transition>
-    </div>
-</template>
+        </main>
+    </div></template>

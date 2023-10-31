@@ -7,6 +7,11 @@ import { computed, onMounted } from "vue";
 
 const storeCart = useCartStore();
 
+const props = defineProps({
+    dark:Boolean,
+    snipperColor:String,
+});
+
 onMounted(() => {
     if (usePage().props.value.auth) {
         storeCart.countOrders();
@@ -15,130 +20,72 @@ onMounted(() => {
 </script>
 
 <template>
-    <nav class="flex justify-between bg-gray-900 text-white w-screen">
-        <div class="px-5 xl:px-12 py-2 flex w-full items-center justify-between">
-            <Link href="/home" preserve-scroll>
-            <div class="flex items-center gap-x-1">
-                <OrbitSpinner :animation-duration="3000" :size="40" color="#feffd4" />
-                <h3 class="lg:text-4xl text-[#f3f5f0] pl-2 text-3xl font-bold font-heading">
-                    Space Store
-                </h3>
-            </div>
-            </Link>
-            <!-- Nav Links -->
-            <ul class="hidden lg:flex px-4 mx-auto text-lg font-heading space-x-12">
-                <Link href="/home" preserve-scroll>
-                <p class="hover:text-yellow-400">خانه</p>
-                </Link>
-                <Link :href="route(`category.list`)" preserve-scroll>
-                <p class="hover:text-yellow-400">دسته بندی</p>
-                </Link>
+                <nav class="flex items-center justify-between px-6 py-4 lg:px-8" aria-label="Global" >
 
-                <Link href="/contact-us" preserve-scroll>
-                <p class="hover:text-yellow-400">ارتباط با ما</p>
-                </Link>
-            </ul>
-            <template v-if="$page.props.auth">
-                <!-- Header Icons -->
-                <div class="hidden lg:flex items-center space-x-5" v-if="$page.props.auth">
-                    <Link class="relative flex" href="/user/profile/liked-products" preserve-scroll>
-                    <i class="bi bi-heart-fill text-red-500"></i>
-                    </Link>
+                    <div class="flex lg:flex-1">
 
-                    <Link class="relative flex" href="/cart" preserve-scroll>
-                    <i class="bi bi-cart3 text-gray-50"></i>
+                        <div class="flex items-center space-x-4 ">
+                            <Link href="/home" preserve-scroll>
+                            <OrbitSpinner :animation-duration="3000" :size="40" :color="snipperColor" />
 
-                    <div v-if="storeCart.count_cart != 0"
-                        class="flex h-5 w-5 absolute -right-2 -top-1 text-center items-center justify-center align-baseline">
-                        <span
-                            class="animate-ping absolute flex justify-center h-full w-full rounded-full bg-[#11fa1d] opacity-75"></span>
-                        <span
-                            class="relative inline-flex justify-center text-gray-900 text-center w-5 h-5 p-0 m-0 rounded-full bg-[#11fa1d]">
-                            {{ storeCart.count_cart }}
-                        </span>
+                            </Link>
+                            <div class="font-medium dark:text-white">
+                                <p    class="text-slate-100 text-lg" :class="{ '!text-gray-700': dark }">Space Store</p>
+
+                            </div>
+                        </div>
                     </div>
-                    </Link>
-
-                    <Link class="relative flex" href="/user/profile" preserve-scroll>
-                    <i class="bi bi-person text-2xl"></i>
-                    </Link>
-                    <Link class="relative flex" :href="route('admin.dashboard')" preserve-scroll>
-                    <div v-if="$page.props.admin"
-                        class="border-2 border-yellow-600 rounded-lg px-3 py-2 text-yellow-400 cursor-pointer hover:bg-yellow-600 hover:text-yellow-200">
-                        پنل مدیریت
+                    <div class="flex lg:hidden">
+                        <button type="button"
+                            class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </button>
                     </div>
-                    </Link>
-                </div>
-                <div class="lg:hidden items-center space-x-5 flex">
-                    <Link class="relative flex" href="/cart" preserve-scroll>
-                    <i class="bi bi-cart3 text-gray-50"></i>
+                    <div class="hidden lg:flex lg:gap-x-12">
+                        <Link href="/home" preserve-scroll>
+                        <p class="text-md font-semibold leading-6 text-gray-200">Home</p>
+                        </Link>
+                        <Link :href="route(`category.list`)" preserve-scroll>
+                        <p class="text-md font-semibold leading-6 text-gray-200">Categories</p>
+                        </Link>
+                        <Link href="/contact-us" preserve-scroll>
+                        <p class="text-md font-semibold leading-6 text-gray-200">Contact us</p>
+                        </Link>
 
-                    <div v-if="storeCart.count_cart != 0"
-                        class="flex h-5 w-5 absolute -right-2 -top-1 text-center items-center justify-center align-baseline">
-                        <span
-                            class="animate-ping absolute flex justify-center h-full w-full rounded-full bg-[#11fa1d] opacity-75"></span>
-                        <span
-                            class="relative inline-flex justify-center text-gray-900 text-center w-5 h-5 p-0 m-0 rounded-full bg-[#11fa1d]">
-                            {{ storeCart.count_cart }}
-                        </span>
                     </div>
-                    </Link>
 
-                    <Dropdown align="right" width="48">
-                        <template #trigger>
-                            <i class="bi bi-list text-3xl pl-2 sm:text-4xl"></i>
-                            <!-- <i
-                            class="mr-5 bi bi-burger  text-gray-200"
-                        ></i> -->
-                        </template>
-
-                        <template #content>
-                            <!-- Account Management -->
-                            <!-- <div
-                                        class="block px-4 py-2 text-xs text-gray-400"
-                                    >
-                                        Manage Account
-                                    </div> -->
-
-                            <Link class="relative flex px-4 align-baseline py-2 text-lg w-full justify-between bg-slate-700"
-                                href="/home" preserve-scroll>
-                            <p>خانه</p>
-                            <i class="bi bi-house text-2xl"></i>
-                            </Link>
-                            <Link class="relative flex px-4 align-baseline py-2 text-lg w-full justify-between bg-slate-700"
-                                href="/user/profile" preserve-scroll>
-                            <p>پروفایل</p>
-                            <i class="bi bi-person text-2xl"></i>
-                            </Link>
+                    <div v-if="$page.props.auth" class="hidden lg:flex lg:flex-1 lg:justify-end">
 
 
+                        <Link :href="route('user.profile')" class="text-gray-100 px-3 duration-100 hover:opacity-80">
 
-                            <Link class="relative flex px-4 align-baseline py-2 text-lg w-full justify-between bg-slate-700"
-                                :href="route(`category.list`)" preserve-scroll>
-                            <p>دسته بندی</p>
-                            <i class="bi bi-diagram-3 text-2xl"></i>
-                            </Link>
+                        <div class="flex items-center space-x-4">
+                            <img class="w-10 h-10 rounded-full"
+                                src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                                alt="profile">
+                            <div class="font-medium dark:text-white">
+                                <p class="text-slate-50">{{ $page.props.user.name }}</p>
+                            </div>
+                        </div>
+                        </Link>
+                    </div>
 
-                            <Link class="relative flex px-4 align-baseline py-2 text-lg w-full justify-between bg-slate-700"
-                                href="/contact-us" preserve-scroll>
-                            <p>ارتباط با ما</p>
-                            <i class="bi bi-envelope-paper text-2xl"></i>
-                            </Link>
-                        </template>
-                    </Dropdown>
-                </div>
-            </template>
+                    <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end">
+                        <Link href="/login" class="text-gray-100 px-3 duration-100 hover:scale-110">
 
-            <div class="flex" v-else>
-                <Link :href="'/login'" class="text-gray-100 px-3 duration-100 hover:scale-110">
-                لاگین
-                </Link>
-                <Link :href="'/register'" class="text-gray-100 px-3 duration-100 hover:scale-110">
-                ثبت نام
-                </Link>
-            </div>
-        </div>
-    </nav>
+                        <p class="text-md font-semibold leading-6 text-gray-200">sign in</p>
+                        </Link>
+                        <Link href="/register" class="text-gray-100 px-3 duration-100 hover:scale-110">
+
+                        <p class="text-md font-semibold leading-6 text-gray-200">sign up</p>
+                        </Link>
+                    </div>
+                </nav>
 </template>
 <style>
 i {

@@ -214,6 +214,6 @@ return [
      * If the default slug engine of cocur/slugify is used, this array of
      * configuration options will be used when instantiating the engine.
      */
-    'slugEngineOptions' => [],
+    'slugEngineOptions' => []
 
 ];

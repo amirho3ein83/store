@@ -35,7 +35,7 @@ const submit = () => {
 
 <template>
     <div
-        class="bg-gray-200/75 dark:bg-gray-900 py-8 w-full px-4 lg:w-1/2 lg:py-12 text-right"
+        class="bg-gray-100 dark:bg-gray-900 py-8 w-full px-4 lg:w-1/2 lg:py-12 text-right"
     >
         <h2
             class="text-lg lg:text-xl p-4 font-semibold text-stone-800 dark:text-white"
@@ -105,8 +105,8 @@ const submit = () => {
                 <button
                     v-if="$page.props.auth"
                     type="submit"
-                    class="inline-flex items-center py-2.5 px-4 text-md font-medium text-center text-gray-900 bg-primary-700 rounded-lg focus:ring-1 focus:ring-primary-200 dark:focus:ring-primary-900 hover:text-gray-500"
-                >
+                    class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-sm font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200">
+
                     ثبت نظر
                 </button>
                 <p v-else>
@@ -118,3 +118,8 @@ const submit = () => {
         </form>
     </div>
 </template>
+<style scoped>
+i {
+    font-size: 20px;
+}
+</style>

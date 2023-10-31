@@ -13,6 +13,7 @@ import {
     TransitionRoot,
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import Breadcrumb from "@/Components/Breadcrumb.vue";
 import {
     ChevronDownIcon,
     FunnelIcon,
@@ -47,21 +48,7 @@ let search = useStorage("search");
 let order_by = useStorage("order_by");
 let filtered_color_ids = useStorage("filtered_color_ids");
 
-// let Fattr = ref([]);
-// let filtered_attributes = useStorage("filtered_attributes", Fattr.value);
-// const object = { foo: ref(1) }
-// const sets = ref([
-//   [1, 2, 3, 4, 5],
-//   [6, 7, 8, 9, 10]
-// ])
 
-// function even(numbers) {
-//   return numbers.filter((number) => number % 2 === 0)
-// }
-// template
-// <ul v-for="numbers in sets">
-//   <li v-for="n in even(numbers)">{{ n }}</li>
-// </ul>
 watch(
     search,
     debounce(function (value) {
@@ -125,8 +112,13 @@ const flushFilters = () => {
     localStorage.removeItem("search");
     localStorage.removeItem("order_by");
     // window.location.href.split("?")[0].split("#")[0];
+    function hasQueryParams(url) {
+        return url.includes('?');
+    }
 
-    window.location = window.location.href.split("?")[0];
+    if (hasQueryParams(window.location.href)) {
+        window.location = window.location.href.split("?")[0];
+    }
 };
 
 const filters = reactive([]);
@@ -143,14 +135,7 @@ onUnmounted(() => {
     flushFilters();
 });
 </script>
-<script>
-import AppLayout from "@/Layouts/AppLayout.vue";
 
-export default {
-    layout: AppLayout,
-    components: { Comment },
-};
-</script>
 
 <template>
     <div class="bg-white">
@@ -224,18 +209,9 @@ export default {
 
             <main class="mx-auto w-full px-4 sm:px-6 lg:px-8">
                 <div class="flex items-baseline justify-between border-b border-gray-200 pt-10 pb-6">
+
+<Breadcrumb/>
                     <div class="flex items-center gap-x-5">
-                        <div class="relative text-gray-600">
-                            <input type="search" name="serch" v-model="search" placeholder="جستجو"
-                                class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none" />
-                            <button type="submit" class="absolute right-0 top-0 mt-2 mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                                </svg>
-                            </button>
-                        </div>
                         <div class="flex items-center">
                             <Menu as="div" class="relative inline-block text-left">
                                 <div>
@@ -291,11 +267,20 @@ export default {
                                 </button>
                             </button>
                         </div>
+                        <div class="relative text-gray-600">
+                            <input type="search" name="serch" v-model="search" placeholder="جستجو"
+                                class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none" />
+                            <button type="submit" class="absolute right-0 top-0 mt-2 mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                </svg>
+                            </button>
+                        </div>
+
                     </div>
 
-                    <h1 class="text-xl hidden sm:block font-bold tracking-tight text-slate-800">
-                        <span class="block text-yellow-900" v-text="category.name"></span>
-                    </h1>
                 </div>
 
                 <section aria-labelledby="products-heading" class="pt-6 pb-24">
@@ -360,14 +345,7 @@ export default {
                                     </div>
                                 </DisclosurePanel>
                             </Disclosure>
-                            <!-- Required font awesome -->
-                            <div class="items-center p-4 w-full">
 
-                                <button :type="type"
-                                class="border-b  border-gray-200 mx-auto  inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-md text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
-                                اعمال تغییرات
-                            </button>
-                        </div>
 
                         </form>
                     </div>

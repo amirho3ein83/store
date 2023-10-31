@@ -65,11 +65,6 @@ export default {
                                             {{ criticism.critic_email }}
                                         </div>
                                     </td>
-                                    <td class="p-2 whitespace-nowrap">
-                                        <div class="text-left">
-                                            {{ criticism.critic_mobile }}
-                                        </div>
-                                    </td>
 
                                     <td class="p-2 whitespace-nowrap">
                                         <div class="text-xs truncate text-center">

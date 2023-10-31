@@ -15,7 +15,6 @@ class Criticism extends Model
 
     protected $fillable = [
         'desc',
-        'critic_mobile',
         'critic_email',
         'critic_name',
     ];

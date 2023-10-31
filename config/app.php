@@ -56,7 +56,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'MINIMUM_PURCHASE_FOR_FREE_SHIPPING' => env('MINIMUM_PURCHASE_FOR_FREE_SHIPPING', 'MINIMUM_PURCHASE_FOR_FREE_SHIPPING'),
 
     'asset_url' => env('ASSET_URL'),
 

@@ -15,7 +15,6 @@ class WalletController extends Controller
 
     public function walletChargeRequest($amount)
     {
-        echo($amount);
         $transaction = Transaction::updateOrCreate(
             ['payer_id' => Auth::id(), 'transactionـfor' => Transaction::TRANSACTION_FOR_CHARGE_WALLET, 'payment_status' => Transaction::PAYMENT_STATUS_PENDING],
             ['amount' => $amount],

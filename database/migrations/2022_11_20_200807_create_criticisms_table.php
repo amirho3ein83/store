@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id()->from(100);
             $table->string('critic_name')->nullable();
             $table->string('critic_email')->nullable();
-            $table->string('critic_mobile');
             $table->text('desc');
             $table->timestamp('date_reported')->useCurrent();
         });

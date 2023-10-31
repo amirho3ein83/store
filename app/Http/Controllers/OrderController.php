@@ -146,8 +146,6 @@ class OrderController extends Controller
 
     public function payOnlyWithWallet(Request $request)
     {
-        
-
         if ($request->use_default_address == false) {
             Validator::make($request->all(), $this->_validation, $this->_validationMessages)->validate();
         }
@@ -177,12 +175,11 @@ class OrderController extends Controller
 
             if ($balance < $numbers['billingTotal']) {
                 return redirect()->back()
-                    ->withErrors('insufficient inventory');
+                ->withErrors('موجودی کافی نیست');
             }
 
-            $wallet->toQuery()->decrement('balance', $numbers['billingTotal']);
-
-            $this->setOrderPaid($order, $numbers);
+            $wallet->decrement('balance', $numbers['billingTotal']);
+            $this->setOrderPaid($order,$numbers);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -220,6 +217,7 @@ class OrderController extends Controller
 
             $numbers = $this->getNumbers($order, $request->useWallet);
 
+
             $transaction = Transaction::updateOrCreate(
                 [
                     'payer_id' => Auth::id(),
@@ -237,11 +235,6 @@ class OrderController extends Controller
                 'error' => 'sth went wrong'
             ], 422);
         }
-
-
-        // return response()->json([
-        //     'message' => 'success'
-        // ], 200);
     }
 
 
@@ -339,22 +332,22 @@ class OrderController extends Controller
         $billingTotal = (int)$billingTotal;
 
 
-        if ($billingTotal >= env('MINIMUM_PURCHASE_FOR_FREE_SHOPPING', 500000)) {
+        if ($billingTotal >= env('MINIMUM_PURCHASE_FOR_FREE_SHIPPING', 500000)) {
             $deliveryCost = 0;
         } else {
             $deliveryCost = env('DELIRVERY_COST', 18000);
         }
         $billingTotal += $deliveryCost;
 
-        if ($useWallet) {
+        // if ($useWallet) {
 
-            $wallet = Wallet::firstWhere('user_id', Auth::id());
+        //     $wallet = Wallet::firstWhere('user_id', Auth::id());
 
-            $balance = $wallet->balance;
+        //     $balance = $wallet->balance;
 
-            $billingTotal -= $balance;
-            $wallet->decrement('balance', 0);
-        }
+        //     $billingTotal -= $balance;
+        //     $wallet->decrement('balance', 0);
+        // }
 
         $numbers['billingSubtotal'] = $billingSubtotal;
         $numbers['billingTax'] = $billingTax;

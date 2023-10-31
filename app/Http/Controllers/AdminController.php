@@ -123,7 +123,6 @@ class AdminController extends Controller
 
         Criticism::create([
             'desc' => $request->desc,
-            'critic_mobile' => $request->mobile,
             'critic_email' => $request->email,
             'critic_name' => $request->name,
         ]);

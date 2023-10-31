@@ -47,7 +47,8 @@ const form = useForm({
     mobile: "",
     zipcode: "",
     save_address_as_default: false,
-    use_default_address: false,
+    use_default_address: true,
+    use_wallet: false,
 });
 
 
@@ -63,6 +64,32 @@ const payWithZarinpal = () => {
         },
         onError: (e) => {
             show_loading_modal.value = false;
+            console.log(e);
+        },
+    });
+};
+
+const payOnlyUsingWallet = () => {
+    show_loading_modal.value = true;
+    setTimeout(() => {
+        show_loading_modal.value = false;
+    }, 8000);
+    form.post(route("pay.with.wallet"), {
+        onSuccess: () => {
+            show_loading_modal.value = false;
+            show_success_modal.value = true;
+            storeCart.count_cart = 0;
+        },
+        onError: (e) => {
+            show_loading_modal.value = false;
+            createToast(e.getMessage(), {
+                position: "bottom-right",
+                transition: "zoom",
+                type: "danger",
+                toastBackgroundColor: "#db5151",
+                timeout: 2300,
+                hideProgressBar: true,
+            });
             console.log(e);
         },
     });
@@ -85,7 +112,7 @@ const showError = (error) => {
         position: "bottom-right",
         transition: "zoom",
         type: "danger",
-        toastBackgroundColor: "#e82323",
+        toastBackgroundColor: "#db5151",
         timeout: 2300,
         hideProgressBar: true,
     });
@@ -104,6 +131,14 @@ const total = computed(() => {
         return (
             Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) +
             deliveryCost
+        ).toLocaleString("ar-EG");
+    }
+});
+
+const orderItemsCount = computed(() => {
+    if (storeCart.count_cart != 0) {
+        return (
+            props.order.items.length
         ).toLocaleString("ar-EG");
     }
 });
@@ -158,9 +193,17 @@ onMounted(() => {
                 <hr />
 
                 <div class="">
-                    <p class="lg:text-xl text-lg py-3 leading-9 text-gray-800 dark:text-white">
-                        خلاصه سبد
-                    </p>
+                    <div>
+
+                        <div class="flex items-center justify-between pt-5">
+                            <p class="text-base leading-none text-gray-800 dark:text-white">
+                                {{ orderItemsCount }} کالا
+                            </p>
+                            <p class="lg:text-xl text-lg py-3 leading-9 text-gray-800 dark:text-white">
+                            خلاصه سبد
+                        </p>
+                        </div>
+                    </div>
 
                     <div class="my-4">
                         <div class="flex items-center justify-between pt-5">
@@ -235,14 +278,9 @@ onMounted(() => {
                     </div>
 
                     <div class="flex w-full shadow-sm rounded-lg py-4">
-                        <div class="px-1 py-2 flex justify-between items-center w-full">
-                            <div>
-                                ارسال رایگان
-                                <span class="text-stone-700 text-sm">برای خرید بالای ۵۰۰ هزار تومان</span>
-                            </div>
-                        </div>
-                        <div class="bg-[#8bb9e8] py-1 px-3 rounded-lg flex items-center">
-                            <i class="bi bi-truck"></i>
+                        <div class="px-1 py-2 flex justify-end items-center w-full">
+                            <span class="text-stone-700 text-sm"> ارسال رایگان برای خرید بالای ۵۰۰ هزار تومن </span>
+                            <i class="bi bi-truck p-3 mt-1"></i>
                         </div>
                     </div>
                 </div>
@@ -252,10 +290,11 @@ onMounted(() => {
                     <div class="mt-5 bg-stone-50 rounded-lg">
                         <div class="flex">
                             <div class="flex-1 py-1 px-5 overflow-hidden">
-                                <h1 class="inline text-lg font-semibold leading-none">
+                                <h1 class="inline text-lg font-semibold leading-none ">
                                     آدرس
                                 </h1>
                                 <i class="bi bi-geo-alt"></i>
+
                             </div>
                         </div>
                         <div :class="{
@@ -282,11 +321,10 @@ onMounted(() => {
                                         class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:border-blueGray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none focus:ring-1 ring-offset-current ring-offset-1 ring-gray-100" />
                                 </div>
                             </div>
-                            <div class="flex justify-between">
+                            <div class="flex justify-between mt-3">
                                 <div class="flex items-center pt-3">
                                     <input :disabled="form.use_default_address == true
-                                        " :checked="form.use_default_address == false
-        " v-model="form.save_address_as_default" type="checkbox"
+                                        "  v-model="form.save_address_as_default" type="checkbox"
                                         class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md focus:ring-transparent" />
                                     <p for="safeAdress" class="block ml-2 text-sm text-gray-900">ذخیره به عنوان آدرس پیش
                                         فرض</p>
@@ -299,12 +337,12 @@ onMounted(() => {
                         <div class="flex justify-end">
                             <div class="flex items-center py-3 gap-2">
                                 <p>استفاده از آدرس پیش فرض</p>
-                                <input v-model="form.use_default_address" type="checkbox" checked
+                                <input v-model="form.use_default_address" type="checkbox"
                                     class="w-5 h-5 text-stone-700 bg-gray-300 border-none rounded-md" />
                             </div>
                         </div>
                         <p class="text-gray-500 text-sm">
-                            نشانی : {{ userAddress.text }}
+                            {{ userAddress.text }} : نشانی
                         </p>
                         <p class="text-gray-500 text-sm">
                             {{ userAddress.recipient_name }} : نام گیرنده
@@ -338,17 +376,23 @@ onMounted(() => {
                         </div>
 
 
-
-                        <button @click="payWithZarinpal" type="submit"
+                        <button @click="payOnlyUsingWallet" type="submit" v-if="useWallet && walletBalance >= Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) +
+                            deliveryCost"
                             class="w-1/4 self-end rounded bg-green-600 px-1 py-3 text-center text-md font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500">
                             پرداخت
                         </button>
-                        <!-- <ConfirmPaymentModal v-if="showConfirmModal && payOnlyWithWallet == false"
+
+                        <button @click="payWithZarinpal" type="submit" v-else
+                            class="w-1/4 self-end rounded bg-green-600 px-1 py-3 text-center text-md font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-green-500">
+                            پرداخت
+                        </button>
+
+                        <ConfirmPaymentModal v-if="showConfirmModal "
                             @close="showConfirmModal = false"
-                            :amount="Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) + deliveryCost "
+                            :amount="Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) + deliveryCost"
                             :gatewayPath="`order.payment.gateway`" />
-                        <ConfirmPaymentModal2 v-if="showConfirmModal && payOnlyWithWallet" @close="showConfirmModal = false"
-                            :amount="Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) + deliveryCost "
+                        <!-- <ConfirmPaymentModal2 v-if="showConfirmModal && payOnlyWithWallet" @close="showConfirmModal = false"
+                            :amount="Math.trunc(storeCart.subtotal + (9 / 100) * storeCart.subtotal) + deliveryCost"
                             :gatewayPath="`order.payment.gateway`" /> -->
                     </div>
                 </form>

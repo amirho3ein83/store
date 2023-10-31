@@ -92,8 +92,6 @@ Route::middleware([
     Route::get('products/{id}/comments', [CommentController::class, 'getComments'])->name('product.comments');
 
 
-    Route::post('/finalize-order/using-wallet', [OrderController::class, 'finalizeOrderUsingWallet'])->name('order.payment.wallet');
-
     Route::post('/cart', [OrderController::class, 'addToCart'])->name('addToCart');
     Route::get('/cart', [OrderController::class, 'index'])->name('Cart');
     Route::get('/cart/count', [OrderController::class, 'countOrders'])->name('cart.count');

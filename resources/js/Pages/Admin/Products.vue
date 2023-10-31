@@ -141,7 +141,7 @@ export default {
                     v-model="search"
                     class="py-2 text-sm text-white bg-gray-700 placeholder:text-slate-100 rounded-md pl-10 focus:outline-none focus:bg-gray-500 focus:text-gray-900"
                     placeholder="Search..."
-                    autocomplete="off"
+
                 />
             </div>
             <div

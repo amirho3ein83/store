@@ -18,7 +18,6 @@ class CriticismFactory extends Factory
     {
         return [
             'desc' => $this->faker->sentence(5, true),
-            'critic_mobile' => $this->faker->numerify('09#########'),
             'critic_email' => $this->faker->unique()->safeEmail(),
             'critic_name' => $this->faker->name(),
         ];

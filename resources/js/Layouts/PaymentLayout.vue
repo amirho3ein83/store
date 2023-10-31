@@ -26,7 +26,7 @@ let step = ref(form_step)
                     <div class="flex relative px-2 flex-col items-center">
                         <div :class="{ 'bg-green-600': step == 2 }"
                             class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-                            <i class="bi bi-geo-alt-fill"></i>
+                            <i class="bi bi-geo-alt-fill "></i>
                         </div>
                         <div class="flex-grow">
                             <h2 class="font-medium title-font text-sm text-purple-900 mb-1">

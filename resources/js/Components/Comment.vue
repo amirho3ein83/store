@@ -48,8 +48,4 @@ defineProps({
         </div>
     </article>
 </template>
-<style scoped>
-i {
-    font-size: 20px;
-}
-</style>
+

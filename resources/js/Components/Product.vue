@@ -1,6 +1,5 @@
 <script setup>
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
 import { Inertia } from "@inertiajs/inertia";
 
 let props = defineProps({
