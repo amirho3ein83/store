@@ -2,7 +2,9 @@ import { Inertia } from "@inertiajs/inertia";
 import { defineStore } from "pinia";
 
 export const managePageStore = defineStore("manage-pages", {
-    state: () => ({ currentPage: "" }),
+    state: () => ({ currentPage: "" ,crumbs:{
+        'Home':route('home')
+    }}),
 
     actions: {
         setPage(page) {

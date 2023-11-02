@@ -129,12 +129,13 @@ class ProductController extends Controller
 
     public function productList(Category $category, Request $request)
     {
+        // info($request->advanceFilters);
         $products = Product::query()
             ->whereHas('categories', function ($query) use ($category, $request) {
                 $query->where('slug', $category->slug);
             })
             // ->whereHas('attributes', function ($query) use ($request) {
-            //     foreach ($request->filtered_attributes as $key => $attribute) {
+            //     foreach ($request->advanceFilters as $key => $attribute) {
             //         $query->whereIn($attribute->key, $attribute->value);
             //     }
             // })
@@ -182,6 +183,8 @@ class ProductController extends Controller
         });
 
         $category->load('attributes', 'attributes.options');
+
+        $category->parentCategory = Category::whereId($category->parent_id)->first();
 
         return Inertia::render(
             'Store/Products/ProductList',

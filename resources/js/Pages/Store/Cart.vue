@@ -191,8 +191,7 @@ export default {
 <template>
     <Head title="Cart" />
 
-    <Navbar />
-    <div class="xl:container mx-auto lg:px-28 my-10">
+    <div class="xl:container mx-auto lg:px-28 my-20 mb-24">
         <div v-if="cartIsEmpty == false" class="flex flex-col md:flex-row md:gap-x-8 shadow-transparent">
             <div id="summary" class="w-full xl:w-1/2 px-4 py-8 sm:py-10 bg-stone-50 my-7">
                 <OrderItem v-for="orderItem of order.items" :orderItem="orderItem" :key="orderItem.id" />

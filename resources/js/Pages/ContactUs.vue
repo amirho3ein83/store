@@ -55,7 +55,7 @@ export default {
 <template>
     <!-- Container for demo purpose -->
     <!-- Container for demo purpose -->
-    <div class="lg:container lg:my-20 mx-auto px-2 lg:px-6 ">
+    <div class="lg:container lg:my-14 mx-auto px-2 lg:px-6 ">
         <!-- Section: Design Block -->
         <section class="mb-32">
             <div class="flex py-4">

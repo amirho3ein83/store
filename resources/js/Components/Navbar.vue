@@ -62,12 +62,16 @@ onMounted(() => {
 
             <Link :href="route('user.profile')" class="text-gray-100 px-3 duration-100 hover:opacity-80">
 
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2">
                 <div class="font-medium dark:text-white">
                     <p class="text-slate-500">{{ $page.props.user.name }}</p>
                     <p class="text-slate-600 text-xs">{{ $page.props.user.email ?? null }}</p>
                 </div>
-                <img class="w-10 h-10 rounded-full" :src="$page.props.user.avatar_url" alt="profile">
+                <img v-if="$page.props.user.avatar_url" class="w-10 h-10 rounded-full" :src="$page.props.user.avatar_url"
+                    alt="profile">
+                <img v-else class="w-12 h-12 rounded-full"
+                    src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                    alt="profile">
 
             </div>
             </Link>

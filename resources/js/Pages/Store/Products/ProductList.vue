@@ -1,7 +1,7 @@
 <script setup>
 import {
     Dialog,
-    // DialogPanel,
+    DialogPanel,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -14,6 +14,7 @@ import {
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
+import PriceRangePicker from "@/Components/PriceRangePicker.vue";
 import {
     ChevronDownIcon,
     FunnelIcon,
@@ -47,6 +48,9 @@ let props = defineProps({
 let search = useStorage("search");
 let order_by = useStorage("order_by");
 let filtered_color_ids = useStorage("filtered_color_ids");
+const advanceFilters = ref({});
+const crumbs = ['Home', 'All Categories', 'Category']
+
 
 
 watch(
@@ -119,6 +123,230 @@ const flushFilters = () => {
     if (hasQueryParams(window.location.href)) {
         window.location = window.location.href.split("?")[0];
     }
+};
+
+const crumbSelected = () => {
+
+};
+
+
+const crumbItems = computed(() => {
+    return [
+        {
+            label: "دسته بندی ها",
+            url: route(`category.list`),
+            disable: false,
+        },
+        {
+            label: props.category.parentCategory.name,
+            url: route('subCategories.list', { category: props.category.parentCategory.slug }),
+            disable: false,
+        },
+        {
+            label: props.category.name,
+            disable: false,
+        },
+    ];
+});
+
+
+
+
+
+
+
+
+const ToggleFilter = (e, filter) => {
+
+    console.log(advanceFilters.value.toString())
+    if (e.target.checked) {
+        // if filter list already exist
+        if (filter in advanceFilters.value) {
+
+        } else {
+
+            var filterObj = { ...filterObj, [filter]: [e.target.value] };
+
+            Object.assign(advanceFilters.value, filterObj);
+
+        }
+
+
+        Inertia.get(
+            window.location.href,
+            {
+                advanceFilters: (advanceFilters.value).toString()
+            },
+            {
+                replace: true,
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (res) => {
+                    if (res.data) {
+                        props.products.value = res.data;
+                    }
+                },
+            });
+
+    } else {
+
+        var filterObj = { ...filterObj, [filter]: [e.target.value] };
+
+
+
+
+        Inertia.get(
+            window.location.href,
+            {
+                advanceFilters: (advanceFilters.value).toString()
+            },
+            {
+                replace: true,
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (res) => {
+                    if (res.data) {
+                        props.products.value = res.data;
+                    }
+                },
+            });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // data structure
+
+
+    // advanceFilters.value = [
+    //     {
+    //         filterName : [value1,value2]
+    //     },
+    //     {
+    //         filterName : [value1,value2]
+    //     },
+    //     {
+    //         filterName : [value1,value2]
+    //     },
+    // ]
+
+
+    // set filter
+    //     if (e.target.checked) {
+    // console.log(e.target.checked)
+
+    // if (advanceFilters.value.indexOf(filter)) {
+
+
+
+
+
+
+    // var filterObj = { ...filterObj, [filter]: [e.target.value] };
+
+    // advanceFilters.value.push(filterObj)
+
+
+
+
+
+    // } else {
+    //     var filterObj = { ...filterObj, [filter]: [e.target.value] };
+
+    //     advanceFilters.value.push(filterObj)
+    // }
+
+
+
+
+
+
+
+    // Inertia.get(
+    //     window.location.href,
+    //     { advanceFilters: advanceFilters.value },
+    //     {
+    //         replace: true,
+    //         preserveState: true,
+    //         preserveScroll: true,
+    //         onSuccess: (res) => {
+    //             if (res.data) {
+    //                 props.products.value = res.data;
+    //             }
+    //         },
+    //     });
+
+    // }
+    // // remove filter
+    // else {
+    //     console.log('true')
+
+    // // delete advanceFilters.value[filter]
+    // console.log(advanceFilters.value)
+
+    // var filterObj = { ...filterObj, [filter]: e.target.value };
+
+
+    // advanceFilters.value = advanceFilters.value.filter(function (filterObj) {
+    //     return filterObj.filter == filter;
+    // });
+
+    // Inertia.get(
+    //     window.location.href,
+    //     { advanceFilters: advanceFilters.value },
+    //     {
+    //         replace: true,
+    //         preserveState: true,
+    //         preserveScroll: true,
+    //         onSuccess: (res) => {
+    //             if (res.data) {
+    //                 props.products.value = res.data;
+    //             }
+    //         },
+    //     });
+    // }
+
+
+
+    // console.log(filter)
+    // console.log(e.target.checked)
+    // console.log(e.target.value)
 };
 
 const filters = reactive([]);
@@ -214,9 +442,9 @@ export default {
             </TransitionRoot>
 
             <main class="mx-auto w-full px-4 sm:px-6 lg:px-8">
-                <div class="flex items-baseline justify-between border-b border-gray-200 pt-10 pb-6">
+                <div class="flex items-baseline justify-between border-b border-gray-200 py-5">
 
-<Breadcrumb/>
+                    <Breadcrumb class="p-5" :crumbs="crumbItems" @selected="crumbSelected()" />
                     <div class="flex items-center gap-x-5">
                         <div class="flex items-center">
                             <Menu as="div" class="relative inline-block text-left">
@@ -275,7 +503,7 @@ export default {
                         </div>
                         <div class="relative text-gray-600">
                             <input type="search" name="serch" v-model="search" placeholder="جستجو"
-                                class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none" />
+                                class="bg-white h-10 px-5 pr-10  rounded-full text-sm focus:outline-none" />
                             <button type="submit" class="absolute right-0 top-0 mt-2 mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                     stroke="currentColor" class="w-6 h-6">
@@ -292,10 +520,10 @@ export default {
                 <section aria-labelledby="products-heading" class="pt-6 pb-24">
                     <h2 id="products-heading" class="sr-only">Products</h2>
 
-                    <div class="flex w-full xl:gap-10">
+                    <div class="flex w-full ">
                         <!-- Product grid -->
                         <div class="lg:col-span-3 lg:w-5/6 p-4">
-                            <div class="flex flex-wrap -m-4 pb-20">
+                            <div class="flex flex-wrap -m-4 pb-20 lg:p-4">
                                 <ProductCard5 v-for="product of products.data" :key="product.id" :product="product" />
                                 <!-- <ProductSkeletonCard /> -->
                             </div>
@@ -309,16 +537,18 @@ export default {
 
                         <!--   Filters -->
                         <!-- @submit.prevent="fetchData"  -->
-                        <form @submit.prevent id="filterForm" class="hidden lg:block lg:w-1/6">
+                        <form @submit.prevent id="filterForm" class="hidden lg:block lg:w-1/6 grow">
                             <div class="flex justify-between items-center border-b-2">
                                 <button class="text-md m-2 p-2 font-medium text-red-700 hover:text-red-600"
                                     @click="flushFilters()">
                                     حذف فیلتر ها
                                 </button>
-                                <h1 class="text-xl hidden sm:block font-semibold tracking-tight">
+                                <h1 class="text-lg hidden sm:block font-semibold tracking-tight">
                                     <span class="block text-slate-800">فیلتر ها</span>
                                 </h1>
                             </div>
+                            <!-- <PriceRangePicker /> -->
+
 
                             <Disclosure as="div" v-for="section in filterLabels" :key="`attr-${section.slug}`"
                                 class="border-b border-gray-200 py-6 text-md" v-slot="{ open }">
@@ -343,7 +573,8 @@ export default {
                                     <div class="space-y-4">
                                         <div v-for="option of section.options" :key="option.slug" class="flex items-center">
                                             <input :id="`filter-${section.slug}-${option.slug}`" :name="`${section.slug}[]`"
-                                                :value="option.slug" type="checkbox" @change="submit()"
+                                                :value="option.slug" type="checkbox"
+                                                @change="ToggleFilter($event, section.slug)"
                                                 class="h-4 w-4 filterCheckbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                                             <label :for="`filter-${section.slug}-${option.slug}`"
                                                 class="ml-3 text text-gray-600">{{ option.name }}</label>

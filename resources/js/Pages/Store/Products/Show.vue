@@ -53,7 +53,7 @@ export default {
 
     <!-- component -->
     <section class="text-gray-700 body-font overflow-hidden bg-white ">
-        <div class="lg:container px-5 py-24 mx-auto">
+        <div class="lg:container px-5 lg:py-24 mx-auto">
             <div class="lg:w-4/5 mx-auto flex flex-wrap">
 
 
