@@ -105,7 +105,7 @@ const submit = () => {
                             Already have an account?
 
 
-                            <Link href="/login" class="text-gray-100 px-3 duration-100 hover:scale-110">
+                            <Link href="/login" class="text-gray-100 px-3 ">
                             <span
                                 class="font-medium text-blue-600 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300">Sign
                                 in</span>

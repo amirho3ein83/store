@@ -120,7 +120,7 @@ onMounted(() => {
                             Don't have an account?
 
 
-                            <Link href="/register" class="text-gray-100 px-3 duration-100 hover:scale-110">
+                            <Link href="/register" class="text-gray-100 px-3 ">
                             <span
                                 class=" text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Sign
                                 up</span>

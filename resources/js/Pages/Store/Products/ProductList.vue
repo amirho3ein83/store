@@ -442,7 +442,7 @@ export default {
             </TransitionRoot>
 
             <main class="mx-auto w-full px-4 sm:px-6 lg:px-8">
-                <div class="flex items-baseline justify-between border-b border-gray-200 py-5">
+                <div class="flex items-baseline justify-between border-b border-gray-200 py-3 pt-0">
 
                     <Breadcrumb class="p-5" :crumbs="crumbItems" @selected="crumbSelected()" />
                     <div class="flex items-center gap-x-5">
@@ -524,8 +524,26 @@ export default {
                         <!-- Product grid -->
                         <div class="lg:col-span-3 lg:w-5/6 p-4">
                             <div class="flex flex-wrap -m-4 pb-20 lg:p-4">
-                                <ProductCard5 v-for="product of products.data" :key="product.id" :product="product" />
-                                <!-- <ProductSkeletonCard /> -->
+
+
+
+
+
+                                <!-- <Suspense>
+                                    <template #default>
+                                        <ProductCard5 v-for="product of products.data" :key="product.id"
+                                            :product="product" />
+
+                                    </template>
+                                    <template #fallback>
+                                        <ProductSkeletonCard />
+
+                                    </template>
+                                </Suspense> -->
+
+                                <ProductCard5 v-for="product of products.data" :key="product.id"
+                                            :product="product" />
+
                             </div>
 
                             <!-- pagination -->
@@ -537,7 +555,7 @@ export default {
 
                         <!--   Filters -->
                         <!-- @submit.prevent="fetchData"  -->
-                        <form @submit.prevent id="filterForm" class="hidden lg:block lg:w-1/6 grow">
+                        <form @submit.prevent id="filterForm" class="hidden lg:block lg:w-1/6 grow self-start sticky top-0 col-span-1">
                             <div class="flex justify-between items-center border-b-2">
                                 <button class="text-md m-2 p-2 font-medium text-red-700 hover:text-red-600"
                                     @click="flushFilters()">

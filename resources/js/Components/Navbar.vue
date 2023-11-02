@@ -46,13 +46,13 @@ onMounted(() => {
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
             <Link href="/home" preserve-scroll>
-            <p class="text-md font-sans leading-6 text-gray-200" :class="{ '!text-gray-800': dark }">Home</p>
+            <p class="text-md font-sans leading-6 text-gray-300" :class="{ '!text-gray-800': dark }">Home</p>
             </Link>
             <Link :href="route(`category.list`)" preserve-scroll>
-            <p class="text-md font-sans leading-6 text-gray-200" :class="{ '!text-gray-800': dark }">Categories</p>
+            <p class="text-md font-sans leading-6 text-gray-300" :class="{ '!text-gray-800': dark }">Categories</p>
             </Link>
             <Link href="/contact-us" preserve-scroll>
-            <p class="text-md font-sans leading-6 text-gray-200" :class="{ '!text-gray-800': dark }">Contact us</p>
+            <p class="text-md font-sans leading-6 text-gray-300" :class="{ '!text-gray-800': dark }">Contact us</p>
             </Link>
 
         </div>
@@ -78,11 +78,11 @@ onMounted(() => {
         </div>
 
         <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Link href="/login" class="text-gray-100 px-3 duration-100 hover:scale-110">
+            <Link href="/login" class="text-gray-100 px-3 ">
 
             <p class="text-md font-sans leading-6 text-gray-200" :class="{ '!text-gray-800': dark }">sign in</p>
             </Link>
-            <Link href="/register" class="text-gray-100 px-3 duration-100 hover:scale-110">
+            <Link href="/register" class="text-gray-100 px-3 ">
 
             <p class="text-md font-sans leading-6 text-gray-200" :class="{ '!text-gray-800': dark }">sign up</p>
             </Link>

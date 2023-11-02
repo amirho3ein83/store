@@ -6,7 +6,6 @@ import Comment from "@/Components/Comment.vue";
 import { computed, ref } from "vue";
 import { useProductStore } from "@/store/Product.js";
 import { useCartStore } from "@/store/Cart.js";
-import Navbar from "@/Components/Navbar.vue";
 
 const storeCart = useCartStore();
 const storeProduct = useProductStore();
@@ -50,7 +49,6 @@ export default {
 
 
 <template>
-
     <!-- component -->
     <section class="text-gray-700 body-font overflow-hidden bg-white ">
         <div class="lg:container px-5 lg:py-24 mx-auto">
@@ -84,41 +82,18 @@ export default {
                     <h2 class="text-sm title-font text-gray-500 tracking-widest">BRAND NAME</h2>
                     <div class="flex mb-4">
                         <span class="flex items-center">
-                            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 -translate-y-1 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor" viewBox="0 0 22 20">
                                 <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
-                                </path>
+                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                             </svg>
-                            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
-                                </path>
-                            </svg>
-                            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
-                                </path>
-                            </svg>
-                            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
-                                </path>
-                            </svg>
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
-                                </path>
-                            </svg>
+                            <span class="p-1">{{ product.rate }}</span>
+
                             <span class="text-gray-600 ml-3"> {{ product.reviews }} Reviews</span>
                         </span>
 
                     </div>
-                    <p class="leading-relaxed">  </p>
+                    <p class="leading-relaxed"> </p>
                     <div class="my-4 text-slate-700">
                         <h2 class="text-md p-2 text-left">Description</h2>
                         <p class="text-slate-600  break-words">
@@ -182,7 +157,8 @@ export default {
         </div>
     </section>
 
-    <section class="lg:py-16 flex flex-col justify-center items-center bg-white" v-if="Object.keys(product.comments).length != 0">
+    <section class="lg:py-16 flex flex-col justify-center items-center bg-white"
+        v-if="Object.keys(product.comments).length != 0">
         <CommentForm :product_id="product.id" />
         <div v-if="$page.props.auth" class="lg:w-1/2 w-full px-4 lg:py-6">
             <div class="flex justify-between items-center space-x-2">
@@ -224,28 +200,23 @@ export default {
   }
   ```
 -->
-<div class="bg-white">
-  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-    <h2 class="text-2xl font-bold tracking-tight py-6 text-gray-800 ">محصولات مشابه  </h2>
+    <div class="bg-white">
+        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+            <h2 class="text-2xl font-bold tracking-tight py-6 text-gray-800 ">محصولات مشابه </h2>
 
-    <div class="flex flex-wrap  justify-center">
-        <ProductCard5
-                    v-for="product of similar_products"
-                    :key="product.id"
-                    :product="product"
-                />
+            <div class="flex flex-wrap  justify-center">
+                <ProductCard5 v-for="product of similar_products" :key="product.id" :product="product" />
 
-      <!-- More products... -->
+                <!-- More products... -->
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
 </template>
 <style scoped>
-
-i{
+i {
     font-size: 22px;
 }
+
 .picked-color {
     border-color: v-bind(color);
 }
