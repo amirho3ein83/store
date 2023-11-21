@@ -1,99 +1,58 @@
-<script >
 
+<script>
+import Slider from "@vueform/slider";
 
 export default {
-    //...
-    mounted() {
-        const recaptchaScript = document.createElement("script");
-        recaptchaScript.setAttribute(
-            "src",
-            "https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-        );
-        document.head.appendChild(recaptchaScript);
-    },
-    //...
+    components: { Slider },
+    data: () => ({
+        value: [0, 10000000],
+    }),
 };
-
-function range() {
-    return {
-        minprice: 1000,
-        maxprice: 7000,
-        min: 100,
-        max: 10000,
-        minthumb: 0,
-        maxthumb: 0,
-
-        mintrigger() {
-            this.minprice = Math.min(this.minprice, this.maxprice - 500);
-            this.minthumb = ((this.minprice - this.min) / (this.max - this.min)) * 100;
-        },
-
-        maxtrigger() {
-            this.maxprice = Math.max(this.maxprice, this.minprice + 500);
-            this.maxthumb = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);
-        },
-    }
-}
 </script>
-
 <template>
-    <!-- component -->
+  <div class="py-12 mx-4">
 
-    <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
-        <div>
-            <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger" x-model="minprice"
-                class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+    <Slider
+        v-model="value"
+        :min="0"
+        :max="10000000"
+        :step="100000"
+        :merge="-100000"
+        @end="(val) => $emit('rangeChanged', val)"
+        :classes="{
+            target: 'relative box-border select-none touch-none tap-highlight-transparent touch-callout-none disabled:cursor-not-allowed',
+            focused: 'slider-focused',
+            tooltipFocus: 'slider-tooltip-focus',
+            tooltipDrag: 'slider-tooltip-drag',
+            ltr: 'slider-ltr',
+            rtl: 'slider-rtl',
+            horizontal: 'slider-horizontal h-1.5',
+            vertical: 'slider-vertical w-1.5 h-80',
+            textDirectionRtl: 'slider-txt-rtl',
+            textDirectionLtr: 'slider-txt-ltr',
+            base: 'w-full h-full relative z-1 bg-gray-300 rounded',
+            connects: 'w-full h-full relative overflow-hidden z-0 rounded',
+            connect:
+                'absolute z-1 top-0 right-0 transform-origin-0 transform-style-flat h-full w-full bg-green-500 cursor-pointer tap:duration-300 tap:transition-transform disabled:bg-gray-400 disabled:cursor-not-allowed',
+            origin: 'slider-origin absolute z-1 top-0 right-0 transform-origin-0 transform-style-flat h-full w-full h:h-0 v:-top-full txt-rtl-h:left-0 txt-rtl-h:right-auto v:w-0 tap:duration-300 tap:transition-transform',
+            handle: 'absolute rounded-full bg-white border-0 shadow-slider cursor-grab focus:outline-none h:w-4 h:h-4 h:-top-1.5 h:-right-2 txt-rtl-h:-left-2 txt-rtl-h:right-auto v:w-4 v:h-4 v:-top-2 v:-right-1.25 disabled:cursor-not-allowed focus:ring focus:ring-green-500 focus:ring-opacity-30',
+            handleLower: 'slider-hande-lower',
+            handleUpper: 'slider-hande-upper',
+            touchArea: 'h-full w-full',
+            tooltip:
+                'absolute block text-sm font-semibold whitespace-nowrap py-1 px-1.5 min-w-5 text-center text-white rounded border border-green-500 bg-green-500 transform h:-translate-x-1/2 h:left-1/2 v:-translate-y-1/2 v:top-1/2 disabled:bg-gray-400 disabled:border-gray-400 merge-h:translate-x-1/2 merge-h:left-auto merge-v:-translate-x-4 merge-v:top-auto tt-focus:hidden tt-focused:block tt-drag:hidden tt-dragging:block',
+            tooltipTop: 'bottom-6 h:arrow-bottom merge-h:bottom-3.5',
+            tooltipBottom: 'top-6 h:arrow-top merge-h:top-5',
+            tooltipLeft: 'right-6 v:arrow-right merge-v:right-1',
+            tooltipRight: 'left-6 v:arrow-left merge-v:left-7',
+            tooltipHidden: 'slider-tooltip-hidden',
+            active: 'slider-active shadow-slider-active cursor-grabbing',
+            draggable: 'cursor-ew-resize v:cursor-ns-resize',
+            tap: 'slider-state-tap',
+            drag: 'slider-state-drag',
+        }"
+    />
+  </div>
 
-            <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger" x-model="maxprice"
-                class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
-
-            <div class="relative z-10 h-2">
-
-                <div class="absolute z-10 left-0 right-0 bottom-0 top-0 rounded-md bg-gray-200"></div>
-
-                <div class="absolute z-20 top-0 bottom-0 rounded-md bg-gray-400"
-                    x-bind:style="'right:'+maxthumb+'%; left:'+minthumb+'%'"></div>
-
-                <div class="absolute z-30 w-6 h-6 top-0 left-0 bg-gray-400 rounded-full -mt-2 -ml-1"
-                    x-bind:style="'left: '+minthumb+'%'"></div>
-
-                <div class="absolute z-30 w-6 h-6 top-0 right-0 bg-gray-400 rounded-full -mt-2 -mr-3"
-                    x-bind:style="'right: '+maxthumb+'%'"></div>
-
-
-            </div>
-
-            <div class="flex justify-between items-center py-4">
-                <!-- <div>
-                    <input type="text" maxlength="5" x-on:input="mintrigger" x-model="minprice"
-                        class=" border border-gray-50 rounded w-24 text-center" value="1000">
-                </div> -->
-                <!-- <div>
-                    <input type="text" maxlength="5" x-on:input="maxtrigger" x-model="maxprice"
-                        class=" border border-gray-50 rounded w-24 text-center" value="10000">
-                </div> -->
-                <span
-                    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-secondary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-secondary-800">
-                    100
-                </span>
-                <span
-                    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-secondary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-secondary-800">
-                    10000
-                </span>
-            </div>
-
-        </div>
-
-
-    </div>
 </template>
 
-<style>
-input[type=range]::-webkit-slider-thumb {
-    pointer-events: all;
-    width: 24px;
-    height: 24px;
-    -webkit-appearance: none;
-    /* @apply w-6 h-6 appearance-none pointer-events-auto; */
-}
-</style>

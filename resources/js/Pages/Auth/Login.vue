@@ -47,7 +47,7 @@ onMounted(() => {
                 <section class="py-6 w-full max-w-xl">
                     <header class="mb-10 text-center">
                         <h1 class="text-2xl font-bold inline-flex items-center mb-2 space-x-2">
-                            <OrbitSpinner :animation-duration="3000" :size="40" color="#2c2e3b" />
+                            <OrbitSpinner :animation-duration="3000" :size="40" color="#2c2e3b"/>
                             <span>Login</span>
                         </h1>
 

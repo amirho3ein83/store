@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -101,6 +102,15 @@ class User extends Authenticatable implements HasMedia
         } else {
             return null;
         }
+    }
+
+    public function isAdmin()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return $user->hasRole('admin');
+        }
+        return false;
     }
 
     public function wallet()

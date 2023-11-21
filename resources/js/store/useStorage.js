@@ -13,14 +13,14 @@ export function useStorage(key, dval = null) {
     watch(dval, write);
 
     function read() {
-        return localStorage.getItem(key);
+        return sessionStorage.getItem(key);
     }
 
     function write() {
         if (dval.value === "" || dval.value === null) {
-            localStorage.removeItem(key);
+            sessionStorage.removeItem(key);
         } else {
-            localStorage.setItem(key, dval.value);
+            sessionStorage.setItem(key, dval.value);
         }
     }
 

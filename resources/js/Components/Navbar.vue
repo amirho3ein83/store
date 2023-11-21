@@ -1,7 +1,6 @@
 <script setup>
 import { useCartStore } from "@/store/Cart.js";
 import { Link, usePage } from "@inertiajs/inertia-vue3";
-import Dropdown from "@/Components/Dropdown.vue";
 import { OrbitSpinner } from "epic-spinners";
 import { computed, onMounted } from "vue";
 

@@ -140,6 +140,16 @@ class AdminController extends Controller
         );
     }
 
+    public function todoList()
+    {
+        return Inertia::render(
+            'Admin/TodoList',
+            [
+                'tasks' => ['shut' , 'up'],
+            ]
+        );
+    }
+
     public function ordersList()
     {
         $orders = Order::with('buyer:id,name,mobile,email', 'address', 'transaction:id,reference_id,transaction_id')->simplePaginate(20);

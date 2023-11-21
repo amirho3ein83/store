@@ -95,7 +95,7 @@ class ProductSeeder extends Seeder
         ];
 
 
-        for ($i = 1; $i < env('PRODUCT_SEEDER_COUNT'); $i++) {
+        for ($i = 1; $i < 115; $i++) {
 
             $title = Str::random(6) . '-کالا';
             $price = mt_rand(5, 120);

@@ -10,7 +10,7 @@ defineProps({
 </script>
 
 <template>
-    <Link :href="route(path, { category: category.slug })" preserve-scroll
+    <Link :href="route(path, { category: category.slug })" 
         class="lg:w-1/5 md:w-1/4 sm:w-1/3 p-4 w-1/2 relative mb-2 cursor-pointer group active:scale-95 transition-all duration-150">
     <div class="sm:col-span-2 md:col-span-1 block group relative transition ease-out active:opacity-75 overflow-hidden">
         <img src="https://cdn.tailkit.com/media/placeholders/photo-gUPiTDBdRe4-700x700.jpg" alt="Product Image"

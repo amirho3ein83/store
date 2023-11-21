@@ -86,9 +86,9 @@ const flushFilters = () => {
 
 };
 onBeforeUnmount(() => {
-    localStorage.removeItem("search");
-    localStorage.removeItem("order_by");
-    localStorage.removeItem("filter_category");
+    sessionStorage.removeItem("search");
+    sessionStorage.removeItem("order_by");
+    sessionStorage.removeItem("filter_category");
 });
 </script>
 <script>

@@ -37,6 +37,16 @@ class Product extends Model implements HasMedia
         'created_at' => 'date:Y-m-d',
     ];
 
+
+
+    // protected $appends = ['discounted_price '];
+
+    // public function getDicountedPriceAttribute()
+    // {
+    //     return $this->price * (1 - $this->discount / 100);
+    // }
+
+    
     // protected $appends = ['available'];
 
     /**

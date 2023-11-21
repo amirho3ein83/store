@@ -50,17 +50,38 @@ class ProductController extends Controller
 
     public function homePage()
     {
-        $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
-        $amazing_offers->map(function ($amazing_offer) {
-            $image_url = $amazing_offer->product->getFirstMedia()->getUrl();
-            $amazing_offer->product->image_url = $image_url;
-        });
+        // $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
+        // $amazing_offers->map(function ($amazing_offer) {
+        //     $image_url = $amazing_offer->product->getFirstMedia()->getUrl();
+        //     $amazing_offer->product->image_url = $image_url;
+        // });
 
-        $categories = Category::main()->get();
+        // $categories = Category::main()->get();
 
-        return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
+        // return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
+
+        return Inertia::render(
+            'MainPage'
+        );
     }
 
+    public function aboutPage(){
+        return Inertia::render(
+            'About'
+        );
+    }
+
+    public function resumePage(){
+        return Inertia::render(
+            'Resume'
+        );
+    }
+
+    public function portfolioPage(){
+        return Inertia::render(
+            'Portfolio'
+        );
+    }
 
     public function showPage(Product $product)
     {
@@ -129,7 +150,7 @@ class ProductController extends Controller
 
     public function productList(Category $category, Request $request)
     {
-        // info($request->advanceFilters);
+        info($request->price_range);
         $products = Product::query()
             ->whereHas('categories', function ($query) use ($category, $request) {
                 $query->where('slug', $category->slug);
@@ -146,6 +167,10 @@ class ProductController extends Controller
             // })
             ->when($request->search, function ($query, $search) {
                 $query->where('slug', 'like', "%{$search}%");
+            })
+            ->when($request->price_range, function ($query, $price_range) {
+                $query->whereBetween('default_price', $price_range)
+                ;
             })
             ->when($request->order_by, function ($query, $order_by) {
                 switch ($order_by) {

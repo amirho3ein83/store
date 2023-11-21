@@ -6,32 +6,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
-use Laravel\Fortify\Features;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
-use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
-use Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController;
-use Laravel\Fortify\Http\Controllers\ConfirmedTwoFactorAuthenticationController;
-use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
-use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
-use Laravel\Fortify\Http\Controllers\NewPasswordController;
-use Laravel\Fortify\Http\Controllers\PasswordController;
-use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
-use Laravel\Fortify\Http\Controllers\ProfileInformationController;
-use Laravel\Fortify\Http\Controllers\RecoveryCodeController;
-use Laravel\Fortify\Http\Controllers\RegisteredUserController;
-use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
-use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
-use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
-use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
-use Laravel\Fortify\Http\Controllers\VerifyEmailController;
-use App\Mail\OrderInvoice;
-use App\Models\Order;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Stevebauman\Location\Facades\Location;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,13 +20,18 @@ use Stevebauman\Location\Facades\Location;
 */
 
 Route::redirect('/', '/home');
-Route::get('/home', [ProductController::class, 'homePage'])->name('home');
+
+Route::get('/home', [ProductController::class, 'aboutPage'])->name('about');
+Route::get('/about', [ProductController::class, 'homePage'])->name('home');
+Route::get('/resume', [ProductController::class, 'resumePage'])->name('resume');
+Route::get('/portfolio', [ProductController::class, 'portfolioPage'])->name('portfolio');
+
 
 Route::get('/categories-all', [ProductController::class, 'categoryList'])->name('category.list');
 Route::get('/categories/{category}/sub-categories', [ProductController::class, 'subCategoryList'])->name('subCategories.list');
-Route::get('/categories/{category}/product-list', [ProductController::class, 'productList'])->name('product-list');
+// Route::get('/categories/{category}/product-list', [ProductController::class, 'productList'])->name('product-list');
 Route::get('/products/{product}', [ProductController::class, 'showPage'])->name('product.show');
-
+Route::match(['get', 'post'], '/categories/{category}/product-list', [ProductController::class, 'productList'])->name('product-list');
 Route::get('/contact-us', function () {
     return Inertia::render('ContactUs');
 })->name('contactus');
@@ -70,6 +51,8 @@ Route::middleware([
         Route::get('/user/orders-list', 'ordersList')->name('orders.list');
         Route::get('/clients-list', 'usersList')->name('clients.list');
         Route::get('/criticisms-list', 'criticismList')->name('criticisms.list');
+        Route::get('/todo-list', 'todoList')->name('todolist');
+
         Route::get('/products/{product:id}/edit', [ProductController::class, 'edit'])->name('product.edit');
         Route::post('/products/{product:id}/update', [ProductController::class, 'update'])->name('product.update');
 

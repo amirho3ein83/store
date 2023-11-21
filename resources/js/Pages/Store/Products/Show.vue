@@ -82,8 +82,8 @@ export default {
                     <h2 class="text-sm title-font text-gray-500 tracking-widest">BRAND NAME</h2>
                     <div class="flex mb-4">
                         <span class="flex items-center">
-                            <svg class="w-4 h-4 -translate-y-1 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor" viewBox="0 0 22 20">
+                            <svg class="w-4 h-4 -translate-y-1 text-yellow-300" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                 <path
                                     d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                             </svg>
@@ -95,10 +95,32 @@ export default {
                     </div>
                     <p class="leading-relaxed"> </p>
                     <div class="my-4 text-slate-700">
-                        <h2 class="text-md p-2 text-left">Description</h2>
-                        <p class="text-slate-600  break-words">
-                            {{ product.description }}
-                        </p>
+                        <div class="space-y-4">
+                            <details class="group [&_summary::-webkit-details-marker]:hidden" open>
+                                <summary
+                                    class="flex cursor-pointer items-center justify-between gap-1.5 rounded-lg  p-4 text-gray-900">
+                                    <svg class="h-5 w-5 shrink-0 transition duration-300 group-open:-rotate-180"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    <h2 class="font-medium">
+                                        نقد و بررسی اجمالی
+                                    </h2>
+
+  
+                                </summary>
+
+                                <p class="mt-4 px-4 leading-relaxed text-gray-700">
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab hic veritatis
+                                    molestias culpa in, recusandae laboriosam neque aliquid libero nesciunt
+                                    voluptate dicta quo officiis explicabo consequuntur distinctio corporis
+                                    earum similique!
+                                </p>
+                            </details>
+
+                        </div>
                     </div>
 
                     <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
@@ -125,29 +147,29 @@ export default {
                                                     </div>
                                                 </span>
                                             </button>
-                                        </ul>
-                                    </div>
+                                    </ul>
                                 </div>
-
-
-
                             </div>
+
+
+
                         </div>
                     </div>
-                    <div class="flex  justify-between">
-                        <h3 class="text-xl text-yellow-800 font-semibold mt-1">
+                </div>
+                <div class="flex  justify-between">
+                    <h3 class="text-xl text-yellow-800 font-semibold mt-1">
                             {{ price.toLocaleString("ar-EG") }}
-                            <span class="text-stone-800">تومان</span>
-                        </h3>
+                        <span class="text-stone-800">تومان</span>
+                    </h3>
 
-                        <div class="flex items-center">
-                            <div class="flex space-x-2 text-sm font-medium justify-start">
-                                <Link href="/login" v-if="!$page.props.auth"
-                                    class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200">
-                                First login </Link>
-                                <AddToCartButton v-else :id="product.id" @pressed="addToCart()" />
-                            </div>
+                    <div class="flex items-center">
+                        <div class="flex space-x-2 text-sm font-medium justify-start">
+                            <Link href="/login" v-if="!$page.props.auth"
+                                class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200">
+                            First login </Link>
+                            <AddToCartButton v-else :id="product.id" @pressed="addToCart()" />
                         </div>
+                    </div>
 
 
 
@@ -175,31 +197,31 @@ export default {
         </div>
     </section>
     <!-- <section class="text-gray-600 body-font bg-white">
-        <div class="container px-5 py-8 mx-auto">
-            <h3 class="text-2xl text-slate-800 py-8 bg-white">محصولات مشابه</h3>
-            <div class="flex flex-wrap -m-4 justify-center">
-                <ProductCard5
-                    v-for="product of similar_products"
-                    :key="product.id"
-                    :product="product"
-                />
+            <div class="container px-5 py-8 mx-auto">
+                <h3 class="text-2xl text-slate-800 py-8 bg-white">محصولات مشابه</h3>
+                <div class="flex flex-wrap -m-4 justify-center">
+                    <ProductCard5
+                        v-for="product of similar_products"
+                        :key="product.id"
+                        :product="product"
+                    />
+                </div>
             </div>
-        </div>
-    </section> -->
+        </section> -->
     <!--
-  This example requires some changes to your config:
+      This example requires some changes to your config:
 
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
--->
+      ```
+      // tailwind.config.js
+      module.exports = {
+        // ...
+        plugins: [
+          // ...
+          require('@tailwindcss/aspect-ratio'),
+        ],
+      }
+      ```
+    -->
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <h2 class="text-2xl font-bold tracking-tight py-6 text-gray-800 ">محصولات مشابه </h2>

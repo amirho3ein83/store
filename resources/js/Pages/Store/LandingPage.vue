@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link, usePage } from "@inertiajs/inertia-vue3";
 import Hero2 from "@/Components/Hero2.vue";
-import AmazingOffer from "@/Components/AmazingOffer.vue";
+import HeroSlider from "@/Components/HeroSlider.vue";
 import "vue-horizontal-scroll/dist/vue-horizontal-scroll.css";
 import CategoryItem from "@/Components/CategoryItem.vue";
 import { OrbitSpinner } from "epic-spinners";
@@ -30,10 +30,10 @@ onMounted(() => {
     <div class="carousel relative container mx-auto" style="max-width: 1600px"></div>
     <section class="">
         <div class=" relative overflow-hidden bg-no-repeat bg-cover min-h-screen" style="
-                background-position: 50%;
-                background-image: url('https://www.jowhareh.com/images/Jowhareh/galleries/poster_045f5b65-f4ae-4b05-8916-1740a7c5e967.png');
-                height: 500px;
-            ">
+                        background-position: 50%;
+                        background-image: url('https://wallpaperaccess.com/full/2499094.jpg');
+                        height: 500px;
+                    ">
             <header class="absolute inset-x-0 top-0 z-50">
                 <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div class="flex lg:flex-1">
@@ -82,31 +82,33 @@ onMounted(() => {
                                 <p class="text-slate-50">{{ $page.props.user.name }}</p>
                                 <p class="text-slate-300 text-xs">{{ $page.props.user.email ?? null }}</p>
                             </div>
-                            <img v-if="$page.props.user.avatar_url" class="w-10 h-10 rounded-full"
-                                :src="$page.props.user.avatar_url" alt="profile">
-                            <img v-else class="w-10 h-10 rounded-full"
-                                src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
-                                alt="profile">
-                        </div>
-                        </Link>
+                        <img v-if="$page.props.user.avatar_url" class="w-10 h-10 rounded-full"
+                            :src="$page.props.user.avatar_url" alt="profile">
+                        <img v-else class="w-10 h-10 rounded-full"
+                            src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                            alt="profile">
                     </div>
+                    </Link>
+                </div>
 
-                    <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <Link href="/login" class="text-gray-100 px-3 ">
+                <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <Link href="/login" class="text-gray-100 px-3 ">
 
-                        <p class="text-md font-sans leading-6 text-gray-200">sign in</p>
-                        </Link>
-                        <Link href="/register" class="text-gray-100 px-3 ">
+                    <p class="text-md font-sans leading-6 text-gray-200">sign in</p>
+                    </Link>
+                    <Link href="/register" class="text-gray-100 px-3 ">
 
-                        <p class="text-md font-sans leading-6 text-gray-200">sign up</p>
-                        </Link>
-                    </div>
-                </nav>
-                <!-- Mobile menu, show/hide based on menu open state. -->
-                <div class="lg:hidden" role="dialog" aria-modal="true">
-                    <!-- Background backdrop, show/hide based on slide-over state. -->
-                    <div class="fixed inset-0 z-50"></div>
-                    <!-- <div
+                    <p class="text-md font-sans leading-6 text-gray-200">sign up</p>
+                    </Link>
+                </div>
+            </nav>
+            <!-- Mobile menu, show/hide based on menu open state. -->
+            <div class="lg:hidden" role="dialog" aria-modal="true">
+
+
+                <!-- Background backdrop, show/hide based on slide-over state. -->
+                <div class="fixed inset-0 z-50"></div>
+                <!-- <div
                         class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                         <div class="flex items-center justify-between">
                             <a href="#" class="-m-1.5 p-1.5">
@@ -115,33 +117,33 @@ onMounted(() => {
                                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
                             </a>
                             <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
-                                <span class="sr-only">Close menu</span>
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="mt-6 flow-root">
-                            <div class="-my-6 divide-y divide-gray-500/10">
-                                <div class="space-y-2 py-6">
-                                    <a href="#"
-                                        class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Product</a>
-                                    <a href="#"
-                                        class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Features</a>
-                                    <a href="#"
-                                        class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Marketplace</a>
-                                    <a href="#"
-                                        class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Company</a>
+                                        <span class="sr-only">Close menu</span>
+                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                            stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div class="py-6">
-                                    <a href="#"
-                                        class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Log
-                                        in</a>
+                                <div class="mt-6 flow-root">
+                                    <div class="-my-6 divide-y divide-gray-500/10">
+                                        <div class="space-y-2 py-6">
+                                            <a href="#"
+                                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Product</a>
+                                            <a href="#"
+                                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Features</a>
+                                            <a href="#"
+                                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Marketplace</a>
+                                            <a href="#"
+                                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Company</a>
+                                        </div>
+                                        <div class="py-6">
+                                            <a href="#"
+                                                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-200 hover:bg-gray-50">Log
+                                                in</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div> -->
+                            </div> -->
                 </div>
             </header>
 
@@ -190,79 +192,15 @@ onMounted(() => {
 
 
 
-
-
-
-
-        <div id="default-carousel" class="relative w-full" data-carousel="slide">
-    <!-- Carousel wrapper -->
-    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-         <!-- Item 1 -->
-        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="/docs/images/carousel/carousel-1.svg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-        <!-- Item 2 -->
-        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="/docs/images/carousel/carousel-2.svg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-        <!-- Item 3 -->
-        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="/docs/images/carousel/carousel-3.svg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-        <!-- Item 4 -->
-        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="/docs/images/carousel/carousel-4.svg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-        <!-- Item 5 -->
-        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="/docs/images/carousel/carousel-5.svg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-    </div>
-    <!-- Slider indicators -->
-    <div class="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
-        <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-    </div>
-    <!-- Slider controls -->
-    <button type="button" class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-            <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-            </svg>
-            <span class="sr-only">Previous</span>
-        </span>
-    </button>
-    <button type="button" class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-            <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-            </svg>
-            <span class="sr-only">Next</span>
-        </span>
-    </button>
-</div>
+        <HeroSlider />
 
 
 
 
 
+    <!-- 
 
-
-
-
-
-
-
-
-
-
-
-
-
-        <div >
+        <div>
 
             <div :class="cartOpen ? 'translate-x-0 ease-out' : 'translate-x-full ease-in'"
                 class="fixed right-0 top-0 max-w-xs w-full h-full px-6 py-4 transition duration-300 transform overflow-y-auto  border-l-2 border-gray-300">
@@ -410,33 +348,33 @@ onMounted(() => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="w-full h-64 mt-8 md:mx-4 rounded-md overflow-hidden bg-cover bg-center md:mt-0 md:w-1/2"
-                            style="background-image: url('https://images.unsplash.com/photo-1486401899868-0e435ed85128?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80')">
-                            <div class="bg-gray-900 bg-opacity-50 flex items-center h-full">
-                                <div class="px-10 max-w-xl">
-                                    <h2 class="text-2xl text-white font-semibold">Games</h2>
-                                    <p class="mt-2 text-gray-400">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                                        Tempore facere provident molestias ipsam sint voluptatum pariatur.</p>
-                                    <button
-                                        class="flex items-center mt-4 text-white text-sm uppercase font-medium rounded hover:underline focus:outline-none">
-                                        <span>Shop Now</span>
-                                        <svg class="h-5 w-5 mx-2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                        </svg>
-                                    </button>
+                            </div>
+                            <div class="w-full h-64 mt-8 md:mx-4 rounded-md overflow-hidden bg-cover bg-center md:mt-0 md:w-1/2"
+                                style="background-image: url('https://images.unsplash.com/photo-1486401899868-0e435ed85128?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80')">
+                                <div class="bg-gray-900 bg-opacity-50 flex items-center h-full">
+                                    <div class="px-10 max-w-xl">
+                                        <h2 class="text-2xl text-white font-semibold">Games</h2>
+                                        <p class="mt-2 text-gray-400">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                            Tempore facere provident molestias ipsam sint voluptatum pariatur.</p>
+                                        <button
+                                            class="flex items-center mt-4 text-white text-sm uppercase font-medium rounded hover:underline focus:outline-none">
+                                            <span>Shop Now</span>
+                                            <svg class="h-5 w-5 mx-2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
-                </div>
-            </main>
+                </main>
 
 
-        </div>
-
+            </div>
+     -->
 
 
         <!-- Features Section: Boxes with Icons -->
@@ -508,43 +446,89 @@ onMounted(() => {
                 </div>
 
                 <div class="grid grid-cols-1 gap-8 mt-8 lg:grid-cols-2">
-                    <div>
-                        <img class="relative z-10 object-cover w-full rounded-md h-96"
-                            src="https://images.unsplash.com/photo-1644018335954-ab54c83e007f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                            alt="">
-
-                        <div class="relative z-20 max-w-lg p-6 mx-auto -mt-20  rounded-md shadow dark:bg-gray-900">
-                            <a href="#" class="font-semibold text-gray-800 hover:underline dark:text-white md:text-xl">
-                                All the features you want to know
-                            </a>
-
-                            <p class="mt-3 text-sm text-gray-500 dark:text-gray-300 md:text-sm">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure veritatis sint autem nesciunt,
-                                laudantium quia tempore delect
-                            </p>
-
-                            <p class="mt-3 text-sm text-blue-500">21 October 2019</p>
+                    <article class="flex bg-white transition hover:shadow-xl">
+                        <div class="rotate-180 p-2 [writing-mode:_vertical-lr]">
+                            <time datetime="2022-10-10"
+                                class="flex items-center justify-between gap-4 text-xs font-bold uppercase text-gray-900">
+                                <span>2022</span>
+                                <span class="w-px flex-1 bg-gray-900/10"></span>
+                                <span>Oct 10</span>
+                            </time>
                         </div>
-                    </div>
 
-                    <div>
-                        <img class="relative z-10 object-cover w-full rounded-md h-96"
-                            src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                            alt="">
-
-                        <div class="relative z-20 max-w-lg p-6 mx-auto -mt-20  rounded-md shadow dark:bg-gray-900">
-                            <a href="#" class="font-semibold text-gray-800 hover:underline dark:text-white md:text-xl">
-                                How to use sticky note for problem solving
-                            </a>
-
-                            <p class="mt-3 text-sm text-gray-500 dark:text-gray-300 md:text-sm">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure veritatis sint autem nesciunt,
-                                laudantium quia tempore delect
-                            </p>
-
-                            <p class="mt-3 text-sm text-blue-500">20 October 2019</p>
+                        <div class="hidden sm:block sm:basis-56">
+                            <img alt="Guitar"
+                                src="https://images.unsplash.com/photo-1609557927087-f9cf8e88de18?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+                                class="aspect-square h-full w-full object-cover" />
                         </div>
-                    </div>
+
+                        <div class="flex flex-1 flex-col justify-between">
+                            <div class="border-s border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
+                                <a href="#">
+                                    <h3 class="font-bold uppercase text-gray-900">
+                                        Finding the right guitar for your style - 5 tips
+                                    </h3>
+                                </a>
+
+                                <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-700">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
+                                    dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
+                                    sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
+                                    voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
+                                    Molestias explicabo corporis voluptatem?
+                                </p>
+                            </div>
+
+                            <div class="sm:flex sm:items-end sm:justify-end">
+                                <a href="#"
+                                    class="block bg-yellow-300 px-5 py-3 text-center text-xs font-bold uppercase text-gray-900 transition hover:bg-yellow-400">
+                                    Read Blog
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="flex bg-white transition hover:shadow-xl">
+                        <div class="rotate-180 p-2 [writing-mode:_vertical-lr]">
+                            <time datetime="2022-10-10"
+                                class="flex items-center justify-between gap-4 text-xs font-bold uppercase text-gray-900">
+                                <span>2022</span>
+                                <span class="w-px flex-1 bg-gray-900/10"></span>
+                                <span>Oct 10</span>
+                            </time>
+                        </div>
+
+                        <div class="hidden sm:block sm:basis-56">
+                            <img alt="Guitar"
+                                src="https://images.unsplash.com/photo-1609557927087-f9cf8e88de18?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+                                class="aspect-square h-full w-full object-cover" />
+                        </div>
+
+                        <div class="flex flex-1 flex-col justify-between">
+                            <div class="border-s border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
+                                <a href="#">
+                                    <h3 class="font-bold uppercase text-gray-900">
+                                        Finding the right guitar for your style - 5 tips
+                                    </h3>
+                                </a>
+
+                                <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-700">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
+                                    dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
+                                    sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
+                                    voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
+                                    Molestias explicabo corporis voluptatem?
+                                </p>
+                            </div>
+
+                            <div class="sm:flex sm:items-end sm:justify-end">
+                                <a href="#"
+                                    class="block bg-yellow-300 px-5 py-3 text-center text-xs font-bold uppercase text-gray-900 transition hover:bg-yellow-400">
+                                    Read Blog
+                                </a>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
