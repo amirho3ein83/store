@@ -21,8 +21,8 @@ use Inertia\Inertia;
 
 Route::redirect('/', '/home');
 
-Route::get('/home', [ProductController::class, 'aboutPage'])->name('about');
-Route::get('/about', [ProductController::class, 'homePage'])->name('home');
+Route::get('/about', [ProductController::class, 'aboutPage'])->name('about');
+Route::get('/home', [ProductController::class, 'homePage'])->name('home');
 Route::get('/resume', [ProductController::class, 'resumePage'])->name('resume');
 Route::get('/portfolio', [ProductController::class, 'portfolioPage'])->name('portfolio');
 

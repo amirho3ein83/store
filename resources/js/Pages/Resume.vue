@@ -10,9 +10,9 @@ defineProps({
 <template>
     <Head title="Resume" />
 
-    <div class=" relative overflow-hidden bg-no-repeat bg-cover min-h-screen" style="
+    <div class=" relative overflow-hidden bg-no-repeat bg-cover min-h-screen brightness-75" style="
                                             background-position: 50%;
-                                            background-image: url('https://wallpaperaccess.com/full/2499094.jpg');
+                                            background-image: url('https://images.pixexid.com/developer-coding-on-a-laptop-4k00scvf.jpeg');
                                             height: 500px;
                                         ">
         <header class="absolute inset-x-0 top-0 z-50">

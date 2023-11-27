@@ -12,7 +12,7 @@ defineProps({
 
     <div class=" relative overflow-hidden bg-no-repeat bg-cover min-h-screen" style="
                                             background-position: 50%;
-                                            background-image: url('https://wallpaperaccess.com/full/2499094.jpg');
+                                            background-image: url('https://cdn.wallpapersafari.com/82/44/MP8omI.jpg');
                                             height: 500px;
                                         ">
         <header class="absolute inset-x-0 top-0 z-50">
