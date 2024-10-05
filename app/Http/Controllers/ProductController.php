@@ -50,19 +50,19 @@ class ProductController extends Controller
 
     public function homePage()
     {
-        // $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
-        // $amazing_offers->map(function ($amazing_offer) {
-        //     $image_url = $amazing_offer->product->getFirstMedia()->getUrl();
-        //     $amazing_offer->product->image_url = $image_url;
-        // });
+//        $amazing_offers = AmazingOffer::where('expiry_date', '<', Carbon::now())->inRandomOrder()->with('product')->get();
+//        $amazing_offers->map(function ($amazing_offer) {
+//            $image_url = $amazing_offer->product->getFirstMedia()->getUrl();
+//            $amazing_offer->product->image_url = $image_url;
+//        });
+//
+//        $categories = Category::main()->get();
+//
+//        return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
 
-        // $categories = Category::main()->get();
-
-        // return Inertia::render('Store/LandingPage', ['amazing_offers' => $amazing_offers, 'categories' => $categories]);
-
-        return Inertia::render(
-            'MainPage'
-        );
+         return Inertia::render(
+             'MainPage'
+         );
     }
 
     public function aboutPage(){

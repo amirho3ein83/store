@@ -33,8 +33,8 @@ const submit = () => {
         <main id="page-content" class="flex flex-auto flex-col max-w-full">
             <div
                 class="min-h-screen flex items-center justify-center relative overflow-hidden max-w-10xl mx-auto p-4 lg:p-8 w-full">
-                <section class="py-6 w-full max-w-xl">
-                    <header class="mb-10 text-center">
+                <section class="w-full max-w-xl">
+                    <header class="mb-6 text-center">
                         <h1 class="text-2xl font-bold inline-flex items-center mb-2 space-x-2">
                             <OrbitSpinner :animation-duration="3000" :size="40" color="#2c2e3b" />
                             <span>Register</span>
@@ -44,7 +44,7 @@ const submit = () => {
 
                     <div
                         class="flex flex-col rounded-lg shadow-sm bg-white overflow-hidden dark:text-gray-100 dark:bg-gray-800">
-                        <div class="p-5 text-left md:px-16 md:py-12 grow">
+                        <div class="p-5 text-left md:px-10 md:py-6 grow">
                             <form @submit.prevent="submit">
 
                                 <div class="space-y-1 py-2">

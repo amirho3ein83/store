@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+    <nav class="flex items-center justify-between p-2 lg:px-8" aria-label="Global">
 
         <div class="flex lg:flex-1">
 

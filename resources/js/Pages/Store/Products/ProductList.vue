@@ -705,11 +705,11 @@ export default {
                                     >
                                 </h1>
                             </div>
-                            <div class="slider-cont">
+                            <!-- <div class="slider-cont">
 
                                 
                                 <PriceRangePicker @range-changed="(p) => price_range = p "/>
-                            </div>
+                            </div> -->
 
                             <Disclosure
                                 as="div"

@@ -56,6 +56,7 @@ class CreateNewUser implements CreatesNewUsers
             'user_id' => $user->id
         ]);
 
+        // mail to new user -> thanks for choosing us. welcome
         return $user;
     }
 }

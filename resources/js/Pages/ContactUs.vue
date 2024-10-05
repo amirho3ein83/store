@@ -55,7 +55,7 @@ export default {
 <template>
     <!-- Container for demo purpose -->
     <!-- Container for demo purpose -->
-    <div class="lg:container lg:my-14 mx-auto px-2 lg:px-6 ">
+    <div class="lg:container lg:my-8 mx-auto px-2 lg:px-6 ">
         <!-- Section: Design Block -->
         <section class="mb-32">
             <!-- <div class="flex py-4">
@@ -66,7 +66,7 @@ export default {
 
             </div> -->
             <div
-                class="relative h-[300px] overflow-hidden bg-cover bg-[50%] bg-no-repeat bg-[url('https://w.wallha.com/ws/14/m1q4PAUW.png')]">
+                class="relative h-[300px] overflow-hidden bg-cover bg-[50%] bg-no-repeat bg-[url('https://iranontour.com/wp-content/uploads/2021/04/Yazd-Attraction-h.jpg')]">
             </div>
             <div class="px-3 lg:px-12">
                 <div

@@ -11,7 +11,7 @@ let showLogoutModal = ref(false);
         <span class="flex items-center justify-center text-lg text-gray-500 group-hover:text-gray-200">
             <i class="bi bi-box-arrow-right text-red-400"></i>
         </span>
-        <span class="ml-3">Settings</span>
+        <span class="ml-3">Log out</span>
     </button>
     <Teleport to="body">
         <LogoutModal v-if="showLogoutModal" @close="showLogoutModal = false" />

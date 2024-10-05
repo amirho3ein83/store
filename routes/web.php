@@ -6,6 +6,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
+use App\Jobs\SendUserInvoice;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 /*
@@ -19,6 +21,12 @@ use Inertia\Inertia;
 |
 */
 
+//Route::get('test', function () {
+//
+//SendUserInvoice::dispatch(Auth::user());
+//
+//    return "Done";
+//});
 Route::redirect('/', '/home');
 
 Route::get('/about', [ProductController::class, 'aboutPage'])->name('about');
@@ -98,10 +106,4 @@ Route::middleware([
     Route::patch('/products/{id}/like', [ProductController::class, 'likeProduct'])->name('like-product');
     Route::patch('/products/{id}/unlike', [ProductController::class, 'unlikeProduct'])->name('unlike-product');
     Route::patch('/rate/product', [ProductController::class, 'rateProduct'])->name('rate-product');
-});
-
-
-
-Route::fallback(function () {
-    return Inertia::render('404');
 });

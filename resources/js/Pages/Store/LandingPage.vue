@@ -31,7 +31,7 @@ onMounted(() => {
     <section class="">
         <div class=" relative overflow-hidden bg-no-repeat bg-cover min-h-screen" style="
                         background-position: 50%;
-                        background-image: url('https://wallpaperaccess.com/full/2499094.jpg');
+                        background-image: url('https://cdn.wallpapersafari.com/4/2/ymKADb.jpg');
                         height: 500px;
                     ">
             <header class="absolute inset-x-0 top-0 z-50">
@@ -542,7 +542,7 @@ onMounted(() => {
                     <div class="mb-6 w-full shrink-0 grow-0 basis-auto lg:mb-0 lg:w-6/12 lg:pr-6">
                         <div class="ripple relative overflow-hidden rounded-lg bg-cover bg-[50%] bg-no-repeat shadow-lg dark:shadow-black/20"
                             data-te-ripple-init data-te-ripple-color="light">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/028.jpg" class="w-full" alt="Louvre" />
+                            <img src="https://cdn.iranhotelonline.com/Content/Images/Gallery/73572.jpg" class="w-full" alt="Louvre" />
                             <a href="#!">
                                 <div
                                     class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-[hsl(0,0%,98.4%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100">
@@ -583,7 +583,7 @@ onMounted(() => {
                     <div class="mb-6 w-full shrink-0 grow-0 basis-auto lg:mb-0 lg:w-6/12 lg:pl-6">
                         <div class="ripple relative overflow-hidden rounded-lg bg-cover bg-[50%] bg-no-repeat shadow-lg dark:shadow-black/20"
                             data-te-ripple-init data-te-ripple-color="light">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/033.jpg" class="w-full" alt="Louvre" />
+                            <img src="https://cdn.mehrbooking.net/general/images/Hotels/yazd-mozafar-traditional-hotel-lobby.jpg" class="w-full" alt="Louvre" />
                             <a href="#!">
                                 <div
                                     class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-[hsl(0,0%,98.4%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100">
@@ -626,7 +626,7 @@ onMounted(() => {
                     <div class="mb-6 w-full shrink-0 grow-0 basis-auto lg:mb-0 lg:w-6/12 lg:pr-6">
                         <div class="ripple relative overflow-hidden rounded-lg bg-cover bg-[50%] bg-no-repeat shadow-lg dark:shadow-black/20"
                             data-te-ripple-init data-te-ripple-color="light">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/079.jpg" class="w-full" alt="Louvre" />
+                            <img src="https://iranontour.com/wp-content/uploads/2021/04/Yazd-Attraction-h.jpg" class="w-full" alt="Louvre" />
                             <a href="#!">
                                 <div
                                     class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-[hsl(0,0%,98.4%,0.2)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100">
